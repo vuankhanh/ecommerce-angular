@@ -1,0 +1,64 @@
+.personal-container{
+    .desktopForm{
+        mat-list{
+            mat-list-item{
+                height: 30px;
+                ::ng-deep .mat-list-item-content{
+                    width: 100%;
+                    justify-content: flex-start !important;
+                    .mat-list-text{
+                        width: 150px;
+                        max-width: 150px;
+                    }
+                }
+                .mat-line{
+                    font-size: 14px;
+                    width: 150px;
+                    min-width: 150px;
+                }
+                // input{
+                //     color: #333333;
+                //     min-width: 300px;
+                //     padding: 5px;
+                //     border-radius: 5px;
+                //     border: 1px solid #333333;
+                //     box-sizing: border-box;
+                // }
+                mat-form-field{
+                    width: 400px;
+                    input[type="text"]:disabled{
+                        cursor: not-allowed;
+                    }
+                }
+                section{
+                    min-width: 300px;
+                    font-size: 14px;
+                }
+                input:disabled{
+                    color: #333333;
+                    border-color:rgb(51, 51, 51, .45)
+                }
+            }
+        }
+        button[type="submit"]{
+            // border: 1px solid #333333;
+        }
+    }
+
+    .mobileForm{
+        
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .personal-container{
+        .desktopForm{
+            
+        }
+        .mobileForm{
+            mat-form-field{
+                width: 100%;
+            }
+        }
+    }
+}

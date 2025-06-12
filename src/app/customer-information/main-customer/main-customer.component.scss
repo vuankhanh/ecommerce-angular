@@ -1,0 +1,54 @@
+.activeLink{
+    background: #d5d5d5;
+}
+.customer-container{
+    padding: 15px;
+    box-sizing: border-box;
+    .customer-menu{
+        min-width: 185px;
+        mat-list{
+            background: #ededed;
+            mat-list-item{
+                padding: 0 15px;
+                box-sizing: border-box;
+                height: 40px;
+                cursor: pointer;
+            }
+            mat-list-item:hover{
+                background: #d5d5d5;
+            }
+            
+        }
+    }
+    .customer-menu-mobile{
+        display: none;
+        mat-accordion{
+            mat-expansion-panel{
+                mat-expansion-panel-header{
+                    background: var(--primary-background);
+                    color: white;
+                    ::ng-deep .mat-expansion-indicator::after{
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+    .customer-body{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .customer-container{
+        flex-direction: column;
+        padding-top: 0;
+        .customer-menu{
+            display: none;
+        }
+        .customer-menu-mobile{
+            display: block;
+            margin-bottom: 15px;
+        }
+    }
+}

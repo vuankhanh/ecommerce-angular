@@ -1,0 +1,101 @@
+<div class="drawer-container">
+    <mat-accordion class="user-information" #userAccordion="matAccordion" [multi]="true">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header
+                collapsedHeight='64px'
+                expandedHeight='64px'
+            >
+                <div class="user-information-block horizontal-container">
+                    <div class="user-information-block_icon vertical-container">
+                        <mat-icon>person_outline</mat-icon>
+                    </div>
+                    <div class="user-information-block_showListButton vertical-container">
+                        <div class="user-information-block_showListButton_status">
+                            {{ userInformation && isLogin ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
+                        </div>
+                        <div class="user-information-block_showListButton_account horizontal-container">
+                            <span>{{ userInformation && isLogin ? userInformation.name ? userInformation.name : userInformation.email : 'Tài khoản'}}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel-header>
+            <mat-list class="user-information-menu" *ngIf="userInformation && isLogin">
+                <mat-list-item
+                    *ngFor="let customer of customerMenu"
+                    [routerLink]="['/customer/'+customer.route]"
+                    [routerLinkActive]="['is-active']"
+                    [routerLinkActiveOptions]="{ exact: customer.route ? false : true }"
+                    (click)="closeSideMenu()"
+                >
+                    <mat-icon>{{customer.icon}}</mat-icon>
+                    <span>{{ customer.title }}</span>
+                </mat-list-item>
+                
+                <div class="height-space"></div>
+                
+                <mat-list-item (click)="logout()">
+                    <mat-icon>logout</mat-icon>
+                    <span>Thoát tài khoản</span>
+                </mat-list-item>
+            </mat-list>
+
+            <mat-list *ngIf="!userInformation || !isLogin">
+                <mat-list-item (click)="login('login')">
+                    <mat-icon>login</mat-icon>
+                    <span>Đăng nhập</span>
+                </mat-list-item>
+                <mat-list-item (click)="login('register')">
+                    <mat-icon>add</mat-icon>
+                    <span>Đăng ký</span>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+    </mat-accordion>
+
+    <div class="height-space"></div>
+
+    <mat-accordion class="menu-list" #accordion="matAccordion" [multi]="true">
+        <!-- <mat-divider></mat-divider> -->
+        <mat-expansion-panel
+            *ngFor="let menu of menusList; let i=index"
+            [hideToggle]="menu.child.length===0"
+            [ngClass]="menu.child.length===0 ? 'disabled-menu-item' : ''"
+            class="menu-item"
+        >
+            <mat-expansion-panel-header
+                matRippleDisabled="false"
+                [ngStyle]="{ background: currentUrl.includes(menu.route) ? '#ededed': '' }"
+                (click)="navigationMenuItem(menu.child.length, menu.route)"
+                collapsedHeight='48px'
+                expandedHeight='48px'
+            >
+                <div  class="horizontal-container title-item">
+                    <span class="horizontal-container text-item">
+                        <mat-icon>{{menu.icon}}</mat-icon>
+                        {{menu.title}}
+                    </span>
+                    <span
+                        class="badge"
+                        *ngIf="menu.route === 'cart' && badgeCart"
+                        [matBadge]="badgeCart"
+                        [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart"
+                    >
+                    </span>
+                </div>
+
+            </mat-expansion-panel-header>
+
+            <div
+                *ngFor="let menuChild of menu.child"
+                routerLink="{{menu.route+'/'+menuChild.route}}"
+                class="child-menu horizontal-container"
+                [ngStyle]="{ background: currentUrl.includes(menuChild.route) ? '#ededed': '' }"
+                (click)="closeSideMenu()"
+            >
+                {{ menuChild.name }}
+            </div>
+        </mat-expansion-panel>
+
+    </mat-accordion>
+</div>

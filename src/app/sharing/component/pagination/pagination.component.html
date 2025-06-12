@@ -1,0 +1,24 @@
+@if (config) {
+  <div class="pagination-container horizontal-container">
+    <ng-container *ngFor="let button of listButton; let i = index; let last = last;">
+      <div
+        class="button-index horizontal-container"
+        [ngClass]="i === config.page ? 'button-index-selected': ''"
+        (click)="changeIndex(button)"
+      >
+        {{button}}
+      </div>
+      <div class="mini-width-space" *ngIf="!last"></div>
+    </ng-container>
+  </div>
+}@else {
+  <ng-container *ngTemplateOutlet="notConfig"></ng-container>
+}
+
+<ng-template #notConfig>
+  <div class="pagination-container horizontal-container">
+    <div class="button-index horizontal-container">
+      <span>Không có dữ liệu</span>
+    </div>
+  </div>
+</ng-template>

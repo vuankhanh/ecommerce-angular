@@ -1,0 +1,18 @@
+.home-container{
+    .product-category-home-page-container{
+        .category-name{
+            padding: 0 15px;
+            align-items: flex-end;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--normal-border);
+            h2{
+                margin: 0;
+                width: fit-content;
+            }
+            span{
+                align-items: center;
+                cursor: pointer;
+            }
+        }
+    }
+}

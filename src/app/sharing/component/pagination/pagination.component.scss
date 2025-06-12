@@ -1,0 +1,22 @@
+.pagination-container{
+    padding: 10px;
+    background: #ededed;
+    .button-index{
+        cursor: pointer;
+        height: 30px;
+        width: 30px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        background: white;
+    }
+
+    .button-index-selected{
+        background: #999999;
+        color: white;
+    }
+
+    .button-index:hover{
+        @extend .button-index-selected;
+    }
+}

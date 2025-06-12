@@ -1,0 +1,23 @@
+.register-successful-container{
+    .icon-container{
+        background-color: #51A351;
+        height: 150px;
+        justify-content: center;
+        align-items: center;
+        mat-icon{
+            font-size: 30px;
+            height: 50px;
+            width: 50px;
+            font-size: 50px;
+            color: white;
+        }
+    }
+    .content-container{
+        padding: 15px 0;
+        .text{
+            h3, p{
+                text-align: center;
+            }
+        }
+    }
+}

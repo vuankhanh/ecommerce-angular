@@ -1,0 +1,48 @@
+<div class="customer-container horizontal-container">
+    <div class="customer-menu">
+        <mat-list role="list">
+            <mat-list-item
+                *ngFor="let menu of customerMenu; let i = index"
+                [routerLink]="'/customer/'+menu.route"
+                [ngClass]="currentUrl.includes('/customer/'+menu.route) ? 'activeLink': '' "
+            >
+                <mat-icon>{{menu.icon}}</mat-icon>
+                <span>{{ menu.title }}</span>
+            </mat-list-item>
+        </mat-list>
+    </div>
+    <div class="customer-menu-mobile">
+        <mat-accordion #userAccordion="matAccordion" [multi]="true">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header
+                    collapsedHeight='64px'
+                    expandedHeight='64px'
+                >
+                   <span>{{ activeMenu.title ? activeMenu.title : 'HEADER' }}</span>
+                </mat-expansion-panel-header>
+                <mat-list class="user-information-menu">
+                    
+                    <mat-list-item
+                        *ngFor="let menu of customerMenu; let i = index"
+                        [routerLink]="'/customer/'+menu.route"
+                        [ngClass]="currentUrl.includes('/customer/'+menu.route) ? 'activeLink': '' "
+                        (click)="closeAccordion()"
+                    >
+                        <mat-icon>{{menu.icon}}</mat-icon>
+                        <span>{{ menu.title }}</span>
+                    </mat-list-item>
+                    
+                    <div class="height-space"></div>
+                    <mat-list-item (click)="logout()">
+                        <mat-icon>logout</mat-icon>
+                        <span>Thoát tài khoản</span>
+                    </mat-list-item>
+                </mat-list>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <div class="width-space"></div>
+    <div class="customer-body">
+        <router-outlet></router-outlet>
+    </div>
+</div>

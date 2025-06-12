@@ -1,0 +1,97 @@
+<div class="modify-address-container">
+    <form *ngIf="addressForm" [formGroup]="addressForm" (ngSubmit)="submit()">
+        <div class="vertical-container">
+
+            <mat-form-field>
+                <mat-label>Người nhận hàng</mat-label>
+                <input type="text" matInput formControlName="responsiblePerson">
+            </mat-form-field>
+    
+            <mat-form-field>
+                <mat-label>Số điện thoại người nhận hàng</mat-label>
+                <input type="text" matInput formControlName="phoneNumber">
+                <mat-error *ngIf="addressForm.controls['phoneNumber'].hasError('pattern')">
+                    Số điện thoại bao gồm 10 chữ số và bắt đầu bằng số 0
+                </mat-error>
+            </mat-form-field>
+    
+    
+            <mat-form-field>
+                <mat-label>Địa chỉ</mat-label>
+                <textarea
+                    type="text"
+                    matInput
+                    formControlName="street"
+                    [matTextareaAutosize]="false"
+                    cdkAutosizeMinRows="1"
+                    rows="3"
+                ></textarea>
+            </mat-form-field>
+    
+    
+            <mat-form-field>
+                <mat-label>Chọn Tỉnh/ Thành Phố</mat-label>
+                <mat-select
+                    formControlName="province"
+                    (selectionChange)="provinceChange($event)"
+                    
+                >
+                    <mat-option
+                        *ngFor="let province of provinces;let i = index"
+                        [value]="i"
+                    >
+                        {{province.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+    
+            <mat-form-field>
+                <mat-label>Chọn Quận/ Huyện</mat-label>
+                <mat-select
+                    formControlName="district"
+                    (selectionChange)="districtChange($event)"
+                >
+                    <mat-option
+                        *ngFor="let district of districts; let i = index"
+                        [value]="i"
+                        
+                    >
+                        {{district.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+    
+            <mat-form-field>
+                <mat-label>Chọn Phường/ Xã</mat-label>
+                <mat-select formControlName="ward">
+                    <mat-option
+                        *ngFor="let ward of wards; let i = index;"
+                        [value]="i"
+                    >
+                        {{ward.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+
+        <mat-checkbox
+            formControlName="isHeadquarters"
+        >
+            Đặt làm địa chỉ mặc định
+        </mat-checkbox>
+
+        <div class="height-space"></div>
+
+        <button
+            type="submit"
+            mat-button
+            class="submit-button button-primary"
+            [disabled]="addressForm.invalid"
+        >
+            {{data.type === 'insert' ? 'Thêm mới' : 'Cập nhật' }}
+        </button>
+    </form>
+</div>

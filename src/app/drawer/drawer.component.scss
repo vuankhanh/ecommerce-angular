@@ -1,0 +1,89 @@
+.is-active{
+    background: #d5d5d5;
+}
+.drawer-container{
+    height: 100%;
+    background: var(--primary-background);
+    .user-information{
+        mat-expansion-panel{
+            mat-expansion-panel-header{
+                .user-information-block{
+                    max-width: 100%;
+                    .user-information-block_showListButton{
+                        max-width: 100%;
+                        .user-information-block_showListButton_account{
+                            span{
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .menu-list{
+        .menu-item{
+            width: 100%;
+            text-align: left;
+            // background: none !important;
+            border: none;
+            border-radius: unset;
+            // padding: 10px;
+            // color: white;
+            font-weight: bold;
+            .mat-expansion-panel-header{
+                .title-item{
+                    width: 100%;
+                    min-height: 22px;
+                    justify-content: space-between;
+                    align-items: center;
+                    .text-item{
+                        align-items: center;
+                    }
+                    .mat-badge{
+                        height: 100%;
+                        .mat-badge-content{
+                            right: 0;
+                            top: 0;
+                        }
+                    }
+                }
+            }
+            // .mat-expansion-panel-header[aria-disabled=true]{
+            //     color: unset;
+            // }
+            ::ng-deep .mat-expansion-panel-body{
+                padding-right: 0;
+            }
+            .child-menu{
+                height: 48px;
+                align-items: center;
+            }
+
+        }
+        .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover{
+            background: #ededed;
+        }
+
+        .mat-expansion-panel-spacing{
+            margin: 0;
+        }
+
+
+    }
+}
+
+.mat-accordion{
+    .mat-expansion-panel-header{
+        font-size: 16px !important;
+    }
+    .mat-expansion-panel{
+        border-radius: unset;
+    }
+    .disabled-menu-item{    
+        ::ng-deep .mat-expansion-panel-content{
+            display: none;
+        }
+    }
+}

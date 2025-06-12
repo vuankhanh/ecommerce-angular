@@ -1,0 +1,32 @@
+<div class="product-container">
+
+    <div class="product-cagatory-container vertical-container" *ngIf="!checkChildParams">
+        <div class="flex-me">
+            <ng-container
+                *ngFor="let category of productCategorys; let i = index;"
+            >
+                <div
+                    class="product-category-frame"
+                    [routerLink]="['/san-pham/'+category.route]"
+                    [routerLinkActive]="['is-active']"
+                >
+                    <div class="vertical-container">
+                        <div class="img-container horizontal-container">
+                            <img
+                                [src]="category.thumbnailUrl | galleryRoute"
+                                [alt]="category.name"
+                                (load)="dosomething($event)"
+                            >
+                        </div>
+                        <div class="product-info">
+                            <h2>{{ category.name }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="product-router-container vertical-container">
+        <router-outlet></router-outlet>
+    </div>
+</div>

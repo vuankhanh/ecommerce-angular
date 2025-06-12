@@ -1,0 +1,20 @@
+<div class="slide-container">
+    <swiper
+        [config]="config"
+        (swiper)="onSwiper($event)"
+        (slideChange)="onSlideChange($event)"
+    >
+        <ng-template
+            *ngFor="let product of productHightlights; let i=index"
+            swiperSlide
+            
+        >   
+            <div class="item-slide-container" (click)="showDetail(product)">
+                <img
+                [src]="product.albumBanner!.src | galleryRoute"
+                [alt]="product.name"
+            >
+            </div>
+        </ng-template>
+    </swiper>
+</div>

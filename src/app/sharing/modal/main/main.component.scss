@@ -1,0 +1,35 @@
+.close-button{
+    box-sizing: border-box;
+    height: 28px;
+    width: 28px;
+    position: absolute;
+    border-radius: 100%;
+    background-color: #ededed;
+    border: 2px solid white;
+    cursor: pointer;
+    animation: seconds 0s forwards;
+    animation-delay: .45s;
+    opacity: 0;
+}
+.back-button{
+    mat-icon{
+        margin-left: -14px;
+        height: 36px;
+        width: 36px;
+        font-size: 36px;
+        cursor: pointer;
+    }
+}
+
+@keyframes seconds {
+    0% {
+        opacity: 0;
+        top: 0px;
+        right: 0px;
+    }
+    100% {
+        opacity: 100%;
+        top: 0;
+        right: 0;
+    }
+}

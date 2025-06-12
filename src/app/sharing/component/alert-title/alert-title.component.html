@@ -1,0 +1,13 @@
+<mat-nav-list>
+  <div class="alert-added-to-cart-container" >
+    <a class="btn-close" (click)="close()"></a>
+    <div class="alert-title">
+        <span class="horizontal-container">
+            <mat-icon>done</mat-icon>
+            Thêm vào giỏ hàng thành công!
+        </span>
+    </div>
+    <div class="height-space"></div>
+    <button class="button-style button-primary go-to-cart" routerLink="/cart" (click)="close()">Xem giỏ hàng và thanh toán</button>
+  </div>
+</mat-nav-list>

@@ -1,0 +1,245 @@
+<ng-container *ngIf="cart && cart.products && cart.products.length>0; else emptyCart">
+    <div class="cart-container horizontal-container">
+        <div class="cart-frame">
+            <div
+                class="cart-item horizontal-container"
+                *ngFor="let product of cart.products; let i = index"
+                #cartItem
+            >
+                <div class="product-information-container horizontal-container">
+                    <div class="img-container">
+                        <img [src]="product.thumbnailUrl | galleryRoute" [alt]="product.name" (click)="showDetail(product)">
+                    </div>
+                </div>
+                <div class="width-space"></div>
+                <div class="product-price-container horizontal-container">
+                    <div class="product-info vertical-container">
+                        <span class="product-name-text">{{product.name}}</span>
+                    </div>
+                    <div class="width-space"></div>
+
+                    <div class="price-unit-container vertical-container">
+                        <div class="vertical-container">
+                            <span class="price-text">
+                                <span>{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
+                                <span>/</span>
+                                <span>{{product.unit.packagingType}}</span>
+                                <span>{{ ' ' }}</span>
+                                <span>{{product.unit.weightNumber}}{{product.unit.unitOfMassMeasurement}}</span>
+                            </span>
+                            
+                            <div class="mini-height-space"></div>
+                            
+                            <div class="change-quantity-container horizontal-container">
+                                <div>Số lượng:</div>
+                                <div class="micro-height-space"></div>
+                                <div class="micro-width-space"></div>
+                                <div class="horizontal-container">
+                                    <button
+                                        class="button-change"
+                                        (click)="changeQuantity(false, i)"
+                                        [disabled]="(!product.quantity || product.quantity===1)"
+                                    >
+                                        <span>-</span>
+                                    </button>
+                                    <input
+                                        type="text"
+                                        class="product-quantity"
+                                        [(ngModel)]="product.quantity"
+                                        (change)="quantityInputChange($event, i)"
+                                        appInputOnlyNumber
+                                    >
+                                    <button
+                                        class="button-change"
+                                        (click)="changeQuantity(true, i)"
+                                    >
+                                        <span>+</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="width-space"></div>
+                        <div class="button-container horizontal-container">
+                            <mat-icon (click)="laterBuy(cartItem, i)">delete</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="width-space"></div>
+        <div class="height-space"></div>
+        <div class="cart-total-price">
+            <div class="cart-total-price-container vertical-container">
+                <ng-container *ngIf="userInformation; else customerFormTemplate">
+                    <div class="customer-information">
+                        <ng-container *ngIf="defaultAddress; else addAddress">
+                            <div class="horizontal-container address-action">
+                                <div>Giao tới</div>
+                                <div class="textLink" (click)="changeAddress()">Thay đổi</div>
+                            </div>
+                            <div class="mini-height-space"></div>
+                            <div class="horizontal-container customer-contact">
+                                <div class="name">{{defaultAddress.responsiblePerson + ' | ' + defaultAddress.phoneNumber}}</div>
+                            </div>
+                            <div class="mini-height-space"></div>
+                            <div class="customer-address primary-key" *ngIf="defaultAddress">
+                                <span class="demo-2">{{ defaultAddress.street }}</span>
+                                <span class="demo-2">, </span>
+                                <span class="demo-2">{{ defaultAddress.ward.name }}</span>
+                                <span class="demo-2">, </span>
+                                <span class="demo-2">{{ defaultAddress.district.name }}</span>
+                                <span class="demo-2">, </span>
+                                <span class="demo-2">{{ defaultAddress.province.name }}</span>
+                            </div>
+                        </ng-container>
+                        <ng-template #addAddress>
+                            <div class="primary-key">Bạn chưa tạo vị trí nào trong sổ địa chỉ.</div>
+                            <div class="mini-height-space"></div>
+                            <button
+                                class="addAddress horizontal-container" 
+                                (click)="insertAddress()"
+                                #btnInsertAddress
+                            >
+                                <mat-icon>add</mat-icon>
+                                Thêm địa chỉ mới
+                            </button>
+                        </ng-template>
+                    </div>
+                    <div class="height-space"></div>
+                </ng-container>
+
+                <ng-template #customerFormTemplate>
+                    <div class="customer-form-container">
+                        <h2>Thông tin của bạn</h2>
+                        <form [formGroup]="customerForm" (ngSubmit)="customerFormSubmit()" #f="ngForm">
+                            <mat-form-field>
+                                <mat-label>Người nhận hàng</mat-label>
+                                <input
+                                    type="text"
+                                    matInput
+                                    formControlName="responsiblePerson"
+                                    #angularFormInputElement="matInput"
+                                >
+                            </mat-form-field>
+                    
+                            <mat-form-field>
+                                <mat-label>Số điện thoại người nhận hàng</mat-label>
+                                <input
+                                    type="text"
+                                    matInput
+                                    formControlName="phoneNumber"
+                                    #angularFormInputElement="matInput"
+                                >
+                                <mat-error *ngIf="customerForm.controls['phoneNumber'].hasError('pattern')">
+                                    Số điện thoại bao gồm 10 chữ số và bắt đầu bằng số 0
+                                </mat-error>
+                            </mat-form-field>
+                    
+                            <mat-form-field>
+                                <mat-label>Địa chỉ</mat-label>
+                                <textarea
+                                    type="text"
+                                    matInput
+                                    formControlName="street"
+                                    #angularFormInputElement="matInput"
+                                    matAutosizeMaxRows="3"
+                                ></textarea>
+                            </mat-form-field>
+                    
+                            <mat-form-field>
+                                <mat-label>Chọn Tỉnh/ Thành Phố</mat-label>
+                                <mat-select
+                                    formControlName="province"
+                                    #angularFormSelectElement='matSelect'
+                                    (selectionChange)="provinceChange($event)"
+                                >
+                                    <mat-option
+                                        *ngFor="let province of provinces;let i = index"
+                                        [value]="i"
+                                    >
+                                        {{province.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                    
+                            <mat-form-field>
+                                <mat-label>Chọn Quận/ Huyện</mat-label>
+                                <mat-select
+                                    formControlName="district"
+                                    #angularFormSelectElement='matSelect'
+                                    (selectionChange)="districtChange($event)"
+                                >
+                                    <mat-option
+                                        *ngFor="let district of districts; let i = index"
+                                        [value]="i"
+                                        
+                                    >
+                                        {{district.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                    
+                            <mat-form-field>
+                                <mat-label>Chọn Phường/ Xã</mat-label>
+                                <mat-select
+                                    formControlName="ward"
+                                    #angularFormSelectElement='matSelect'
+                                >
+                                    <mat-option
+                                        *ngFor="let ward of wards; let i = index;"
+                                        [value]="i"
+                                    >
+                                        {{ward.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <div class="height-space"></div>
+                </ng-template>
+
+                <div class="total-price-frame vertical-container">
+                    <ng-container *ngIf="temporaryValue > totalBill">
+                        <div class="primary-key discount horizontal-container">
+                            <mat-icon svgIcon="discount"></mat-icon>
+                            Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG
+                        </div>
+                        <div class="height-space"></div>
+                    </ng-container>
+
+                    <div class="provisional horizontal-container">
+                        <div class="primary-key">
+                            Tạm tính
+                        </div>
+                        <div class="secondary-key">
+                            {{ temporaryValue | currency:'VND':'symbol' | replaceSpace }}
+                        </div>
+                    </div>
+
+                    <div class="height-space"></div>
+
+                    <div class="total-price horizontal-container">
+                        <div class="primary-key">
+                            Thành tiền
+                        </div>
+                        <div class="secondary-key">
+                            
+                            {{ totalBill | currency:'VND':'symbol' | replaceSpace }}
+                        </div>
+                    </div>
+                </div>
+                <div class="height-space"></div>
+                <button
+                    (click)="order()"
+                    class="button-style button-primary"
+                >
+                    Tiến hành đặt hàng
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #emptyCart>
+    <app-empty-cart></app-empty-cart>
+</ng-template>

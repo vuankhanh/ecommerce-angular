@@ -1,0 +1,28 @@
+<div class="verification-email-container horizontal-container">
+    <div class="vertical-container" *ngIf="result==='success'">
+        <div class="icon-container horizontal-container">
+            <mat-icon>check_circle_outline</mat-icon>
+        </div>
+        <div class="content-container vertical-container">
+            <div class="text">
+                <h3>Tài khoản CAROTA của bạn đã được kích hoạt</h3>
+                <!-- <p>Đơn hàng {{ order.code }} đã được gửi!</p> -->
+                <p>Hãy đăng nhập để tiếp tục mua sắm</p>
+            </div>
+            <div class="button-container horizontal-container">
+                <button class="button-style button-primary" mat-button (click)="login()">Đăng nhập</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="vertical-container" *ngIf="result==='failure'">
+        <div class="failure-icon-container icon-container horizontal-container">
+            <mat-icon>highlight_off</mat-icon>
+        </div>
+        <div class="failure-content-container content-container vertical-container">
+            <div class="text">
+                <h3>Mã xác nhận đăng ký tài khoản không chính xác</h3>
+            </div>
+        </div>
+    </div>
+</div>

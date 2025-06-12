@@ -1,0 +1,32 @@
+.order-history-container{
+    .table-container{
+        .mat-table{
+            width: 100%;
+            .mat-column-orderCode{
+                color: var(--normal-text);
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .order-history-container{
+        .table-container{
+            width: 100%;
+            overflow-x: scroll;
+            .mat-table{
+                .mat-header-cell, .mat-cell{
+                    min-width: 100px;
+                    padding: 0 5px;
+                }
+                .mat-table-sticky-border-elem-right {
+                    border-left: 1px solid #e0e0e0;
+                }
+                .mat-table-sticky-border-elem-left {
+                    border-right: 1px solid #e0e0e0;
+                }
+            }
+        }
+    }
+}

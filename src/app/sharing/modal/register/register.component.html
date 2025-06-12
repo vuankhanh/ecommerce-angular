@@ -1,0 +1,109 @@
+<div class="register-container">
+    <form [formGroup]="registerGroup" (ngSubmit)="register()">
+        <div class="title">
+            <h1>Xin chào,</h1>
+            <span>Hãy đăng ký để chúng tôi phục vụ bạn tốt hơn</span>
+        </div>
+        <div class="height-space"></div>
+        <div class="input-information-container horizontal-container">
+            <div class="vertical-container">
+                <mat-form-field [ngClass]="registerGroup.controls['userName'].valid ? 'mat-form-field-done' : ''">
+                    <mat-label>Tài khoản *</mat-label>
+                    <input matInput type="text" formControlName="userName" (blur)="checkExistsUserName()">
+                    <mat-error *ngIf="registerGroup.controls['userName'].hasError('isAlreadyExist')">
+                        Tài khoản đã tồn tại.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field
+                    [ngClass]="passwordValid() ? 'mat-form-field-done' : ''"
+                >
+                    <mat-label>Mật khẩu *</mat-label>
+                    <input
+                        matInput
+                        [type]="!fieldTextType ? 'password' : 'text'"
+                        formControlName="password"
+                    >
+                    <mat-icon matSuffix (click)="fieldTextType = !fieldTextType">
+                        {{ !fieldTextType ? 'visibility' : 'visibility_off'}}
+                    </mat-icon>
+                </mat-form-field>
+
+                <mat-form-field
+                    [ngClass]="passwordValid() ? 'mat-form-field-done' : ''"
+                >
+                    <mat-label>Nhập lại mật khẩu *</mat-label>
+                    <input
+                        matInput
+                        [type]="!repeatFieldTextType ? 'password' : 'text'"
+                        formControlName="confirmPassword"
+                    >
+                    <mat-icon matSuffix (click)="repeatFieldTextType = !repeatFieldTextType">
+                        {{ !repeatFieldTextType ? 'visibility' : 'visibility_off'}}
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+
+            <div class="width-space"></div>
+
+            <div class="vertical-container">
+                <mat-form-field [ngClass]="registerGroup.controls['name'].valid ? 'mat-form-field-done' : ''">
+                    <mat-label>Tên của bạn *</mat-label>
+                    <input matInput type="text" formControlName="name">
+                </mat-form-field>
+    
+                <mat-form-field [ngClass]="registerGroup.controls['email'].valid ? 'mat-form-field-done' : ''">
+                    <mat-label>Email *</mat-label>
+                    <input matInput type="text" formControlName="email" (blur)="checkExistsEmail()">
+                    <mat-error *ngIf="registerGroup.controls['email'].hasError('isAlreadyExist')">
+                        Email đã tồn tại.
+                    </mat-error>
+                </mat-form-field>
+    
+                <mat-form-field [ngClass]="registerGroup.controls['phoneNumber'].valid ? 'mat-form-field-done' : ''">
+                    <mat-label>Số điện thoại *</mat-label>
+                    <input matInput type="text" formControlName="phoneNumber">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="warning">
+            <div class="caps-lock-warning" (capsLock)="capsOn=$event">
+                <span *ngIf="capsOn">Caps Lock đang bật</span>
+            </div>
+            <div *ngIf="registerGroup.controls['userName'].hasError('containsSpecialCharacter')">
+                Tài khoản viết thường, không dấu và không được chứa ký tự đặc biệt
+            </div>
+            <div *ngIf="registerGroup.controls['password'].hasError('safePassword')">
+                Mật khẩu gồm 6 ký tự chữ cái, viết thường, viết hoa và số
+            </div>
+            <div *ngIf="registerGroup.controls['confirmPassword'].hasError('passwordIsNotSame')">
+                Mật khẩu chưa trùng khớp
+            </div>
+            <div *ngIf="registerGroup.controls['email'].hasError('pattern')">
+                Email không đúng định dạng
+            </div>
+            <div *ngIf="registerGroup.controls['phoneNumber'].hasError('pattern')">
+                Số điện thoại bao gồm 10 chữ số và bắt đầu bằng số 0
+            </div>
+        </div>
+        <div class="height-space"></div>
+        <button
+            mat-button
+            type="submit"
+            class="submit-button button-primary"
+            [disabled]="registerGroup.invalid || loading"
+        >   
+            <span *ngIf="!loading; else loadingSpinner">Đăng ký</span>
+            <ng-template #loadingSpinner>
+                <div class="horizontal-container">
+                    <mat-spinner diameter="30"></mat-spinner>
+                </div>
+            </ng-template>
+        </button>
+        <div class="height-space"></div>
+        <div class="change-component horizontal-container">
+            <div class="textLink" (click)="valueChange.emit('login')">Đăng nhập</div>
+        </div>
+    </form>
+</div>

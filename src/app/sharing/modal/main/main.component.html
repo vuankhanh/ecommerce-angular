@@ -1,0 +1,18 @@
+<div class="close-button" [mat-dialog-close]="">
+    <mat-icon>close</mat-icon>
+</div>
+<div class="back-button" *ngIf="historyModalComponent.length>1">
+    <mat-icon (click)="back()">chevron_left</mat-icon>
+    <div class="height-space"></div>
+</div>
+<ng-container *ngIf="data && data.type as type" [ngSwitch]="type">
+    <app-login
+        *ngSwitchCase="'login'"
+        (valueChange)="changeComponent($event)"
+        (closeModal)="closeModal($event)"
+    ></app-login>
+    <app-register *ngSwitchCase="'register'" (valueChange)="changeComponent($event)"></app-register>
+    <app-forgot-password *ngSwitchCase="'forgotPassword'" (valueChange)="changeComponent($event)"></app-forgot-password>
+    <app-register-successful *ngSwitchCase="'registerSuccessful'"></app-register-successful>
+    <app-forgot-password-successful *ngSwitchCase="'forgotPasswordSuccessful'"></app-forgot-password-successful>
+</ng-container>

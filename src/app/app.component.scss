@@ -1,0 +1,70 @@
+.carota-container{
+    position: relative;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    mat-drawer{
+        max-width: calc(100% - 70px);
+        display: none;
+    }
+    mat-drawer-container{
+        height: 100%;
+        width: 100%;
+        background: none;
+        mat-drawer{
+            height: 100%;
+        }
+
+        mat-drawer-content{
+            height: 100%;
+            width: 100%;
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            color: var(--normal-text);
+            
+            .main-container{
+                width: 100%;
+                height: fit-content;
+                display: flex;
+                flex-direction: column;
+                max-width: 1024px;
+                margin: auto;
+                app-header{
+                    z-index: 2;
+                    position: sticky;
+                    top: 0;
+                }
+            }
+        }
+    }
+}
+
+.carota-container:after{
+    content : "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url('../assets/imgs/bg-cold.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    opacity : 0.45;
+    z-index: -1;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .carota-container{
+        mat-drawer-container{
+            mat-drawer{
+                display: block;
+            }
+        }
+    }
+}
+  
+@media only screen and (max-width: 414px) {
+    
+}

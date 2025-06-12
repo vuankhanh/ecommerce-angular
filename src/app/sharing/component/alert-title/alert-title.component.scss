@@ -1,0 +1,29 @@
+.alert-added-to-cart-container{
+    .btn-close{
+        cursor: pointer;
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        padding: 4px;
+        color: rgb(155, 155, 155);
+        font-size: 11px;
+    }
+    .alert-title{
+        margin-right: 50px;
+        span{
+            align-items: center;
+            mat-icon{
+                height: 18px;
+                width: 18px;
+                font-size: 18px;
+                background: green;
+                border-radius: 100%;
+                color: white;
+                margin-right: 5px;
+            }
+        }
+    }
+    .go-to-cart{
+        width: 100%;
+    }
+}

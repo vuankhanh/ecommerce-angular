@@ -1,0 +1,72 @@
+<div class="login-container">
+    <form [formGroup]="loginGroup" (ngSubmit)="login()">
+        <div class="title">
+            <h1>Xin chào,</h1>
+            <span>Mời đăng nhập</span>
+        </div>
+        <div class="height-space"></div>
+        <div class="input-information-container">
+            <div class="vertical-container">
+                <mat-form-field>
+                    <mat-label>Tài khoản *</mat-label>
+                    <input matInput type="text" formControlName="userName">
+                </mat-form-field>
+    
+                <mat-form-field>
+                    <mat-label>Mật khẩu *</mat-label>
+                    <input
+                        matInput
+                        [type]="!fieldTextType ? 'password' : 'text'"
+                        formControlName="password"
+                    >
+                    <mat-icon matSuffix (click)="fieldTextType = !fieldTextType">
+                        {{ !fieldTextType ? 'visibility' : 'visibility_off'}}
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="height-space"></div>
+        <button
+            mat-button
+            type="submit"
+            class="submit-button button-primary"
+            [disabled]="loginGroup.invalid"
+        >
+            Đăng nhập
+        </button>
+        <div class="height-space"></div>
+        <div class="change-component horizontal-container">
+            <div class="textLink" (click)="valueChange.emit('register')">Đăng ký</div>
+            <div class="textLink" (click)="valueChange.emit('forgotPassword')">Quên mật khẩu</div>
+        </div>
+    </form>
+    
+    <div class="login-with-social-networking-container">
+        <p>Hoặc đăng nhập bằng</p>
+        <div class="horizontal-container center">
+            <div class="horizontal-container">
+                <div
+                    class="social-networking-item horizontal-container loginFacebook"
+                    (click)="facebookLogin()"
+                >
+                    <mat-icon svgIcon="facebook"></mat-icon>
+                </div>
+    
+                <div class="width-space"></div>
+    
+                <div
+                    class="social-networking-item horizontal-container loginGoogle"
+                    (click)="googleLogin()"
+                >
+                    <mat-icon svgIcon="google-plus"></mat-icon>
+                </div>
+    
+                <!-- <div class="width-space"></div>
+    
+                <div class="social-networking-item horizontal-container loginZalo">
+                    <mat-icon svgIcon="zalo"></mat-icon>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

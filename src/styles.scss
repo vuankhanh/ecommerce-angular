@@ -1,0 +1,309 @@
+:root{
+    --primary-background: #5470ff;
+    --secondary-background: #37b5ff;
+    --tertiary-background: #333333;
+    --normal-text: #0a5185;
+    --hightlight-text: #001727;
+    --normal-border: rgba(84, 112, 255, 0.3);
+    --ahamove-normal-text: #16254e;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+/* You can add global styles to this file, and also import other style files */
+.cdk-global-scrollblock{
+    position: initial;
+    width: initial;
+    overflow: hidden;
+}
+
+.cdk-overlay-pane{
+    max-height: calc(100% - 30px) !important;
+    overflow-y: auto;
+}
+
+html, body { 
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: var(--normal-text);
+}
+
+.vertical-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.horizontal-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.width-space{
+    width: 15px;
+    min-width: 15px;
+}
+
+.height-space{
+    height: 15px;
+    min-height: 15px;
+}
+
+.mini-width-space{
+    width: 10px;
+    min-width: 10px;
+}
+
+.mini-height-space{
+    height: 10px;
+    min-height: 10px;
+}
+
+.micro-width-space{
+    width: 5px;
+    min-width: 5px;
+}
+
+.micro-height-space{
+    height: 5px;
+    min-height: 5px;
+}
+
+.button-style{
+    outline: none;
+    border: none;
+    padding: 0 15px;
+    height: 35px;
+    border-radius: 5px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 2px rgb(0 0 0 / 35%);
+    cursor: pointer;
+}
+.button-style:active:enabled{
+    box-shadow: 0px 0px rgb(0 0 0 / 35%);
+    transform: translateY(2px);
+}
+
+.button-style:disabled{
+    opacity: .45;
+}
+
+.button-primary{
+    background-color: var(--primary-background);
+    color: white;
+}
+
+.button-secondary{
+    background-color: var(--secondary-background);
+    color: white;
+}
+
+.button-substyle{
+    background-color: var(--secondary-background);
+    color: white;
+}
+
+.textLink{
+    font-size: 12px;
+    cursor: pointer;
+    color: #20417d;
+}
+.textLink:hover{
+    text-decoration: underline;
+}
+
+.pleaseLogin{
+    font-size: 12px;
+}
+
+.login-modal{
+    position: relative!important;
+    mat-dialog-container{
+        // background: white;
+        color: var(--normal-text);
+    }
+}
+
+.write-rating-component{
+    position: relative!important;
+}
+
+.thanks-for-the-review-component{
+    mat-dialog-container{
+        padding: 0;
+        color: var(--normal-text);
+    }
+}
+
+.payment-success-modal{
+    min-width: 400px;
+    mat-dialog-container{
+        padding: 0;
+    }
+}
+
+.mat-form-field-done{
+    .mat-form-field-flex{
+        background-color: rgb(187, 255, 181);
+    }
+}
+
+mat-list{
+    padding: 0 !important;
+    mat-list-item{
+        .mat-list-item-content{
+            padding: 0 !important;
+        }
+    }
+}
+
+.overlay-container{
+    .toast-container{
+        .ngx-toastr{
+            .toast-title{
+                line-height: 1.5;
+            }
+            .toast-message{
+                line-height: 1.5;
+            }
+        }
+    }
+}
+
+.img-container{
+    width: 100%;
+    padding-bottom: 100%;
+    position: relative;
+    img{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        display: block;
+        width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        cursor: pointer;
+    }
+}
+img{
+    border-radius: 5px;
+}
+
+.posts-container{
+    ::ng-deep img{
+        max-width: 100%;
+    }
+}
+
+fieldset{
+    border-radius: 5px;
+    border: 1px dotted var(--normal-text);
+    padding: 5px;
+    legend{
+        font-size: unset;
+        float: unset;
+        width: auto;
+        margin-left: 15px;
+        margin-bottom: 0;
+    }
+}
+
+.primary-key{
+    color: #999999;
+}
+.secondary-key{
+    color: #333333;
+}
+
+@media only screen and (max-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+    .cdk-overlay-pane{
+        max-width: calc(100% - 30px) !important;
+        // width: calc(100% - 30px) !important;
+        max-height: calc(100% - 30px) !important;
+        overflow: auto;
+    }
+    .login-modal{
+        width: 100%;
+        mat-dialog-container{
+            app-check-account-main{
+                .close-button{
+                    animation: secondss 0s forwards !important;
+                    animation-delay: .45s !important;
+                }
+                .login-container,
+                .register-container,
+                .forgot-password-container{
+                    width: 100%;
+                }
+    
+                .register-container{
+                    .input-information-container{
+                        flex-direction: column;
+                        .vertical-container{
+                            width: 100% !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .address-modification-modal{
+        width: 100%;
+        mat-dialog-container{
+            .modify-address-container{
+                width: 100%;
+            }
+        }
+    }
+    .confirm-modal{
+        width: 100%;
+        mat-dialog-container{
+            .mat-dialog-actions{
+                justify-content: flex-end;
+            }
+        }
+    }
+    .write-rating-component{
+        width: 100%;
+    }
+    .add-to-card-bottom-sheet{
+        width: 100%;
+        min-width: unset !important;
+        max-width: 100%;
+    }
+}
+
+@keyframes secondss {
+    0% {
+        opacity: 0;
+        top: 0px;
+        right: 0px;
+    }
+    100% {
+        opacity: 100%;
+        top: 0;
+        right: 0;
+    }
+}
