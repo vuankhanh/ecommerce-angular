@@ -10,6 +10,7 @@ import { AppServicesService } from './services/app-services.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BreadCrumbComponent } from './main/bread-crumb/bread-crumb.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -36,6 +37,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ratingValue: number = 3.6;
   
+  private readonly subscription: Subscription = new Subscription();
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     @Inject(DOCUMENT) private _document: Document,
@@ -116,9 +118,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   listenIsMobile(){
-    this.appService.checkScreenWidthSize$.subscribe(res=>{
-      this.screenWidthSize = res;
-    })
+    this.subscription.add(
+      this.appService.checkScreenWidthSize$.subscribe(res=>{
+        this.screenWidthSize = res;
+      })
+    )
   }
 
   toggle(event: any){
@@ -149,14 +153,16 @@ export class AppComponent implements OnInit, AfterViewInit {
   };
 
   setScroll(){
-    this.mainContainerScrollService.listenDirectionPostion$.subscribe(res=>{
-      if(res){
-        if(res.direction === 'x'){
-          this.drawercontent?.scrollTo({ left: res.position, behavior: "smooth" });
-        }else if(res.direction === 'y'){
-          this.drawercontent?.scrollTo({ top: res.position, behavior: "smooth" })
+    this.subscription.add(
+      this.mainContainerScrollService.listenDirectionPostion$.subscribe(res=>{
+        if(res){
+          if(res.direction === 'x'){
+            this.drawercontent?.scrollTo({ left: res.position, behavior: "smooth" });
+          }else if(res.direction === 'y'){
+            this.drawercontent?.scrollTo({ top: res.position, behavior: "smooth" })
+          }
         }
-      }
-    });
+      })
+    )
   }
 }

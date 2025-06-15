@@ -1,22 +1,22 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 //Model
-import { UserInformation, JwtDecoded } from '../../models/UserInformation';
+import { UserInformation } from '../../models/UserInformation';
 
 //Service
-import { AuthService } from 'src/app/services/auth.service';
-import { UpdatePersonalInformationService, ResponseUpdate } from 'src/app/services/api/update-personal-information.service';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { ResponseLogin } from 'src/app/services/api/login.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { AppServicesService } from 'src/app/services/app-services.service';
 
 //Validation Form
 import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../services/formCustom/validators'
 
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
+import { ResponseUpdate, UpdatePersonalInformationService } from '../../services/api/update-personal-information.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { ToastService } from '../../services/toast.service';
+import { AppServicesService } from '../../services/app-services.service';
+import { TToken } from '../../models/token.interface';
 
 @Component({
   selector: 'app-personal-information',
@@ -24,8 +24,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./personal-information.component.scss']
 })
 export class PersonalInformationComponent implements OnInit, OnDestroy {
-  screenWidthSize: 'full' | 'normal' | 'mini';
-  informationGroup: FormGroup;
+  screenWidthSize: 'full' | 'normal' | 'mini' = 'normal';
+  informationGroup!: FormGroup;
   checkedChangePassword: boolean = false;
   private emailRegEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   private phoneNumberRegEx = /((0)+([0-9]{9})\b)/g;
@@ -124,7 +124,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
   update(){
     if(this.informationGroup.valid){
       this.informationGroup.controls['confirmPassword'].disable();
-      let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+      let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
       if(tokenStoraged){
         this.updatePersonalInformationService.update(tokenStoraged.accessToken, this.informationGroup.value).subscribe(res=>{
           this.informationGroup.controls['confirmPassword'].enable();

@@ -1,18 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { ConfirmActionComponent } from 'src/app/sharing/modal/confirm-action/confirm-action.component';
-
 //Model
 import { Address } from '../../models/Address';
 
-import { CustomerAddressService, ResponseAddress } from 'src/app/services/api/customer-address.service';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { ResponseLogin } from 'src/app/services/api/login.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { AddressModificationService } from 'src/app/services/address-modification.service';
 
 import { Subscription } from 'rxjs';
+import { CustomerAddressService, ResponseAddress } from '../../services/api/customer-address.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { ToastService } from '../../services/toast.service';
+import { AddressModificationService } from '../../services/address-modification.service';
+import { TToken } from '../../models/token.interface';
+import { ConfirmActionComponent } from '../../sharing/modal/confirm-action/confirm-action.component';
 @Component({
   selector: 'app-address-book',
   templateUrl: './address-book.component.html',
@@ -20,7 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class AddressBookComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription;
-  addresses: Array<Address>;
+  addresses: Array<Address> = [];
   constructor(
     private dialog: MatDialog,
     private customerAddressService: CustomerAddressService,
@@ -34,7 +33,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   }
 
   listenCustomerAddress(){
-    let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
     if(tokenStoraged){
       this.subscription.add(
         this.customerAddressService.get(tokenStoraged.accessToken).subscribe(res=>{
@@ -77,7 +76,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
-        let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+        let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
         if(tokenStoraged){
           this.customerAddressService.remove(tokenStoraged.accessToken, address).subscribe(res=>{
             if(res){

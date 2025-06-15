@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 //Service
 
@@ -10,6 +10,8 @@ import { ToastService } from '../../../services/toast.service';
 import { SocialAuthenticationService } from '../../../services/api/social-login/social-authentication';
 import { InProgressSpinnerService } from '../../../services/in-progress-spinner.service';
 import { MaterialModule } from '../../module/material';
+import { TToken } from '../../../models/token.interface';
+import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -33,8 +35,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private loginService: LoginService,
-    private toastService: ToastService,
+    private authService: AuthService,
     private socialAuthenticationService: SocialAuthenticationService,
+    private toastService: ToastService,
     private inProgressSpinnerService: InProgressSpinnerService
   ) { }
 
@@ -75,23 +78,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  googleLogin(){
-    this.socialAuthenticationService.signInWithGoogle().then(userInfo=>{
-      this.closeModal.emit(userInfo);
-      this.toastService.shortToastSuccess('Đăng nhập thành công', '');
-    }).catch(error=>{
-      this.toastService.shortToastError('Đã có lỗi xảy ra', 'Lỗi đăng nhập');
-    });
-  }
-
-  facebookLogin(){
-    this.socialAuthenticationService.signInWithFB().then(userInfo=>{
-      this.closeModal.emit(userInfo);
-      this.toastService.shortToastSuccess('Đăng nhập thành công', '');
-    }).catch(error=>{
-      this.toastService.shortToastError('Đã có lỗi xảy ra', 'Lỗi đăng nhập')
-    });
-  }
+  async socialAuthentication(provider: 'google' | 'facebook'){
+      try {
+        const token: TToken = await this.socialAuthenticationService.authentication(provider);
+        this.authService.afterLogin(token);
+      } catch (error) {
+        
+      }
+    }
 
   ngOnDestroy(){
     this.subscription.unsubscribe();

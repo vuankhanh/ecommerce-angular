@@ -1,16 +1,14 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 import { Product } from '../models/Product';
 import { ProductCategory } from '../models/ProductCategory';
 
 import { ProductService } from './api/product/product.service';
 import { AuthService } from './auth.service';
-import { ResponseLogin } from './api/login.service';
 import { LocalStorageService } from './local-storage.service';
 import { AddIconSvgService } from './add-icon-svg.service';
 // import { SocketIoService } from './socket/socket-io.service';
@@ -18,6 +16,7 @@ import { DirectionPostion, MainContainerScrollService } from './main-container-s
 
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, filter, take } from 'rxjs/operators';
+import { TToken } from '../models/token.interface';
 
 const defaultPageTitle = 'Thủy Hải Sản Carota';
 @Injectable({
@@ -80,7 +79,7 @@ export class AppServicesService {
 
     this.addIconSvgService.addIcon();
 
-    let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
     if(tokenStoraged && tokenStoraged.accessToken){
       let accessToken = tokenStoraged.accessToken;
       this.authService.checkTokenValidation(accessToken);

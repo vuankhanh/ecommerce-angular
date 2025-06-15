@@ -4,22 +4,18 @@ import { Router } from '@angular/router';
 
 import { AddressChooseComponent } from '../../sharing/modal/address-choose/address-choose.component';
 import { PaymentSuccessfulComponent } from '../../sharing/modal/payment-successful/payment-successful.component';
-
-import { Address } from 'src/app/models/Address';
-import { Product } from 'src/app/models/Product';
-import { UserInformation } from 'src/app/models/UserInformation';
-
-import { AuthService } from 'src/app/services/auth.service';
-import { Cart, CartService } from 'src/app/services/cart.service';
-import { AddressModificationService } from 'src/app/services/address-modification.service';
-import { OrderService } from 'src/app/services/api/order.service';
-import { ResponseLogin } from 'src/app/services/api/login.service';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
-import { ToastService } from 'src/app/services/toast.service';
-import { CartApiService } from 'src/app/services/api/cart-api.service';
-
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { AddressModifyComponent } from 'src/app/sharing/modal/address-modify/address-modify.component';
+import { UserInformation } from '../../models/UserInformation';
+import { Cart, CartService } from '../../services/cart.service';
+import { combineLatest, Subscription } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
+import { AddressModificationService } from '../../services/address-modification.service';
+import { OrderService } from '../../services/api/order.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { ToastService } from '../../services/toast.service';
+import { CartApiService } from '../../services/api/cart-api.service';
+import { Address } from '../../models/Address';
+import { Product } from '../../models/Product';
+import { TToken } from '../../models/token.interface';
 
 @Component({
   selector: 'app-payment-page',
@@ -27,20 +23,20 @@ import { AddressModifyComponent } from 'src/app/sharing/modal/address-modify/add
   styleUrls: ['./payment-page.component.scss']
 })
 export class PaymentPageComponent implements OnInit, OnDestroy {
-  @ViewChild('btnInsertAddress') btnInsertAddress: ElementRef;
+  @ViewChild('btnInsertAddress') btnInsertAddress!: ElementRef;
 
   displayedColumns: string[] = ['numericalOrder', 'thumbnail', 'name', 'price', 'quantity'];
-  cart: Cart;
+  cart?: Cart;
   totalBill: number = 0;
 
   estimateFeeInfo: any = null;
   estimateFeeError: any;
   
-  userInformation: UserInformation | null;
-  defaultAddress: Address;
+  userInformation?: UserInformation;
+  defaultAddress?: Address;
   temporaryValue: number = 0;
   
-  subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
     private dialog: MatDialog,
@@ -81,7 +77,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
           this.userInformation = userInfo;
         }
 
-        if(userInfo && this.cart.deliverTo && this.cart.products.length>0){
+        if(userInfo && this.cart?.deliverTo && this.cart.products.length>0){
           let tokenStoraged = this.localStorageService.get(this.localStorageService.tokenStoragedKey);
           if(tokenStoraged && tokenStoraged.accessToken){
             let estimateFee$ = this.cartApiService.getEstimateFee(tokenStoraged.accessToken, this.cart.deliverTo._id!, this.cart.products);
@@ -137,10 +133,10 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
 
   confirmPayment(){
     if(this.userInformation){
-      let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+      let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
       if(tokenStoraged && tokenStoraged.accessToken){
         this.subscription.add(
-          this.orderService.insert(tokenStoraged.accessToken, this.cart).subscribe(async order=>{
+          this.orderService.insert(tokenStoraged.accessToken, this.cart!).subscribe(async order=>{
             await this.router.navigate(['/san-pham']);
             this.cartService.resetProduct();
             this.dialog.open(PaymentSuccessfulComponent,
@@ -162,7 +158,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
       }
     }else{
       this.subscription.add(
-        this.orderService.insertFromVitors(this.cart).subscribe(async order=>{
+        this.orderService.insertFromVitors(this.cart!).subscribe(async order=>{
           await this.router.navigate(['/san-pham']);
           this.cartService.resetProduct();
           this.dialog.open(PaymentSuccessfulComponent,

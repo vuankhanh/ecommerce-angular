@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 import { Observable } from 'rxjs';
+import { IRefreshTokenResponse } from '../../models/token.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -20,21 +21,11 @@ export class LoginService {
   }
 
   refreshToken(refreshToken: string){
-    return this.httpClient.post<ResponseRefreshToken>(this.urlRefreshToken, { refreshToken });
+    return this.httpClient.post<IRefreshTokenResponse>(this.urlRefreshToken, { refreshToken });
   }
 }
 
 export interface UserName{
   userName: string,
   password: string
-}
-
-export interface ResponseLogin{
-  accessToken: string,
-  refreshToken: string,
-  message: string
-}
-
-export interface ResponseRefreshToken{
-  accessToken: string
 }

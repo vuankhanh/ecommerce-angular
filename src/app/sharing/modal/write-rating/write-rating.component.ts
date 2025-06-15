@@ -1,15 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Rating } from 'src/app/models/ServerConfig';
+import { Rating } from '../../../models/ServerConfig';
 
-import { ConfigService } from 'src/app/services/api/config.service';
-import { ProductReviewsService, ReviewsWillUpload } from 'src/app/services/api/product/product-reviews.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { ConfigService } from '../../../services/api/config.service';
+import { ProductReviewsService, ReviewsWillUpload } from '../../../services/api/product/product-reviews.service';
+import { ToastService } from '../../../services/toast.service';
 
 import { Subscription } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Product } from 'src/app/models/Product';
+import { Product } from '../../../models/Product';
 
 const totalNumberOfStars = 5;
 @Component({
@@ -20,13 +20,13 @@ const totalNumberOfStars = 5;
 export class WriteRatingComponent implements OnInit {
   totalNumberOfStars = Array(totalNumberOfStars).fill(null).map((value, index)=>index+1);
 
-  ratingForm: FormGroup;
+  ratingForm!: FormGroup;
 
   mouseIndex: number = -1;
   rateSelection: number = this.mouseIndex;
-  ratingTitle: string;
+  ratingTitle: string = '';
 
-  ratings: Array<Rating>;
+  ratings: Array<Rating> = [];
 
   subscription: Subscription = new Subscription();
   constructor(

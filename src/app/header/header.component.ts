@@ -29,6 +29,7 @@ import { SocialAuthenticationService } from '../services/api/social-login/social
 import { Subscription } from 'rxjs';
 import { MaterialModule } from '../sharing/module/material';
 import { GalleryRoutePipe } from '../pipes/gallery-route/gallery-route.pipe';
+import { TToken } from '../models/token.interface';
 
 @Component({
   selector: 'app-header',
@@ -195,20 +196,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.setUserInformation(tokenInformation.data);
   }
 
-  googleLogin(){
-    this.socialAuthenticationService.signInWithGoogle().then(userInfo=>{
-      this.authService.afterLogin(userInfo);
-    }).catch(error=>{
-      console.log(error);
-    });
-  }
-
-  facebookLogin(){
-    this.socialAuthenticationService.signInWithFB().then(userInfo=>{
-      this.authService.afterLogin(userInfo);
-    }).catch(error=>{
-      console.log(error);
-    });
+  async socialAuthentication(provider: 'google' | 'facebook'){
+    try {
+      const token: TToken = await this.socialAuthenticationService.authentication(provider);
+      this.authService.afterLogin(token);
+    } catch (error) {
+      
+    }
   }
 
   logout(){

@@ -12,7 +12,6 @@ import { Address } from '../models/Address';
 //Service
 import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
-import { ResponseLogin } from './api/login.service';
 import { CheckTokenService } from './api/check-token.service';
 import { CartService } from './cart.service';
 import { CustomerAddressService, ResponseAddress } from './api/customer-address.service';
@@ -21,6 +20,7 @@ import { SocialAuthenticationService } from './api/social-login/social-authentic
 import { ToastService } from './toast.service';
 
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { TToken } from '../models/token.interface';
 @Injectable({
   providedIn: 'root'
 })
@@ -59,18 +59,20 @@ export class AuthService {
     }
   }
 
-  afterLogin(result: ResponseLogin){
-    this.checkTokenValidation(result.accessToken);
-    this.setDeliveryTo(result.accessToken);
-    let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(result.accessToken);
-    this.localStorageService.set(this.localStorageService.tokenStoragedKey, result);
+  afterLogin(token: TToken){
+    this.checkTokenValidation(token.accessToken);
+    this.setDeliveryTo(token.accessToken);
+    console.log(token);
+    
+    let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(token.accessToken);
+    this.localStorageService.set(this.localStorageService.tokenStoragedKey, token);
     if(tokenInformation){
       this.setUserInformation(tokenInformation.data);
     }
   }
 
   updateAccessToken(newAccessToken: string){
-    let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
     if(tokenStoraged){
       tokenStoraged.accessToken = newAccessToken;
       let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(tokenStoraged.accessToken);
@@ -94,10 +96,16 @@ export class AuthService {
   }
 
   setDeliveryTo(accessToken: string){
-    this.customerAddressService.get(accessToken).subscribe(res=>{
-      let responseAddress: ResponseAddress = res;
-      let isHeadquartersAddress: Address | null = this.getIsHeadquartersAddress(responseAddress.address);
-      this.cartService.setDelivery(isHeadquartersAddress);
+    this.customerAddressService.get(accessToken).subscribe({
+      next: (res: ResponseAddress) => {
+        let isHeadquartersAddress: Address | null = this.getIsHeadquartersAddress(res.address);
+        this.cartService.setDelivery(isHeadquartersAddress);
+      },
+      error: (err: Error) => {
+        console.log('Error fetching addresses:', err);
+        this.inProgressSpinnerService.progressSpinnerStatus(false);
+        this.toastService.shortToastError('Không thể lấy địa chỉ giao hàng', 'Lỗi');
+      }
     })
   }
 
@@ -112,7 +120,7 @@ export class AuthService {
   }
 
   getUserInfoFromTokenStoraged(){
-    let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
     if(tokenStoraged){
       let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(tokenStoraged.accessToken);
       if(tokenInformation){

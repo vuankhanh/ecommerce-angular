@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 
 import { animationSlide } from '../../animation/slide-show';
 
-import { Product } from 'src/app/models/Product';
+import { Product } from '../../models/Product';
 
-import { CartService } from 'src/app/services/cart.service';
-import { HeaderService } from 'src/app/services/header.service';
-import { AppServicesService } from 'src/app/services/app-services.service';
+import { CartService } from '../../services/cart.service';
+import { HeaderService } from '../../services/header.service';
+import { AppServicesService } from '../../services/app-services.service';
 // import Swiper core and required modules
 import SwiperCore, { A11y, Autoplay, Controller, Navigation, Pagination, Scrollbar, Swiper, SwiperOptions, Thumbs, Virtual, Zoom } from 'swiper';
 
@@ -31,7 +31,7 @@ SwiperCore.use([
   animations: [animationSlide]
 })
 export class SlideShowComponent implements OnInit, OnDestroy {
-  productHightlights: Array<Product>;
+  productHightlights: Array<Product> = [];
 
   config: SwiperOptions = {
     slidesPerView: 1,

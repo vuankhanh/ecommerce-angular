@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { ResponseLogin } from '../../../services/api/login.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../module/material';
 import { LoginComponent } from '../login/login.component';
@@ -9,6 +8,7 @@ import { RegisterComponent } from '../register/register.component';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 import { RegisterSuccessfulComponent } from '../register-successful/register-successful.component';
 import { ForgotPasswordSuccessfulComponent } from '../forgot-password-successful/forgot-password-successful.component';
+import { TToken } from '../../../models/token.interface';
 @Component({
   selector: 'app-check-account-main',
   standalone: true,
@@ -53,7 +53,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  closeModal(value: ResponseLogin){
+  closeModal(value: TToken){
     this.dialogRef.close(value);
   }
 

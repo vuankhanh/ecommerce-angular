@@ -7,9 +7,9 @@ import { AuthService } from '../../../services/auth.service';
 import { AddressModificationService } from '../../../services/address-modification.service';
 
 import { Subscription } from 'rxjs';
-import { ResponseLogin } from '../../../services/api/login.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { CustomerAddressService, ResponseAddress } from '../../../services/api/customer-address.service';
+import { TToken } from '../../../models/token.interface';
 
 @Component({
   selector: 'app-address-choose',
@@ -37,7 +37,7 @@ export class AddressChooseComponent implements OnInit, OnDestroy {
   }
 
   listenCustomerAddress(){
-    let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
     if(tokenStoraged){
       this.subscription.add(
         this.customerAddressService.get(tokenStoraged.accessToken).subscribe(res=>{

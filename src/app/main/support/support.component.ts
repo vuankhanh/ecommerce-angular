@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { toHTML } from "ngx-editor";
 
-import { SupportDetail } from 'src/app/models/Support';
+import { SupportDetail } from '../../models/Support';
 
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./support.component.scss']
 })
 export class SupportComponent implements OnInit, OnDestroy {
-  supportDetail: SupportDetail;
+  supportDetail?: SupportDetail;
   preview: any;
 
   subscription: Subscription = new Subscription();
@@ -24,7 +24,7 @@ export class SupportComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const activatedRouteData$ = this.activatedRoute.data.pipe(
-      map(data => <SupportDetail>data.support)
+      map(data => <SupportDetail>data['support'])
     );
 
     activatedRouteData$.subscribe(res=>{

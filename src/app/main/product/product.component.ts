@@ -3,18 +3,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ProductCategory } from '../../models/ProductCategory';
 
-import { AppServicesService } from 'src/app/services/app-services.service';
 
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { combineLatest, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AppServicesService } from '../../services/app-services.service';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
 export class ProductionsComponent implements OnInit, OnDestroy {
-  productCategorys: Array<ProductCategory>;
-  categoryIsActivated: ProductCategory;
+  productCategorys: Array<ProductCategory> = [];
+  categoryIsActivated?: ProductCategory;
 
   checkChildParams: boolean = false;
 
@@ -23,7 +23,7 @@ export class ProductionsComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
-    private appServicesService: AppServicesService,
+    private appServicesService: AppServicesService
   ) {}
 
   ngOnInit(): void {

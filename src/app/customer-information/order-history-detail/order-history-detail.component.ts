@@ -1,13 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Order } from 'src/app/models/Order';
-import { Product } from 'src/app/models/Product';
-import { ConfigService } from 'src/app/services/api/config.service';
-import { ResponseLogin } from 'src/app/services/api/login.service';
-
-import { OrderService } from 'src/app/services/api/order.service';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { Order } from '../../models/Order';
+import { TToken } from '../../models/token.interface';
+import { OrderService } from '../../services/api/order.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { Product } from '../../models/Product';
 
 @Component({
   selector: 'app-order-history-detail',
@@ -17,7 +15,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
   orderId: string;
 
-  order: Order;
+  order?: Order;
 
   displayedColumns: string[] = ['name', 'price', 'quantity'];
 
@@ -26,10 +24,9 @@ export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private orderService: OrderService,
-    private localStorageService: LocalStorageService,
-    public configService: ConfigService
+    private localStorageService: LocalStorageService
   ) {
-    this.orderId = this.activatedRoute.snapshot.params.id;
+    this.orderId = this.activatedRoute.snapshot.params['id'];
   }
 
   ngOnInit(): void {
@@ -37,7 +34,7 @@ export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
   }
 
   listenOrderHistoryDetail(orderId: string){
-    let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
     if(tokenStoraged && tokenStoraged.accessToken){
       this.subscription.add(
         this.orderService.getDetail(tokenStoraged.accessToken, orderId).subscribe(res=>{
@@ -53,8 +50,8 @@ export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
   }
 
   revoke(id: string){
-    let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-    if(tokenStoraged && tokenStoraged.accessToken && this.order._id != 'revoke'){
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    if(tokenStoraged && tokenStoraged.accessToken && this.order?._id != 'revoke'){
       this.subscription.add(
         this.orderService.revoke(tokenStoraged.accessToken, id).subscribe(res=>{
           this.order = res;

@@ -2,18 +2,18 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 
-import { ResponseLogin } from 'src/app/services/api/login.service';
-import { AdministrativeUnitsService } from 'src/app/services/api/administrative-units.service';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { AdministrativeUnitsService } from '../../../services/api/administrative-units.service';
+import { LocalStorageService } from '../../../services/local-storage.service';
 
-import { AuthService } from 'src/app/services/auth.service';
-import { ToastService } from 'src/app/services/toast.service';
+import { AuthService } from '../../../services/auth.service';
+import { ToastService } from '../../../services/toast.service';
 
 import { Subscription } from 'rxjs';
-import { UserInformation } from 'src/app/models/UserInformation';
-import { Address, Province, District, Ward, Position } from 'src/app/models/Address';
+import { UserInformation } from '../../../models/UserInformation';
+import { Address, Province, District, Ward, Position } from '../../../models/Address';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CustomerAddressService, ResponseAddress } from 'src/app/services/api/customer-address.service';
+import { CustomerAddressService, ResponseAddress } from '../../../services/api/customer-address.service';
+import { TToken } from '../../../models/token.interface';
 
 @Component({
   selector: 'app-address-modify',
@@ -21,7 +21,7 @@ import { CustomerAddressService, ResponseAddress } from 'src/app/services/api/cu
   styleUrls: ['./address-modify.component.scss']
 })
 export class AddressModifyComponent implements OnInit, OnDestroy {
-  addressForm: FormGroup;
+  addressForm!: FormGroup;
 
   provinces: Array<Province> = [];
   districts: Array<District> = [];
@@ -151,7 +151,7 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
         isHeadquarters: this.addressForm.value.isHeadquarters,
       }
       
-      let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+      let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
       if(tokenStoraged){
         this.subscription.add(
           this.customerAddressService.update(tokenStoraged.accessToken, address).subscribe(res=>{
@@ -179,7 +179,7 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
         isHeadquarters: this.addressForm.value.isHeadquarters,
       };
       
-      let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+      let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
       if(tokenStoraged){
         this.subscription.add(
           this.customerAddressService.insert(tokenStoraged.accessToken, address).subscribe(res=>{
