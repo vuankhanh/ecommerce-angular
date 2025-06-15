@@ -31,11 +31,11 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
 
   estimateFeeInfo: any = null;
   estimateFeeError: any;
-  
+
   userInformation?: UserInformation;
   defaultAddress?: Address;
   temporaryValue: number = 0;
-  
+
   private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
@@ -55,39 +55,39 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     const userInformation$ = this.authService.getUserInformation();
 
     this.subscription.add(
-      combineLatest([cartChange$, userInformation$]).subscribe(([cart, userInfo])=>{
-        if(cart){
+      combineLatest([cartChange$, userInformation$]).subscribe(([cart, userInfo]) => {
+        if (cart) {
           this.cart = cart;
           this.temporaryValue = this.cartService.sumTemporaryValue(this.cart.products);
-  
-          if(this.cart.products.length>0){
-            this.cartApiService.getTotalBill(this.cart.products).subscribe(res=>{
+
+          if (this.cart.products.length > 0) {
+            this.cartApiService.getTotalBill(this.cart.products).subscribe(res => {
               this.totalBill = res.totalBill;
-            },error=>{
+            }, error => {
               this.totalBill = 0;
             })
           }
-          
-          if(this.cart.deliverTo){
+
+          if (this.cart.deliverTo) {
             this.defaultAddress = this.cart.deliverTo;
           }
         }
 
-        if(userInfo){
+        if (userInfo) {
           this.userInformation = userInfo;
         }
 
-        if(userInfo && this.cart?.deliverTo && this.cart.products.length>0){
+        if (userInfo && this.cart?.deliverTo && this.cart.products.length > 0) {
           let tokenStoraged = this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-          if(tokenStoraged && tokenStoraged.accessToken){
+          if (tokenStoraged && tokenStoraged.accessToken) {
             let estimateFee$ = this.cartApiService.getEstimateFee(tokenStoraged.accessToken, this.cart.deliverTo._id!, this.cart.products);
             this.subscription.add(
-              estimateFee$.subscribe(res=>{
-                if(res){
+              estimateFee$.subscribe(res => {
+                if (res) {
                   this.estimateFeeInfo = res;
                   this.estimateFeeError = null;
                 }
-              }, error=>{
+              }, error => {
                 this.estimateFeeInfo = null;
                 this.estimateFeeError = {
                   desc: 'AhaMove hiện tại không hỗ trợ vận chuyển đến địa chỉ của bạn vì thế Carota sẽ liên hệ với bạn và chuẩn bị một hình thức vận chuyển khác.'
@@ -107,18 +107,18 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  showDetail(product: Product){
-    this.router.navigate(['san-pham/'+product.category.route, product._id]);
+  showDetail(product: Product) {
+    this.router.navigate(['san-pham/' + product.category.route, product._id]);
   }
 
-  changeAddress(){
+  changeAddress() {
     this.dialog.open(AddressChooseComponent, {
       panelClass: 'address-choose',
       data: {
         defaultAddress: this.defaultAddress
       }
-    }).afterClosed().subscribe(res=>{
-      if(res && res.deliverTo){
+    }).afterClosed().subscribe(res => {
+      if (res && res.deliverTo) {
         let address: Address = res.deliverTo;
         this.defaultAddress = address;
         this.cartService.setDelivery(this.defaultAddress);
@@ -126,17 +126,17 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     })
   }
 
-  insertAddress(){
+  insertAddress() {
     this.renderer2.removeClass(this.btnInsertAddress.nativeElement, 'button-substyle');
     this.addressModificationService.openAddressModification('insert', null)
   }
 
-  confirmPayment(){
-    if(this.userInformation){
+  confirmPayment() {
+    if (this.userInformation) {
       let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-      if(tokenStoraged && tokenStoraged.accessToken){
+      if (tokenStoraged && tokenStoraged.accessToken) {
         this.subscription.add(
-          this.orderService.insert(tokenStoraged.accessToken, this.cart!).subscribe(async order=>{
+          this.orderService.insert(tokenStoraged.accessToken, this.cart!).subscribe(async order => {
             await this.router.navigate(['/san-pham']);
             this.cartService.resetProduct();
             this.dialog.open(PaymentSuccessfulComponent,
@@ -145,20 +145,20 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
                 data: { isLoyalCustomer: true, order },
                 autoFocus: false
               }
-            ).afterClosed().subscribe(res=>{
+            ).afterClosed().subscribe(res => {
               let result: 'goProduct' | 'goOrderHistory' = res;
-              if(result === 'goOrderHistory'){
+              if (result === 'goOrderHistory') {
                 this.router.navigate(['/customer/order-history']);
               }
             })
-          },error=>{
+          }, error => {
             this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
           })
         )
       }
-    }else{
+    } else {
       this.subscription.add(
-        this.orderService.insertFromVitors(this.cart!).subscribe(async order=>{
+        this.orderService.insertFromVitors(this.cart!).subscribe(async order => {
           await this.router.navigate(['/san-pham']);
           this.cartService.resetProduct();
           this.dialog.open(PaymentSuccessfulComponent,
@@ -168,14 +168,14 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
               autoFocus: false
             }
           )
-        },error=>{
+        }, error => {
           this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
         })
       )
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

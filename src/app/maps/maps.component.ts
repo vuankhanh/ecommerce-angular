@@ -22,11 +22,11 @@ export class MapsComponent implements OnInit, AfterViewInit {
 
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.addMap(this.address);
   }
 
-  addMap(address: Address){
+  addMap(address: Address) {
     let mapOptions = {
       center: address.position,
       zoom: 16,
@@ -53,23 +53,23 @@ export class MapsComponent implements OnInit, AfterViewInit {
     });
 
     marker.infowindow = this.infoWindow(address);
-    marker.addListener('click', ()=>{
+    marker.addListener('click', () => {
       marker.infowindow.open(this.map, marker);
     })
 
-    this.mouseEventEmitService.get().subscribe(check=>{
-      if(check){
+    this.mouseEventEmitService.get().subscribe(check => {
+      if (check) {
         marker.infowindow.open(this.map, marker);
-      }else{
+      } else {
         marker.infowindow.close();
       }
     });
   }
 
-  infoWindow(address: Address){
-    const contentString = 
-    '<div id="content">'+
-    address.street
+  infoWindow(address: Address) {
+    const contentString =
+      '<div id="content">' +
+      address.street
     '</div>';
 
     const infowindow = new google.maps.InfoWindow({

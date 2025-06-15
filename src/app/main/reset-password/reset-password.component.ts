@@ -35,57 +35,57 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.pipe(
       filter(params => !!params['passwordToken']),
       map(params => params['passwordToken'] as string)
-    ).subscribe(passwordToken=>{
+    ).subscribe(passwordToken => {
       this.passwordToken = passwordToken;
       this.subscription.add(
-        this.resetPasswordService.checkToken(this.passwordToken).subscribe(res=>{
+        this.resetPasswordService.checkToken(this.passwordToken).subscribe(res => {
           this.initForm();
-        },err=>{this.router.navigate([''])})
+        }, err => { this.router.navigate(['']) })
       )
     })
   }
 
-  initForm(){
+  initForm() {
     this.newPasswordForm = this.formBuilder.group({
-        password: ['',
-          { 
-            validators: [Validators.required, safePassword()],
-            updateOn: 'blur'
-          }
-        ],
-        confirmPassword: ['',
-          {
-            validators: [Validators.required, isSameInConfirmPassword()],
-            updateOn: 'blur'
-          }
-        ],
+      password: ['',
+        {
+          validators: [Validators.required, safePassword()],
+          updateOn: 'blur'
+        }
+      ],
+      confirmPassword: ['',
+        {
+          validators: [Validators.required, isSameInConfirmPassword()],
+          updateOn: 'blur'
+        }
+      ],
     })
   }
 
-  resetPassword(){
-    if(this.newPasswordForm.valid && this.passwordToken){
+  resetPassword() {
+    if (this.newPasswordForm.valid && this.passwordToken) {
       this.subscription.add(
-        this.resetPasswordService.newPassword(this.passwordToken, this.newPasswordForm.value.confirmPassword).subscribe(res=>{
+        this.resetPasswordService.newPassword(this.passwordToken, this.newPasswordForm.value.confirmPassword).subscribe(res => {
           this.toastService.shortToastSuccess('Đã đổi mật khẩu thành công', 'Thành công');
           this.countDown = 3;
-          let interval = setInterval(()=>{
+          let interval = setInterval(() => {
             this.countDown--;
-            if(this.countDown === 0){
-              this.authSerivce.logout().then(_=>{
+            if (this.countDown === 0) {
+              this.authSerivce.logout().then(_ => {
                 this.authSerivce.login('login');
               });
               clearInterval(interval);
             }
           }, 1000);
-        },err=>{
+        }, err => {
           this.toastService.shortToastError('Đã có lỗi xảy ra', 'Thất bại');
         })
       )
     }
-    
+
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

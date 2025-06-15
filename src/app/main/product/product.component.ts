@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { ProductCategory } from '../../models/ProductCategory';
 
@@ -7,8 +7,19 @@ import { ProductCategory } from '../../models/ProductCategory';
 import { combineLatest, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppServicesService } from '../../services/app-services.service';
+import { CommonModule } from '@angular/common';
+import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
 @Component({
   selector: 'app-product',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+
+    GalleryRoutePipe
+  ],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
@@ -24,7 +35,7 @@ export class ProductionsComponent implements OnInit, OnDestroy {
     private router: Router,
     private activateRoute: ActivatedRoute,
     private appServicesService: AppServicesService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -32,8 +43,8 @@ export class ProductionsComponent implements OnInit, OnDestroy {
     const url$ = this.activateRoute.url.pipe(map(segments => segments.join('')));
 
     this.subscription.add(
-      combineLatest([productCategory$, url$]).subscribe(([productCategories, url])=>{
-        if(productCategories.length){
+      combineLatest([productCategory$, url$]).subscribe(([productCategories, url]) => {
+        if (productCategories.length) {
           this.productCategorys = productCategories;
           setTimeout(() => {
             let childPath = this.activateRoute.firstChild?.routeConfig?.path;
@@ -42,17 +53,17 @@ export class ProductionsComponent implements OnInit, OnDestroy {
         }
       })
     );
-    
+
   }
 
-  dosomething(event: any){
+  dosomething(event: any) {
     let img: HTMLImageElement = <HTMLImageElement>event.target;
-    if(img){
+    if (img) {
       let src: string = img.src;
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 }

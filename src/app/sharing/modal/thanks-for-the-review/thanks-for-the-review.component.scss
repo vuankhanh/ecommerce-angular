@@ -1,45 +1,53 @@
-.thanks-for-the-review-container{
-    max-width: 400px;
-    .main-container{
-        padding: 15px;
-        .icon-container{
-            background-color: #51A351;
-            height: 150px;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-            mat-icon{
-                height: 50px;
-                width: 50px;
-                font-size: 50px;
-                color: white;
-            }
-        }
-        .content-container{
-            .emotion-container{
-                align-items: center;
-                mat-icon{
-                    height: 50px;
-                    width: 50px;
-                    font-size: 50px;
-                    color: red;
-                }
-                .heading{
-                    font-weight: 450;
-                    font-size: 16px;
-                }
-            }
-        }
-    }
-    .button-container{
-        cursor: pointer;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
+.thanks-for-the-review-container {
+  max-width: 400px;
+
+  .main-container {
+    padding: 15px;
+
+    .icon-container {
+      background-color: #51A351;
+      height: 150px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+
+      mat-icon {
         height: 50px;
-        border-top: 1px solid;
+        width: 50px;
+        font-size: 50px;
+        color: white;
+      }
     }
-    .button-container:hover{
-        background: #ededed;
+
+    .content-container {
+      .emotion-container {
+        align-items: center;
+
+        mat-icon {
+          height: 50px;
+          width: 50px;
+          font-size: 50px;
+          color: red;
+        }
+
+        .heading {
+          font-weight: 450;
+          font-size: 16px;
+        }
+      }
     }
+  }
+
+  .button-container {
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    border-top: 1px solid;
+  }
+
+  .button-container:hover {
+    background: #ededed;
+  }
 }

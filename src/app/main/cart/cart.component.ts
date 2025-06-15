@@ -10,7 +10,7 @@ import { AddressChooseComponent } from '../../sharing/modal/address-choose/addre
 
 import { Address, District, Province, Ward } from '../../models/Address';
 import { Product } from '../../models/Product';
-import { UserInformation } from '../../models/UserInformation';
+import { JwtDecoded } from '../../models/UserInformation';
 
 import { AuthService } from '../../services/auth.service';
 import { Cart, CartService } from '../../services/cart.service';
@@ -22,8 +22,8 @@ import { AdministrativeUnitsService } from '../../services/api/administrative-un
 import { DirectionPostion, MainContainerScrollService } from '../../services/main-container-scroll.service';
 
 import { Subscription } from 'rxjs';
-import { GalleryRoutePipe } from '../../pipes/gallery-route/gallery-route.pipe';
-import { ReplaceSpacePipe } from '../../pipes/replace-space/replace-space.pipe';
+import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
+import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
 import { MaterialModule } from '../../sharing/module/material';
 import { EmptyCartComponent } from '../../sharing/component/empty-cart/empty-cart.component';
 
@@ -61,7 +61,7 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
   districts: Array<District> = [];
   wards: Array<Ward> = [];
 
-  userInformation: UserInformation | null = null;
+  jwtDecoded: JwtDecoded | null = null;
   defaultAddress?: Address;
 
   angularFormElements: Array<AngularFormElement> = [];
@@ -78,7 +78,7 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     private addressModificationService: AddressModificationService,
     private toastService: ToastService,
     private cartApiService: CartApiService,
-    // private socketIoService: SocketIoService,
+    private socketIoService: SocketIoService,
     private administrativeUnitsService: AdministrativeUnitsService,
     private mainContainerScrollService: MainContainerScrollService
   ) {
@@ -88,16 +88,16 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.initCart();
     this.listenUserInformation();
-    if(this.isBrowser){
+    if (this.isBrowser) {
       this.listenSocketDataProduct();
     }
   }
 
   ngAfterViewInit(): void {
-    if(!this.matFormField){
+    if (!this.matFormField) {
       return;
     }
-    this.angularFormElements = this.matFormField.map(matFormField=>{
+    this.angularFormElements = this.matFormField.map(matFormField => {
       let target = document.getElementById(matFormField._control.id);
 
       let angularFormElement: AngularFormElement = {
@@ -109,18 +109,18 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  initCart(){
+  initCart() {
     this.subscription.add(
-      this.cartService.listenCartChange().subscribe(cart=>{
+      this.cartService.listenCartChange().subscribe(cart => {
         this.cart = cart;
         this.temporaryValue = this.cartService.sumTemporaryValue(this.cart.products);
-        if(this.cart.products.length>0){
-          this.cartApiService.getTotalBill(this.cart.products).subscribe(res=>{
+        if (this.cart.products.length > 0) {
+          this.cartApiService.getTotalBill(this.cart.products).subscribe(res => {
             this.totalBill = res.totalBill;
-          },error=>{
+          }, error => {
             this.totalBill = 0;
           })
-          if(this.cart.deliverTo && !this.defaultAddress){
+          if (this.cart.deliverTo && !this.defaultAddress) {
             this.defaultAddress = this.cart.deliverTo;
           }
           this.initForm(this.defaultAddress);
@@ -129,7 +129,7 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     )
   }
 
-  initForm(address?: Address){
+  initForm(address?: Address) {
     let phoneNumberRegEx = /^((0)+([0-9]{9})\b)$/g;
 
     this.customerForm = this.formBuilder.group({
@@ -146,83 +146,83 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
       isHeadquarters: [false, Validators.required],
     });
     this.getProvince();
-    if(address){
+    if (address) {
       this.customerForm.controls['responsiblePerson'].setValue(address.responsiblePerson);
       this.customerForm.controls['phoneNumber'].setValue(address.phoneNumber);
       this.customerForm.controls['street'].setValue(address.street);
       this.customerForm.controls['isHeadquarters'].setValue(address.isHeadquarters);
       this.customerForm.get('position')?.get('lat')?.setValue(address.position?.lat);
       this.customerForm.get('position')?.get('lng')?.setValue(address.position?.lng);
-      if(address.province && address.province.code){
+      if (address.province && address.province.code) {
         this.getDistrict(address.province.code);
       }
-      if(address.district && address.district.code){
+      if (address.district && address.district.code) {
         this.getWard(address.district.code);
       }
     }
   }
 
-  getProvince(){
+  getProvince() {
     this.subscription.add(
-      this.administrativeUnitsService.getProvince().subscribe(res=>{
+      this.administrativeUnitsService.getProvince().subscribe(res => {
         this.provinces = res;
-        if(this.defaultAddress && this.defaultAddress.province){
-          let index:number = this.findIndexOfObjectInArray(this.defaultAddress.province._id, this.provinces);
+        if (this.defaultAddress && this.defaultAddress.province) {
+          let index: number = this.findIndexOfObjectInArray(this.defaultAddress.province._id, this.provinces);
           this.customerForm.controls['province'].setValue(index);
         }
       })
     )
   }
 
-  getDistrict(provinceCode: string, reset?: boolean){
+  getDistrict(provinceCode: string, reset?: boolean) {
     this.subscription.add(
-      this.administrativeUnitsService.getDistrict(provinceCode).subscribe(res=>{
+      this.administrativeUnitsService.getDistrict(provinceCode).subscribe(res => {
         this.districts = res;
-        if(!reset){
-          if(this.defaultAddress && this.defaultAddress.district){
-            let index:number = this.findIndexOfObjectInArray(this.defaultAddress.district._id, this.districts)
+        if (!reset) {
+          if (this.defaultAddress && this.defaultAddress.district) {
+            let index: number = this.findIndexOfObjectInArray(this.defaultAddress.district._id, this.districts)
             this.customerForm.controls['district'].setValue(index);
           }
-        }else{
+        } else {
           this.customerForm.controls['district'].setValue('');
           this.customerForm.controls['ward'].setValue('');
         }
-      }, error=>{
+      }, error => {
         this.districts = [];
       })
     )
   }
 
-  getWard(districtCode: string, reset?: boolean){
+  getWard(districtCode: string, reset?: boolean) {
     this.subscription.add(
-      this.administrativeUnitsService.getWard(districtCode).subscribe(res=>{
+      this.administrativeUnitsService.getWard(districtCode).subscribe(res => {
         this.wards = res;
-        if(!reset){
-          if(this.defaultAddress && this.defaultAddress.ward){
+        if (!reset) {
+          if (this.defaultAddress && this.defaultAddress.ward) {
             let index: number = this.findIndexOfObjectInArray(this.defaultAddress.ward._id, this.wards)
             this.customerForm.controls['ward'].setValue(index);
           }
-        }else{
+        } else {
           this.customerForm.controls['ward'].setValue('');
         }
-      },error=>{
+      }, error => {
         this.wards = [];
       })
     )
   }
 
-  provinceChange(event: MatSelectChange){
+  provinceChange(event: MatSelectChange) {
     let index: number = event.value;
     let province: Province = this.provinces[index];
-    if(province){
+    if (province) {
       this.getDistrict(province.code, true);
     }
   }
 
-  districtChange(event: MatSelectChange){
+  districtChange(event: MatSelectChange) {
     let index: number = event.value;
     let district: District = this.districts[index];
-    if(district){
+    if (district) {
       this.getWard(district.code, true);
     }
   }
@@ -230,45 +230,45 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
   findIndexOfObjectInArray(
     id: string,
     array: Array<Province> | Array<District> | Array<Ward>
-  ){
-    return array.findIndex(object=>object._id === id);
+  ) {
+    return array.findIndex(object => object._id === id);
   }
 
-  listenUserInformation(){
+  listenUserInformation() {
     this.subscription.add(
-      this.authService.getUserInformation().subscribe(userInfo=>{
-        this.userInformation = userInfo;
+      this.authService.jwtPayload$.subscribe(jwtDecoded => {
+        this.jwtDecoded = jwtDecoded;
       })
     )
   }
 
-  listenSocketDataProduct(){
+  listenSocketDataProduct() {
     this.subscription.add(
-      // this.socketIoService.theRemainingAmoutChange$().subscribe(socketData=>{
-      //   if(this.cart){
-      //     let products: Array<Product> = this.cart.products;
-      //     if(products && products.length>0){
-      //       let index: number = products.findIndex(product=>product._id === socketData.product._id);
-      //       if(index >= 0){
-      //         products[index].theRemainingAmount = socketData.product.theRemainingAmount;
-      //         this.cartService.setProduct(products);
-      //       }
-      //     }
-      //   }
-      // })
+      this.socketIoService.theRemainingAmoutChange$().subscribe(socketData=>{
+        if(this.cart){
+          let products: Array<Product> = this.cart.products;
+          if(products && products.length>0){
+            let index: number = products.findIndex(product=>product._id === socketData.product._id);
+            if(index >= 0){
+              products[index].theRemainingAmount = socketData.product.theRemainingAmount;
+              this.cartService.setProduct(products);
+            }
+          }
+        }
+      })
     )
   }
 
-  changeQuantity(increase: boolean, index: number){
+  changeQuantity(increase: boolean, index: number) {
     let products: Array<Product> = this.cart?.products || [];
-    if(increase){
-      if(products[index].quantity! < products[index].theRemainingAmount){
+    if (increase) {
+      if (products[index].quantity! < products[index].theRemainingAmount) {
         products[index].quantity!++;
-      }else{
-        this.toastService.shortToastWarning(products[index].name+ ' chỉ còn '+products[index].theRemainingAmount+ ' sản phẩm', '');
+      } else {
+        this.toastService.shortToastWarning(products[index].name + ' chỉ còn ' + products[index].theRemainingAmount + ' sản phẩm', '');
       }
-    }else{
-      if(products[index].quantity! > 1){
+    } else {
+      if (products[index].quantity! > 1) {
         products[index].quantity!--;
       }
     }
@@ -276,29 +276,29 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     this.temporaryValue = this.cartService.sumTemporaryValue(this.cart!.products);
   }
 
-  showDetail(product: Product){
-    this.router.navigate(['san-pham/'+product.category.route, product.route]);
+  showDetail(product: Product) {
+    this.router.navigate(['san-pham/' + product.category.route, product.route]);
   }
 
-  quantityInputChange(event: Event, index: number){
+  quantityInputChange(event: Event, index: number) {
     let value = (event.target as HTMLInputElement).value;
-    
+
     let products: Array<Product> = this.cart?.products || [];
-    if(this.isNumber(value)){
-      if(products[index].quantity! <= products[index].theRemainingAmount){
+    if (this.isNumber(value)) {
+      if (products[index].quantity! <= products[index].theRemainingAmount) {
         products[index].quantity = parseInt(value);
-      }else{
+      } else {
         products[index].quantity = products[index].theRemainingAmount;
-        this.toastService.shortToastWarning(products[index].name+ ' chỉ còn '+products[index].theRemainingAmount+ ' sản phẩm', '');
+        this.toastService.shortToastWarning(products[index].name + ' chỉ còn ' + products[index].theRemainingAmount + ' sản phẩm', '');
       }
-    }else{
+    } else {
       products[index].quantity = 1;
     }
     this.cartService.setProduct(products);
     this.temporaryValue = this.cartService.sumTemporaryValue(products);
   }
 
-  laterBuy(cartItem: HTMLDivElement, index: number){
+  laterBuy(cartItem: HTMLDivElement, index: number) {
     this.renderer2.addClass(cartItem, 'cart-item-removed');
     setTimeout(() => {
       let products: Array<Product> = this.cart?.products || [];
@@ -308,17 +308,17 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 450);
   }
 
-  changeAddress(){
-    if(!this.userInformation){
+  changeAddress() {
+    if (!this.jwtDecoded) {
       this.authService.login('login');
-    }else{
+    } else {
       this.dialog.open(AddressChooseComponent, {
         panelClass: 'address-choose',
         data: {
           defaultAddress: this.defaultAddress
         }
-      }).afterClosed().subscribe(res=>{
-        if(res && res.deliverTo){
+      }).afterClosed().subscribe(res => {
+        if (res && res.deliverTo) {
           let address: Address = res.deliverTo;
           this.defaultAddress = address;
           this.cartService.setDelivery(this.defaultAddress);
@@ -327,40 +327,40 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  insertAddress(){
-    if(!this.userInformation){
+  insertAddress() {
+    if (!this.jwtDecoded) {
       this.authService.login('login');
-    }else{
+    } else {
       this.renderer2.removeClass(this.btnInsertAddress?.nativeElement, 'button-substyle');
       this.addressModificationService.openAddressModification('insert', null);
     }
   }
 
-  order(){
-    if(!this.userInformation){
-      if(this.isBrowser){
+  order() {
+    if (!this.jwtDecoded) {
+      if (this.isBrowser) {
         this.form?.ngSubmit.emit();
       }
-    }else{
-      if(!this.cart?.deliverTo){
+    } else {
+      if (!this.cart?.deliverTo) {
         this.renderer2.addClass(this.btnInsertAddress?.nativeElement, 'button-substyle');
         this.toastService.shortToastWarning('Bạn chưa tạo vị trí nào trong sổ địa chỉ.', '');
-      }else{
+      } else {
         this.navigateToPaymentConfirm();
       }
     }
   }
 
-  customerFormSubmit(){
+  customerFormSubmit() {
     this.customerForm.updateValueAndValidity();
     this.customerForm.markAllAsTouched();
 
-    if(this.customerForm.valid){
+    if (this.customerForm.valid) {
       this.navigateToPaymentConfirm();
-    }else{
-      for(let [index, formElement] of this.angularFormElements.entries()){
+    } else {
+      for (let [index, formElement] of this.angularFormElements.entries()) {
         const controlErrors: ValidationErrors = formElement.control?.errors!;
-        if(controlErrors != null){
+        if (controlErrors != null) {
           let directionPostion: DirectionPostion = {
             direction: 'y',
             position: formElement.offsetTop
@@ -375,14 +375,14 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  navigateToPaymentConfirm(){
+  navigateToPaymentConfirm() {
     if (!this.cart) return;
-    if(this.cart.products.length>0){
+    if (this.cart.products.length > 0) {
       let checkMatchingQuantity = this.cartService.checkMatchingQuantity();
 
-      if(checkMatchingQuantity.length === 0){
+      if (checkMatchingQuantity.length === 0) {
         this.router.navigate(['/payment-confirm']);
-      }else{
+      } else {
         alert(checkMatchingQuantity)
       }
     }
@@ -392,7 +392,7 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     return !isNaN(number) && isFinite(number)
   }
 
-  addressValue(): Address{
+  addressValue(): Address {
     let address: Address = {
       street: this.customerForm.value.street,
       responsiblePerson: this.customerForm.value.responsiblePerson,
@@ -406,8 +406,8 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     return address;
   }
 
-  ngOnDestroy(){
-    if(this.customerForm && this.customerForm.valid){
+  ngOnDestroy() {
+    if (this.customerForm && this.customerForm.valid) {
       let address: Address = this.addressValue();
       this.cartService.setDelivery(address);
     }
@@ -415,7 +415,7 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 }
 
-interface AngularFormElement{
+interface AngularFormElement {
   control: NgControl | AbstractControlDirective | null,
   offsetTop: number,
   fieldElement: HTMLElement | null

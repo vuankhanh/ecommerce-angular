@@ -1,13 +1,16 @@
-.rating-container{
-    align-items: center;
-    .star-container{
-        width: fit-content;
-        mat-icon{
-            color: orange;
-        }
+.rating-container {
+  align-items: center;
 
+  .star-container {
+    width: fit-content;
+
+    mat-icon {
+      color: orange;
     }
-    .rating-title{
-        font-weight: 450;
-    }
+
+  }
+
+  .rating-title {
+    font-weight: 450;
+  }
 }

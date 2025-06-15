@@ -30,10 +30,10 @@
     "firebase": "^11.9.1",
     "jwt-decode": "^4.0.0",
     "ngx-editor": "^17.5.4",
+    "ngx-owl-carousel-o": "^19.0.2",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "socket.io-client": "^4.8.1",
-    "swiper": "^11.2.8",
     "tslib": "^2.4.0",
     "zone.js": "~0.15.1"
   },

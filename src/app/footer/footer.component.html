@@ -1,91 +1,71 @@
 <div class="footer-container" *ngIf="identification">
-    <div class="horizontal-container footer-item-container">
-        <div class="vertical-container first-block">
-            <!-- <div class="logo-container">
+  <div class="horizontal-container footer-item-container">
+    <div class="vertical-container first-block">
+      <!-- <div class="logo-container">
                 <img width="100" src="{{ identification.logo.srcThumbnail | galleryRoute }}" alt="">
             </div> -->
 
-            <iframe
-                src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fthuy.hai.san.carota&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=583183603050614"
-                width="340"
-                height="130"
-                style="border:none;overflow:hidden"
-                scrolling="no"
-                frameborder="0"
-                allowfullscreen="true"
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-            ></iframe>
-        
-            <div class="menu-container horizontal-container">
-                <ng-container *ngFor="let menu of menusList; let i = index">
-                    <div class="vertical-container dropdown-container">
-                        <button
-                            matRippleDisabled="false"
-                            class="title-menu"
-                            [routerLink]="[menu.route]"
-                            [routerLinkActive]="['is-active']"
-                            [routerLinkActiveOptions]="{exact: true}"
-                            
-                            [matBadge]="badgeCart"
-                            [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart"
-                            (mouseenter)="closeAlertAddedToCart()"
-                        >
-                            {{menu.title}}
-                        </button>
-                    </div>
-                </ng-container>
-            </div>
+      <iframe
+        src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fthuy.hai.san.carota&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=583183603050614"
+        width="340" height="130" style="border:none;overflow:hidden" scrolling="no" frameborder="0"
+        allowfullscreen="true"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
 
-            <div class="drawer-toggle-button vertical-container">
-                <button mat-icon-button (click)="toggleDrawerEmit()">
-                    <mat-icon>menu</mat-icon>
-                </button>
-            </div>
-        </div>
+      <div class="menu-container horizontal-container">
+        <ng-container *ngFor="let menu of menusList; let i = index">
+          <div class="vertical-container dropdown-container">
+            <button matRippleDisabled="false" class="title-menu" [routerLink]="[menu.route]"
+              [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{exact: true}" [matBadge]="badgeCart"
+              [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart"
+              (mouseenter)="closeAlertAddedToCart()">
+              {{menu.title}}
+            </button>
+          </div>
+        </ng-container>
+      </div>
 
-        <div class="height-space"></div>
-    
-        <div class="second-block">
-            <div class="social-container vertical-container" *ngIf="isBrowser">
-                <a
-                    *ngFor="let social of identification.social"
-                    class="social-networking-item horizontal-container"
-                    [href]="social.url" target="_blank"
-                >
-                    <mat-icon svgIcon="{{ social.name }}" class="{{ social.name }}"></mat-icon>
-                    <span>{{ social.url }}</span>
-                </a>
-            </div>
-            <div class="phone-number-container vertical-container">
-                <ng-container *ngFor="let phoneNumber of identification.phoneNumber">
-                    <a
-                        *ngIf="phoneNumber.isMain"
-                        class="horizontal-container"
-                        [href]="'tel: '+phoneNumber.number" target="_blank"
-                    >
-                        <mat-icon>phone</mat-icon>
-                        <span>{{ phoneNumber.number }}</span>
-                    </a>
-                </ng-container>
-            </div>
-            <div class="address-container vertical-container">
-                <ng-container *ngFor="let address of identification.address">
-                    <a
-                        *ngIf="address.isHeadquarters"
-                        class="horizontal-container"
-                        [href]="'https://www.google.com/maps/place/Th%E1%BB%A7y+H%E1%BA%A3i+S%E1%BA%A3n+Carota/@20.9631999,105.8244628,17z/data=!4m5!3m4!1s0x0:0xfa2d7145a9279994!8m2!3d20.9632111!4d105.8266494'" target="_blank"
-                    >
-                        <mat-icon>place</mat-icon>
-                        <span>{{ address.ward.name + ', '+ address.district.name + ', '+ address.province.name}}</span>
-                    </a>
-                </ng-container>
-            </div>
-        </div>
-        
-        <div class="height-space"></div>
+      <div class="drawer-toggle-button vertical-container">
+        <button mat-icon-button (click)="toggleDrawerEmit()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+    </div>
 
-        <div class="third-block">
-            <!-- <iframe
+    <div class="height-space"></div>
+
+    <div class="second-block">
+      <div class="social-container vertical-container" *ngIf="isBrowser">
+        <a *ngFor="let social of identification.social" class="social-networking-item horizontal-container"
+          [href]="social.url" target="_blank">
+          <mat-icon svgIcon="{{ social.name }}" class="{{ social.name }}"></mat-icon>
+          <span>{{ social.url }}</span>
+        </a>
+      </div>
+      <div class="phone-number-container vertical-container">
+        <ng-container *ngFor="let phoneNumber of identification.phoneNumber">
+          <a *ngIf="phoneNumber.isMain" class="horizontal-container" [href]="'tel: '+phoneNumber.number"
+            target="_blank">
+            <mat-icon>phone</mat-icon>
+            <span>{{ phoneNumber.number }}</span>
+          </a>
+        </ng-container>
+      </div>
+      <div class="address-container vertical-container">
+        <ng-container *ngFor="let address of identification.address">
+          <a *ngIf="address.isHeadquarters" class="horizontal-container"
+            [href]="'https://www.google.com/maps/place/Th%E1%BB%A7y+H%E1%BA%A3i+S%E1%BA%A3n+Carota/@20.9631999,105.8244628,17z/data=!4m5!3m4!1s0x0:0xfa2d7145a9279994!8m2!3d20.9632111!4d105.8266494'"
+            target="_blank">
+            <mat-icon>place</mat-icon>
+            <span>{{ address.ward.name + ', '+ address.district.name + ', '+ address.province.name}}</span>
+          </a>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="height-space"></div>
+
+    <div class="third-block">
+      <!-- <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.7338716789923!2d105.8244628!3d20.963199900000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xfa2d7145a9279994!2zVGjhu6d5IEjhuqNpIFPhuqNuIENhcm90YQ!5e0!3m2!1svi!2s!4v1627466727028!5m2!1svi!2s"
                 style="border:0;"
                 height="100%"
@@ -94,17 +74,14 @@
                 loading="lazy"
             ></iframe> -->
 
-            <ng-container *ngFor="let item of supports; let i = index;">
-                <div class="vertical-container dropdown-container">
-                    <a
-                        [routerLink]="['support/'+item.route]"
-                        [routerLinkActive]="['is-active']"
-                        [routerLinkActiveOptions]="{exact: true}"
-                    >
-                        {{'- '+item.name}}
-                    </a>
-                </div>
-            </ng-container>
+      <ng-container *ngFor="let item of supports; let i = index;">
+        <div class="vertical-container dropdown-container">
+          <a [routerLink]="['support/'+item.route]" [routerLinkActive]="['is-active']"
+            [routerLinkActiveOptions]="{exact: true}">
+            {{'- '+item.name}}
+          </a>
         </div>
+      </ng-container>
     </div>
+  </div>
 </div>

@@ -1,18 +1,20 @@
-.slide-container{
-    width: 100%;
-    swiper{
-        .item-slide-container{
-            position: relative;
-            img{
-                width: 100%;
-                cursor: pointer;
-            }
-        }
+.slide-container {
+  width: 100%;
+
+  swiper {
+    .item-slide-container {
+      position: relative;
+
+      img {
+        width: 100%;
+        cursor: pointer;
+      }
     }
-    // position: relative;
-    // padding-bottom: 33.33%;
-    // overflow-x: hidden;
+  }
+
+  // position: relative;
+  // padding-bottom: 33.33%;
+  // overflow-x: hidden;
 }
 
-@media only screen and (max-width: 768px) {
-}
+@media only screen and (max-width: 768px) {}

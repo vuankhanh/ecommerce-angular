@@ -1,70 +1,55 @@
 <ng-container *ngIf="product">
-    <div class="product-detail-container horizontal-container">
-        <div class="main-container vertical-container">
-            <div class="product-info-container horizontal-container">
-                <div class="album-container" *ngIf="imgMain && product.albumImg && product.albumImg.media.length>0">
-                    <div class="main-img-container horizontal-container">
+  <div class="product-detail-container horizontal-container">
+    <div class="main-container vertical-container">
+      <div class="product-info-container horizontal-container">
+        <div class="album-container" *ngIf="imgMain && product.albumImg && product.albumImg.media.length>0">
+          <div class="main-img-container horizontal-container">
 
-                        <div class="button-container">
-                            <button
-                                (click)="setImgMainDirection('toLeft')"
-                                [disabled] = "imgMain._id === product.albumImg.media[0]._id"
-                            >
-                                <mat-icon>chevron_left</mat-icon>
-                            </button>
-                        </div>
+            <div class="button-container">
+              <button (click)="setImgMainDirection('toLeft')"
+                [disabled]="imgMain._id === product.albumImg.media[0]._id">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+            </div>
 
-                        <div style="width: 100%;">
-                            <div class="img-container horizontal-container">
-                                <img
-                                    [src]="imgMain.src | galleryRoute"
-                                    [alt]="product.name"
-                                    (load)="dosomething($event)"
-                                    appZoomElement
-                                >
-                            </div>
-                        </div>
+            <div style="width: 100%;">
+              <div class="img-container horizontal-container">
+                <img [src]="imgMain.src | galleryRoute" [alt]="product.name" (load)="dosomething($event)"
+                  appZoomElement>
+              </div>
+            </div>
 
-                        <div class="button-container">
-                            <button
-                                (click)="setImgMainDirection('toRight')"
-                                [disabled] = "imgMain._id === product.albumImg.media[product.albumImg.media.length-1]._id"
-                            >
-                                <mat-icon>chevron_right</mat-icon>
-                            </button>
-                        </div>
+            <div class="button-container">
+              <button (click)="setImgMainDirection('toRight')"
+                [disabled]="imgMain._id === product.albumImg.media[product.albumImg.media.length-1]._id">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
 
-                        <!-- <div class="action-img horizontal-container"></div> -->
-                    </div>
-                    <div class="height-space"></div>
-                    <div class="list-img horizontal-container" #listImg>
-                        <ng-container *ngFor="let item of product.albumImg.media; let i = index;">
-                            <div
-                                class="img-thumbnail-container horizontal-container"
-                                id="list-item-{{i}}"
-                            >
-                                <img
-                                    [src]="item.srcThumbnail | galleryRoute"
-                                    [alt]="product.name"
-                                    (click)="setImgMain(i)"
-                                    [ngClass]="imgMain._id === item._id ? 'imgMain' : ''"
-                                >
-                            </div>
-                            
-                        </ng-container>
-                    </div>
-                </div>
+            <!-- <div class="action-img horizontal-container"></div> -->
+          </div>
+          <div class="height-space"></div>
+          <div class="list-img horizontal-container" #listImg>
+            <ng-container *ngFor="let item of product.albumImg.media; let i = index;">
+              <div class="img-thumbnail-container horizontal-container" id="list-item-{{i}}">
+                <img [src]="item.srcThumbnail | galleryRoute" [alt]="product.name" (click)="setImgMain(i)"
+                  [ngClass]="imgMain._id === item._id ? 'imgMain' : ''">
+              </div>
 
-                <div class="width-space"></div>
-                <div class="height-space"></div>
-            
-                <div class="basic-info-container">
-                    <h1 class="heading">{{product.name}}</h1>
-                    <div class="facebook-container">
-                        <ng-template [ngTemplateOutlet]="facebookLikeButton"></ng-template>
-                    </div>
+            </ng-container>
+          </div>
+        </div>
 
-                    <!-- <div
+        <div class="width-space"></div>
+        <div class="height-space"></div>
+
+        <div class="basic-info-container">
+          <h1 class="heading">{{product.name}}</h1>
+          <div class="facebook-container">
+            <ng-template [ngTemplateOutlet]="facebookLikeButton"></ng-template>
+          </div>
+
+          <!-- <div
                         class="fb-share-button"
                     >
                         <a
@@ -72,334 +57,294 @@
                             target="_blank"
                         >Chia sẻ</a>
                     </div> -->
-                     
-                    <div class="content-p">
-                        {{product.sortDescription}}
-                    </div>
-                    <div class="product-price">
-                        <span>{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
-                        <span>/</span>
-                        <span>{{product.unit.packagingType}}</span>
-                        <span>{{ ' ' }}</span>
-                        <span>{{product.unit.weightNumber}}{{product.unit.unitOfMassMeasurement}}</span>
-                    </div>
 
-                    <ng-container *ngIf="userInformation; else loginPlease">
-                        <ng-container *ngIf="headquartersAddress; else createAddress">
-                            <div class="horizontal-container deliveryTo">
-                                <div>Giao đến:</div>
-                                <div class="micro-width-space"></div>
-                                <a
-                                    href="{{'https://www.google.com/maps/place/'+ headquartersAddress.street +' '+ headquartersAddress.ward.name +' '+ headquartersAddress.district.name +' '+ headquartersAddress.province.name }}"
-                                    target="_blank"
-                                    class="textAddress"
-                                >
-                                    <span>
-                                        {{ headquartersAddress.responsiblePerson }}, 
-                                        {{ headquartersAddress.ward.name }}, 
-                                        {{ headquartersAddress.district.name }},
-                                        {{ headquartersAddress.province.name }}
-                                    </span>
-                                </a>
-                                <div class="micro-width-space"></div>
-                                <div>-</div>
-                                <div class="micro-width-space"></div>
-                                <div class="textLink" (click)="chooseAddress(headquartersAddress)">
-                                    Đổi địa chỉ
-                                </div>
-                            </div>
-                            <div class="height-space"></div>
-                            <fieldset class="ahamove-shipping-fee-container">
-                                <legend>
-                                    <img
-                                        height="30"    
-                                        src="assets/logo/partner/shipping/ahamove/ahamove_logo.png"
-                                        alt=""
-                                    >
-                                </legend>
-                                <div
-                                    class="vertical-container shipping-info"
-                                    *ngIf="estimateFeeInfo; else notSupport"
-                                >
-                                    <div class="horizontal-container">
-                                        <span class="estimate-time">
-                                            {{ estimateFeeInfo.deliveryTime.original | theDayOfWeekFormat }}
-                                        </span>
-                                    </div>
-                                    <div class="horizontal-container" *ngIf="estimateFeeInfo.shippingFee>0">
-                                        <span>Phí vận chuyển: </span>
-                                        <div class="micro-width-space"></div>
-                                        <span>{{ estimateFeeInfo.shippingFee | currency:'VND':'symbol' | replaceSpace }}</span>
-                                    </div>
-                                    <div class="horizontal-container free-shipping-text" *ngIf="estimateFeeInfo.shippingFee === 0">
-                                        <span>Miễn phí vận chuyển</span>
-                                    </div>
-                                </div>
-                                <ng-template #notSupport>
-                                    <span *ngIf="estimateFeeError && estimateFeeError.desc">
-                                        {{ estimateFeeError.desc }}
-                                    </span>
-                                </ng-template>
-                            </fieldset>
-                        </ng-container>
-                        <ng-template #createAddress>
-                            <span class="pleaseLogin" (click)="insertAddress()">
-                                Bạn chưa có vị trí nào trong sổ địa chỉ. <span class="textLink">TẠO ĐỊA CHỈ</span>
-                            </span>
-                        </ng-template>
-                    </ng-container>
-                    <ng-template #loginPlease>
-                        <div class="pleaseLogin" (click)="login()">
-                            Bạn hãy <span class="textLink">ĐĂNG NHẬP</span> để được dự báo thời gian và chi phí giao hàng
-                        </div>
-                    </ng-template>
+          <div class="content-p">
+            {{product.sortDescription}}
+          </div>
+          <div class="product-price">
+            <span>{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
+            <span>/</span>
+            <span>{{product.unit.packagingType}}</span>
+            <span>{{ ' ' }}</span>
+            <span>{{product.unit.weightNumber}}{{product.unit.unitOfMassMeasurement}}</span>
+          </div>
 
-                    <div class="mini-height-space"></div>
-
-                    <div class="verical-container">
-                        <div>Số lượng:</div>
-                        <div class="micro-height-space"></div>
-                        <div class="horizontal-container">
-                            <div class="change-quantity-container horizontal-container">
-                                <button
-                                    class="button-change"
-                                    (click)="changeQuantity('decrease')"
-                                    [disabled]="(!product.quantity || product.quantity===1)"
-                                >
-                                    <span>-</span>
-                                </button>
-                                <input
-                                    type="text"
-                                    class="product-quantity"
-                                    [(ngModel)]="product.quantity"
-                                    (change)="quantityInputChange($event)"
-                                    appInputOnlyNumber
-                                >
-                                <button
-                                    class="button-change"
-                                    (click)="changeQuantity('increase')"
-                                >
-                                    <span>+</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="height-space"></div>
-
-                    <div class="button-container horizontal-container">
-                        <button class="button-style button-primary" (click)="bookNow(product)">
-                            <mat-icon>shopping_cart</mat-icon>
-                            <span>Đặt hàng ngay</span>
-                        </button>
-
-                        <div class="width-space"></div>
-
-                        <button class="button-style button-secondary" (click)="addToCart(product)">
-                            <mat-icon>add_shopping_cart</mat-icon>
-                            <span>Thêm vào giỏ</span>
-                        </button>
-                    </div>
-
-                    <ng-container *ngIf="identification">
-                        <div class="height-space"></div>
-
-                        <div class="contact-us-container" *ngIf="isBrowser">
-                            <fieldset>
-                                <legend class="horizontal-container">
-                                    <mat-icon svgIcon="supporter"></mat-icon>
-                                    <span>Trò chuyện thêm</span>
-                                </legend>
-                                <a
-                                    class="fb-messenger-href horizontal-container"
-                                    href="https://m.me/thuy.hai.san.carota" target="_blank"
-                                    (click)="contactUs('messenger')"
-                                >
-                                    <mat-icon svgIcon="messenger"></mat-icon>
-                                    <span>Facebook Messenger</span>
-                                </a>
-
-                                <div class="mini-height-space"></div>
-
-                                <a
-                                    class="zalo-href horizontal-container"
-                                    href="https://zalo.me/0834517989" target="_blank"
-                                    (click)="contactUs('zalo')"
-                                >
-                                    <mat-icon svgIcon="zalo-new"></mat-icon>
-                                    <span>Zalo</span>
-                                </a>
-
-                                <div class="mini-height-space"></div>
-
-                                <a
-                                    class="call-href horizontal-container"
-                                    [href]="'tel: 0834517989'" target="_blank"
-                                    (click)="contactUs('call')"
-                                >
-                                    <mat-icon>phone</mat-icon>
-                                    <span>Gọi điện</span>
-                                </a>
-                            </fieldset>
-                        </div>
-                    </ng-container>
+          <ng-container *ngIf="userInformation; else loginPlease">
+            <ng-container *ngIf="headquartersAddress; else createAddress">
+              <div class="horizontal-container deliveryTo">
+                <div>Giao đến:</div>
+                <div class="micro-width-space"></div>
+                <a href="{{'https://www.google.com/maps/place/'+ headquartersAddress.street +' '+ headquartersAddress.ward.name +' '+ headquartersAddress.district.name +' '+ headquartersAddress.province.name }}"
+                  target="_blank" class="textAddress">
+                  <span>
+                    {{ headquartersAddress.responsiblePerson }},
+                    {{ headquartersAddress.ward.name }},
+                    {{ headquartersAddress.district.name }},
+                    {{ headquartersAddress.province.name }}
+                  </span>
+                </a>
+                <div class="micro-width-space"></div>
+                <div>-</div>
+                <div class="micro-width-space"></div>
+                <div class="textLink" (click)="chooseAddress(headquartersAddress)">
+                  Đổi địa chỉ
                 </div>
-            </div>
-            <ng-container *ngIf="product.albumVideo as albumVideo">
-                <div class="height-space"></div>
-                <div class="video-album-container vertical-container">
-                    <div class="title-video-album">Món ngon dễ làm</div>
-                    <div class="youtube-video-container horizontal-container">
-                        <ng-container *ngFor="let video of albumVideo.media; let i = index">
-                            <youtube-player
-                                [videoId]="video.youtubeId"
-                                (ready)="savePlayer($event, i)"
-                                (change)="onStateChange($event, i)"
-                                [playerVars]="playerVars"
-                            >
-                            </youtube-player>
-                        </ng-container>
-                    </div>
+              </div>
+              <div class="height-space"></div>
+              <fieldset class="ahamove-shipping-fee-container">
+                <legend>
+                  <img height="30" src="assets/logo/partner/shipping/ahamove/ahamove_logo.png" alt="">
+                </legend>
+                <div class="vertical-container shipping-info" *ngIf="estimateFeeInfo; else notSupport">
+                  <div class="horizontal-container">
+                    <span class="estimate-time">
+                      {{ estimateFeeInfo.deliveryTime.original | theDayOfWeekFormat }}
+                    </span>
+                  </div>
+                  <div class="horizontal-container" *ngIf="estimateFeeInfo.shippingFee>0">
+                    <span>Phí vận chuyển: </span>
+                    <div class="micro-width-space"></div>
+                    <span>{{ estimateFeeInfo.shippingFee | currency:'VND':'symbol' | replaceSpace }}</span>
+                  </div>
+                  <div class="horizontal-container free-shipping-text" *ngIf="estimateFeeInfo.shippingFee === 0">
+                    <span>Miễn phí vận chuyển</span>
+                  </div>
                 </div>
+                <ng-template #notSupport>
+                  <span *ngIf="estimateFeeError && estimateFeeError.desc">
+                    {{ estimateFeeError.desc }}
+                  </span>
+                </ng-template>
+              </fieldset>
             </ng-container>
+            <ng-template #createAddress>
+              <span class="pleaseLogin" (click)="insertAddress()">
+                Bạn chưa có vị trí nào trong sổ địa chỉ. <span class="textLink">TẠO ĐỊA CHỈ</span>
+              </span>
+            </ng-template>
+          </ng-container>
+          <ng-template #loginPlease>
+            <div class="pleaseLogin" (click)="login()">
+              Bạn hãy <span class="textLink">ĐĂNG NHẬP</span> để được dự báo thời gian và chi phí giao hàng
+            </div>
+          </ng-template>
+
+          <div class="mini-height-space"></div>
+
+          <div class="verical-container">
+            <div>Số lượng:</div>
+            <div class="micro-height-space"></div>
+            <div class="horizontal-container">
+              <div class="change-quantity-container horizontal-container">
+                <button class="button-change" (click)="changeQuantity('decrease')"
+                  [disabled]="(!product.quantity || product.quantity===1)">
+                  <span>-</span>
+                </button>
+                <input type="text" class="product-quantity" [(ngModel)]="product.quantity"
+                  (change)="quantityInputChange($event)" appInputOnlyNumber>
+                <button class="button-change" (click)="changeQuantity('increase')">
+                  <span>+</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="height-space"></div>
+
+          <div class="button-container horizontal-container">
+            <button class="button-style button-primary" (click)="bookNow(product)">
+              <mat-icon>shopping_cart</mat-icon>
+              <span>Đặt hàng ngay</span>
+            </button>
+
+            <div class="width-space"></div>
+
+            <button class="button-style button-secondary" (click)="addToCart(product)">
+              <mat-icon>add_shopping_cart</mat-icon>
+              <span>Thêm vào giỏ</span>
+            </button>
+          </div>
+
+          <ng-container *ngIf="identification">
             <div class="height-space"></div>
-            <div class="product-description-container" *ngIf="product.longDescription">
-                <div class="title-product-desciption">Mô tả</div>
-                <app-posts [editorContent]="product.longDescription"></app-posts>
+
+            <div class="contact-us-container" *ngIf="isBrowser">
+              <fieldset>
+                <legend class="horizontal-container">
+                  <mat-icon svgIcon="supporter"></mat-icon>
+                  <span>Trò chuyện thêm</span>
+                </legend>
+                <a class="fb-messenger-href horizontal-container" href="https://m.me/thuy.hai.san.carota"
+                  target="_blank" (click)="contactUs('messenger')">
+                  <mat-icon svgIcon="messenger"></mat-icon>
+                  <span>Facebook Messenger</span>
+                </a>
+
+                <div class="mini-height-space"></div>
+
+                <a class="zalo-href horizontal-container" href="https://zalo.me/0834517989" target="_blank"
+                  (click)="contactUs('zalo')">
+                  <mat-icon svgIcon="zalo-new"></mat-icon>
+                  <span>Zalo</span>
+                </a>
+
+                <div class="mini-height-space"></div>
+
+                <a class="call-href horizontal-container" [href]="'tel: 0834517989'" target="_blank"
+                  (click)="contactUs('call')">
+                  <mat-icon>phone</mat-icon>
+                  <span>Gọi điện</span>
+                </a>
+              </fieldset>
             </div>
-            <div class="height-space" #mainContainer></div>
-
-            <div class="product-reviews-container">
-                <div class="product-reviews-heading">
-                    Đánh Giá - Nhận Xét Từ Khách Hàng
-                </div>
-
-                <div class="total-review-and-new-review-container horizontal-container">
-                    <div class="total-review-container vertical-container">
-                        <div class="mini-height-space"></div>
-                        <div class="average-rating-container horizontal-container">
-                            <div class="average-rating-title">
-                                <span>{{ totalProductReviews.averageRating }}</span>
-                            </div>
-                            <div class="mini-width-space"></div>
-                            <div class="vertical-container">
-                                <app-rating [ratingValue]="totalProductReviews.averageRating"></app-rating>
-                                <div class="exist-rating-container">
-                                    <span>{{totalProductReviews.existRating+ ' nhận xét'}} </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mini-height-space"></div>
-                        <div class="rating-detail-container vertical-container">
-                            <div class="rating-level-item horizontal-container">
-                                <app-rating [ratingValue]="5"></app-rating>
-                                <div class="mini-width-space"></div>
-                                <mat-progress-bar mode="determinate" [value]="totalProductReviews.totalProductReviewsReponse.level5/totalProductReviews.existRating*100"></mat-progress-bar>
-                                <div class="mini-width-space"></div>
-                                <span>{{ totalProductReviews.totalProductReviewsReponse.level5 }}</span>
-                            </div>
-
-                            <div class="rating-level-item horizontal-container">
-                                <app-rating [ratingValue]="4"></app-rating>
-                                <div class="mini-width-space"></div>
-                                <mat-progress-bar mode="determinate" [value]="totalProductReviews.totalProductReviewsReponse.level4/totalProductReviews.existRating*100"></mat-progress-bar>
-                                <div class="mini-width-space"></div>
-                                <span>{{ totalProductReviews.totalProductReviewsReponse.level4 }}</span>
-                            </div>
-
-                            <div class="rating-level-item horizontal-container">
-                                <app-rating [ratingValue]="3"></app-rating>
-                                <div class="mini-width-space"></div>
-                                <mat-progress-bar mode="determinate" [value]="totalProductReviews.totalProductReviewsReponse.level3/totalProductReviews.existRating*100"></mat-progress-bar>
-                                <div class="mini-width-space"></div>
-                                <span>{{ totalProductReviews.totalProductReviewsReponse.level3 }}</span>
-                            </div>
-
-                            <div class="rating-level-item horizontal-container">
-                                <app-rating [ratingValue]="2"></app-rating>
-                                <div class="mini-width-space"></div>
-                                <mat-progress-bar mode="determinate" [value]="totalProductReviews.totalProductReviewsReponse.level2/totalProductReviews.existRating*100"></mat-progress-bar>
-                                <div class="mini-width-space"></div>
-                                <span>{{ totalProductReviews.totalProductReviewsReponse.level2 }}</span>
-                            </div>
-
-                            <div class="rating-level-item horizontal-container">
-                                <app-rating [ratingValue]="1"></app-rating>
-                                <div class="mini-width-space"></div>
-                                <mat-progress-bar mode="determinate" [value]="totalProductReviews.totalProductReviewsReponse.level1/totalProductReviews.existRating*100"></mat-progress-bar>
-                                <div class="mini-width-space"></div>
-                                <span>{{ totalProductReviews.totalProductReviewsReponse.level1 }}</span>
-                            </div>
-                            
-                        </div>
-                    </div>
-
-                    <div class="width-space"></div>
-                    <div class="mini-height-space"></div>
-
-                    <div class="new-review-button-container horizontal-container">
-                        <button
-                            class="button-style button-primary"
-                            (click)="openWriteReviews()"
-                        >Viết đánh giá mới</button>
-                    </div>
-                </div>
-
-                <div class="height-space"></div>
-
-                <ng-container *ngIf="productReviews && productReviews.length">
-                    <div>
-                        <ng-container *ngFor="let review of productReviews">
-                            <div class="product-reviews-item-container secondary-key">
-    
-                                <span class="client-information">{{review.clientInformation.name}}</span>
-    
-                                <app-rating [ratingValue]="review.rating" [showRatingTitle]="true"></app-rating>
-                                
-                                <div class="purchase-confirmation horizontal-container" *ngIf="review.purchaseConfirmation">
-                                    <mat-icon>check_circle</mat-icon>
-                                    <div class="micro-width-space"></div>
-                                    <span>Đã mua hàng</span>
-                                </div>
-    
-                                <p class="comment-reviews" *ngIf="review.content">
-                                    {{review.content}}
-                                </p>
-    
-                                <div class="created-at">
-                                    {{ review.createdAt | date :'hh:mm dd/MM/yyyy' }}
-                                </div>
-                            </div>
-                        </ng-container>
-                    </div>
-                    <app-pagination *ngIf="configPagination" [config]="configPagination" (emitChangeIndex)="changeIndex($event)"></app-pagination>
-                </ng-container>
-            </div>
+          </ng-container>
         </div>
-
-        <div class="width-space"></div>
+      </div>
+      <ng-container *ngIf="product.albumVideo as albumVideo">
         <div class="height-space"></div>
-    
-        <div class="is-same-category vertical-container">
-            <div class="title-is-same-category">Sản phẩm liên quan</div>
-            <app-product-category-home-page
-                [category]="product.category.route"
-                [isSameCategory]="true"
-            ></app-product-category-home-page>
+        <div class="video-album-container vertical-container">
+          <div class="title-video-album">Món ngon dễ làm</div>
+          <div class="youtube-video-container horizontal-container">
+            <ng-container *ngFor="let video of albumVideo.media; let i = index">
+              <youtube-player [videoId]="video.youtubeId" (ready)="savePlayer($event, i)"
+                (change)="onStateChange($event, i)" [playerVars]="playerVars">
+              </youtube-player>
+            </ng-container>
+          </div>
         </div>
+      </ng-container>
+      <div class="height-space"></div>
+      <div class="product-description-container" *ngIf="product.longDescription">
+        <div class="title-product-desciption">Mô tả</div>
+        <app-posts [editorContent]="product.longDescription"></app-posts>
+      </div>
+      <div class="height-space" #mainContainer></div>
+
+      <div class="product-reviews-container">
+        <div class="product-reviews-heading">
+          Đánh Giá - Nhận Xét Từ Khách Hàng
+        </div>
+
+        <div class="total-review-and-new-review-container horizontal-container">
+          <div class="total-review-container vertical-container">
+            <div class="mini-height-space"></div>
+            <div class="average-rating-container horizontal-container">
+              <div class="average-rating-title">
+                <span>{{ totalProductReviews.averageRating }}</span>
+              </div>
+              <div class="mini-width-space"></div>
+              <div class="vertical-container">
+                <app-rating [ratingValue]="totalProductReviews.averageRating"></app-rating>
+                <div class="exist-rating-container">
+                  <span>{{totalProductReviews.existRating+ ' nhận xét'}} </span>
+                </div>
+              </div>
+            </div>
+            <div class="mini-height-space"></div>
+            <div class="rating-detail-container vertical-container">
+              <div class="rating-level-item horizontal-container">
+                <app-rating [ratingValue]="5"></app-rating>
+                <div class="mini-width-space"></div>
+                <mat-progress-bar mode="determinate"
+                  [value]="totalProductReviews.totalProductReviewsReponse.level5/totalProductReviews.existRating*100"></mat-progress-bar>
+                <div class="mini-width-space"></div>
+                <span>{{ totalProductReviews.totalProductReviewsReponse.level5 }}</span>
+              </div>
+
+              <div class="rating-level-item horizontal-container">
+                <app-rating [ratingValue]="4"></app-rating>
+                <div class="mini-width-space"></div>
+                <mat-progress-bar mode="determinate"
+                  [value]="totalProductReviews.totalProductReviewsReponse.level4/totalProductReviews.existRating*100"></mat-progress-bar>
+                <div class="mini-width-space"></div>
+                <span>{{ totalProductReviews.totalProductReviewsReponse.level4 }}</span>
+              </div>
+
+              <div class="rating-level-item horizontal-container">
+                <app-rating [ratingValue]="3"></app-rating>
+                <div class="mini-width-space"></div>
+                <mat-progress-bar mode="determinate"
+                  [value]="totalProductReviews.totalProductReviewsReponse.level3/totalProductReviews.existRating*100"></mat-progress-bar>
+                <div class="mini-width-space"></div>
+                <span>{{ totalProductReviews.totalProductReviewsReponse.level3 }}</span>
+              </div>
+
+              <div class="rating-level-item horizontal-container">
+                <app-rating [ratingValue]="2"></app-rating>
+                <div class="mini-width-space"></div>
+                <mat-progress-bar mode="determinate"
+                  [value]="totalProductReviews.totalProductReviewsReponse.level2/totalProductReviews.existRating*100"></mat-progress-bar>
+                <div class="mini-width-space"></div>
+                <span>{{ totalProductReviews.totalProductReviewsReponse.level2 }}</span>
+              </div>
+
+              <div class="rating-level-item horizontal-container">
+                <app-rating [ratingValue]="1"></app-rating>
+                <div class="mini-width-space"></div>
+                <mat-progress-bar mode="determinate"
+                  [value]="totalProductReviews.totalProductReviewsReponse.level1/totalProductReviews.existRating*100"></mat-progress-bar>
+                <div class="mini-width-space"></div>
+                <span>{{ totalProductReviews.totalProductReviewsReponse.level1 }}</span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="width-space"></div>
+          <div class="mini-height-space"></div>
+
+          <div class="new-review-button-container horizontal-container">
+            <button class="button-style button-primary" (click)="openWriteReviews()">Viết đánh giá mới</button>
+          </div>
+        </div>
+
+        <div class="height-space"></div>
+
+        <ng-container *ngIf="productReviews && productReviews.length">
+          <div>
+            <ng-container *ngFor="let review of productReviews">
+              <div class="product-reviews-item-container secondary-key">
+
+                <span class="client-information">{{review.clientInformation.name}}</span>
+
+                <app-rating [ratingValue]="review.rating" [showRatingTitle]="true"></app-rating>
+
+                <div class="purchase-confirmation horizontal-container" *ngIf="review.purchaseConfirmation">
+                  <mat-icon>check_circle</mat-icon>
+                  <div class="micro-width-space"></div>
+                  <span>Đã mua hàng</span>
+                </div>
+
+                <p class="comment-reviews" *ngIf="review.content">
+                  {{review.content}}
+                </p>
+
+                <div class="created-at">
+                  {{ review.createdAt | date :'hh:mm dd/MM/yyyy' }}
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <app-pagination *ngIf="configPagination" [config]="configPagination"
+            (emitChangeIndex)="changeIndex($event)"></app-pagination>
+        </ng-container>
+      </div>
     </div>
+
+    <div class="width-space"></div>
+    <div class="height-space"></div>
+
+    <div class="is-same-category vertical-container">
+      <div class="title-is-same-category">Sản phẩm liên quan</div>
+      <app-product-category-home-page [category]="product.category.route"
+        [isSameCategory]="true"></app-product-category-home-page>
+    </div>
+  </div>
 </ng-container>
 
 <ng-template #facebookLikeButton>
-    <iframe 
-        src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook.com%2Fthuy.hai.san.carota&width=120&layout=button&action=like&size=large&share=true&height=65&appId"
-        width="160"
-        height="29"
-        style="border:none;overflow:hidden"
-        scrolling="no"
-        frameborder="0"
-        allowfullscreen="true"
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-    ></iframe>
+  <iframe
+    src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook.com%2Fthuy.hai.san.carota&width=120&layout=button&action=like&size=large&share=true&height=65&appId"
+    width="160" height="29" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"
+    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
 </ng-template>
-

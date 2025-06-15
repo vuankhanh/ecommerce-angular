@@ -8,7 +8,7 @@ import { WriteRatingComponent } from '../../sharing/modal/write-rating/write-rat
 import { ThanksForTheReviewComponent } from '../../sharing/modal/thanks-for-the-review/thanks-for-the-review.component';
 
 //Pipe
-import { GalleryRoutePipe } from '../../pipes/gallery-route/gallery-route.pipe';
+import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
 
 import { Product } from '../../models/Product';
 import { Media } from '../../models/ProductGallery';
@@ -36,8 +36,8 @@ import { MainContainerScrollService, DirectionPostion } from '../../services/mai
 import { combineLatest, of, Subject, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { MaterialModule } from '../../sharing/module/material';
-import { ReplaceSpacePipe } from '../../pipes/replace-space/replace-space.pipe';
-import { TheDayOfWeekPipe } from '../../pipes/the-day-of-week-format/the-day-of-week-format.pipe';
+import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
+import { TheDayOfWeekPipe } from '../../pipes/the-day-of-week-format.pipe';
 import { FormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { PostsComponent } from '../../sharing/component/posts/posts.component';
@@ -308,7 +308,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
 
   changeIndex(index: number) {
     this.configPagination!.page = index;
-    if(this.product) this.listenScroll(this.product, this.configPagination);
+    if (this.product) this.listenScroll(this.product, this.configPagination);
   }
 
   dosomething(event: any) {

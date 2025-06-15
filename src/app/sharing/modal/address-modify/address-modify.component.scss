@@ -1,12 +1,14 @@
-.modify-address-container{
-    width: 415px;
-    form{
-        button[type="submit"]{
-            width: 100%;
-        }
-        button[type="submit"]:disabled{
-            color: #999999;
-            background: #ededed;
-        }
+.modify-address-container {
+  width: 415px;
+
+  form {
+    button[type="submit"] {
+      width: 100%;
     }
+
+    button[type="submit"]:disabled {
+      color: #999999;
+      background: #ededed;
+    }
+  }
 }

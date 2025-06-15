@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.formInit();
   }
 
-  formInit(){
+  formInit() {
     let emailRegEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let phoneNumberRegEx = /((0)+([0-9]{9})\b)/g;
     this.registerGroup = this.formBuilder.group({
@@ -58,17 +58,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkExistsUserName(){
+  checkExistsUserName() {
     let userName = this.registerGroup.controls['userName'];
-    if(userName.valid){
+    if (userName.valid) {
       this.subscription.add(
-        this.checkExistsAccountService.checkExistUserName({userName: userName.value}).subscribe(res=>{
-          if(userName.errors){
+        this.checkExistsAccountService.checkExistUserName({ userName: userName.value }).subscribe(res => {
+          if (userName.errors) {
             delete userName.errors!['isAlreadyExist'];
           }
-          
-        },error=>{
-          if(error.status === 409){
+
+        }, error => {
+          if (error.status === 409) {
             userName.setErrors({ isAlreadyExist: true });
           }
         })
@@ -76,16 +76,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkExistsEmail(){
+  checkExistsEmail() {
     let email = this.registerGroup.controls['email'];
-    if(email.valid){
+    if (email.valid) {
       this.subscription.add(
-        this.checkExistsAccountService.checkExistEmail({email: email.value}).subscribe(res=>{
-          if(email.errors){
+        this.checkExistsAccountService.checkExistEmail({ email: email.value }).subscribe(res => {
+          if (email.errors) {
             delete email.errors!['isAlreadyExist'];
           }
-        },error=>{
-          if(error.status === 409){
+        }, error => {
+          if (error.status === 409) {
             email.setErrors({ isAlreadyExist: true });
           }
         })
@@ -94,28 +94,28 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   //Show Match Password is done
-  passwordValid(){
+  passwordValid() {
     return this.registerGroup.controls['password'].valid && this.registerGroup.controls['confirmPassword'].valid;
   }
 
-  register(){
+  register() {
     let email = this.registerGroup.controls['email'];
     let userName = this.registerGroup.controls['userName'];
-    if(this.registerGroup.valid){
+    if (this.registerGroup.valid) {
       this.loading = true;
       this.subscription.add(
-        this.registerService.register(this.registerGroup.value).subscribe(res=>{
+        this.registerService.register(this.registerGroup.value).subscribe(res => {
           this.loading = false;
           this.toastService.shortToastSuccess('Bạn đã đăng ký thành công.', 'Thành Công');
           this.valueChange.emit('registerSuccessful');
-        },error=>{
-          if(error.status === 409){
-            if(error.error.key){
-              if(error.error.key.userName){
+        }, error => {
+          if (error.status === 409) {
+            if (error.error.key) {
+              if (error.error.key.userName) {
                 userName.setErrors({ isAlreadyExist: true });
               }
 
-              if(error.error.key.email){
+              if (error.error.key.email) {
                 email.setErrors({ isAlreadyExist: true });
               }
             }
@@ -126,7 +126,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

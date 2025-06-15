@@ -19,14 +19,14 @@ export class PaginationComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.config){
-      for(let i=1; i<=this.config.totalPages; i++){
+    if (this.config) {
+      for (let i = 1; i <= this.config.totalPages; i++) {
         this.listButton.push(i);
       }
     }
   }
 
-  changeIndex(index: number){
+  changeIndex(index: number) {
     this.emitChangeIndex.emit(index);
   }
 

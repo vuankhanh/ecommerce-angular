@@ -27,10 +27,10 @@ export class SupportComponent implements OnInit, OnDestroy {
       map(data => <SupportDetail>data['support'])
     );
 
-    activatedRouteData$.subscribe(res=>{
-      if(res){
+    activatedRouteData$.subscribe(res => {
+      if (res) {
         this.supportDetail = res;
-        this.preview =  toHTML(JSON.parse(this.supportDetail.postsId.data));
+        this.preview = toHTML(JSON.parse(this.supportDetail.postsId.data));
       }
     });
   }

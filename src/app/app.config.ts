@@ -3,7 +3,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { GalleryRoutePipe } from './pipes/gallery-route/gallery-route.pipe';
+import { GalleryRoutePipe } from './pipes/gallery-route.pipe';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';

@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { ProductCategory } from '../../models/ProductCategory';
-import { PaginationParams } from 'src/app/models/PaginationParams';
-import { Product } from 'src/app/models/Product';
+import { PaginationParams } from '../../models/PaginationParams';
+import { Product } from '../../models/Product';
 
-import { ProductResponse, ProductService } from 'src/app/services/api/product/product.service';
-import { AppServicesService } from 'src/app/services/app-services.service';
-import { UrlChangeService } from 'src/app/services/url-change.service';
-import { SEOService } from 'src/app/services/seo.service';
+import { ProductResponse, ProductService } from '../../services/api/product/product.service';
+import { AppServicesService } from '../../services/app-services.service';
+import { UrlChangeService } from '../../services/url-change.service';
+import { SEOService } from '../../services/seo.service';
 
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,12 +20,12 @@ import { map } from 'rxjs/operators';
 export class ProductCategoryComponent implements OnInit, OnDestroy {
   private child: any;
 
-  productResponse: ProductResponse;
-  configPagination: PaginationParams;
-  
-  products: Array<Product>;
-  productCategory: ProductCategory;
-  productCategorys: Array<ProductCategory>;
+  productResponse?: ProductResponse;
+  configPagination?: PaginationParams;
+
+  products: Array<Product> = [];
+  productCategory?: ProductCategory;
+  productCategorys: Array<ProductCategory> = [];
 
   subscription: Subscription = new Subscription();
   constructor(
@@ -35,15 +35,15 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private urlChangeService: UrlChangeService,
     private seoService: SEOService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscription.add(
       this.activatedRoute.data.pipe(
-        map(data => data.productCategory)
-      ).subscribe(res=>{
+        map(data => data['productCategory'])
+      ).subscribe(res => {
         let productCategory: ProductCategory = res;
-        if(productCategory){
+        if (productCategory) {
           this.seoService.updateTitle(productCategory.name);
           this.listenProduct(productCategory.route);
         }
@@ -51,9 +51,9 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     );
   }
 
-  listenProduct(type: string){
+  listenProduct(type: string) {
     this.subscription.add(
-      this.productService.getProduct(type).subscribe(res=>{
+      this.productService.getProduct(type).subscribe(res => {
         this.productResponse = res;
         this.configPagination = {
           totalItems: this.productResponse.totalItems,
@@ -61,37 +61,37 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
           size: this.productResponse.size,
           totalPages: this.productResponse.totalPages
         };
-        this.products = this.productResponse.data; 
+        this.products = this.productResponse.data;
       })
     )
   }
 
-  getCategoryIsActivated(category: string){
+  getCategoryIsActivated(category: string) {
     this.subscription.add(
-      this.appServicesService.productCategory$.subscribe(res=>{
-        if(res.length){
+      this.appServicesService.productCategory$.subscribe(res => {
+        if (res.length) {
           this.productCategorys = res;
-          let index: number = this.productCategorys.findIndex(productCategory=>category === productCategory.route);
-          if(index>=0){
+          let index: number = this.productCategorys.findIndex(productCategory => category === productCategory.route);
+          if (index >= 0) {
             this.productCategory = this.productCategorys[index];
             this.listenProduct(this.productCategory.route);
-          }else{
-            this.router.navigate(['/san-pham/'+this.productCategorys[0].route])
+          } else {
+            this.router.navigate(['/san-pham/' + this.productCategorys[0].route])
           }
         }
       })
     )
   }
 
-  showDetail(product: Product){
-    this.router.navigate(['san-pham/'+product.category.route, product.route]);
+  showDetail(product: Product) {
+    this.router.navigate(['san-pham/' + product.category.route, product.route]);
   }
 
-  changeIndex(index: number){
+  changeIndex(index: number) {
     console.log('Change index = ' + index);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 
 import { toHTML } from "ngx-editor";
 import { Posts } from '../../../models/Posts';
-import { SanitizeHtmlBindingPipe } from '../../../pipes/sanitize-html-binding/sanitize-html-binding.pipe';
+import { SanitizeHtmlBindingPipe } from '../../../pipes/sanitize-html-binding.pipe';
 @Component({
   selector: 'app-posts',
   standalone: true,

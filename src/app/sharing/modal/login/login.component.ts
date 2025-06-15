@@ -45,32 +45,32 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.initForm();
   }
 
-  private initForm(){
+  private initForm() {
     this.loginGroup = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
-  login(){
-    if(this.loginGroup.valid){
+  login() {
+    if (this.loginGroup.valid) {
       this.inProgressSpinnerService.progressSpinnerStatus(true);
       this.subscription.add(
-        this.loginService.login(this.loginGroup.value).subscribe(res=>{
+        this.loginService.login(this.loginGroup.value).subscribe(res => {
           this.inProgressSpinnerService.progressSpinnerStatus(false);
-          
-          if(res.status===205){
+
+          if (res.status === 205) {
             this.toastService.shortToastWarning('Tài khoản chưa kích hoạt', 'Đăng nhập');
-          }else if(res.status === 200){
+          } else if (res.status === 200) {
             this.closeModal.emit(res.body);
             this.toastService.shortToastSuccess('Đăng nhập thành công', '');
           }
-        },error=>{
-          
+        }, error => {
+
           this.inProgressSpinnerService.progressSpinnerStatus(false);
-          if(error.status === 403){
+          if (error.status === 403) {
             this.toastService.shortToastError('Tài khoản hoặc Mật khẩu không đúng', 'Lỗi đăng nhập');
-          }else{
+          } else {
             this.toastService.shortToastError('Đã xảy ra lỗi không xác định', 'Lỗi đăng nhập');
           }
         })
@@ -78,16 +78,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  async socialAuthentication(provider: 'google' | 'facebook'){
-      try {
-        const token: TToken = await this.socialAuthenticationService.authentication(provider);
-        this.authService.afterLogin(token);
-      } catch (error) {
-        
-      }
-    }
+  async socialAuthentication(provider: 'google' | 'facebook') {
+    try {
+      const token: TToken = await this.socialAuthenticationService.authentication(provider);
+      this.authService.afterLogin(token);
+      this.closeModal.emit(token);
+    } catch (error) {
 
-  ngOnDestroy(){
+    }
+  }
+
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 }

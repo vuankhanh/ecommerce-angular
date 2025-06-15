@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 
 import { AdministrativeUnitsService } from '../../../services/api/administrative-units.service';
@@ -14,10 +14,15 @@ import { Address, Province, District, Ward, Position } from '../../../models/Add
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CustomerAddressService, ResponseAddress } from '../../../services/api/customer-address.service';
 import { TToken } from '../../../models/token.interface';
+import { MaterialModule } from '../../module/material';
 
 @Component({
   selector: 'app-address-modify',
-  standalone: false,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MaterialModule
+  ],
   templateUrl: './address-modify.component.html',
   styleUrls: ['./address-modify.component.scss']
 })
@@ -37,7 +42,7 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
     private localStorageService: LocalStorageService,
     private customerAddressService: CustomerAddressService,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.formInit();
@@ -45,7 +50,7 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
     this.checkModalType(this.data);
   }
 
-  formInit(){
+  formInit() {
     let phoneNumberRegEx = /((0)+([0-9]{9})\b)/g;
     this.addressForm = this.formBuilder.group({
       responsiblePerson: ['', Validators.required],
@@ -62,10 +67,10 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
     })
   }
 
-  checkModalType(dataInit: DataInit){
-    if(dataInit.type === 'insert'){
-      
-    }else if(dataInit.type === 'update' && dataInit.address){
+  checkModalType(dataInit: DataInit) {
+    if (dataInit.type === 'insert') {
+
+    } else if (dataInit.type === 'update' && dataInit.address) {
       this.addressForm.controls['responsiblePerson'].setValue(dataInit.address.responsiblePerson);
       this.addressForm.controls['phoneNumber'].setValue(dataInit.address.phoneNumber);
       this.addressForm.controls['street'].setValue(dataInit.address.street);
@@ -77,69 +82,69 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProvince(){
+  getProvince() {
     this.subscription.add(
-      this.administrativeUnitsService.getProvince().subscribe(res=>{
+      this.administrativeUnitsService.getProvince().subscribe(res => {
         this.provinces = res;
-        if(this.data.type === 'update' && this.data.address){
-          let index:number = this.findIndexOfObjectInArray(this.data.address.province._id, this.provinces);
-          
+        if (this.data.type === 'update' && this.data.address) {
+          let index: number = this.findIndexOfObjectInArray(this.data.address.province._id, this.provinces);
+
           this.addressForm.controls['province'].setValue(index);
         }
       })
     )
   }
 
-  getDistrict(provinceCode: string){
+  getDistrict(provinceCode: string) {
     this.subscription.add(
-      this.administrativeUnitsService.getDistrict(provinceCode).subscribe(res=>{
+      this.administrativeUnitsService.getDistrict(provinceCode).subscribe(res => {
         this.districts = res;
-        if(this.data.type === 'update' && this.data.address){
-          let index:number = this.findIndexOfObjectInArray(this.data.address.district._id, this.districts)
+        if (this.data.type === 'update' && this.data.address) {
+          let index: number = this.findIndexOfObjectInArray(this.data.address.district._id, this.districts)
           this.addressForm.controls['district'].setValue(index);
         }
-      }, error=>{
+      }, error => {
         this.districts = [];
       })
     )
   }
 
-  getWard(districtCode: string){
+  getWard(districtCode: string) {
     this.subscription.add(
-      this.administrativeUnitsService.getWard(districtCode).subscribe(res=>{
+      this.administrativeUnitsService.getWard(districtCode).subscribe(res => {
         this.wards = res;
-        if(this.data.type === 'update' && this.data.address){
-          let index:number = this.findIndexOfObjectInArray(this.data.address.ward._id, this.wards)
+        if (this.data.type === 'update' && this.data.address) {
+          let index: number = this.findIndexOfObjectInArray(this.data.address.ward._id, this.wards)
           this.addressForm.controls['ward'].setValue(index);
         }
       })
     )
   }
 
-  provinceChange(event: MatSelectChange){
+  provinceChange(event: MatSelectChange) {
     let index: number = event.value;
     let province: Province = this.provinces[index];
     this.getDistrict(province.code);
   }
 
-  districtChange(event: MatSelectChange){
+  districtChange(event: MatSelectChange) {
     let index: number = event.value;
     let district: District = this.districts[index];
     this.getWard(district.code);
   }
 
-  submit(){
-    if(this.data.type === 'insert'){
+  submit() {
+    if (this.data.type === 'insert') {
       this.insert();
-    }else if(this.data.type === 'update'){
+    } else if (this.data.type === 'update') {
       this.update();
-    }else{
+    } else {
       this.toastService.shortToastError('Đã có lỗi xảy ra', 'Lỗi ')
     }
   }
 
-  update(){
-    if(this.addressForm.valid){
+  update() {
+    if (this.addressForm.valid) {
       let address: Address = {
         _id: this.data.address?._id,
         responsiblePerson: this.addressForm.value.responsiblePerson,
@@ -151,24 +156,24 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
         position: this.addressForm.value.position,
         isHeadquarters: this.addressForm.value.isHeadquarters,
       }
-      
+
       let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-      if(tokenStoraged){
+      if (tokenStoraged) {
         this.subscription.add(
-          this.customerAddressService.update(tokenStoraged.accessToken, address).subscribe(res=>{
+          this.customerAddressService.update(tokenStoraged.accessToken, address).subscribe(res => {
             this.toastService.shortToastSuccess('Đã cập nhật địa chỉ thành công', 'Thành công');
             this.dialogRef.close(res);
-          },error=>{
+          }, error => {
             this.toastService.shortToastError('Đã có lỗi xảy ra', 'Thất bại');
           })
         )
       }
-      
+
     }
   }
 
-  async insert(){
-    if(this.addressForm.valid){
+  async insert() {
+    if (this.addressForm.valid) {
       let address: Address = {
         street: this.addressForm.value.street,
         responsiblePerson: this.addressForm.value.responsiblePerson,
@@ -179,35 +184,35 @@ export class AddressModifyComponent implements OnInit, OnDestroy {
         position: this.addressForm.value.position,
         isHeadquarters: this.addressForm.value.isHeadquarters,
       };
-      
+
       let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-      if(tokenStoraged){
+      if (tokenStoraged) {
         this.subscription.add(
-          this.customerAddressService.insert(tokenStoraged.accessToken, address).subscribe(res=>{
+          this.customerAddressService.insert(tokenStoraged.accessToken, address).subscribe(res => {
             this.toastService.shortToastSuccess('Đã thêm địa chỉ thành công', 'Thành công');
             this.dialogRef.close(res);
-          },error=>{
+          }, error => {
             this.toastService.shortToastError('Đã có lỗi xảy ra', 'Thất bại');
           })
         )
       }
-      
+
     }
   }
 
   findIndexOfObjectInArray(
     id: string,
     array: Array<Province> | Array<District> | Array<Ward>
-  ){
-    return array.findIndex(object=>object._id === id);
+  ) {
+    return array.findIndex(object => object._id === id);
   }
-  
-  ngOnDestroy(){
+
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 }
 
-interface DataInit{
+interface DataInit {
   type: string,
   address: Address | null
 }

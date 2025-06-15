@@ -55,10 +55,10 @@ export class DrawerComponent implements OnInit {
   ) {
     this.menusList = MenusList;
     this.customerMenu = CustomerMenu;
-    this.appServicesService.productCategory$.subscribe(res=>{
+    this.appServicesService.productCategory$.subscribe(res => {
       this.productCategorys = res;
-      for(let i in this.menusList){
-        if(this.menusList[i].route === 'san-pham'){
+      for (let i in this.menusList) {
+        if (this.menusList[i].route === 'san-pham') {
           this.menusList[i].child = this.productCategorys;
         }
       }
@@ -66,39 +66,39 @@ export class DrawerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cartService.listenCartChange().subscribe((cart: Cart)=>{
+    this.cartService.listenCartChange().subscribe((cart: Cart) => {
       let badgeCart = this.cartService.sumQuantityOfCart(cart.products);
       this.badgeCart = badgeCart;
     });
 
     this.subscription.add(
-      this.urlChangeService.urlChange().subscribe((event)=>{
-        if(event) {
+      this.urlChangeService.urlChange().subscribe((event) => {
+        if (event) {
           this.currentUrl = event.url;
         }
       })
     );
   }
 
-  navigationMenuItem(length: number, url: string){
-    if(length === 0){
+  navigationMenuItem(length: number, url: string) {
+    if (length === 0) {
       this.closeSideMenu();
       this.router.navigate([url]);
     }
   }
 
-  closeSideMenu(){
+  closeSideMenu() {
     this.accordion?.closeAll();
     this.userAccordion?.closeAll();
     this.toggleDrawer.emit();
   }
 
-  login(type: 'login' | 'register'){
+  login(type: 'login' | 'register') {
     this.authService.login(type);
     this.closeSideMenu();
   }
 
-  logout(){
+  logout() {
     this.closeSideMenu();
     this.authService.logout();
   }

@@ -21,8 +21,8 @@ import { ToastService } from '../../../services/toast.service';
   styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
-  @Output() valueChange= new EventEmitter();
-  
+  @Output() valueChange = new EventEmitter();
+
   forgotPasswordForm!: FormGroup;
 
   subscription: Subscription = new Subscription()
@@ -36,26 +36,26 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     this.initForm();
   }
 
-  initForm(){
+  initForm() {
     let emailRegEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     this.forgotPasswordForm = this.formBuilder.group({
       email: ['', { validators: [Validators.required, Validators.pattern(emailRegEx)], updateOn: 'blur' }]
     })
   }
 
-  checkEmail(){
-    if(this.forgotPasswordForm.valid){
+  checkEmail() {
+    if (this.forgotPasswordForm.valid) {
       this.subscription.add(
-        this.resetPasswordService.checkEmail(this.forgotPasswordForm.value.email).subscribe(res=>{
+        this.resetPasswordService.checkEmail(this.forgotPasswordForm.value.email).subscribe(res => {
           this.valueChange.emit('forgotPasswordSuccessful');
-        },err=>{
-          this.toastService.shortToastError('Email không hợp lệ','');
+        }, err => {
+          this.toastService.shortToastError('Email không hợp lệ', '');
         })
       )
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

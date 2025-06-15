@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Rating } from '../../../models/ServerConfig';
 
@@ -10,10 +10,23 @@ import { ToastService } from '../../../services/toast.service';
 import { Subscription } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Product } from '../../../models/Product';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../module/material';
+import { GalleryRoutePipe } from '../../../pipes/gallery-route.pipe';
 
 const totalNumberOfStars = 5;
 @Component({
   selector: 'app-write-rating',
+  standalone: true,
+  imports: [
+    CommonModule,
+    
+    ReactiveFormsModule,
+    
+    GalleryRoutePipe,
+
+    MaterialModule
+  ],
   templateUrl: './write-rating.component.html',
   styleUrls: ['./write-rating.component.scss']
 })

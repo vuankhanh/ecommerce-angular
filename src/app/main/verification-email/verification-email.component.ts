@@ -21,24 +21,24 @@ export class VerificationEmailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(params=>{
+    this.activatedRoute.queryParams.subscribe(params => {
       let userId = params['userId'];
       let emailToken = params['emailToken'];
       this.subscription.add(
-        this.verifyEmailService.verify(userId, emailToken).subscribe(res=>{
+        this.verifyEmailService.verify(userId, emailToken).subscribe(res => {
           this.result = 'success';
-        }, error=>{
+        }, error => {
           this.result = 'failure';
         })
       )
     })
   }
 
-  login(){
+  login() {
     this.authService.login('login');
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

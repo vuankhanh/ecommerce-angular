@@ -10,10 +10,10 @@ export class TheDayOfWeekPipe implements PipeTransform {
     let newDate = new Date(value);
     let day = days[newDate.getDay()];
     let date = String(newDate.getDate()).padStart(2, '0');
-    let month = String(newDate.getMonth()+1).padStart(2, '0');
+    let month = String(newDate.getMonth() + 1).padStart(2, '0');
 
     let hour = String(newDate.getHours()).padStart(2, '0');
-    return hour+' giờ - '+ day + ', ngày ' + date + ' tháng ' + month;
+    return hour + ' giờ - ' + day + ', ngày ' + date + ' tháng ' + month;
   }
 
 }

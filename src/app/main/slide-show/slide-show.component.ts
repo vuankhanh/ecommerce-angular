@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { animationSlide } from '../../animation/slide-show';
@@ -8,24 +8,22 @@ import { Product } from '../../models/Product';
 import { CartService } from '../../services/cart.service';
 import { HeaderService } from '../../services/header.service';
 import { AppServicesService } from '../../services/app-services.service';
-// import Swiper core and required modules
-import SwiperCore, { A11y, Autoplay, Controller, Navigation, Pagination, Scrollbar, Swiper, SwiperOptions, Thumbs, Virtual, Zoom } from 'swiper';
+import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
 
-SwiperCore.use([
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Virtual,
-  Zoom,
-  Autoplay,
-  Thumbs,
-  Controller
-]);
 @Component({
   selector: 'app-slide-show',
+  standalone: true,
+  imports: [
+    CommonModule,
+
+    GalleryRoutePipe,
+
+    CarouselModule
+  ],
   templateUrl: './slide-show.component.html',
   styleUrls: ['./slide-show.component.scss'],
   animations: [animationSlide]
@@ -33,49 +31,54 @@ SwiperCore.use([
 export class SlideShowComponent implements OnInit, OnDestroy {
   productHightlights: Array<Product> = [];
 
-  config: SwiperOptions = {
-    slidesPerView: 1,
-    spaceBetween: 15,
-    pagination: { clickable: true },
-    autoplay: { delay: 3000, disableOnInteraction: false }
-  };
-  
+  customOptions: OwlOptions = {
+    loop: true,
+    mouseDrag: false,
+    touchDrag: false,
+    pullDrag: false,
+    dots: false,
+    navSpeed: 700,
+    navText: ['', ''],
+    responsive: {
+      0: {
+        items: 1
+      },
+      400: {
+        items: 2
+      },
+      740: {
+        items: 3
+      },
+      940: {
+        items: 4
+      }
+    },
+    nav: true
+  }
+
   private subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
     private cartService: CartService,
     private headerService: HeaderService,
     private appServicesService: AppServicesService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscription.add(
-      this.appServicesService.productHightlight$.subscribe(res=>{
-        if(res.length){
+      this.appServicesService.productHightlight$.subscribe(res => {
+        if (res.length) {
           this.productHightlights = res;
         }
       })
     )
   }
 
-  onSwiper(swiper: any) {
-    
+  showDetail(product: Product) {
+
   }
 
-  onSlideChange(event: any) {
-    let e: Swiper = event;
-  }
-
-  addToCart(product: Product): void{
-    this.cartService.addToCart(product, true);
-    this.headerService.set(true);
-  }
-
-  showDetail(product: Product): void{
-    this.router.navigate(['san-pham/'+product.category.route, product.route]);
-  }
-  
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

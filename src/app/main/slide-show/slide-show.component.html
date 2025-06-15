@@ -1,20 +1,11 @@
 <div class="slide-container">
-    <swiper
-        [config]="config"
-        (swiper)="onSwiper($event)"
-        (slideChange)="onSlideChange($event)"
-    >
-        <ng-template
-            *ngFor="let product of productHightlights; let i=index"
-            swiperSlide
-            
-        >   
-            <div class="item-slide-container" (click)="showDetail(product)">
-                <img
-                [src]="product.albumBanner!.src | galleryRoute"
-                [alt]="product.name"
-            >
-            </div>
-        </ng-template>
-    </swiper>
+  <owl-carousel-o [options]="customOptions">
+    @for (product of productHightlights; track $index; let i=$index) {
+    <ng-template carouselSlide>
+      <div class="item-slide-container" (click)="showDetail(product)">
+        <img [src]="product.albumBanner!.src | galleryRoute" [alt]="product.name">
+      </div>
+    </ng-template>
+    }
+  </owl-carousel-o>
 </div>

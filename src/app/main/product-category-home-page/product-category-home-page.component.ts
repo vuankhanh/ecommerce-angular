@@ -8,12 +8,21 @@ import { ProductCategory } from '../../models/ProductCategory';
 import { ProductResponse, ProductService } from '../../services/api/product/product.service';
 
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
+import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
+import { SkeletonComponent } from '../../sharing/component/skeleton/skeleton.component';
 
 @Component({
   selector: 'app-product-category-home-page',
   standalone: true,
   imports: [
+    CommonModule,
 
+    GalleryRoutePipe,
+    ReplaceSpacePipe,
+
+    SkeletonComponent
   ],
   templateUrl: './product-category-home-page.component.html',
   styleUrls: ['./product-category-home-page.component.scss']
@@ -22,7 +31,7 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
   @Input() category: string = '';
   @Input() isSameCategory?: boolean;
   @Output() emitChangeRoute: EventEmitter<string> = new EventEmitter();
-  
+
   productResponse?: ProductResponse;
   configPagination?: PaginationParams;
   products: Array<Product> = [];
@@ -38,9 +47,9 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
     this.listenProduct(this.category);
   }
 
-  listenProduct(type: string){
+  listenProduct(type: string) {
     this.subscription.add(
-      this.productService.getProduct(type).subscribe(res=>{
+      this.productService.getProduct(type).subscribe(res => {
         this.productResponse = res;
         this.configPagination = {
           totalItems: this.productResponse.totalItems,
@@ -53,12 +62,12 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
     )
   }
 
-  showDetail(product: Product){
-    this.router.navigate(['san-pham/'+this.category, product.route]);
+  showDetail(product: Product) {
+    this.router.navigate(['san-pham/' + this.category, product.route]);
     this.emitChangeRoute.emit(product.route);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

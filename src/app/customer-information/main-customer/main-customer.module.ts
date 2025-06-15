@@ -18,10 +18,10 @@ import { AddressModifyComponent } from '../../sharing/modal/address-modify/addre
 
 import { RefreshTokenInterceptorService } from '../../services/api/refresh-token-interceptor.service';
 import { MaterialModule } from '../../sharing/module/material';
-import { ReplaceProtocolNamePipe } from '../../pipes/replace-protocol-name/replace-protocol-name.pipe';
-import { ReplaceSpacePipe } from '../../pipes/replace-space/replace-space.pipe';
-import { GalleryRoutePipe } from '../../pipes/gallery-route/gallery-route.pipe';
-import { SanitizeHtmlBindingPipe } from '../../pipes/sanitize-html-binding/sanitize-html-binding.pipe';
+import { ReplaceProtocolNamePipe } from '../../pipes/replace-protocol-name.pipe';
+import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
+import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
+import { SanitizeHtmlBindingPipe } from '../../pipes/sanitize-html-binding.pipe';
 
 @NgModule({
   imports: [
@@ -36,6 +36,8 @@ import { SanitizeHtmlBindingPipe } from '../../pipes/sanitize-html-binding/sanit
     ReplaceSpacePipe,
     GalleryRoutePipe,
     SanitizeHtmlBindingPipe,
+
+    AddressModifyComponent
   ],
   declarations: [
     MainCustomerComponent,
@@ -43,8 +45,6 @@ import { SanitizeHtmlBindingPipe } from '../../pipes/sanitize-html-binding/sanit
     ChangePasswordComponent,
     AddressBookComponent,
     OrderHistoryComponent,
-
-    AddressModifyComponent
   ],
   providers: [
     {

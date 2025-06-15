@@ -1,17 +1,20 @@
-.page-not-found-container{
-    min-height: 500px;
+.page-not-found-container {
+  min-height: 500px;
+  justify-content: center;
+  align-items: center;
+
+  .content-container {
     justify-content: center;
     align-items: center;
-    .content-container{
-        justify-content: center;
-        align-items: center;
-        .code-error {
-            font-size: 95px;
-            font-weight: bold;
-            line-height: 1;
-        }
-        .message-error{
-            font-size: 24px;
-        }
+
+    .code-error {
+      font-size: 95px;
+      font-weight: bold;
+      line-height: 1;
     }
+
+    .message-error {
+      font-size: 24px;
+    }
+  }
 }

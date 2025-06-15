@@ -10,25 +10,25 @@ import { Order } from 'src/app/models/Order';
   styleUrls: ['./payment-successful.component.scss']
 })
 export class PaymentSuccessfulComponent implements OnInit {
-private isBrowser: boolean;
+  private isBrowser: boolean;
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     @Inject(DOCUMENT) private _document: Document,
     private renderer2: Renderer2,
     public dialogRef: MatDialogRef<PaymentSuccessfulComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Data,
-    
+
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit(): void {
-    if(this.isBrowser && this.data && this.data.order){
+    if (this.isBrowser && this.data && this.data.order) {
       let order = this.data.order;
       let products: any = order.products;
-      let newProduct = products.map((product: any)=>"'"+product.productId+"'");
+      let newProduct = products.map((product: any) => "'" + product.productId + "'");
       let strProducts = newProduct.join(',');
-      if(!isDevMode()){
+      if (!isDevMode()) {
         let script = this.renderer2.createElement('script');
         script.type = `text/javascript`;
         script.text = `fbq('track', 'Purchase',{
@@ -43,12 +43,12 @@ private isBrowser: boolean;
     }
   }
 
-  goOrderHistory(){
+  goOrderHistory() {
     this.dialogRef.close('goOrderHistory');
   }
 
 }
-interface Data{
+interface Data {
   isLoyalCustomer: boolean,
   order: Order
 }

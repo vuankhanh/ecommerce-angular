@@ -10,9 +10,19 @@ import { Subscription } from 'rxjs';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { CustomerAddressService, ResponseAddress } from '../../../services/api/customer-address.service';
 import { TToken } from '../../../models/token.interface';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../module/material';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-address-choose',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+
+    MaterialModule
+  ],
   templateUrl: './address-choose.component.html',
   styleUrls: ['./address-choose.component.scss']
 })
@@ -28,25 +38,25 @@ export class AddressChooseComponent implements OnInit, OnDestroy {
     public addressModificationService: AddressModificationService,
     private localStorageService: LocalStorageService,
     private customerAddressService: CustomerAddressService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // this.listenUserInformation();
     this.listenCustomerAddress();
-    
+
   }
 
-  listenCustomerAddress(){
+  listenCustomerAddress() {
     let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-    if(tokenStoraged){
+    if (tokenStoraged) {
       this.subscription.add(
-        this.customerAddressService.get(tokenStoraged.accessToken).subscribe(res=>{
-          if(res){
+        this.customerAddressService.get(tokenStoraged.accessToken).subscribe(res => {
+          if (res) {
             let responseAddress: ResponseAddress = res;
             this.addresses = responseAddress.address;
             let index = this.findIndexOfObjectInArray(this.data.defaultAddress._id!, this.addresses);
-            if(this.addresses[index]){
-              this.addressSelected = this.addresses[index]; 
+            if (this.addresses[index]) {
+              this.addressSelected = this.addresses[index];
             }
           }
         })
@@ -54,10 +64,10 @@ export class AddressChooseComponent implements OnInit, OnDestroy {
     }
   }
 
-  addAddress(){
+  addAddress() {
     this.subscription.add(
-      this.addressModificationService.openAddressModification('insert', null).subscribe(res=>{
-        if(res){
+      this.addressModificationService.openAddressModification('insert', null).subscribe(res => {
+        if (res) {
           let responseAddress: ResponseAddress = res;
           this.addresses = responseAddress.address;
         }
@@ -65,7 +75,7 @@ export class AddressChooseComponent implements OnInit, OnDestroy {
     )
   }
 
-  deliveryTo(){
+  deliveryTo() {
     this.dialogRef.close(
       {
         deliverTo: this.addressSelected
@@ -76,16 +86,16 @@ export class AddressChooseComponent implements OnInit, OnDestroy {
   findIndexOfObjectInArray(
     id: string,
     array: Array<Address>
-  ){
-    return array.findIndex(object=>object._id === id);
+  ) {
+    return array.findIndex(object => object._id === id);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
 }
 
-interface DefaultAddressData{
+interface DefaultAddressData {
   defaultAddress: Address
 }

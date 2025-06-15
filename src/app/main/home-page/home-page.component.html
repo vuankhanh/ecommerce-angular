@@ -1,21 +1,17 @@
-<div
-    class="home-container vertical-container"
->
-    <app-slide-show></app-slide-show>
+<div class="home-container vertical-container">
+  <!-- <app-slide-show></app-slide-show> -->
 
-    <div class="height-space"></div>
+  <div class="height-space"></div>
 
-    <div class="product-category-home-page-container">
-        <ng-container *ngFor="let category of category$ | async">
-            <div class="category-name horizontal-container" [routerLink]="['/san-pham/'+category.route]" >
-                <h2>{{ category.name }}</h2>
-                <span
-                    class="horizontal-container"
-                >
-                    Xem thêm<mat-icon>arrow_right</mat-icon>
-                </span>
-            </div>
-            <app-product-category-home-page [category]="category.route"></app-product-category-home-page>
-        </ng-container>
-    </div>
+  <div class="product-category-home-page-container">
+    <ng-container *ngFor="let category of category$ | async">
+      <div class="category-name horizontal-container" [routerLink]="['/san-pham/'+category.route]">
+        <h2>{{ category.name }}</h2>
+        <span class="horizontal-container">
+          Xem thêm<mat-icon>arrow_right</mat-icon>
+        </span>
+      </div>
+      <app-product-category-home-page [category]="category.route"></app-product-category-home-page>
+    </ng-container>
+  </div>
 </div>

@@ -1,193 +1,180 @@
 <ng-container *ngIf="cart.products && cart.products.length>0; else emptyCart">
-    <div class="payment-confirm-container">
-        <div class="table-cart-container">
-            <div class="customer-information">
-                <ng-container *ngIf="defaultAddress; else addAddress">
-                    <div class="horizontal-container address-action">
-                        <div>Giao tới</div>
-                        <ng-container *ngIf="userInformation;">
-                            <div class="textLink" (click)="changeAddress()">Thay đổi</div>
-                        </ng-container>
-                    </div>
-                    <div class="mini-height-space"></div>
-                    <div class="horizontal-container customer-contact">
-                        <div class="name">{{defaultAddress.responsiblePerson + ' | ' + defaultAddress.phoneNumber}}</div>
-                    </div>
-                    <div class="mini-height-space"></div>
-                    <div class="customer-address primary-key" *ngIf="defaultAddress">
-                        <span class="demo-2">{{ defaultAddress.street }}</span>
-                        <span class="demo-2">, </span>
-                        <span class="demo-2">{{ defaultAddress.ward.name }}</span>
-                        <span class="demo-2">, </span>
-                        <span class="demo-2">{{ defaultAddress.district.name }}</span>
-                        <span class="demo-2">, </span>
-                        <span class="demo-2">{{ defaultAddress.province.name }}</span>
-                    </div>
-                </ng-container>
-                <ng-template #addAddress>
-                    <div class="primary-key">Bạn chưa tạo vị trí nào trong sổ địa chỉ.</div>
-                    <div class="mini-height-space"></div>
-                    <button
-                        class="addAddress horizontal-container" 
-                        (click)="insertAddress()"
-                        #btnInsertAddress
-                    >
-                        <mat-icon>add</mat-icon>
-                        Thêm địa chỉ mới
-                    </button>
-                </ng-template>
-            </div>
-
-            <ng-container *ngIf="estimateFeeInfo || estimateFeeError">
-                <div class="height-space"></div>
-    
-                <fieldset class="ahamove-shipping-fee-container">
-                    <legend>
-                        <img
-                            height="30"    
-                            src="assets/logo/partner/shipping/ahamove/ahamove_logo.png"
-                            alt=""
-                        >
-                    </legend>
-                    <div
-                        class="vertical-container shipping-info"
-                        *ngIf="estimateFeeInfo; else notSupport"
-                    >
-                        <div class="horizontal-container">
-                            <span class="estimate-time">
-                                {{ estimateFeeInfo.deliveryTime.original | theDayOfWeekFormat }}
-                            </span>
-                        </div>
-                        <div class="horizontal-container" *ngIf="estimateFeeInfo.shippingFee>0">
-                            <span>Phí vận chuyển: </span>
-                            <div class="micro-width-space"></div>
-                            <span>{{ estimateFeeInfo.shippingFee | currency:'VND':'symbol' | replaceSpace }}</span>
-                        </div>
-                        <div class="horizontal-container free-shipping-text" *ngIf="estimateFeeInfo.shippingFee === 0">
-                            <span>Miễn phí vận chuyển</span>
-                        </div>
-                    </div>
-                    <ng-template #notSupport>
-                        <span *ngIf="estimateFeeError && estimateFeeError.desc">
-                            {{ estimateFeeError.desc }}
-                        </span>
-                    </ng-template>
-                </fieldset>
+  <div class="payment-confirm-container">
+    <div class="table-cart-container">
+      <div class="customer-information">
+        <ng-container *ngIf="defaultAddress; else addAddress">
+          <div class="horizontal-container address-action">
+            <div>Giao tới</div>
+            <ng-container *ngIf="userInformation;">
+              <div class="textLink" (click)="changeAddress()">Thay đổi</div>
             </ng-container>
-    
-            <div class="height-space"></div>
-    
-            <table mat-table [dataSource]="cart.products" class="mat-elevation-z8">
-                <!-- Position Column -->
-                <ng-container matColumnDef="numericalOrder">
-                    <th mat-header-cell *matHeaderCellDef> No. </th>
-                    <td mat-cell *matCellDef="let product; let i = index"> {{i+1}} </td>
-                </ng-container>
-    
-                 <!-- Thumbnail Column -->
-                 <ng-container matColumnDef="thumbnail">
-                    <th mat-header-cell *matHeaderCellDef> Ảnh </th>
-                    <td mat-cell *matCellDef="let product">
-                        <div class="img-container">
-                            <img [src]="product.thumbnailUrl | galleryRoute" [alt]="product.name" (click)="showDetail(product)">
-                        </div>
-                    </td>
-                </ng-container>
-              
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Sản phẩm </th>
-                    <td mat-cell *matCellDef="let product"> {{product.name}} </td>
-                </ng-container>
-              
-                <!-- Weight Column -->
-                <ng-container matColumnDef="price">
-                    <th mat-header-cell *matHeaderCellDef> Đơn giá </th>
-                    <td mat-cell *matCellDef="let product">
-                        <span>{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
-                        <span>/</span>
-                        <span>{{product.unit.packagingType}}</span>
-                        <span>{{ ' ' }}</span>
-                        <span>{{product.unit.weightNumber}}{{product.unit.unitOfMassMeasurement}}</span>
-                    </td>
-                </ng-container>
-              
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="quantity">
-                    <th mat-header-cell *matHeaderCellDef> Số lượng </th>
-                    <td mat-cell *matCellDef="let product"> {{product.quantity}} </td>
-                </ng-container>
-              
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-    
-            <div class="height-space"></div>
-    
-            <div class="total-price-frame vertical-container">
-                <ng-container *ngIf="temporaryValue > totalBill">
-                    <div class="primary-key discount horizontal-container">
-                        <mat-icon svgIcon="discount"></mat-icon>
-                        Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG
-                    </div>
-                    <div class="height-space"></div>
-                </ng-container>
+          </div>
+          <div class="mini-height-space"></div>
+          <div class="horizontal-container customer-contact">
+            <div class="name">{{defaultAddress.responsiblePerson + ' | ' + defaultAddress.phoneNumber}}</div>
+          </div>
+          <div class="mini-height-space"></div>
+          <div class="customer-address primary-key" *ngIf="defaultAddress">
+            <span class="demo-2">{{ defaultAddress.street }}</span>
+            <span class="demo-2">, </span>
+            <span class="demo-2">{{ defaultAddress.ward.name }}</span>
+            <span class="demo-2">, </span>
+            <span class="demo-2">{{ defaultAddress.district.name }}</span>
+            <span class="demo-2">, </span>
+            <span class="demo-2">{{ defaultAddress.province.name }}</span>
+          </div>
+        </ng-container>
+        <ng-template #addAddress>
+          <div class="primary-key">Bạn chưa tạo vị trí nào trong sổ địa chỉ.</div>
+          <div class="mini-height-space"></div>
+          <button class="addAddress horizontal-container" (click)="insertAddress()" #btnInsertAddress>
+            <mat-icon>add</mat-icon>
+            Thêm địa chỉ mới
+          </button>
+        </ng-template>
+      </div>
 
-                <div class="provisional horizontal-container">
-                    <div class="primary-key">
-                        Tạm tính
-                    </div>
-                    <div class="secondary-key">
-                        {{ temporaryValue | currency:'VND':'symbol' | replaceSpace }}
-                    </div>
-                </div>
+      <ng-container *ngIf="estimateFeeInfo || estimateFeeError">
+        <div class="height-space"></div>
 
-                <div class="height-space"></div>
-
-                <div class="provisional horizontal-container">
-                    <div class="primary-key">
-                        Phí vận chuyển
-                    </div>
-                    <div class="secondary-key" *ngIf="estimateFeeInfo && estimateFeeInfo.shippingFee != null; else canNotCalculateShippingFee">
-                        {{ estimateFeeInfo.shippingFee | currency:'VND':'symbol' | replaceSpace }}
-                    </div>
-                    <ng-template #canNotCalculateShippingFee>
-                        <div class="secondary-key">
-                            {{ '???' }}
-                        </div>
-                    </ng-template>
-                </div>
-    
-                <div class="height-space"></div>
-    
-                <div class="total-price horizontal-container">
-                    <div class="primary-key">
-                        Thành tiền
-                    </div>
-                    <div class="secondary-key" *ngIf="estimateFeeInfo && estimateFeeInfo.shippingFee != null; else onlyTotalBill">
-                        {{ (totalBill + estimateFeeInfo.shippingFee) | currency:'VND':'symbol' | replaceSpace }}
-                    </div>
-
-                    <ng-template #onlyTotalBill>
-                        <div class="secondary-key">
-                            {{ totalBill | currency:'VND':'symbol' | replaceSpace }}
-                        </div>
-                    </ng-template>
-                </div>
+        <fieldset class="ahamove-shipping-fee-container">
+          <legend>
+            <img height="30" src="assets/logo/partner/shipping/ahamove/ahamove_logo.png" alt="">
+          </legend>
+          <div class="vertical-container shipping-info" *ngIf="estimateFeeInfo; else notSupport">
+            <div class="horizontal-container">
+              <span class="estimate-time">
+                {{ estimateFeeInfo.deliveryTime.original | theDayOfWeekFormat }}
+              </span>
             </div>
-    
-            <div class="height-space"></div>
-    
-            <button
-                (click)="confirmPayment()"
-                class="button-style button-primary"
-            >
-                Đặt mua
-            </button>
+            <div class="horizontal-container" *ngIf="estimateFeeInfo.shippingFee>0">
+              <span>Phí vận chuyển: </span>
+              <div class="micro-width-space"></div>
+              <span>{{ estimateFeeInfo.shippingFee | currency:'VND':'symbol' | replaceSpace }}</span>
+            </div>
+            <div class="horizontal-container free-shipping-text" *ngIf="estimateFeeInfo.shippingFee === 0">
+              <span>Miễn phí vận chuyển</span>
+            </div>
+          </div>
+          <ng-template #notSupport>
+            <span *ngIf="estimateFeeError && estimateFeeError.desc">
+              {{ estimateFeeError.desc }}
+            </span>
+          </ng-template>
+        </fieldset>
+      </ng-container>
+
+      <div class="height-space"></div>
+
+      <table mat-table [dataSource]="cart.products" class="mat-elevation-z8">
+        <!-- Position Column -->
+        <ng-container matColumnDef="numericalOrder">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let product; let i = index"> {{i+1}} </td>
+        </ng-container>
+
+        <!-- Thumbnail Column -->
+        <ng-container matColumnDef="thumbnail">
+          <th mat-header-cell *matHeaderCellDef> Ảnh </th>
+          <td mat-cell *matCellDef="let product">
+            <div class="img-container">
+              <img [src]="product.thumbnailUrl | galleryRoute" [alt]="product.name" (click)="showDetail(product)">
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Sản phẩm </th>
+          <td mat-cell *matCellDef="let product"> {{product.name}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef> Đơn giá </th>
+          <td mat-cell *matCellDef="let product">
+            <span>{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
+            <span>/</span>
+            <span>{{product.unit.packagingType}}</span>
+            <span>{{ ' ' }}</span>
+            <span>{{product.unit.weightNumber}}{{product.unit.unitOfMassMeasurement}}</span>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Số lượng </th>
+          <td mat-cell *matCellDef="let product"> {{product.quantity}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div class="height-space"></div>
+
+      <div class="total-price-frame vertical-container">
+        <ng-container *ngIf="temporaryValue > totalBill">
+          <div class="primary-key discount horizontal-container">
+            <mat-icon svgIcon="discount"></mat-icon>
+            Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG
+          </div>
+          <div class="height-space"></div>
+        </ng-container>
+
+        <div class="provisional horizontal-container">
+          <div class="primary-key">
+            Tạm tính
+          </div>
+          <div class="secondary-key">
+            {{ temporaryValue | currency:'VND':'symbol' | replaceSpace }}
+          </div>
         </div>
+
+        <div class="height-space"></div>
+
+        <div class="provisional horizontal-container">
+          <div class="primary-key">
+            Phí vận chuyển
+          </div>
+          <div class="secondary-key"
+            *ngIf="estimateFeeInfo && estimateFeeInfo.shippingFee != null; else canNotCalculateShippingFee">
+            {{ estimateFeeInfo.shippingFee | currency:'VND':'symbol' | replaceSpace }}
+          </div>
+          <ng-template #canNotCalculateShippingFee>
+            <div class="secondary-key">
+              {{ '???' }}
+            </div>
+          </ng-template>
+        </div>
+
+        <div class="height-space"></div>
+
+        <div class="total-price horizontal-container">
+          <div class="primary-key">
+            Thành tiền
+          </div>
+          <div class="secondary-key" *ngIf="estimateFeeInfo && estimateFeeInfo.shippingFee != null; else onlyTotalBill">
+            {{ (totalBill + estimateFeeInfo.shippingFee) | currency:'VND':'symbol' | replaceSpace }}
+          </div>
+
+          <ng-template #onlyTotalBill>
+            <div class="secondary-key">
+              {{ totalBill | currency:'VND':'symbol' | replaceSpace }}
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="height-space"></div>
+
+      <button (click)="confirmPayment()" class="button-style button-primary">
+        Đặt mua
+      </button>
     </div>
+  </div>
 </ng-container>
 
 <ng-template #emptyCart>
-    <app-empty-cart></app-empty-cart>
+  <app-empty-cart></app-empty-cart>
 </ng-template>

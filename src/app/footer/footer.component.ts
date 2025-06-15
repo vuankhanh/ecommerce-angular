@@ -36,7 +36,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   badgeCart: number = 0;
   menusList: Array<Menu>;
-  
+
   supports: Array<Support> = [];
 
   productCategorys: Array<ProductCategory> = [];
@@ -54,10 +54,10 @@ export class FooterComponent implements OnInit, OnDestroy {
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.menusList = MenusList;
-    this.appServicesService.productCategory$.subscribe(res=>{
+    this.appServicesService.productCategory$.subscribe(res => {
       this.productCategorys = res;
-      for(let i in this.menusList){
-        if(this.menusList[i].route === 'san-pham'){
+      for (let i in this.menusList) {
+        if (this.menusList[i].route === 'san-pham') {
           this.menusList[i].child = this.productCategorys
         }
       }
@@ -65,7 +65,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.cartService.listenCartChange().subscribe((cart: Cart)=>{
+    this.cartService.listenCartChange().subscribe((cart: Cart) => {
       let badgeCart = this.cartService.sumQuantityOfCart(cart.products);
       this.badgeCart = badgeCart;
     });
@@ -74,18 +74,18 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.listenSupport();
   }
 
-  
-  listenConfig(){
+
+  listenConfig() {
     this.subscription.add(
       this.configService.getConfig().subscribe({
-        next: (config)=> this.configService.set(config),
+        next: (config) => this.configService.set(config),
         error: (err) => console.error('Lỗi lấy cấu hình:', err.message),
         complete: () => console.log('Cấu hình đã được lấy thành công')
       })
     )
   }
 
-  listenSupport(){
+  listenSupport() {
     this.subscription.add(
       this.supportService.getAll().subscribe({
         next: (supports) => {
@@ -97,11 +97,11 @@ export class FooterComponent implements OnInit, OnDestroy {
     )
   }
 
-  closeAlertAddedToCart(){
+  closeAlertAddedToCart() {
     this.headerService.set(false);
   }
 
-  toggleDrawerEmit(){
+  toggleDrawerEmit() {
     this.toggleDrawer.emit();
   }
 
