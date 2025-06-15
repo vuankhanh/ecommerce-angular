@@ -1,15 +1,17 @@
-export interface JwtDecoded{
-    data: UserInformation,
-    exp: number,
-    iat: number
+export interface JwtDecoded {
+  email: string,
+  name: string,
+  avatar: string,
+  exp: number,
+  iat: number
 }
 
 export interface UserInformation {
-    userName?: string,
-    name: string,
-    email: string,
-    phoneNumber: string,
-    customerCode: string,
-    createdAt: string,
-    updatedAt: string
+  email: string,
+  name: string,
+  avatar: string,
+  phoneNumber: string,
+  customerCode: string,
+  createdAt: string,
+  updatedAt: string
 }

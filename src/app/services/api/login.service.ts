@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { IRefreshTokenResponse } from '../../models/token.interface';
 
 @Injectable({
@@ -21,7 +21,9 @@ export class LoginService {
   }
 
   refreshToken(refreshToken: string){
-    return this.httpClient.post<IRefreshTokenResponse>(this.urlRefreshToken, { refreshToken });
+    return this.httpClient.post<IRefreshTokenResponse>(this.urlRefreshToken, { refreshToken }).pipe(
+      map(res=>res.metaData)
+    );
   }
 }
 

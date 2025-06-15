@@ -14,6 +14,7 @@ import { TToken } from '../../models/token.interface';
 import { ConfirmActionComponent } from '../../sharing/modal/confirm-action/confirm-action.component';
 @Component({
   selector: 'app-address-book',
+  standalone: false,
   templateUrl: './address-book.component.html',
   styleUrls: ['./address-book.component.scss']
 })

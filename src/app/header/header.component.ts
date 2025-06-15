@@ -59,8 +59,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   showAlertAddedToCart: boolean = false;
   screenWidthSize: 'full' | 'normal' | 'mini' = 'normal';
 
-  isLogin: boolean = false;
-  userInformation: UserInformation | null = null;
+  isLogin$ = this.checkTokenService.check$;
+  userInformation$ = this.authService.jwtPayload$;
 
   isBrowser: boolean;
 
@@ -151,12 +151,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   listenUserInformation(){
     this.subscription.add(
-      this.authService.getUserInformation().subscribe(userInfo=>{
-        this.userInformation = userInfo;
-      })
-    );
-
-    this.subscription.add(
       this.headerService.get().subscribe(res=>{
         if(!res){
           this.showAlertAddedToCart=res;
@@ -177,12 +171,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.checkTokenService.get().subscribe(res=>{
-        this.isLogin = res;
-      })
-    );
-
-    this.subscription.add(
       this.configService.getConfig().subscribe({
         next: (config)=> this.configService.set(config),
         error: (err) => console.error('Lỗi lấy cấu hình:', err.message),
@@ -193,7 +181,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   decodeJwtUserInfo(accessToken: string){
     let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(accessToken);
-    this.authService.setUserInformation(tokenInformation.data);
+    this.authService.setUserInformation(tokenInformation);
   }
 
   async socialAuthentication(provider: 'google' | 'facebook'){

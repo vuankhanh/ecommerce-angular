@@ -15,6 +15,7 @@ import { TToken } from '../../models/token.interface';
 
 @Component({
   selector: 'app-order-history',
+  standalone: false,
   templateUrl: './order-history.component.html',
   styleUrls: ['./order-history.component.scss'],
   providers: [

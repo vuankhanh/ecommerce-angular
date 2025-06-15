@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-main-customer',
+  standalone: false,
   templateUrl: './main-customer.component.html',
   styleUrls: ['./main-customer.component.scss']
 })

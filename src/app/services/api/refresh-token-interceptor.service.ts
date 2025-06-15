@@ -2,11 +2,12 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoginService, ResponseLogin, ResponseRefreshToken } from './login.service';
+import { LoginService } from './login.service';
 import { LocalStorageService } from '../local-storage.service';
 
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { catchError, switchMap, filter, take } from 'rxjs/operators';
+import { IRefreshTokenResponse, TToken } from '../../models/token.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
     return next.handle(req).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        let tokenStoraged: ResponseLogin = <ResponseLogin>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+        let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
         if(tokenStoraged){
           return this.handle401Error(tokenStoraged, req, next);
         }else{
@@ -35,9 +36,9 @@ export class RefreshTokenInterceptorService implements HttpInterceptor {
     }));
   }
 
-  private handle401Error(tokenStoraged: ResponseLogin, request: HttpRequest<any>, next: HttpHandler) {
+  private handle401Error(tokenStoraged: TToken, request: HttpRequest<any>, next: HttpHandler) {
     return this.loginService.refreshToken(tokenStoraged.refreshToken).pipe(
-      switchMap((token: ResponseRefreshToken) => {
+      switchMap((token) => {
         tokenStoraged.accessToken = token.accessToken;
         this.localStorageService.set(this.localStorageService.tokenStoragedKey, tokenStoraged);
         return next.handle(this.addToken(request, token.accessToken));

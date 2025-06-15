@@ -25,7 +25,8 @@ import { TToken } from '../models/token.interface';
   providedIn: 'root'
 })
 export class AuthService {
-  private userInformation: BehaviorSubject<UserInformation | null> = new BehaviorSubject<UserInformation | null>(null);
+  private readonly bJwtPayload: BehaviorSubject<JwtDecoded | null> = new BehaviorSubject<JwtDecoded | null>(null);
+  public readonly jwtPayload$: Observable<JwtDecoded | null> = this.bJwtPayload.asObservable();
   constructor(
     private router: Router,
     private dialog: MatDialog,
@@ -62,12 +63,12 @@ export class AuthService {
   afterLogin(token: TToken){
     this.checkTokenValidation(token.accessToken);
     this.setDeliveryTo(token.accessToken);
-    console.log(token);
-    
-    let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(token.accessToken);
+    let jwtPayload: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(token.accessToken);
     this.localStorageService.set(this.localStorageService.tokenStoragedKey, token);
-    if(tokenInformation){
-      this.setUserInformation(tokenInformation.data);
+    if(jwtPayload){
+      console.log('Token Information:', jwtPayload);
+      
+      this.setUserInformation(jwtPayload);
     }
   }
 
@@ -78,20 +79,24 @@ export class AuthService {
       let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(tokenStoraged.accessToken);
       if(tokenInformation){
         this.localStorageService.set(this.localStorageService.tokenStoragedKey, tokenStoraged);
-        this.setUserInformation(tokenInformation.data);
+        this.setUserInformation(tokenInformation);
       }
     }
   }
 
   checkTokenValidation(accessToken: string){
-    this.checkTokenService.getCheck(accessToken).subscribe(res=>{
-      if(res){
+    this.checkTokenService.getCheck(accessToken).subscribe({
+      next: res => {
+        console.log(res);
+        
         this.checkTokenService.set(true);
+      },
+      error: (err: Error) => {
+        console.error('Error checking token:', err);
+        this.checkTokenService.set(false);
+        this.toastService.shortToastError('Phiên đăng nhập hết hạn', 'Lỗi');
+        this.logout();
       }
-    },err=>{
-      this.checkTokenService.set(false);
-      this.toastService.shortToastWarning('Phiên đăng nhập hết hạn', '');
-      this.logout();
     })
   }
 
@@ -124,24 +129,22 @@ export class AuthService {
     if(tokenStoraged){
       let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(tokenStoraged.accessToken);
       if(tokenInformation){
-        this.setUserInformation(tokenInformation.data);
+        this.setUserInformation(tokenInformation);
       }
     }
   }
 
   logout(){
-    this.userInformation.next(null);
+    this.bJwtPayload.next(null);
     this.cartService.setDelivery(null);
     this.localStorageService.remove(this.localStorageService.tokenStoragedKey);
     this.socialAuthenticationService.signOut();
     return this.router.navigate(['']);
   }
 
-  setUserInformation(userInformation: UserInformation | null){
-    this.userInformation.next(userInformation);
+  setUserInformation(jwtPayload: JwtDecoded){
+    console.log('Setting user information:', jwtPayload);
+    this.bJwtPayload.next(jwtPayload);
   }
 
-  getUserInformation():Observable<UserInformation | null>{
-    return this.userInformation.asObservable()
-  }
 }

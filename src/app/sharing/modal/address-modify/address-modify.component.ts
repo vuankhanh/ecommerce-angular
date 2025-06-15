@@ -17,6 +17,7 @@ import { TToken } from '../../../models/token.interface';
 
 @Component({
   selector: 'app-address-modify',
+  standalone: false,
   templateUrl: './address-modify.component.html',
   styleUrls: ['./address-modify.component.scss']
 })

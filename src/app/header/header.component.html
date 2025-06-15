@@ -63,10 +63,10 @@
       </div>
       <div class="user-information-block_showListButton vertical-container">
         <div class="user-information-block_showListButton_status">
-          {{ userInformation && isLogin ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
+          {{ (userInformation$ | async) && (isLogin$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
         </div>
         <div class="user-information-block_showListButton_account horizontal-container">
-          <span>{{ userInformation && isLogin ? userInformation.name ? userInformation.name : userInformation.email :
+          <span>{{ (userInformation$ | async) && (isLogin$ | async) ? (userInformation$ | async)?.name ? (userInformation$ | async)?.name : (userInformation$ | async)?.email :
             'Tài khoản'}}</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </div>
@@ -74,7 +74,7 @@
     </div>
 
     <div class="listButton vertical-container">
-      <ng-container *ngIf="userInformation && isLogin; else menuAuthentication">
+      <ng-container *ngIf="(userInformation$ | async) && (isLogin$ | async); else menuAuthentication">
         <mat-list role="list">
           <div class="micro-height-space"></div>
 

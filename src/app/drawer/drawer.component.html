@@ -11,15 +11,15 @@
                     </div>
                     <div class="user-information-block_showListButton vertical-container">
                         <div class="user-information-block_showListButton_status">
-                            {{ userInformation && isLogin ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
+                            {{ (userInformation$ | async) && (isLogin$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
                         </div>
                         <div class="user-information-block_showListButton_account horizontal-container">
-                            <span>{{ userInformation && isLogin ? userInformation.name ? userInformation.name : userInformation.email : 'Tài khoản'}}</span>
+                            <span>{{ (userInformation$ | async) && (isLogin$ | async) ? (userInformation$ | async)?.name ? (userInformation$ | async)?.name : (userInformation$ | async)?.email : 'Tài khoản'}}</span>
                         </div>
                     </div>
                 </div>
             </mat-expansion-panel-header>
-            <mat-list class="user-information-menu" *ngIf="userInformation && isLogin">
+            <mat-list class="user-information-menu" *ngIf="(userInformation$ | async) && (isLogin$ | async)">
                 <mat-list-item
                     *ngFor="let customer of customerMenu"
                     [routerLink]="['/customer/'+customer.route]"
@@ -39,7 +39,7 @@
                 </mat-list-item>
             </mat-list>
 
-            <mat-list *ngIf="!userInformation || !isLogin">
+            <mat-list *ngIf="!(userInformation$ | async) || !(isLogin$ | async)">
                 <mat-list-item (click)="login('login')">
                     <mat-icon>login</mat-icon>
                     <span>Đăng nhập</span>

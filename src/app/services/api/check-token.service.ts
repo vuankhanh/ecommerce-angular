@@ -7,10 +7,10 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class CheckTokenService {
-  private urlCheck: string = environment.backendApi+'/check';
+  private readonly urlCheck: string = environment.backendApi+'/auth/config';
 
-  private bCheck: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private check$: Observable<boolean> = this.bCheck.asObservable();
+  private readonly bCheck: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public readonly check$: Observable<boolean> = this.bCheck.asObservable();
   constructor(
     private httpClient: HttpClient
   ) { }
@@ -20,14 +20,10 @@ export class CheckTokenService {
       'Content-Type': 'application/json',
       'x-access-token': token
     });
-    return this.httpClient.get(this.urlCheck, { headers: headers })
+    return this.httpClient.post(this.urlCheck, {}, { headers: headers })
   }
 
   set(check: boolean){
     this.bCheck.next(check);
-  }
-
-  get(){
-    return this.check$;
   }
 }

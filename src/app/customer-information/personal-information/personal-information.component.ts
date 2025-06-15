@@ -20,6 +20,7 @@ import { TToken } from '../../models/token.interface';
 
 @Component({
   selector: 'app-personal-information',
+  standalone: false,
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.scss']
 })

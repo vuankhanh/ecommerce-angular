@@ -41,8 +41,8 @@ export class DrawerComponent implements OnInit {
   badgeCart: number = 0;
   currentUrl: string = this.router.url;
 
-  isLogin: boolean = false;
-  userInformation?: UserInformation | null;
+  isLogin$ = this.checkTokenService.check$;
+  userInformation$ = this.authService.jwtPayload$;
 
   subscription: Subscription = new Subscription();
   constructor(
@@ -76,22 +76,6 @@ export class DrawerComponent implements OnInit {
         if(event) {
           this.currentUrl = event.url;
         }
-      })
-    );
-
-    this.listenUserInformation();
-  }
-
-  listenUserInformation(){
-    this.subscription.add(
-      this.authService.getUserInformation().subscribe(userInfo=>{
-        this.userInformation = userInfo;
-      })
-    );
-
-    this.subscription.add(
-      this.checkTokenService.get().subscribe(res=>{
-        this.isLogin = res;
       })
     );
   }
