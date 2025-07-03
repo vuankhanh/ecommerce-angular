@@ -28,8 +28,8 @@ import { SocialAuthenticationService } from '../services/api/social-login/social
 
 import { Subscription } from 'rxjs';
 import { MaterialModule } from '../sharing/module/material';
-import { GalleryRoutePipe } from '../pipes/gallery-route.pipe';
 import { TToken } from '../models/token.interface';
+import { PrefixBackendStaticPipe } from '../pipes/prefix-backend.pipe';
 
 @Component({
   selector: 'app-header',
@@ -39,7 +39,7 @@ import { TToken } from '../models/token.interface';
     RouterLink,
     RouterLinkActive,
 
-    GalleryRoutePipe,
+    PrefixBackendStaticPipe,
 
     MaterialModule
   ],

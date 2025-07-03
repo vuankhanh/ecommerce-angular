@@ -6,7 +6,7 @@
   </div>
 
   <div class="brand-name vertical-container" *ngIf="identification">
-    <img [src]="identification.logo.src | galleryRoute" [alt]="'Carota Logo'" [routerLink]="['']">
+    <img [src]="identification.logo.src | prefixBackendStatic" [alt]="'Carota Logo'" [routerLink]="['']">
   </div>
 
   <div class="cart-container vertical-container">

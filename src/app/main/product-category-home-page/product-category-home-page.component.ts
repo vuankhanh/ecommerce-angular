@@ -9,9 +9,9 @@ import { ProductResponse, ProductService } from '../../services/api/product/prod
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
 import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
 import { SkeletonComponent } from '../../sharing/component/skeleton/skeleton.component';
+import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
 
 @Component({
   selector: 'app-product-category-home-page',
@@ -19,7 +19,7 @@ import { SkeletonComponent } from '../../sharing/component/skeleton/skeleton.com
   imports: [
     CommonModule,
 
-    GalleryRoutePipe,
+    PrefixBackendStaticPipe,
     ReplaceSpacePipe,
 
     SkeletonComponent

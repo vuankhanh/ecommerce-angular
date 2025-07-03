@@ -1,0 +1,26 @@
+import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { TAlbumModel } from '../../models/album.interface';
+import { ISuccess } from '../../models/success.interface';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SlideShowService {
+  private readonly url: string = environment.backendApi;
+  constructor(
+    private httpClient: HttpClient
+  ) { }
+
+  get() {
+    return this.httpClient.get<IAlbumResponse>(this.url+'/slide-show').pipe(
+      map(res => res.metaData)
+    );
+  }
+}
+
+export interface IAlbumResponse extends ISuccess {
+  metaData: TAlbumModel;
+}

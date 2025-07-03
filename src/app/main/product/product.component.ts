@@ -8,7 +8,7 @@ import { combineLatest, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AppServicesService } from '../../services/app-services.service';
 import { CommonModule } from '@angular/common';
-import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
+import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -18,7 +18,7 @@ import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
     RouterLink,
     RouterLinkActive,
 
-    GalleryRoutePipe
+    PrefixBackendStaticPipe
   ],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']

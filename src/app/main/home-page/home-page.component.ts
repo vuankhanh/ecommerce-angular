@@ -18,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
 
     RouterLink,
-    // SlideShowComponent,
+    SlideShowComponent,
     ProductCategoryHomePageComponent,
 
     MatIconModule,

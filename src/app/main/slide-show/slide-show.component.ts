@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 
 import { animationSlide } from '../../animation/slide-show';
 
-import { Product } from '../../models/Product';
-
 import { CartService } from '../../services/cart.service';
 import { HeaderService } from '../../services/header.service';
 import { AppServicesService } from '../../services/app-services.service';
@@ -12,7 +10,8 @@ import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
+import { SlideShowService } from '../../services/api/slide-show.service';
+import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
 
 @Component({
   selector: 'app-slide-show',
@@ -20,7 +19,7 @@ import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
   imports: [
     CommonModule,
 
-    GalleryRoutePipe,
+    PrefixBackendStaticPipe,
 
     CarouselModule
   ],
@@ -29,7 +28,7 @@ import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
   animations: [animationSlide]
 })
 export class SlideShowComponent implements OnInit, OnDestroy {
-  productHightlights: Array<Product> = [];
+  slideShow$ = this.slideShowService.get();
 
   customOptions: OwlOptions = {
     loop: true,
@@ -42,15 +41,6 @@ export class SlideShowComponent implements OnInit, OnDestroy {
     responsive: {
       0: {
         items: 1
-      },
-      400: {
-        items: 2
-      },
-      740: {
-        items: 3
-      },
-      940: {
-        items: 4
       }
     },
     nav: true
@@ -61,21 +51,12 @@ export class SlideShowComponent implements OnInit, OnDestroy {
     private router: Router,
     private cartService: CartService,
     private headerService: HeaderService,
-    private appServicesService: AppServicesService
+    private appServicesService: AppServicesService,
+    private readonly slideShowService: SlideShowService
   ) { }
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.appServicesService.productHightlight$.subscribe(res => {
-        if (res.length) {
-          this.productHightlights = res;
-        }
-      })
-    )
-  }
-
-  showDetail(product: Product) {
-
+    
   }
 
   ngOnDestroy() {

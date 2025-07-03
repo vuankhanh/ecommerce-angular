@@ -7,7 +7,7 @@
           [routerLinkActive]="['is-active']">
           <div class="vertical-container">
             <div class="img-container horizontal-container">
-              <img [src]="category.thumbnailUrl | galleryRoute" [alt]="category.name" (load)="dosomething($event)">
+              <img [src]="category.thumbnailUrl | prefixBackendStatic" [alt]="category.name" (load)="dosomething($event)">
             </div>
             <div class="product-info">
               <h2>{{ category.name }}</h2>

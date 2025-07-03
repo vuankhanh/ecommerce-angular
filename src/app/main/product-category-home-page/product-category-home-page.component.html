@@ -4,7 +4,7 @@
     <ng-container *ngFor="let product of products; let i = index;">
       <div class="product-frame">
         <div class="img-container">
-          <img [src]="product.thumbnailUrl | galleryRoute" [alt]="product.name" loading="lazy"
+          <img [src]="(product.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy"
             (click)="showDetail(product)">
         </div>
         <div class="product-info">

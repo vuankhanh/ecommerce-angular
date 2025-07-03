@@ -3,7 +3,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { GalleryRoutePipe } from './pipes/gallery-route.pipe';
+
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
@@ -11,6 +11,7 @@ import { SocketIoService } from './services/socket/socket-io.service';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
+import { PrefixBackendStaticPipe } from './pipes/prefix-backend.pipe';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +28,6 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-bottom-center',
       preventDuplicates: true,
     }),
-    GalleryRoutePipe
+    PrefixBackendStaticPipe
   ]
 };
