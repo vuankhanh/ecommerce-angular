@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
-import { Cart } from '../cart.service'
+import { Cart } from '../../../services/cart.service'
 
-import { LocalStorageService } from '../local-storage.service';
+import { LocalStorageService } from '../../../services/local-storage.service';
 
 import { Observable } from 'rxjs';
 

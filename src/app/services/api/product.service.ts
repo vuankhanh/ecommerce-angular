@@ -52,17 +52,29 @@ export class ProductService {
     );
   }
 
-  getDetail(id: string): Observable<TProductModel> {
-    if (!id) {
-      throw new Error('Id là bắt buộc để cập nhật danh mục sản phẩm');
+  getDetail(id?: string, slug?: string): Observable<TProductModel> {
+    if( !id && !slug) {
+      throw new Error('Id hoặc slug là bắt buộc để lấy chi tiết sản phẩm');
     }
 
     let params = new HttpParams();
-    params = params.append('id', id)
+    if (id) params = params.append('id', id);
+    if (slug) params = params.append('slug', slug);
 
     return this.httpClient.get<IProductDetailResponse>(`${this.url}/detail`, { params }).pipe(
       map(response => response.metaData)
     );
+  }
+
+  getProductsByCategorySlug(slug: string, page?: number, size?: number): Observable<TProduct> {
+    if(!slug) throw new Error('Slug là bắt buộc để lấy danh sách sản phẩm theo danh mục');
+
+    let params = new HttpParams();
+    params = params.append('slug', slug);
+
+    return this.httpClient.get<IProductResponse>(this.url+'/by-category-slug' , { params }).pipe(
+      map(response => response.metaData)
+    )
   }
 
   create(data: IProduct) {

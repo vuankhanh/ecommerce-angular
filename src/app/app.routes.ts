@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './main/home-page/home-page.component';
 import { CartComponent } from './main/cart/cart.component';
-import { ProductionsComponent } from './main/product/product.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +11,6 @@ export const routes: Routes = [
     component: CartComponent
   }, {
     path: 'san-pham',
-    component: ProductionsComponent
+    loadChildren: () => import('./main/product/product.routes').then(m => m.routes)
   }
 ];

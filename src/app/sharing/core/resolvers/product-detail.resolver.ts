@@ -5,8 +5,8 @@ import {
   ResolveFn
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Product } from '../../models/Product';
-import { ProductService } from '../api/product/product.service';
+import { Product } from '../../../models/Product';
+import { ProductService } from '../../../services/api/product/product.service';
 
 export const productDetailResolver: ResolveFn<Product> =
   (

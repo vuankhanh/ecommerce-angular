@@ -3,49 +3,50 @@ import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { AddressChooseComponent } from '../../sharing/modal/address-choose/address-choose.component';
-import { WriteRatingComponent } from '../../sharing/modal/write-rating/write-rating.component';
-import { ThanksForTheReviewComponent } from '../../sharing/modal/thanks-for-the-review/thanks-for-the-review.component';
+// import { AddressChooseComponent } from '../../../sharing/modal/address-choose/address-choose.component';
+// import { WriteRatingComponent } from '../../../sharing/modal/write-rating/write-rating.component';
+// import { ThanksForTheReviewComponent } from '../../../sharing/modal/thanks-for-the-review/thanks-for-the-review.component';
 
 //Pipe
 
-import { Product } from '../../models/Product';
-import { Media } from '../../models/ProductGallery';
-import { UserInformation } from '../../models/UserInformation';
-import { Address } from '../../models/Address';
-import { MetaTagFacebook } from '../../models/MetaTag';
-import { Identification } from '../../models/Identification';
-import { Rating } from '../../models/ServerConfig';
-import { ProductReviews } from '../../models/ProductReviews';
-import { PaginationParams } from '../../models/PaginationParams';
+import { Product } from '../../../models/Product';
+import { Media } from '../../../models/ProductGallery';
+import { UserInformation } from '../../../models/UserInformation';
+import { Address } from '../../../models/Address';
+import { MetaTagFacebook } from '../../../models/MetaTag';
+import { Identification } from '../../../models/Identification';
+import { Rating } from '../../../models/ServerConfig';
+import { ProductReviews } from '../../../models/ProductReviews';
+import { PaginationParams } from '../../../models/PaginationParams';
 
-import { Cart, CartService } from '../../services/cart.service';
-import { ProductReviewsResponse, ProductReviewsService, TotalProductReviews } from '../../services/api/product/product-reviews.service';
-import { AuthService } from '../../services/auth.service';
-import { AddressModificationService } from '../../services/address-modification.service';
-import { ResponseAddress } from '../../services/api/customer-address.service';
-import { LocalStorageService } from '../../services/local-storage.service';
-// import { SocketIoService } from '../../services/socket/socket-io.service';
-import { SEOService } from '../../services/seo.service';
-import { InProgressSpinnerService } from '../../services/in-progress-spinner.service';
-import { ConfigService } from '../../services/api/config.service';
-import { MainContainerScrollService, DirectionPostion } from '../../services/main-container-scroll.service';
+import { Cart, CartService } from '../../../services/cart.service';
+import { ProductReviewsResponse, ProductReviewsService, TotalProductReviews } from '../../../services/api/product/product-reviews.service';
+import { AuthService } from '../../../services/auth.service';
+import { AddressModificationService } from '../../../services/address-modification.service';
+import { ResponseAddress } from '../../../services/api/customer-address.service';
+import { LocalStorageService } from '../../../services/local-storage.service';
+// import { SocketIoService } from '../../../services/socket/socket-io.service';
+import { SEOService } from '../../../services/seo.service';
+import { InProgressSpinnerService } from '../../../services/in-progress-spinner.service';
+import { ConfigService } from '../../../services/api/config.service';
+import { MainContainerScrollService, DirectionPostion } from '../../../services/main-container-scroll.service';
 
 import { combineLatest, of, Subject, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { MaterialModule } from '../../sharing/module/material';
-import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
-import { TheDayOfWeekPipe } from '../../pipes/the-day-of-week-format.pipe';
+import { MaterialModule } from '../../../sharing/module/material';
+import { ReplaceSpacePipe } from '../../../pipes/replace-space.pipe';
+import { TheDayOfWeekPipe } from '../../../pipes/the-day-of-week-format.pipe';
 import { FormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
-import { PostsComponent } from '../../sharing/component/posts/posts.component';
-import { RatingComponent } from '../../sharing/component/rating/rating.component';
-import { PaginationComponent } from '../../sharing/component/pagination/pagination.component';
-import { ProductCategoryHomePageComponent } from '../product-category-home-page/product-category-home-page.component';
-import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
-import { TProductModel } from '../../models/product.interface';
+import { PostsComponent } from '../../../sharing/component/posts/posts.component';
+import { RatingComponent } from '../../../sharing/component/rating/rating.component';
+import { PaginationComponent } from '../../../sharing/component/pagination/pagination.component';
+import { ProductCategoryHomePageComponent } from '../../product-category-home-page/product-category-home-page.component';
+import { PrefixBackendStaticPipe } from '../../../pipes/prefix-backend.pipe';
+import { TProductModel } from '../../../models/product.interface';
 import { GalleryComponent } from '@daelmaak/ngx-gallery';
-import { GalleryPipe } from '../../pipes/gallery.pipe';
+import { GalleryPipe } from '../../../pipes/gallery.pipe';
+import { ProductService } from '../../../services/api/product.service';
 
 const headerOffset = 85;
 @Component({
@@ -130,15 +131,32 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     private inProgressSpinnerService: InProgressSpinnerService,
     private configService: ConfigService,
     private mainContainerScrollService: MainContainerScrollService,
+    private productService: ProductService
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit(): void {
-    const activatedRouteData$ = this.activatedRoute.data.pipe(
-      filter(data => !!data),
-      map(data => data['product'])
-    )
+    this.activatedRoute.params.pipe(
+      map(params => params['productSlug'] as string),
+      filter(productSlug => !!productSlug),
+      switchMap(productSlug => {
+        this.product = undefined;
+        return this.productService.getDetail(undefined, productSlug);
+      })
+    ).subscribe({
+      next: (product) => {
+        this.product = product;
+      },
+      error: (err) => {
+        console.error('Lỗi khi lấy chi tiết sản phẩm:', err.message);
+        // this.inProgressSpinnerService.hide();
+      },
+      complete: () => {
+        console.log('Chi tiết sản phẩm đã được lấy thành công');
+        
+      }
+    })
     const cartChange$ = this.cartService.listenCartChange();
     // const userInformation$ = this.authService.getUserInformation();
     // this.subscription.add(

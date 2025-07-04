@@ -1,19 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { ProductCategory } from '../../models/ProductCategory';
-
-
-import { combineLatest, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AppServicesService } from '../../services/app-services.service';
+import { Observable, Subscription } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
+import { TProductCategoryModel } from '../../models/product-category.interface';
 @Component({
   selector: 'app-product',
   standalone: true,
   imports: [
     CommonModule,
+
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
@@ -23,37 +21,44 @@ import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
-export class ProductionsComponent implements OnInit, OnDestroy {
-  productCategorys: Array<ProductCategory> = [];
-  categoryIsActivated?: ProductCategory;
+export class ProductComponent implements OnInit, OnDestroy {
+  productCategorise$: Observable<TProductCategoryModel[]> = this.activatedRoute?.data.pipe(
+    map(data => data['productCategories'] as TProductCategoryModel[]),
+  )
 
-  checkChildParams: boolean = false;
-
-  subscription: Subscription = new Subscription();
-
+  private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
-    private activateRoute: ActivatedRoute,
-    private appServicesService: AppServicesService
-  ) { }
+    private activatedRoute: ActivatedRoute,
+  ) {
+
+  }
 
   ngOnInit(): void {
-
-    const productCategory$ = this.appServicesService.productCategory$;
-    const url$ = this.activateRoute.url.pipe(map(segments => segments.join('')));
+    const slug$ = this.productCategorise$.pipe(
+      filter(productCategories => !!productCategories.length),
+      map(productCategories => productCategories[0].slug)
+    );
 
     this.subscription.add(
-      combineLatest([productCategory$, url$]).subscribe(([productCategories, url]) => {
-        if (productCategories.length) {
-          this.productCategorys = productCategories;
-          setTimeout(() => {
-            let childPath = this.activateRoute.firstChild?.routeConfig?.path;
-            this.checkChildParams = childPath ? true : false;
-          }, 10);
-        }
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(event => this.activatedRoute.children),
+        filter(children => !children.length),
+        switchMap(_ => slug$)
+      ).subscribe((slug) => {
+        this.router.navigate(['san-pham', slug]);
       })
     );
 
+    this.subscription.add(
+      slug$.pipe(
+        take(1),
+        filter(_=>!this.activatedRoute.children.length )
+      ).subscribe((slug) => {
+        this.router.navigate(['san-pham', slug]);
+      })
+    )
   }
 
   dosomething(event: any) {

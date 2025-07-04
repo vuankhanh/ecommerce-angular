@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 
-import { LocalStorageService } from '../local-storage.service';
-import { ResponseLogin } from '../api/login.service';
-import { AuthService } from '../auth.service';
-import { CheckTokenService } from '../api/check-token.service';
+import { LocalStorageService } from '../../../services/local-storage.service';
+import { ResponseLogin } from '../../../services/api/login.service';
+import { AuthService } from '../../../services/auth.service';
+import { CheckTokenService } from '../../../services/api/check-token.service';
 
 
 import { Observable, of } from 'rxjs';
