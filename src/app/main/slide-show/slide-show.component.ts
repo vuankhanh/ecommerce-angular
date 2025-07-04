@@ -32,9 +32,10 @@ export class SlideShowComponent implements OnInit, OnDestroy {
 
   customOptions: OwlOptions = {
     loop: true,
-    mouseDrag: false,
-    touchDrag: false,
-    pullDrag: false,
+    autoplay: true,
+    // mouseDrag: false,
+    // touchDrag: false,
+    // pullDrag: false,
     dots: false,
     navSpeed: 700,
     navText: ['', ''],

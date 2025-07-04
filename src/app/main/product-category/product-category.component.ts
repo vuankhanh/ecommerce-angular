@@ -3,27 +3,39 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 import { ProductCategory } from '../../models/ProductCategory';
 import { PaginationParams } from '../../models/PaginationParams';
-import { Product } from '../../models/Product';
 
-import { ProductResponse, ProductService } from '../../services/api/product/product.service';
 import { AppServicesService } from '../../services/app-services.service';
 import { UrlChangeService } from '../../services/url-change.service';
 import { SEOService } from '../../services/seo.service';
 
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
+import { ProductService } from '../../services/api/product.service';
+import { TProductModel } from '../../models/product.interface';
+import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
+import { SkeletonComponent } from '../../sharing/component/skeleton/skeleton.component';
 @Component({
   selector: 'app-product-category',
+  standalone: true,
+  imports: [
+    CommonModule,
+
+    SkeletonComponent,
+    
+    PrefixBackendStaticPipe,
+    ReplaceSpacePipe
+  ],
   templateUrl: './product-category.component.html',
   styleUrls: ['./product-category.component.scss']
 })
 export class ProductCategoryComponent implements OnInit, OnDestroy {
   private child: any;
 
-  productResponse?: ProductResponse;
   configPagination?: PaginationParams;
 
-  products: Array<Product> = [];
+  products: Array<TProductModel> = [];
   productCategory?: ProductCategory;
   productCategorys: Array<ProductCategory> = [];
 
@@ -53,15 +65,16 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
 
   listenProduct(type: string) {
     this.subscription.add(
-      this.productService.getProduct(type).subscribe(res => {
-        this.productResponse = res;
-        this.configPagination = {
-          totalItems: this.productResponse.totalItems,
-          page: this.productResponse.page,
-          size: this.productResponse.size,
-          totalPages: this.productResponse.totalPages
-        };
-        this.products = this.productResponse.data;
+      this.productService.getAll('', type).subscribe(res => {
+        const {data, paging} = res
+        this.products = data;
+        // this.productResponse = res;
+        // this.configPagination = {
+        //   totalItems: this.productResponse.totalItems,
+        //   page: this.productResponse.page,
+        //   size: this.productResponse.size,
+        //   totalPages: this.productResponse.totalPages
+        // };
       })
     )
   }
@@ -83,8 +96,8 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     )
   }
 
-  showDetail(product: Product) {
-    this.router.navigate(['san-pham/' + product.category.route, product.route]);
+  showDetail(product: TProductModel) {
+    this.router.navigate(['san-pham/' + product.productCategory?.slug, product.slug]);
   }
 
   changeIndex(index: number) {

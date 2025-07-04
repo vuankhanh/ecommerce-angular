@@ -8,7 +8,6 @@ import { WriteRatingComponent } from '../../sharing/modal/write-rating/write-rat
 import { ThanksForTheReviewComponent } from '../../sharing/modal/thanks-for-the-review/thanks-for-the-review.component';
 
 //Pipe
-import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
 
 import { Product } from '../../models/Product';
 import { Media } from '../../models/ProductGallery';
@@ -25,7 +24,6 @@ import { ProductReviewsResponse, ProductReviewsService, TotalProductReviews } fr
 import { AuthService } from '../../services/auth.service';
 import { AddressModificationService } from '../../services/address-modification.service';
 import { ResponseAddress } from '../../services/api/customer-address.service';
-import { EstimateFeeService } from '../../services/api/estimate-fee.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 // import { SocketIoService } from '../../services/socket/socket-io.service';
 import { SEOService } from '../../services/seo.service';
@@ -44,6 +42,10 @@ import { PostsComponent } from '../../sharing/component/posts/posts.component';
 import { RatingComponent } from '../../sharing/component/rating/rating.component';
 import { PaginationComponent } from '../../sharing/component/pagination/pagination.component';
 import { ProductCategoryHomePageComponent } from '../product-category-home-page/product-category-home-page.component';
+import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
+import { TProductModel } from '../../models/product.interface';
+import { GalleryComponent } from '@daelmaak/ngx-gallery';
+import { GalleryPipe } from '../../pipes/gallery.pipe';
 
 const headerOffset = 85;
 @Component({
@@ -54,11 +56,14 @@ const headerOffset = 85;
 
     FormsModule,
 
-    GalleryRoutePipe,
+    PrefixBackendStaticPipe,
+    GalleryPipe,
     ReplaceSpacePipe,
     TheDayOfWeekPipe,
 
     YouTubePlayerModule,
+
+    GalleryComponent,
     PostsComponent,
     RatingComponent,
     PaginationComponent,
@@ -91,26 +96,9 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     end: 0 // End at the end of the video
   };
 
-  arrYoutube: Array<PlayerObject> = [];
-
-  detailId: string = '';
   userInformation: UserInformation | null = null;
-  product?: Product;
-  productReviews: Array<ProductReviews> = [];
+  product?: TProductModel;
   configPagination: PaginationParams | undefined;
-  productReviewsResponse?: ProductReviewsResponse;
-  totalProductReviews: TotalProductReviews = {
-    totalProductReviewsReponse: {
-      level1: 0,
-      level2: 0,
-      level3: 0,
-      level4: 0,
-      level5: 0,
-    },
-    totalRating: 0,
-    existRating: 0,
-    averageRating: 0
-  }
   cart?: Cart;
 
   estimateFeeInfo: any = null;
@@ -123,7 +111,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   identification?: Identification;
   rating: Array<Rating> = [];
 
-  subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
   scrollToBottomMainContainer: Subject<null> = new Subject<null>();
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
@@ -132,13 +120,11 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     private activatedRoute: ActivatedRoute,
     private renderer2: Renderer2,
     private dialog: MatDialog,
-    private galleryRoutePipe: GalleryRoutePipe,
+    private prefixBackendStaticPipe: PrefixBackendStaticPipe,
     private productReviewsService: ProductReviewsService,
     private cartService: CartService,
     private authService: AuthService,
     private addressModificationService: AddressModificationService,
-    private estimateFeeService: EstimateFeeService,
-    private localStorageService: LocalStorageService,
     // private socketIoService: SocketIoService,
     private seoService: SEOService,
     private inProgressSpinnerService: InProgressSpinnerService,
@@ -154,61 +140,61 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
       map(data => data['product'])
     )
     const cartChange$ = this.cartService.listenCartChange();
-    const userInformation$ = this.authService.getUserInformation();
-    this.subscription.add(
-      combineLatest(
-        [
-          userInformation$,
-          cartChange$,
-          activatedRouteData$
-        ]
-      ).subscribe(([userInfo, cart, productDetail]) => {
+    // const userInformation$ = this.authService.getUserInformation();
+    // this.subscription.add(
+    //   combineLatest(
+    //     [
+    //       userInformation$,
+    //       cartChange$,
+    //       activatedRouteData$
+    //     ]
+    //   ).subscribe(([userInfo, cart, productDetail]) => {
 
-        if (userInfo) {
-          this.userInformation = userInfo;
-        }
+    //     if (userInfo) {
+    //       this.userInformation = userInfo;
+    //     }
 
-        this.cart = cart;
-        if (this.cart.deliverTo) {
-          this.headquartersAddress = this.cart.deliverTo;
-        }
-        if (productDetail) {
-          this.setProductDetail(productDetail)
-        }
+    //     this.cart = cart;
+    //     if (this.cart.deliverTo) {
+    //       this.headquartersAddress = this.cart.deliverTo;
+    //     }
+    //     if (productDetail) {
+    //       this.setProductDetail(productDetail)
+    //     }
 
-        if (userInfo && this.cart.deliverTo && this.product) {
-          let tokenStoraged = this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-          if (tokenStoraged && tokenStoraged.accessToken) {
-            let estimateFee$ = this.estimateFeeService.getEstimateFee(tokenStoraged.accessToken, this.cart.deliverTo._id!, this.product.price);
-            this.subscription.add(
-              estimateFee$.subscribe(res => {
-                if (res) {
-                  this.estimateFeeInfo = res;
+    //     if (userInfo && this.cart.deliverTo && this.product) {
+    //       let tokenStoraged = this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    //       if (tokenStoraged && tokenStoraged.accessToken) {
+    //         let estimateFee$ = this.estimateFeeService.getEstimateFee(tokenStoraged.accessToken, this.cart.deliverTo._id!, this.product.price);
+    //         this.subscription.add(
+    //           estimateFee$.subscribe(res => {
+    //             if (res) {
+    //               this.estimateFeeInfo = res;
 
-                  this.estimateFeeError = null;
-                }
-              }, error => {
-                console.log(error);
+    //               this.estimateFeeError = null;
+    //             }
+    //           }, error => {
+    //             console.log(error);
 
-                this.estimateFeeInfo = null;
-                this.estimateFeeError = {
-                  desc: 'AhaMove hiện tại không hỗ trợ vận chuyển đến địa chỉ của bạn vì thế Carota sẽ liên hệ với bạn và chuẩn bị một hình thức vận chuyển khác.'
-                }
-                // if(error.status === 406){
-                //   if(error.error.code === 'INVALID_DISTANCE'){
-                //     this.estimateFeeError = {
-                //       desc: 'AhaMove hiện tại không hỗ trợ vận chuyển đến địa của bạn vì thế Carota sẽ liên hệ với bạn và chuẩn bị một hình thức vận chuyển khác.'
-                //     }
-                //   }
-                // }
-              })
-            )
-          }
-        }
-      }, error => {
-        console.log(error);
-      })
-    );
+    //             this.estimateFeeInfo = null;
+    //             this.estimateFeeError = {
+    //               desc: 'AhaMove hiện tại không hỗ trợ vận chuyển đến địa chỉ của bạn vì thế Carota sẽ liên hệ với bạn và chuẩn bị một hình thức vận chuyển khác.'
+    //             }
+    //             // if(error.status === 406){
+    //             //   if(error.error.code === 'INVALID_DISTANCE'){
+    //             //     this.estimateFeeError = {
+    //             //       desc: 'AhaMove hiện tại không hỗ trợ vận chuyển đến địa của bạn vì thế Carota sẽ liên hệ với bạn và chuẩn bị một hình thức vận chuyển khác.'
+    //             //     }
+    //             //   }
+    //             // }
+    //           })
+    //         )
+    //       }
+    //     }
+    //   }, error => {
+    //     console.log(error);
+    //   })
+    // );
 
     if (this.isBrowser) {
       this.subscription.add(
@@ -239,336 +225,336 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
 
   }
 
-  listenScroll(product: Product, paginationParams?: PaginationParams) {
-    this.configPagination = paginationParams;
-    var body = document.body,
-      html = document.documentElement;
+  // listenScroll(product: Product, paginationParams?: PaginationParams) {
+  //   this.configPagination = paginationParams;
+  //   var body = document.body,
+  //     html = document.documentElement;
 
-    var height = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
-    );
+  //   var height = Math.max(
+  //     body.scrollHeight,
+  //     body.offsetHeight,
+  //     html.clientHeight,
+  //     html.scrollHeight,
+  //     html.offsetHeight
+  //   );
 
-    const getTotalProductReview$ = this.productReviewsService.getTotal(product._id);
-    const getProductReviews$ = this.productReviewsService.get(product._id, paginationParams);
+  //   const getTotalProductReview$ = this.productReviewsService.getTotal(product._id);
+  //   const getProductReviews$ = this.productReviewsService.get(product._id, paginationParams);
 
-    this.subscription.add(
-      this.mainContainerScrollService.listenScrollTop$.pipe(
-        map(pos => {
-          let mainContainer: HTMLDivElement = this.mainContainer ? this.mainContainer.nativeElement : null;
-          return {
-            pos,
-            mainContainer
-          }
-        }),
-        filter(data => {
-          if (data.mainContainer) {
-            let bottomElement: number = data.mainContainer.offsetTop + data.mainContainer.offsetHeight;
-            let total: number = data.pos + height;
-            if (total >= bottomElement) {
-              return true;
-            } else {
-              return false;
-            }
-          } else {
-            return false;
-          }
-        }),
-        take(1),
-        switchMap((data) => combineLatest([getTotalProductReview$, getProductReviews$, of(data.mainContainer)])),
-        takeUntil(this.scrollToBottomMainContainer)
-      ).subscribe(([productReviewsTotal, productReviews, mainContainer]) => {
-        if (productReviews) {
-          if (this.configPagination) {
-            let directionPostion: DirectionPostion = {
-              direction: 'y',
-              position: mainContainer.offsetTop - headerOffset
-            }
-            this.mainContainerScrollService.setDirectionPosition(directionPostion)
-          }
-          this.productReviewsResponse = productReviews;
-          this.configPagination = {
-            totalItems: this.productReviewsResponse.totalItems,
-            page: this.productReviewsResponse.page - 1,
-            size: this.productReviewsResponse.size,
-            totalPages: this.productReviewsResponse.totalPages
-          };
-          this.productReviews = this.productReviewsResponse.data;
-        }
+  //   this.subscription.add(
+  //     this.mainContainerScrollService.listenScrollTop$.pipe(
+  //       map(pos => {
+  //         let mainContainer: HTMLDivElement = this.mainContainer ? this.mainContainer.nativeElement : null;
+  //         return {
+  //           pos,
+  //           mainContainer
+  //         }
+  //       }),
+  //       filter(data => {
+  //         if (data.mainContainer) {
+  //           let bottomElement: number = data.mainContainer.offsetTop + data.mainContainer.offsetHeight;
+  //           let total: number = data.pos + height;
+  //           if (total >= bottomElement) {
+  //             return true;
+  //           } else {
+  //             return false;
+  //           }
+  //         } else {
+  //           return false;
+  //         }
+  //       }),
+  //       take(1),
+  //       switchMap((data) => combineLatest([getTotalProductReview$, getProductReviews$, of(data.mainContainer)])),
+  //       takeUntil(this.scrollToBottomMainContainer)
+  //     ).subscribe(([productReviewsTotal, productReviews, mainContainer]) => {
+  //       if (productReviews) {
+  //         if (this.configPagination) {
+  //           let directionPostion: DirectionPostion = {
+  //             direction: 'y',
+  //             position: mainContainer.offsetTop - headerOffset
+  //           }
+  //           this.mainContainerScrollService.setDirectionPosition(directionPostion)
+  //         }
+  //         this.productReviewsResponse = productReviews;
+  //         this.configPagination = {
+  //           totalItems: this.productReviewsResponse.totalItems,
+  //           page: this.productReviewsResponse.page - 1,
+  //           size: this.productReviewsResponse.size,
+  //           totalPages: this.productReviewsResponse.totalPages
+  //         };
+  //         this.productReviews = this.productReviewsResponse.data;
+  //       }
 
-        if (productReviewsTotal) {
-          this.totalProductReviews = productReviewsTotal;
-        }
-      })
-    )
-  }
+  //       if (productReviewsTotal) {
+  //         this.totalProductReviews = productReviewsTotal;
+  //       }
+  //     })
+  //   )
+  // }
 
-  changeIndex(index: number) {
-    this.configPagination!.page = index;
-    if (this.product) this.listenScroll(this.product, this.configPagination);
-  }
+  // changeIndex(index: number) {
+  //   this.configPagination!.page = index;
+  //   if (this.product) this.listenScroll(this.product, this.configPagination);
+  // }
 
-  dosomething(event: any) {
-    let img: HTMLImageElement = <HTMLImageElement>event.target;
-    if (img) {
-      let src: string = img.src;
-    }
-  }
+  // dosomething(event: any) {
+  //   let img: HTMLImageElement = <HTMLImageElement>event.target;
+  //   if (img) {
+  //     let src: string = img.src;
+  //   }
+  // }
 
-  setProductDetail(product: Product) {
-    let currentUrl = 'https://carota.vn' + this.router.url;
-    if (product) {
-      if (!this.product || this.product._id != product._id) {
-        this.product = product;
-        if (this.isBrowser) {
-          this.listenScroll(this.product);
-        }
-        if (!isDevMode() && this.isBrowser) {
-          //Facebook Pixel
-          let script = this.renderer2.createElement('script');
-          script.type = `text/javascript`;
-          script.text = `fbq('track', 'ViewContent',{
-            _id: '${this.product._id}',
-            name: '${this.product.name}',
-            price: ${this.product.price},
-            quantity: ${this.product.quantity},
-            theRemainingAmount: ${this.product.theRemainingAmount}
-          });`;
-          this.renderer2.appendChild(this._document.head, script);
+  // setProductDetail(product: Product) {
+  //   let currentUrl = 'https://carota.vn' + this.router.url;
+  //   if (product) {
+  //     if (!this.product || this.product._id != product._id) {
+  //       this.product = product;
+  //       if (this.isBrowser) {
+  //         this.listenScroll(this.product);
+  //       }
+  //       if (!isDevMode() && this.isBrowser) {
+  //         //Facebook Pixel
+  //         let script = this.renderer2.createElement('script');
+  //         script.type = `text/javascript`;
+  //         script.text = `fbq('track', 'ViewContent',{
+  //           _id: '${this.product._id}',
+  //           name: '${this.product.name}',
+  //           price: ${this.product.price},
+  //           quantity: ${this.product.quantity},
+  //           theRemainingAmount: ${this.product.theRemainingAmount}
+  //         });`;
+  //         this.renderer2.appendChild(this._document.head, script);
 
-          //Google structured data
-          let images = this.product.albumImg?.media.map(media => "\"" + this.galleryRoutePipe.transform(media.src) + "\"");
+  //         //Google structured data
+  //         let images = this.product.albumImg?.media.map(media => "\"" + this.prefixBackendStaticPipe.transform(media.src) + "\"");
 
-          let googleSchemaScript = this.renderer2.createElement('script');
-          googleSchemaScript.type = 'application/ld+json';
-          googleSchemaScript.text = `{
-            "@context": "https://schema.org/",
-            "@type": "Product",
-            "name": "${this.product.name}",
-            "image": [${images}],
-            "description": "${this.product.sortDescription}",
-            "brand": {
-              "@type": "Brand",
-              "name": "Thủy hải sản Carota"
-            },
-            "offers": {
-              "@type": "Offer",
-              "url": "${currentUrl}",
-              "priceCurrency": "${this.product.currencyUnit}",
-              "price": "${this.product.price}",
-              "priceValidUntil": "2022-12-31",
-              "itemCondition": "https://schema.org/UsedCondition",
-              "availability": "https://schema.org/InStock"
-            }
-          }`;
-          this.renderer2.appendChild(this._document.head, googleSchemaScript);
-        }
+  //         let googleSchemaScript = this.renderer2.createElement('script');
+  //         googleSchemaScript.type = 'application/ld+json';
+  //         googleSchemaScript.text = `{
+  //           "@context": "https://schema.org/",
+  //           "@type": "Product",
+  //           "name": "${this.product.name}",
+  //           "image": [${images}],
+  //           "description": "${this.product.sortDescription}",
+  //           "brand": {
+  //             "@type": "Brand",
+  //             "name": "Thủy hải sản Carota"
+  //           },
+  //           "offers": {
+  //             "@type": "Offer",
+  //             "url": "${currentUrl}",
+  //             "priceCurrency": "${this.product.currencyUnit}",
+  //             "price": "${this.product.price}",
+  //             "priceValidUntil": "2022-12-31",
+  //             "itemCondition": "https://schema.org/UsedCondition",
+  //             "availability": "https://schema.org/InStock"
+  //           }
+  //         }`;
+  //         this.renderer2.appendChild(this._document.head, googleSchemaScript);
+  //       }
 
 
-        if (!this.product.quantity) {
-          this.product.quantity = 1;
-        }
-        let index: number = this.product.albumImg!.media.findIndex(media => media.isMain);
-        index >= 0 ? this.setImgMain(index) : this.setImgMain(0);
+  //       if (!this.product.quantity) {
+  //         this.product.quantity = 1;
+  //       }
+  //       let index: number = this.product.albumImg!.media.findIndex(media => media.isMain);
+  //       index >= 0 ? this.setImgMain(index) : this.setImgMain(0);
 
-        let metaTagFacebook: MetaTagFacebook = {
-          title: this.product.name,
-          image: this.galleryRoutePipe.transform(this.product.thumbnailUrl),
-          imageAlt: this.product.name,
-          imageType: 'image/png',
-          imageWidth: '100',
-          imageHeight: '100',
-          url: currentUrl,
-          description: this.product.sortDescription,
+  //       let metaTagFacebook: MetaTagFacebook = {
+  //         title: this.product.name,
+  //         image: this.prefixBackendStaticPipe.transform(this.product?.thumbnailUrl || ''),
+  //         imageAlt: this.product.name,
+  //         imageType: 'image/png',
+  //         imageWidth: '100',
+  //         imageHeight: '100',
+  //         url: currentUrl,
+  //         description: this.product.sortDescription,
 
-          productBrand: 'Thủy hải sản Carota',
-          productAvailability: 'in stock',
-          productCondition: 'new',
-          productPriceAmount: this.product.price.toString(),
-          productPriceCurrency: this.product.currencyUnit,
-          productRetailerItemId: this.product.route,
-          productItemGroupId: this.product.category.route,
-          googleProductCategory: this.product.category.googleProductCategory,
-        }
-        this.seoService.updateTitle(this.product.name);
-        this.seoService.updateMetaTagFacebook(metaTagFacebook);
-      }
-    }
-  }
+  //         productBrand: 'Thủy hải sản Carota',
+  //         productAvailability: 'in stock',
+  //         productCondition: 'new',
+  //         productPriceAmount: this.product.price.toString(),
+  //         productPriceCurrency: this.product.currencyUnit,
+  //         productRetailerItemId: this.product.route,
+  //         productItemGroupId: this.product.category.route,
+  //         googleProductCategory: this.product.category.googleProductCategory,
+  //       }
+  //       this.seoService.updateTitle(this.product.name);
+  //       this.seoService.updateMetaTagFacebook(metaTagFacebook);
+  //     }
+  //   }
+  // }
 
-  setImgMain(index: number) {
-    this.indexImgMain = index;
-    this.imgMain = this.product?.albumImg!.media[index];
-  }
+  // setImgMain(index: number) {
+  //   this.indexImgMain = index;
+  //   this.imgMain = this.product?.albumImg!.media[index];
+  // }
 
-  setImgMainDirection(direction: string) {
-    if (this.isBrowser) {
-      if (direction === 'toLeft') {
-        if (this.imgMain?._id != this.product?.albumImg?.media[0]._id) {
-          this.indexImgMain--;
-          this.product?.albumImg?.media[this.indexImgMain] ? this.imgMain = this.product?.albumImg?.media[this.indexImgMain] : this.product?.albumImg?.media[0];
-          const elementId = window.document.getElementById("list-item-" + this.indexImgMain)! as HTMLDivElement;
+  // setImgMainDirection(direction: string) {
+  //   if (this.isBrowser) {
+  //     if (direction === 'toLeft') {
+  //       if (this.imgMain?._id != this.product?.albumImg?.media[0]._id) {
+  //         this.indexImgMain--;
+  //         this.product?.albumImg?.media[this.indexImgMain] ? this.imgMain = this.product?.albumImg?.media[this.indexImgMain] : this.product?.albumImg?.media[0];
+  //         const elementId = window.document.getElementById("list-item-" + this.indexImgMain)! as HTMLDivElement;
 
-          this.listImg?.nativeElement.scrollTo({ left: this.indexImgMain * elementId.offsetWidth, behavior: "smooth" });
-        }
-      } else if (direction === 'toRight') {
-        if (this.imgMain?._id != this.product?.albumImg?.media[this.product?.albumImg?.media.length - 1]._id) {
-          this.indexImgMain++;
-          this.product?.albumImg?.media[this.indexImgMain] ? this.imgMain = this.product?.albumImg?.media[this.indexImgMain] : this.product?.albumImg?.media[0];
-          const elementId = window.document.getElementById("list-item-" + this.indexImgMain)! as HTMLDivElement;
+  //         this.listImg?.nativeElement.scrollTo({ left: this.indexImgMain * elementId.offsetWidth, behavior: "smooth" });
+  //       }
+  //     } else if (direction === 'toRight') {
+  //       if (this.imgMain?._id != this.product?.albumImg?.media[this.product?.albumImg?.media.length - 1]._id) {
+  //         this.indexImgMain++;
+  //         this.product?.albumImg?.media[this.indexImgMain] ? this.imgMain = this.product?.albumImg?.media[this.indexImgMain] : this.product?.albumImg?.media[0];
+  //         const elementId = window.document.getElementById("list-item-" + this.indexImgMain)! as HTMLDivElement;
 
-          this.listImg?.nativeElement.scrollTo({ left: this.indexImgMain * elementId.offsetWidth, behavior: "smooth" })
-        }
-      } else {
-        console.log('Hướng không xác định');
-      }
-    }
-  }
+  //         this.listImg?.nativeElement.scrollTo({ left: this.indexImgMain * elementId.offsetWidth, behavior: "smooth" })
+  //       }
+  //     } else {
+  //       console.log('Hướng không xác định');
+  //     }
+  //   }
+  // }
 
-  chooseAddress(headquartersAddress: Address) {
-    if (!this.userInformation) {
-      this.authService.login('login');
-    } else {
-      this.subscription.add(
-        this.dialog.open(AddressChooseComponent, {
-          panelClass: 'address-choose',
-          data: {
-            defaultAddress: headquartersAddress
-          }
-        }).afterClosed().subscribe(res => {
-          if (res && res.deliverTo) {
-            let address: Address = res.deliverTo;
-            this.headquartersAddress = address;
-            this.cartService.setDelivery(this.headquartersAddress);
-          }
-        })
-      )
-    }
-  }
+  // chooseAddress(headquartersAddress: Address) {
+  //   if (!this.userInformation) {
+  //     this.authService.login('login');
+  //   } else {
+  //     this.subscription.add(
+  //       this.dialog.open(AddressChooseComponent, {
+  //         panelClass: 'address-choose',
+  //         data: {
+  //           defaultAddress: headquartersAddress
+  //         }
+  //       }).afterClosed().subscribe(res => {
+  //         if (res && res.deliverTo) {
+  //           let address: Address = res.deliverTo;
+  //           this.headquartersAddress = address;
+  //           this.cartService.setDelivery(this.headquartersAddress);
+  //         }
+  //       })
+  //     )
+  //   }
+  // }
 
-  insertAddress() {
-    if (!this.userInformation) {
-      this.authService.login('login');
-    } else {
-      this.subscription.add(
-        this.addressModificationService.openAddressModification('insert', null).subscribe(res => {
-          if (res) {
-            let responseAddress: ResponseAddress = res;
-            let address: Address = responseAddress.address[0];
-            this.cartService.setDelivery(address);
-          }
-        })
-      );
-    }
-  }
+  // insertAddress() {
+  //   if (!this.userInformation) {
+  //     this.authService.login('login');
+  //   } else {
+  //     this.subscription.add(
+  //       this.addressModificationService.openAddressModification('insert', null).subscribe(res => {
+  //         if (res) {
+  //           let responseAddress: ResponseAddress = res;
+  //           let address: Address = responseAddress.address[0];
+  //           this.cartService.setDelivery(address);
+  //         }
+  //       })
+  //     );
+  //   }
+  // }
 
-  changeQuantity(increase: 'increase' | 'decrease') {
-    if (!this.product || this.product.quantity) return;
-    if (increase === 'increase') {
-      this.product.quantity!++;
-    } else {
-      if (this.product.quantity! > 1) {
-        this.product.quantity!--;
-      }
-    }
-  }
+  // changeQuantity(increase: 'increase' | 'decrease') {
+  //   if (!this.product || this.product.quantity) return;
+  //   if (increase === 'increase') {
+  //     this.product.quantity!++;
+  //   } else {
+  //     if (this.product.quantity! > 1) {
+  //       this.product.quantity!--;
+  //     }
+  //   }
+  // }
 
-  quantityInputChange(event: Event) {
-    if (!this.product || this.product.quantity) return;
-    let value = (event.target as HTMLInputElement).value;
-    this.product.quantity = !isNaN(parseInt(value)) ? parseInt(value) : 1;
-  }
+  // quantityInputChange(event: Event) {
+  //   if (!this.product || this.product.quantity) return;
+  //   let value = (event.target as HTMLInputElement).value;
+  //   this.product.quantity = !isNaN(parseInt(value)) ? parseInt(value) : 1;
+  // }
 
-  bookNow(product: Product) {
-    if (!this.product || this.product.quantity) return;
-    this.cartService.addToCart(product, false);
-    this.router.navigate(['/cart']);
-    if (!isDevMode() && this.isBrowser) {
-      let script = this.renderer2.createElement('script');
-      script.type = `text/javascript`;
-      script.text = `fbq('track', 'AddToCart',{
-        _id: '${product._id}',
-        name: '${product.name}',
-        price: ${product.price},
-        quantity: ${product.quantity},
-        theRemainingAmount: ${this.product.theRemainingAmount}
-      });`;
-      this.renderer2.appendChild(this._document.head, script);
-    }
-  }
+  // bookNow(product: Product) {
+  //   if (!this.product || this.product.quantity) return;
+  //   this.cartService.addToCart(product, false);
+  //   this.router.navigate(['/cart']);
+  //   if (!isDevMode() && this.isBrowser) {
+  //     let script = this.renderer2.createElement('script');
+  //     script.type = `text/javascript`;
+  //     script.text = `fbq('track', 'AddToCart',{
+  //       _id: '${product._id}',
+  //       name: '${product.name}',
+  //       price: ${product.price},
+  //       quantity: ${product.quantity},
+  //       theRemainingAmount: ${this.product.theRemainingAmount}
+  //     });`;
+  //     this.renderer2.appendChild(this._document.head, script);
+  //   }
+  // }
 
-  addToCart(product: Product) {
-    this.cartService.addToCart(product, true);
-    if (!isDevMode() && this.isBrowser) {
-      let script = this.renderer2.createElement('script');
-      script.type = `text/javascript`;
-      script.text = `fbq('track', 'AddToCart',{
-        _id: '${product._id}',
-        name: '${product.name}',
-        price: ${product.price},
-        quantity: ${product.quantity},
-        theRemainingAmount: ${product.theRemainingAmount}
-      });`;
-      this.renderer2.appendChild(this._document.head, script);
-    }
-  }
+  // addToCart(product: Product) {
+  //   this.cartService.addToCart(product, true);
+  //   if (!isDevMode() && this.isBrowser) {
+  //     let script = this.renderer2.createElement('script');
+  //     script.type = `text/javascript`;
+  //     script.text = `fbq('track', 'AddToCart',{
+  //       _id: '${product._id}',
+  //       name: '${product.name}',
+  //       price: ${product.price},
+  //       quantity: ${product.quantity},
+  //       theRemainingAmount: ${product.theRemainingAmount}
+  //     });`;
+  //     this.renderer2.appendChild(this._document.head, script);
+  //   }
+  // }
 
-  contactUs(type: 'messenger' | 'zalo' | 'call') {
-    if (!isDevMode() && this.isBrowser) {
-      let script = this.renderer2.createElement('script');
-      script.type = `text/javascript`;
-      script.text = `fbq('trackCustom', 'ContactUsButton',{
-        type: '${type}'
-      });`;
-      this.renderer2.appendChild(this._document.head, script);
-    }
-  }
+  // contactUs(type: 'messenger' | 'zalo' | 'call') {
+  //   if (!isDevMode() && this.isBrowser) {
+  //     let script = this.renderer2.createElement('script');
+  //     script.type = `text/javascript`;
+  //     script.text = `fbq('trackCustom', 'ContactUsButton',{
+  //       type: '${type}'
+  //     });`;
+  //     this.renderer2.appendChild(this._document.head, script);
+  //   }
+  // }
 
-  openWriteReviews() {
-    this.subscription.add(
-      this.dialog.open(WriteRatingComponent, {
-        panelClass: 'write-rating-component',
-        disableClose: true,
-        data: this.product
-      }).afterClosed().subscribe(res => {
-        if (res) {
-          this.openThanksForTheReview(res);
-        }
-      })
-    )
-  }
+  // openWriteReviews() {
+  //   this.subscription.add(
+  //     this.dialog.open(WriteRatingComponent, {
+  //       panelClass: 'write-rating-component',
+  //       disableClose: true,
+  //       data: this.product
+  //     }).afterClosed().subscribe(res => {
+  //       if (res) {
+  //         this.openThanksForTheReview(res);
+  //       }
+  //     })
+  //   )
+  // }
 
-  openThanksForTheReview(productReviews: ProductReviews) {
-    this.dialog.open(ThanksForTheReviewComponent, {
-      panelClass: 'thanks-for-the-review-component',
-      data: productReviews
-    })
-  }
+  // openThanksForTheReview(productReviews: ProductReviews) {
+  //   this.dialog.open(ThanksForTheReviewComponent, {
+  //     panelClass: 'thanks-for-the-review-component',
+  //     data: productReviews
+  //   })
+  // }
 
   login() {
     this.authService.login('login');
   }
 
-  onStateChange(event: any, index: number) {
-    if (event.data === 1) {
-      this.arrYoutube.forEach(objPlayer => {
-        if (objPlayer.index != index) {
-          objPlayer.player.pauseVideo();
-        }
-      })
-    }
-  }
+  // onStateChange(event: any, index: number) {
+  //   if (event.data === 1) {
+  //     this.arrYoutube.forEach(objPlayer => {
+  //       if (objPlayer.index != index) {
+  //         objPlayer.player.pauseVideo();
+  //       }
+  //     })
+  //   }
+  // }
 
-  savePlayer(player: any, index: number) {
-    let object: PlayerObject = {
-      player,
-      index
-    }
-    this.arrYoutube.push(object);
-  }
+  // savePlayer(player: any, index: number) {
+  //   let object: PlayerObject = {
+  //     player,
+  //     index
+  //   }
+  //   this.arrYoutube.push(object);
+  // }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

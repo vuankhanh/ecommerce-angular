@@ -4,7 +4,7 @@
     <ng-container *ngFor="let product of products; let i = index;">
       <div class="product-frame">
         <div class="img-container">
-          <img [src]="(product.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy"
+          <img [src]="(product.album?.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy"
             (click)="showDetail(product)">
         </div>
         <div class="product-info">
@@ -12,13 +12,9 @@
             <h3 class="heading">{{product.name}}</h3>
             <div class="product-price">
               <span class="amount-of-money">{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
-              <span>/</span>
-              <span>{{product.unit.packagingType}}</span>
-              <span>{{ ' ' }}</span>
-              <span>{{product.unit.weightNumber}}{{product.unit.unitOfMassMeasurement}}</span>
             </div>
             <div class="content-p">
-              {{product.sortDescription}}
+              {{product.shortDescription}}
             </div>
           </div>
         </div>

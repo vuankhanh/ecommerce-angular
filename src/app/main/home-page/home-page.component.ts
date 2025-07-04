@@ -10,6 +10,8 @@ import { ProductCategoryHomePageComponent } from '../product-category-home-page/
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ProductCategoryService } from '../../services/api/product-category.service';
+import { TProductCategoryModel } from '../../models/product-category.interface';
 
 @Component({
   selector: 'app-home-page',
@@ -27,12 +29,11 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
-  category$: Observable<ProductCategory[]>;
+  productCategory$: Observable<TProductCategoryModel[]> = this.productCategoryService.getAllData();
   constructor(
-    private appServiceService: AppServicesService
-  ) {
-    this.category$ = this.appServiceService.productCategory$;
-  }
+    private appServiceService: AppServicesService,
+    private productCategoryService: ProductCategoryService
+  ) {}
 
   ngOnInit() {
 

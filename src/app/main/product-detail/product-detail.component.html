@@ -1,44 +1,8 @@
-<ng-container *ngIf="product">
+<ng-container *ngIf="!!product">
   <div class="product-detail-container horizontal-container">
     <div class="main-container vertical-container">
       <div class="product-info-container horizontal-container">
-        <div class="album-container" *ngIf="imgMain && product.albumImg && product.albumImg.media.length>0">
-          <div class="main-img-container horizontal-container">
-
-            <div class="button-container">
-              <button (click)="setImgMainDirection('toLeft')"
-                [disabled]="imgMain._id === product.albumImg.media[0]._id">
-                <mat-icon>chevron_left</mat-icon>
-              </button>
-            </div>
-
-            <div style="width: 100%;">
-              <div class="img-container horizontal-container">
-                <img [src]="imgMain.src | galleryRoute" [alt]="product.name" (load)="dosomething($event)"
-                  appZoomElement>
-              </div>
-            </div>
-
-            <div class="button-container">
-              <button (click)="setImgMainDirection('toRight')"
-                [disabled]="imgMain._id === product.albumImg.media[product.albumImg.media.length-1]._id">
-                <mat-icon>chevron_right</mat-icon>
-              </button>
-            </div>
-
-            <!-- <div class="action-img horizontal-container"></div> -->
-          </div>
-          <div class="height-space"></div>
-          <div class="list-img horizontal-container" #listImg>
-            <ng-container *ngFor="let item of product.albumImg.media; let i = index;">
-              <div class="img-thumbnail-container horizontal-container" id="list-item-{{i}}">
-                <img [src]="item.srcThumbnail | galleryRoute" [alt]="product.name" (click)="setImgMain(i)"
-                  [ngClass]="imgMain._id === item._id ? 'imgMain' : ''">
-              </div>
-
-            </ng-container>
-          </div>
-        </div>
+        <gallery [objectFit]="'contain'" [items]="product.album | gallery"></gallery>
 
         <div class="width-space"></div>
         <div class="height-space"></div>
@@ -49,24 +13,11 @@
             <ng-template [ngTemplateOutlet]="facebookLikeButton"></ng-template>
           </div>
 
-          <!-- <div
-                        class="fb-share-button"
-                    >
-                        <a
-                            href="https://www.facebook.com/sharer/sharer.php?u={{currentUrl}}"
-                            target="_blank"
-                        >Chia sẻ</a>
-                    </div> -->
-
           <div class="content-p">
-            {{product.sortDescription}}
+            {{product.shortDescription}}
           </div>
           <div class="product-price">
             <span>{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
-            <span>/</span>
-            <span>{{product.unit.packagingType}}</span>
-            <span>{{ ' ' }}</span>
-            <span>{{product.unit.weightNumber}}{{product.unit.unitOfMassMeasurement}}</span>
           </div>
 
           <ng-container *ngIf="userInformation; else loginPlease">
@@ -86,7 +37,7 @@
                 <div class="micro-width-space"></div>
                 <div>-</div>
                 <div class="micro-width-space"></div>
-                <div class="textLink" (click)="chooseAddress(headquartersAddress)">
+                <div class="textLink">
                   Đổi địa chỉ
                 </div>
               </div>
@@ -118,7 +69,7 @@
               </fieldset>
             </ng-container>
             <ng-template #createAddress>
-              <span class="pleaseLogin" (click)="insertAddress()">
+              <span class="pleaseLogin">
                 Bạn chưa có vị trí nào trong sổ địa chỉ. <span class="textLink">TẠO ĐỊA CHỈ</span>
               </span>
             </ng-template>
@@ -129,7 +80,7 @@
             </div>
           </ng-template>
 
-          <div class="mini-height-space"></div>
+          <!-- <div class="mini-height-space"></div>
 
           <div class="verical-container">
             <div>Số lượng:</div>
@@ -147,9 +98,9 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          <div class="height-space"></div>
+          <!-- <div class="height-space"></div>
 
           <div class="button-container horizontal-container">
             <button class="button-style button-primary" (click)="bookNow(product)">
@@ -197,24 +148,10 @@
                 </a>
               </fieldset>
             </div>
-          </ng-container>
+          </ng-container> -->
         </div>
       </div>
-      <ng-container *ngIf="product.albumVideo as albumVideo">
-        <div class="height-space"></div>
-        <div class="video-album-container vertical-container">
-          <div class="title-video-album">Món ngon dễ làm</div>
-          <div class="youtube-video-container horizontal-container">
-            <ng-container *ngFor="let video of albumVideo.media; let i = index">
-              <youtube-player [videoId]="video.youtubeId" (ready)="savePlayer($event, i)"
-                (change)="onStateChange($event, i)" [playerVars]="playerVars">
-              </youtube-player>
-            </ng-container>
-          </div>
-        </div>
-      </ng-container>
-      <div class="height-space"></div>
-      <div class="product-description-container" *ngIf="product.longDescription">
+      <!-- <div class="product-description-container" *ngIf="product.longDescription">
         <div class="title-product-desciption">Mô tả</div>
         <app-posts [editorContent]="product.longDescription"></app-posts>
       </div>
@@ -328,17 +265,17 @@
           <app-pagination *ngIf="configPagination" [config]="configPagination"
             (emitChangeIndex)="changeIndex($event)"></app-pagination>
         </ng-container>
-      </div>
+      </div> -->
     </div>
 
     <div class="width-space"></div>
     <div class="height-space"></div>
 
-    <div class="is-same-category vertical-container">
+    <!-- <div class="is-same-category vertical-container">
       <div class="title-is-same-category">Sản phẩm liên quan</div>
       <app-product-category-home-page [category]="product.category.route"
         [isSameCategory]="true"></app-product-category-home-page>
-    </div>
+    </div> -->
   </div>
 </ng-container>
 
