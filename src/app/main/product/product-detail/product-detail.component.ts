@@ -29,24 +29,27 @@ import { LocalStorageService } from '../../../services/local-storage.service';
 import { SEOService } from '../../../services/seo.service';
 import { InProgressSpinnerService } from '../../../services/in-progress-spinner.service';
 import { ConfigService } from '../../../services/api/config.service';
-import { MainContainerScrollService, DirectionPostion } from '../../../services/main-container-scroll.service';
+import { MainContainerScrollService } from '../../../services/main-container-scroll.service';
 
-import { combineLatest, of, Subject, Subscription } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { MaterialModule } from '../../../sharing/module/material';
-import { ReplaceSpacePipe } from '../../../pipes/replace-space.pipe';
-import { TheDayOfWeekPipe } from '../../../pipes/the-day-of-week-format.pipe';
+import { TheDayOfWeekPipe } from '../../../sharing/pipe/the-day-of-week-format.pipe';
 import { FormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { PostsComponent } from '../../../sharing/component/posts/posts.component';
 import { RatingComponent } from '../../../sharing/component/rating/rating.component';
 import { PaginationComponent } from '../../../sharing/component/pagination/pagination.component';
 import { ProductCategoryHomePageComponent } from '../../product-category-home-page/product-category-home-page.component';
-import { PrefixBackendStaticPipe } from '../../../pipes/prefix-backend.pipe';
+import { PrefixBackendStaticPipe } from '../../../sharing/pipe/prefix-backend.pipe';
 import { TProductModel } from '../../../models/product.interface';
 import { GalleryComponent } from '@daelmaak/ngx-gallery';
-import { GalleryPipe } from '../../../pipes/gallery.pipe';
+import { GalleryPipe } from '../../../sharing/pipe/gallery.pipe';
 import { ProductService } from '../../../services/api/product.service';
+import { ProductDetailEntity } from '../../../entity/product-detail.entity';
+import { NumberInputComponent } from '../../../sharing/component/number-input/number-input.component';
+import { SkeletonComponent } from '../../../sharing/component/skeleton/skeleton.component';
+import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
 
 const headerOffset = 85;
 @Component({
@@ -58,13 +61,15 @@ const headerOffset = 85;
     FormsModule,
 
     PrefixBackendStaticPipe,
+    NumberInputComponent,
     GalleryPipe,
-    ReplaceSpacePipe,
     TheDayOfWeekPipe,
+    CurrencyCustomPipe,
 
     YouTubePlayerModule,
 
     GalleryComponent,
+    SkeletonComponent,
     PostsComponent,
     RatingComponent,
     PaginationComponent,
@@ -81,33 +86,9 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
 
   isBrowser: boolean;
 
-  playerVars: YT.PlayerVars = {
-    controls: 1,
-    rel: 0,
-    showinfo: 0,
-    modestbranding: 1,
-    playsinline: 1,
-    enablejsapi: 1,
-    iv_load_policy: 3, // Disable annotations
-    cc_load_policy: 0, // Disable closed captions
-    fs: 0, // Disable fullscreen button
-    loop: 1, // Enable looping
-    playlist: '', // Add playlist ID if needed
-    start: 0, // Start at the beginning of the video
-    end: 0 // End at the end of the video
-  };
-
-  userInformation: UserInformation | null = null;
-  product?: TProductModel;
-  configPagination: PaginationParams | undefined;
+  product?: ProductDetailEntity;
   cart?: Cart;
 
-  estimateFeeInfo: any = null;
-  estimateFeeError: any;
-
-  imgMain?: Media;
-  indexImgMain: number = 0;
-  headquartersAddress?: Address;
 
   identification?: Identification;
   rating: Array<Rating> = [];
@@ -145,7 +126,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
         return this.productService.getDetail(undefined, productSlug);
       })
     ).subscribe({
-      next: (product) => {
+      next: (product: ProductDetailEntity) => {
         this.product = product;
       },
       error: (err) => {
@@ -310,162 +291,10 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   //   )
   // }
 
-  // changeIndex(index: number) {
-  //   this.configPagination!.page = index;
-  //   if (this.product) this.listenScroll(this.product, this.configPagination);
-  // }
-
   // dosomething(event: any) {
   //   let img: HTMLImageElement = <HTMLImageElement>event.target;
   //   if (img) {
   //     let src: string = img.src;
-  //   }
-  // }
-
-  // setProductDetail(product: Product) {
-  //   let currentUrl = 'https://carota.vn' + this.router.url;
-  //   if (product) {
-  //     if (!this.product || this.product._id != product._id) {
-  //       this.product = product;
-  //       if (this.isBrowser) {
-  //         this.listenScroll(this.product);
-  //       }
-  //       if (!isDevMode() && this.isBrowser) {
-  //         //Facebook Pixel
-  //         let script = this.renderer2.createElement('script');
-  //         script.type = `text/javascript`;
-  //         script.text = `fbq('track', 'ViewContent',{
-  //           _id: '${this.product._id}',
-  //           name: '${this.product.name}',
-  //           price: ${this.product.price},
-  //           quantity: ${this.product.quantity},
-  //           theRemainingAmount: ${this.product.theRemainingAmount}
-  //         });`;
-  //         this.renderer2.appendChild(this._document.head, script);
-
-  //         //Google structured data
-  //         let images = this.product.albumImg?.media.map(media => "\"" + this.prefixBackendStaticPipe.transform(media.src) + "\"");
-
-  //         let googleSchemaScript = this.renderer2.createElement('script');
-  //         googleSchemaScript.type = 'application/ld+json';
-  //         googleSchemaScript.text = `{
-  //           "@context": "https://schema.org/",
-  //           "@type": "Product",
-  //           "name": "${this.product.name}",
-  //           "image": [${images}],
-  //           "description": "${this.product.sortDescription}",
-  //           "brand": {
-  //             "@type": "Brand",
-  //             "name": "Thủy hải sản Carota"
-  //           },
-  //           "offers": {
-  //             "@type": "Offer",
-  //             "url": "${currentUrl}",
-  //             "priceCurrency": "${this.product.currencyUnit}",
-  //             "price": "${this.product.price}",
-  //             "priceValidUntil": "2022-12-31",
-  //             "itemCondition": "https://schema.org/UsedCondition",
-  //             "availability": "https://schema.org/InStock"
-  //           }
-  //         }`;
-  //         this.renderer2.appendChild(this._document.head, googleSchemaScript);
-  //       }
-
-
-  //       if (!this.product.quantity) {
-  //         this.product.quantity = 1;
-  //       }
-  //       let index: number = this.product.albumImg!.media.findIndex(media => media.isMain);
-  //       index >= 0 ? this.setImgMain(index) : this.setImgMain(0);
-
-  //       let metaTagFacebook: MetaTagFacebook = {
-  //         title: this.product.name,
-  //         image: this.prefixBackendStaticPipe.transform(this.product?.thumbnailUrl || ''),
-  //         imageAlt: this.product.name,
-  //         imageType: 'image/png',
-  //         imageWidth: '100',
-  //         imageHeight: '100',
-  //         url: currentUrl,
-  //         description: this.product.sortDescription,
-
-  //         productBrand: 'Thủy hải sản Carota',
-  //         productAvailability: 'in stock',
-  //         productCondition: 'new',
-  //         productPriceAmount: this.product.price.toString(),
-  //         productPriceCurrency: this.product.currencyUnit,
-  //         productRetailerItemId: this.product.route,
-  //         productItemGroupId: this.product.category.route,
-  //         googleProductCategory: this.product.category.googleProductCategory,
-  //       }
-  //       this.seoService.updateTitle(this.product.name);
-  //       this.seoService.updateMetaTagFacebook(metaTagFacebook);
-  //     }
-  //   }
-  // }
-
-  // setImgMain(index: number) {
-  //   this.indexImgMain = index;
-  //   this.imgMain = this.product?.albumImg!.media[index];
-  // }
-
-  // setImgMainDirection(direction: string) {
-  //   if (this.isBrowser) {
-  //     if (direction === 'toLeft') {
-  //       if (this.imgMain?._id != this.product?.albumImg?.media[0]._id) {
-  //         this.indexImgMain--;
-  //         this.product?.albumImg?.media[this.indexImgMain] ? this.imgMain = this.product?.albumImg?.media[this.indexImgMain] : this.product?.albumImg?.media[0];
-  //         const elementId = window.document.getElementById("list-item-" + this.indexImgMain)! as HTMLDivElement;
-
-  //         this.listImg?.nativeElement.scrollTo({ left: this.indexImgMain * elementId.offsetWidth, behavior: "smooth" });
-  //       }
-  //     } else if (direction === 'toRight') {
-  //       if (this.imgMain?._id != this.product?.albumImg?.media[this.product?.albumImg?.media.length - 1]._id) {
-  //         this.indexImgMain++;
-  //         this.product?.albumImg?.media[this.indexImgMain] ? this.imgMain = this.product?.albumImg?.media[this.indexImgMain] : this.product?.albumImg?.media[0];
-  //         const elementId = window.document.getElementById("list-item-" + this.indexImgMain)! as HTMLDivElement;
-
-  //         this.listImg?.nativeElement.scrollTo({ left: this.indexImgMain * elementId.offsetWidth, behavior: "smooth" })
-  //       }
-  //     } else {
-  //       console.log('Hướng không xác định');
-  //     }
-  //   }
-  // }
-
-  // chooseAddress(headquartersAddress: Address) {
-  //   if (!this.userInformation) {
-  //     this.authService.login('login');
-  //   } else {
-  //     this.subscription.add(
-  //       this.dialog.open(AddressChooseComponent, {
-  //         panelClass: 'address-choose',
-  //         data: {
-  //           defaultAddress: headquartersAddress
-  //         }
-  //       }).afterClosed().subscribe(res => {
-  //         if (res && res.deliverTo) {
-  //           let address: Address = res.deliverTo;
-  //           this.headquartersAddress = address;
-  //           this.cartService.setDelivery(this.headquartersAddress);
-  //         }
-  //       })
-  //     )
-  //   }
-  // }
-
-  // insertAddress() {
-  //   if (!this.userInformation) {
-  //     this.authService.login('login');
-  //   } else {
-  //     this.subscription.add(
-  //       this.addressModificationService.openAddressModification('insert', null).subscribe(res => {
-  //         if (res) {
-  //           let responseAddress: ResponseAddress = res;
-  //           let address: Address = responseAddress.address[0];
-  //           this.cartService.setDelivery(address);
-  //         }
-  //       })
-  //     );
   //   }
   // }
 
@@ -551,6 +380,15 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   //     data: productReviews
   //   })
   // }
+
+  bookNow(product: TProductModel) {
+    console.log('Book now clicked for product:', product);
+    
+  }
+
+  addToCart(product: TProductModel) {}
+
+  contactUs(type: 'messenger' | 'zalo' | 'call') {}
 
   login() {
     this.authService.login('login');

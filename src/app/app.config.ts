@@ -11,7 +11,7 @@ import { SocketIoService } from './services/socket/socket-io.service';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
-import { PrefixBackendStaticPipe } from './pipes/prefix-backend.pipe';
+import { PrefixBackendStaticPipe } from './sharing/pipe/prefix-backend.pipe';
 
 export const appConfig: ApplicationConfig = {
   providers: [

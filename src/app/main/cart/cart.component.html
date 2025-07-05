@@ -17,7 +17,7 @@
           <div class="price-unit-container vertical-container">
             <div class="vertical-container">
               <span class="price-text">
-                <span>{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
+                <span>{{ product.price | vndCurrency}}</span>
                 <span>/</span>
                 <span>{{product.unit.packagingType}}</span>
                 <span>{{ ' ' }}</span>
@@ -159,7 +159,7 @@
               Tạm tính
             </div>
             <div class="secondary-key">
-              {{ temporaryValue | currency:'VND':'symbol' | replaceSpace }}
+              {{ temporaryValue | vndCurrency }}
             </div>
           </div>
 
@@ -171,7 +171,7 @@
             </div>
             <div class="secondary-key">
 
-              {{ totalBill | currency:'VND':'symbol' | replaceSpace }}
+              {{ totalBill | vndCurrency }}
             </div>
           </div>
         </div>

@@ -18,10 +18,10 @@ import { AddressModifyComponent } from '../../sharing/modal/address-modify/addre
 
 import { RefreshTokenInterceptorService } from '../../services/api/refresh-token-interceptor.service';
 import { MaterialModule } from '../../sharing/module/material';
-import { ReplaceProtocolNamePipe } from '../../pipes/replace-protocol-name.pipe';
-import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
-import { GalleryRoutePipe } from '../../pipes/gallery-route.pipe';
-import { SanitizeHtmlBindingPipe } from '../../pipes/sanitize-html-binding.pipe';
+import { ReplaceProtocolNamePipe } from '../../sharing/pipe/replace-protocol-name.pipe';
+import { ReplaceSpacePipe } from '../../sharing/pipe/replace-space.pipe';
+import { GalleryRoutePipe } from '../../sharing/pipe/gallery-route.pipe';
+import { SanitizeHtmlBindingPipe } from '../../sharing/pipe/sanitize-html-binding.pipe';
 
 @NgModule({
   imports: [

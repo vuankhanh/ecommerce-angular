@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
 
-import { GetAverageRgbService } from '../services/get-average-rgb.service';
+import { GetAverageRgbService } from '../../services/get-average-rgb.service';
 
 @Directive({
   selector: '[appSetBackgroundParentElementColor]'

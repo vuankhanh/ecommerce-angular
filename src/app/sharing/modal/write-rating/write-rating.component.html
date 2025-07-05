@@ -5,7 +5,7 @@
   <div class="product-container horizontal-container">
     <div class="limit-size-container">
       <div class="img-container">
-        <img [src]="product.thumbnailUrl | galleryRoute" [alt]="product.name" loading="lazy">
+        <img [src]="(product.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy">
       </div>
     </div>
     <div class="width-space"></div>

@@ -12,7 +12,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Product } from '../../../models/Product';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../module/material';
-import { GalleryRoutePipe } from '../../../pipes/gallery-route.pipe';
+import { PrefixBackendStaticPipe } from '../../pipe/prefix-backend.pipe';
 
 const totalNumberOfStars = 5;
 @Component({
@@ -23,7 +23,7 @@ const totalNumberOfStars = 5;
     
     ReactiveFormsModule,
     
-    GalleryRoutePipe,
+    PrefixBackendStaticPipe,
 
     MaterialModule
   ],

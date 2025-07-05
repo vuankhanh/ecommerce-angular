@@ -11,7 +11,7 @@ import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SlideShowService } from '../../services/api/slide-show.service';
-import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
+import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 
 @Component({
   selector: 'app-slide-show',

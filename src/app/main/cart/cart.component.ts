@@ -22,10 +22,10 @@ import { AdministrativeUnitsService } from '../../services/api/administrative-un
 import { DirectionPostion, MainContainerScrollService } from '../../services/main-container-scroll.service';
 
 import { Subscription } from 'rxjs';
-import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
 import { MaterialModule } from '../../sharing/module/material';
 import { EmptyCartComponent } from '../../sharing/component/empty-cart/empty-cart.component';
-import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
+import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
+import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 
 @Component({
   selector: 'app-cart',
@@ -38,7 +38,7 @@ import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
     EmptyCartComponent,
 
     PrefixBackendStaticPipe,
-    ReplaceSpacePipe,
+    CurrencyCustomPipe,
 
     MaterialModule
   ],

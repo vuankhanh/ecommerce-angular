@@ -1,6 +1,6 @@
 import { AfterViewInit, Directive, ElementRef } from '@angular/core';
-import { ConvertVieService } from '../services/convert-vie.service';
-import { DirectionPostion, MainContainerScrollService } from '../services/main-container-scroll.service';
+import { ConvertVieService } from '../../services/convert-vie.service';
+import { DirectionPostion, MainContainerScrollService } from '../../services/main-container-scroll.service';
 
 const headerOffset = 85;
 @Directive({

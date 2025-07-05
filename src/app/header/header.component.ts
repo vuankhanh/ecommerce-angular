@@ -29,7 +29,7 @@ import { SocialAuthenticationService } from '../services/api/social-login/social
 import { Subscription } from 'rxjs';
 import { MaterialModule } from '../sharing/module/material';
 import { TToken } from '../models/token.interface';
-import { PrefixBackendStaticPipe } from '../pipes/prefix-backend.pipe';
+import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
 
 @Component({
   selector: 'app-header',

@@ -1,6 +1,41 @@
 <div class="product-container">
   @if(productCategorise$ | async; as productCategorys) {
-    <div class="product-cagatory-container vertical-container">
+  <mat-card class="categories-card">
+    <mat-card-header>
+      <mat-card-title>Danh mục sản phẩm</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="categories-grid">
+        <ng-container *ngFor="let category of productCategorys; let i = index;">
+          <mat-card class="category-card" [routerLink]="['/san-pham/'+category.slug]" [routerLinkActive]="['is-active']"
+            mat-ripple>
+            <mat-card-header>
+              <div mat-card-avatar class="category-avatar">
+                <img [src]="category.album.thumbnailUrl | prefixBackendStatic" [alt]="category.name"
+                  (load)="dosomething($event)">
+              </div>
+              <mat-card-title>{{ category.name }}</mat-card-title>
+            </mat-card-header>
+
+            <!-- Hoặc sử dụng mat-card-content cho layout khác -->
+            <!-- <mat-card-content>
+                <div class="category-image">
+                  <img [src]="category.album.thumbnailUrl | prefixBackendStatic" 
+                       [alt]="category.name" 
+                       (load)="dosomething($event)">
+                </div>
+              </mat-card-content>
+              
+              <mat-card-actions>
+                <span>{{ category.name }}</span>
+              </mat-card-actions> -->
+          </mat-card>
+        </ng-container>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <!-- <div class="product-cagatory-container vertical-container">
       <div class="flex-me">
         <ng-container *ngFor="let category of productCategorys; let i = index;">
           <div class="product-category-frame" [routerLink]="['/san-pham/'+category.slug]"
@@ -16,7 +51,7 @@
           </div>
         </ng-container>
       </div>
-    </div>
+    </div> -->
   }
   <div class="product-router-container vertical-container">
     <router-outlet></router-outlet>

@@ -1,5 +1,5 @@
 import { AfterViewInit, Directive, ElementRef, HostListener, ViewChildren } from '@angular/core';
-import { AppServicesService } from '../services/app-services.service';
+import { AppServicesService } from '../../services/app-services.service';
 import { Subscription } from 'rxjs';
 
 const lensHorizontalEdge = 150;

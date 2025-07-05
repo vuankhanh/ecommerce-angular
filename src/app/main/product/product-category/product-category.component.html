@@ -10,7 +10,7 @@
           <div class="text-container" (click)="showDetail(product)">
             <h3 class="heading">{{product.name}}</h3>
             <div class="product-price">
-              <span class="amount-of-money">{{ product.price | currency:'VND':'symbol' | replaceSpace}}</span>
+              <span class="amount-of-money">{{ product.price | vndCurrency}}</span>
             </div>
             <div class="content-p">
               {{product.shortDescription}}
@@ -20,10 +20,6 @@
       </div>
     </ng-container>
   </div>
-  <div class="height-space"></div>
-
-  <!-- <app-pagination *ngIf="configPagination" [config]="configPagination"
-    (emitChangeIndex)="changeIndex($event)"></app-pagination> -->
 </div>
 <ng-template #loadingSkeleton>
   <app-skeleton></app-skeleton>

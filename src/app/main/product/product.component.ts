@@ -4,8 +4,10 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, Ro
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
+import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { TProductCategoryModel } from '../../models/product-category.interface';
+import { ProductCategoryService } from '../../services/api/product-category.service';
+import { MaterialModule } from '../../sharing/module/material';
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -16,20 +18,24 @@ import { TProductCategoryModel } from '../../models/product-category.interface';
     RouterLink,
     RouterLinkActive,
 
-    PrefixBackendStaticPipe
+    PrefixBackendStaticPipe,
+
+    MaterialModule
+  ],
+  providers: [
+    ProductCategoryService
   ],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  productCategorise$: Observable<TProductCategoryModel[]> = this.activatedRoute?.data.pipe(
-    map(data => data['productCategories'] as TProductCategoryModel[]),
-  )
+  productCategorise$: Observable<TProductCategoryModel[]> = this.productCategoryService.getAllData();
 
   private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private productCategoryService: ProductCategoryService
   ) {
 
   }

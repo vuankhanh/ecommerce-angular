@@ -2,17 +2,16 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { Router } from '@angular/router';
 
 import { PaginationParams } from '../../models/PaginationParams';
-import { Product } from '../../models/Product';
 import { ProductCategory } from '../../models/ProductCategory';
 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ReplaceSpacePipe } from '../../pipes/replace-space.pipe';
 import { SkeletonComponent } from '../../sharing/component/skeleton/skeleton.component';
-import { PrefixBackendStaticPipe } from '../../pipes/prefix-backend.pipe';
+import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { ProductService } from '../../services/api/product.service';
 import { TProductCategoryModel } from '../../models/product-category.interface';
 import { TProductModel } from '../../models/product.interface';
+import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 
 @Component({
   selector: 'app-product-category-home-page',
@@ -21,7 +20,8 @@ import { TProductModel } from '../../models/product.interface';
     CommonModule,
 
     PrefixBackendStaticPipe,
-    ReplaceSpacePipe,
+
+    CurrencyCustomPipe,
 
     SkeletonComponent
   ],

@@ -5,6 +5,7 @@ import { EMPTY, expand, map, Observable, toArray } from 'rxjs';
 import { IProduct, TProductModel } from '../../models/product.interface';
 import { ISuccess } from '../../models/success.interface';
 import { IPagination } from './pagination.interface';
+import { ProductDetailEntity } from '../../entity/product-detail.entity';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +53,7 @@ export class ProductService {
     );
   }
 
-  getDetail(id?: string, slug?: string): Observable<TProductModel> {
+  getDetail(id?: string, slug?: string): Observable<ProductDetailEntity> {
     if( !id && !slug) {
       throw new Error('Id hoặc slug là bắt buộc để lấy chi tiết sản phẩm');
     }
@@ -62,7 +63,8 @@ export class ProductService {
     if (slug) params = params.append('slug', slug);
 
     return this.httpClient.get<IProductDetailResponse>(`${this.url}/detail`, { params }).pipe(
-      map(response => response.metaData)
+      map(response => response.metaData),
+      map(product => new ProductDetailEntity(product))
     );
   }
 
@@ -75,6 +77,24 @@ export class ProductService {
     return this.httpClient.get<IProductResponse>(this.url+'/by-category-slug' , { params }).pipe(
       map(response => response.metaData)
     )
+  }
+
+  getAllDataByCategorySlug(slug: string) {
+    if(!slug) throw new Error('Slug là bắt buộc để lấy danh sách sản phẩm theo danh mục');
+
+    let page = 1;
+    return this.getProductsByCategorySlug(slug).pipe(
+      expand(metaData => {
+        page++;
+        const paging = metaData.paging;
+        return page <= paging.totalPages ? this.getProductsByCategorySlug(slug, page) : EMPTY
+      }),
+      toArray(),
+      map((arr: Array<TProduct>) => {
+        const data = arr.map(res => res.data).flat();
+        return data;
+      })
+    );
   }
 
   create(data: IProduct) {
