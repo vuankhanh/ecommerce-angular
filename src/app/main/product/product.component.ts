@@ -8,6 +8,7 @@ import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe'
 import { TProductCategoryModel } from '../../models/product-category.interface';
 import { ProductCategoryService } from '../../services/api/product-category.service';
 import { MaterialModule } from '../../sharing/module/material';
+import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -17,6 +18,8 @@ import { MaterialModule } from '../../sharing/module/material';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
+
+    BreadCrumbComponent,
 
     PrefixBackendStaticPipe,
 

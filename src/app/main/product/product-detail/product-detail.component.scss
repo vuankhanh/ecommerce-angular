@@ -1,16 +1,129 @@
 mat-card {
   background-color: unset;
+
+  .quantity-section {
+    align-items: center;
+  }
+
+  .description-section {
+    margin: 16px 0;
+
+    .description-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+
+      mat-icon {
+        color: rgba(0, 0, 0, 0.54);
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+
+    .description-content {
+      line-height: 1.6;
+      color: rgba(0, 0, 0, 0.87);
+    }
+  }
+
+  .reviews-section {
+    margin: 24px 0;
+
+    .reviews-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+
+      mat-icon {
+        color: rgba(0, 0, 0, 0.54);
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+
+    .reviews-content {
+      .review-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #e0e0e0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .review-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+
+          .reviewer-name {
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.87);
+          }
+
+          .review-rating {
+            display: flex;
+            gap: 2px;
+
+            .star-icon {
+              font-size: 16px;
+              color: #ddd;
+
+              &.filled {
+                color: #ffc107;
+              }
+            }
+          }
+        }
+
+        .review-text {
+          margin: 0 0 8px 0;
+          line-height: 1.5;
+          color: rgba(0, 0, 0, 0.87);
+        }
+
+        .review-date {
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.54);
+        }
+      }
+    }
+  }
 }
 
 :host .gallery-card {
   gallery {
     width: 100%;
-    height: fit-content;  
+    height: fit-content;
+
     ::ng-deep viewer {
       height: fit-content;
+
       img {
         height: fit-content
       }
     }
+  }
+}
+
+.action-buttons {
+  position: sticky;
+  bottom: 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  &.scrolled {
+    background-color: white;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #e0e0e0;
   }
 }

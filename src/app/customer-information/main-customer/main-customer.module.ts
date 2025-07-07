@@ -25,33 +25,13 @@ import { SanitizeHtmlBindingPipe } from '../../sharing/pipe/sanitize-html-bindin
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MainCustomerRoutingModule,
-
-    MaterialModule,
-
-    ReplaceProtocolNamePipe,
-    ReplaceSpacePipe,
-    GalleryRoutePipe,
-    SanitizeHtmlBindingPipe,
-
-    AddressModifyComponent
+    
   ],
   declarations: [
-    MainCustomerComponent,
-    PersonalInformationComponent,
-    ChangePasswordComponent,
-    AddressBookComponent,
-    OrderHistoryComponent,
+    
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: RefreshTokenInterceptorService,
-      multi: true
-    }
+    
   ]
 })
 export class MainCustomerModule { }

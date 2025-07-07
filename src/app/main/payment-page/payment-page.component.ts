@@ -1,40 +1,60 @@
 import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
-import { AddressChooseComponent } from '../../sharing/modal/address-choose/address-choose.component';
 import { PaymentSuccessfulComponent } from '../../sharing/modal/payment-successful/payment-successful.component';
 import { UserInformation } from '../../models/UserInformation';
-import { Cart, CartService } from '../../services/cart.service';
-import { combineLatest, Subscription } from 'rxjs';
+import { CartService } from '../../services/cart.service';
+import { take, map, Observable, Subscription, switchMap, filter } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { AddressModificationService } from '../../services/address-modification.service';
 import { OrderService } from '../../services/api/order.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ToastService } from '../../services/toast.service';
-import { CartApiService } from '../../services/api/cart-api.service';
-import { Address } from '../../models/Address';
-import { Product } from '../../models/Product';
+
 import { TToken } from '../../models/token.interface';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../sharing/module/material';
+import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
+import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
+import { EmptyCartComponent } from '../../sharing/component/empty-cart/empty-cart.component';
+import { LocalStorageKey } from '../../sharing/constant/local_storage.constant';
+import { CartEntity } from '../../entity/cart.entity';
+import { ProductDetailEntity } from '../../entity/product-detail.entity';
+import { DeliveryEntity } from '../../entity/deliverty.entity';
+import { DeliveryService } from '../../services/delivery.service';
+import { AddressPipe } from '../../sharing/pipe/address.pipe';
+import { DeliveryComponent } from '../../sharing/modal/delivery/delivery.component';
+import { IAddress } from '../../models/vn-public-apis.interface';
 
 @Component({
   selector: 'app-payment-page',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+
+    PrefixBackendStaticPipe,
+    CurrencyCustomPipe,
+    AddressPipe,
+
+    EmptyCartComponent,
+
+    MaterialModule
+  ],
   templateUrl: './payment-page.component.html',
   styleUrls: ['./payment-page.component.scss']
 })
 export class PaymentPageComponent implements OnInit, OnDestroy {
   @ViewChild('btnInsertAddress') btnInsertAddress!: ElementRef;
 
-  displayedColumns: string[] = ['numericalOrder', 'thumbnail', 'name', 'price', 'quantity'];
-  cart?: Cart;
-  totalBill: number = 0;
+  delivery$: Observable<DeliveryEntity | null> = this.deliveryService.deliveryStoraged$;
+  cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
 
-  estimateFeeInfo: any = null;
-  estimateFeeError: any;
+  cartItemProducts$: Observable<ProductDetailEntity[]> = this.cart$.pipe(
+    map(cart => cart.cartItems.map(cartItem => cartItem.product))
+  );
 
-  userInformation?: UserInformation;
-  defaultAddress?: Address;
-  temporaryValue: number = 0;
+  displayedColumns: string[] = ['thumbnail', 'name', 'price', 'quantity'];
 
   private readonly subscription: Subscription = new Subscription();
   constructor(
@@ -42,137 +62,75 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private renderer2: Renderer2,
     private cartService: CartService,
+    private readonly deliveryService: DeliveryService,
     private authService: AuthService,
-    private addressModificationService: AddressModificationService,
     private orderService: OrderService,
     private localStorageService: LocalStorageService,
-    private toastService: ToastService,
-    private cartApiService: CartApiService,
+    private toastService: ToastService
   ) { }
 
-  ngOnInit(): void {
-    const cartChange$ = this.cartService.listenCartChange();
-    const userInformation$ = this.authService.getUserInformation();
+  ngOnInit(): void { }
 
+  chooseAddress() {
+    console.log('chooseAddress');
     this.subscription.add(
-      combineLatest([cartChange$, userInformation$]).subscribe(([cart, userInfo]) => {
-        if (cart) {
-          this.cart = cart;
-          this.temporaryValue = this.cartService.sumTemporaryValue(this.cart.products);
-
-          if (this.cart.products.length > 0) {
-            this.cartApiService.getTotalBill(this.cart.products).subscribe(res => {
-              this.totalBill = res.totalBill;
-            }, error => {
-              this.totalBill = 0;
-            })
-          }
-
-          if (this.cart.deliverTo) {
-            this.defaultAddress = this.cart.deliverTo;
-          }
-        }
-
-        if (userInfo) {
-          this.userInformation = userInfo;
-        }
-
-        if (userInfo && this.cart?.deliverTo && this.cart.products.length > 0) {
-          let tokenStoraged = this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-          if (tokenStoraged && tokenStoraged.accessToken) {
-            let estimateFee$ = this.cartApiService.getEstimateFee(tokenStoraged.accessToken, this.cart.deliverTo._id!, this.cart.products);
-            this.subscription.add(
-              estimateFee$.subscribe(res => {
-                if (res) {
-                  this.estimateFeeInfo = res;
-                  this.estimateFeeError = null;
-                }
-              }, error => {
-                this.estimateFeeInfo = null;
-                this.estimateFeeError = {
-                  desc: 'AhaMove hiện tại không hỗ trợ vận chuyển đến địa chỉ của bạn vì thế Carota sẽ liên hệ với bạn và chuẩn bị một hình thức vận chuyển khác.'
-                }
-                // if(error.status === 406){
-                //   if(error.error.code === 'INVALID_DISTANCE'){
-                //     this.estimateFeeError = {
-                //       desc: 'AhaMove hiện tại không hỗ trợ vận chuyển đến địa của bạn vì thế Carota sẽ liên hệ với bạn và chuẩn bị một hình thức vận chuyển khác.'
-                //     }
-                //   }
-                // }
-              })
-            )
-          }
-        }
+      this.delivery$.pipe(
+        take(1),
+        switchMap(delivery => this.dialog.open(DeliveryComponent, {
+          panelClass: 'delivery-modal',
+          data: delivery
+        }).afterClosed()),
+        filter(delivery=> !!delivery)
+      ).subscribe((delivery: DeliveryEntity) => {
+        console.log(delivery);
+        
+        this.deliveryService.modifyDelivery(delivery);
       })
-    );
-  }
-
-  showDetail(product: Product) {
-    this.router.navigate(['san-pham/' + product.category.route, product._id]);
-  }
-
-  changeAddress() {
-    this.dialog.open(AddressChooseComponent, {
-      panelClass: 'address-choose',
-      data: {
-        defaultAddress: this.defaultAddress
-      }
-    }).afterClosed().subscribe(res => {
-      if (res && res.deliverTo) {
-        let address: Address = res.deliverTo;
-        this.defaultAddress = address;
-        this.cartService.setDelivery(this.defaultAddress);
-      }
-    })
-  }
-
-  insertAddress() {
-    this.renderer2.removeClass(this.btnInsertAddress.nativeElement, 'button-substyle');
-    this.addressModificationService.openAddressModification('insert', null)
+    )
   }
 
   confirmPayment() {
-    if (this.userInformation) {
-      let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-      if (tokenStoraged && tokenStoraged.accessToken) {
-        this.subscription.add(
-          this.orderService.insert(tokenStoraged.accessToken, this.cart!).subscribe(async order => {
-            await this.router.navigate(['/san-pham']);
-            this.cartService.resetProduct();
-            this.dialog.open(PaymentSuccessfulComponent,
-              {
-                panelClass: 'payment-success-modal',
-                data: { isLoyalCustomer: true, order },
-                autoFocus: false
-              }
-            ).afterClosed().subscribe(res => {
-              let result: 'goProduct' | 'goOrderHistory' = res;
-              if (result === 'goOrderHistory') {
-                this.router.navigate(['/customer/order-history']);
-              }
-            })
-          }, error => {
-            this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
-          })
-        )
-      }
-    } else {
-      this.subscription.add(
-        this.orderService.insertFromVitors(this.cart!).subscribe(async order => {
-          await this.router.navigate(['/san-pham']);
-          this.cartService.resetProduct();
-          this.dialog.open(PaymentSuccessfulComponent,
-            {
-              panelClass: 'payment-success-modal',
-              data: { isLoyalCustomer: false, order },
-              autoFocus: false
-            }
-          )
-        }, error => {
-          this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
-        })
-      )
-    }
+    // if (this.userInformation) {
+    //   let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
+    //   if (tokenStoraged && tokenStoraged.accessToken) {
+    //     this.subscription.add(
+    //       this.orderService.insert(tokenStoraged.accessToken, this.cart!).subscribe(async order => {
+    //         await this.router.navigate(['/san-pham']);
+    //         this.cartService.resetProduct();
+    //         this.dialog.open(PaymentSuccessfulComponent,
+    //           {
+    //             panelClass: 'payment-success-modal',
+    //             data: { isLoyalCustomer: true, order },
+    //             autoFocus: false
+    //           }
+    //         ).afterClosed().subscribe(res => {
+    //           let result: 'goProduct' | 'goOrderHistory' = res;
+    //           if (result === 'goOrderHistory') {
+    //             this.router.navigate(['/customer/order-history']);
+    //           }
+    //         })
+    //       }, error => {
+    //         this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
+    //       })
+    //     )
+    //   }
+    // } else {
+    //   this.subscription.add(
+    //     this.orderService.insertFromVitors(this.cart!).subscribe(async order => {
+    //       await this.router.navigate(['/san-pham']);
+    //       this.cartService.resetProduct();
+    //       this.dialog.open(PaymentSuccessfulComponent,
+    //         {
+    //           panelClass: 'payment-success-modal',
+    //           data: { isLoyalCustomer: false, order },
+    //           autoFocus: false
+    //         }
+    //       )
+    //     }, error => {
+    //       this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
+    //     })
+    //   )
+    // }
   }
 
   ngOnDestroy() {

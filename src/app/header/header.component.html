@@ -6,52 +6,37 @@
   </div>
 
   <div class="brand-name vertical-container" *ngIf="identification">
-    <img [src]="identification.logo.src | prefixBackendStatic" [alt]="'Carota Logo'" [routerLink]="['']">
+    <img [src]="identification.logo.src | prefixBackendStatic" [alt]="''" [routerLink]="['']">
   </div>
 
   <div class="cart-container vertical-container">
-    <button mat-icon-button [matBadge]="badgeCart" [matBadgeHidden]="!badgeCart" routerLink="/cart">
-      <mat-icon>shopping_cart</mat-icon>
+    <button mat-icon-button routerLink="/gio-hang">
+      <mat-icon [matBadge]="badgeCart" [matBadgeHidden]="!badgeCart">shopping_cart</mat-icon>
     </button>
   </div>
 
   <div class="menu-container horizontal-container">
-    <ng-container *ngFor="let menu of menusList; let i = index">
-      <div class="vertical-container dropdown-container">
-        <button matRippleDisabled="false" class="title-menu" [routerLink]="['/'+menu.route]"
-          [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: menu.route ? false : true }"
-          [matBadge]="badgeCart" [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart"
-          (mouseenter)="closeAlertAddedToCart()">
-          {{menu.title}}
-        </button>
-        <ng-container *ngIf="menu.child.length>0">
-          <div class="sub-menu-container">
-            <div *ngFor="let child of menu.child">
-              <button routerLink="{{menu.route+'/'+child.route}}"
-                [ngStyle]="{ color: currentUrl.includes(child.route) ? 'var(--hightlight-text)': '' }">
-                {{child.name}}
-              </button>
-            </div>
-          </div>
-        </ng-container>
 
-        <ng-container *ngIf="menu.route === 'cart' && showAlertAddedToCart" (clickOutside)="closeAlertAddedToCart()">
-          <div class="alert-added-to-cart">
-            <a class="btn-close">
-              <!-- <mat-icon id="closeAlertAddedToCart">close</mat-icon> -->
-            </a>
-            <div class="alert-title">
-              <span class="horizontal-container">
-                <mat-icon>done</mat-icon>
-                Thêm vào giỏ hàng thành công!
-              </span>
-            </div>
-            <div class="height-space"></div>
-            <button class="go-to-cart" id="closeAlertAddedToCart" routerLink="/cart">Xem giỏ hàng và thanh toán</button>
+    @for (menu of menusList; track menu) {
+    <div class="vertical-container dropdown-container">
+      <button matRippleDisabled="false" class="title-menu" [routerLink]="['/'+menu.route]"
+        [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: menu.route ? false : true }">
+        <span [matBadge]="badgeCart"
+          [matBadgeHidden]="(menu.route === 'gio-hang' ? false : true) || !badgeCart">{{menu.title}}</span>
+
+      </button>
+      <ng-container *ngIf="menu.child.length>0">
+        <div class="sub-menu-container">
+          <div *ngFor="let child of menu.child">
+            <button routerLink="{{menu.route+'/'+child.route}}"
+              [ngStyle]="{ color: currentUrl.includes(child.route) ? 'var(--hightlight-text)': '' }">
+              {{child.name}}
+            </button>
           </div>
-        </ng-container>
-      </div>
-    </ng-container>
+        </div>
+      </ng-container>
+    </div>
+    }
   </div>
 
   <div class="user-information">
@@ -66,7 +51,8 @@
           {{ (userInformation$ | async) && (isLogin$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
         </div>
         <div class="user-information-block_showListButton_account horizontal-container">
-          <span>{{ (userInformation$ | async) && (isLogin$ | async) ? (userInformation$ | async)?.name ? (userInformation$ | async)?.name : (userInformation$ | async)?.email :
+          <span>{{ (userInformation$ | async) && (isLogin$ | async) ? (userInformation$ | async)?.name ?
+            (userInformation$ | async)?.name : (userInformation$ | async)?.email :
             'Tài khoản'}}</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </div>
@@ -106,7 +92,8 @@
 
           <div class="mini-height-space"></div>
 
-          <div class="button-loginRegister loginFacebook horizontal-container" (click)="socialAuthentication('facebook')">
+          <div class="button-loginRegister loginFacebook horizontal-container"
+            (click)="socialAuthentication('facebook')">
             <div class="icon">
               <mat-icon *ngIf="isBrowser" svgIcon="facebook"></mat-icon>
             </div>

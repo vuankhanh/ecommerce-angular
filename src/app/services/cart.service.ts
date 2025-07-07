@@ -3,175 +3,82 @@ import { isPlatformBrowser } from '@angular/common';
 
 import { LocalStorageService } from './local-storage.service'
 
-import { Address } from '../models/Address';
-import { Product } from '../models/Product';
+import { ProductDetailEntity } from '../entity/product-detail.entity';
 import { ToastService } from './toast.service';
-import { HeaderService } from './header.service';
 // import { SocketIoService } from './socket/socket-io.service';
 
 import { BehaviorSubject, Observable } from 'rxjs';
+import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
+import { CartEntity, CartItemEntity } from '../entity/cart.entity';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartDefault: Cart = {
-    deliverTo: null,
-    products: [],
-    status: 'inLocalStorageCart'
-  }
-
-  private isBrowser: boolean;
-
-  private cartStoragedChange$: BehaviorSubject<Cart> = new BehaviorSubject<Cart>(this.get());
-  private listenCartStoragedChange: Observable<Cart> = this.cartStoragedChange$.asObservable();
+  private readonly rawCart: CartEntity = new CartEntity([]);
+  private readonly bCartStoraged: BehaviorSubject<CartEntity> = new BehaviorSubject<CartEntity>(this.rawCart);
+  cartStoraged$: Observable<CartEntity> = this.bCartStoraged.asObservable();
+  
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     private localStorageService: LocalStorageService,
-    private toastService: ToastService,
-    private headerService: HeaderService,
-    // private socketIoService: SocketIoService
+    private toastService: ToastService
   ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-    //Phát đến Server 
-    if(this.isBrowser){
-      this.refreshTheRemainingAmout();
-      this.listenTheRemainingAmountProducts();
+    if (isPlatformBrowser(platformId)) {
+      this.get();
     }
   }
 
-  listenCartChange(): Observable<Cart>{
-    return this.listenCartStoragedChange;
+  private get() {
+    const cartItemsLocalStoraged: string = this.localStorageService.get(LocalStorageKey.CART);
+    let cart: CartEntity;
+    try {
+      const jsonParse: CartItemEntity[] = JSON.parse(cartItemsLocalStoraged);
+      cart = new CartEntity(jsonParse);
+    } catch (error: any) {
+      this.toastService.shortToastError('Lỗi khi lấy dữ liệu giỏ hàng từ LocalStorage', 'Lỗi');
+      this.set(this.rawCart); // Nếu có lỗi thì khởi tạo giỏ hàng mới
+      cart = this.rawCart;
+    }
+
+    this.bCartStoraged.next(cart);
   }
 
-  private get(): Cart{
-    let cart: Cart| null = this.localStorageService.get(this.localStorageService.carotaCartKey);
-    return cart ? cart : this.cartDefault;
+  private set(cart: CartEntity) {
+    const cartStringify: string = JSON.stringify(cart.cartItems); // Chỉ lưu trữ data, không cần methods
+    return this.localStorageService.set(LocalStorageKey.CART, cartStringify);
   }
 
-  private set(cart: Cart){
-    this.cartStoragedChange$.next(cart);
-    return this.localStorageService.set(this.localStorageService.carotaCartKey, cart);
-  }
+  addToCart(cartItem: CartItemEntity): void {
+    const cart: CartEntity = this.bCartStoraged.getValue();
+    cart.addItem(cartItem);
 
-  setDelivery(address: Address | null){
-    let cart: Cart = this.get();
-    cart.deliverTo = address;
+    this.bCartStoraged.next(cart);
     this.set(cart);
   }
 
-  setProduct(products: Array<Product>){
-    let cart: Cart = this.get();
-    cart.products = products;
+  changeQuantity(cartItem: CartItemEntity, quantity: number): void {
+    const cart: CartEntity = this.bCartStoraged.getValue();
+    try {
+      cart.changeQuantity(cartItem, quantity);
+      this.bCartStoraged.next(cart);
+      this.set(cart);
+    } catch (error: any) {
+      this.toastService.shortToastError(error.message as string, 'Lỗi');
+    }
+  }
+
+  removeItem(cartItem: CartItemEntity): void {
+    const cart: CartEntity = this.bCartStoraged.getValue();
+    cart.removeItem(cartItem);
+    this.bCartStoraged.next(cart);
     this.set(cart);
   }
 
-  addToCart(product: Product, showAlert: boolean): void{
-    let productsInCart: Array<Product> = this.get().products;
-    
-    let checkExist = productsInCart.some((itemCart: Product) => itemCart._id === product._id);
-    if(!checkExist){
-      if(!product.quantity){
-        product.quantity = 1;
-      }
-      if(product.quantity>product.theRemainingAmount){
-        this.toastService.shortToastWarning(product.name+ ' chỉ còn '+product.theRemainingAmount+ ' sản phẩm', '');
-      }else{
-        productsInCart.push(product);
-        if(showAlert){
-          this.headerService.set(true);
-        }
-      }
-    }else{
-      for(let itemCart of productsInCart){
-        if(itemCart._id === product._id){
-          if((itemCart.quantity! + product.quantity!)>product.theRemainingAmount){
-            this.toastService.shortToastWarning('Sản phẩm '+product.name+ ' chỉ còn '+product.theRemainingAmount+ ' sản phẩm', '');
-          }else{
-            itemCart.quantity! += product.quantity!;
-            if(showAlert){
-              this.headerService.set(true);
-            }
-          }
-        }
-      }
-    }
-    
-    this.setProduct(productsInCart);
+  resetProduct() {
+    const cart: CartEntity = this.bCartStoraged.getValue();
+    cart.resetCart();
+    this.bCartStoraged.next(cart);
+    this.set(cart);
   }
-
-  resetProduct(){
-    this.cartStoragedChange$.next(this.cartDefault);
-    this.setProduct([]);
-  }
-
-  sumQuantityOfCart(itemCarts: Array<Product>): number{
-    let total: number = 0;
-    if(itemCarts && itemCarts.length>0){
-      for(let product of itemCarts){
-        total += product.quantity!;
-      }
-    }
-    return total;
-  }
-
-  sumTemporaryValue(products: Array<Product>): number{
-    let temporaryValue: number = 0;
-    if(products && products.length>0){
-      for(let product of products){
-        temporaryValue += (product.quantity!*product.price);
-      }
-    }
-    return temporaryValue;
-  }
-
-  refreshTheRemainingAmout(){
-    let cart: Cart = this.get();
-    let products: Array<Product> = cart.products;
-    if(products.length>0){
-      let ids = products.map(product=>product._id);
-      // this.socketIoService.refreshTheRemainingAmountProducts$(ids);
-    }
-  }
-
-  listenTheRemainingAmountProducts(){
-    // this.socketIoService.theRemainingAmountProductsAfterRefresh$().subscribe(theRemainingAmountProducts=>{
-    //   if(theRemainingAmountProducts.length>0){
-    //     let cart: Cart = this.get();
-    //     let products: Array<Product> = cart.products;
-    //     for(let i=0; i<=products.length-1; i++){
-    //       let product = products[i];
-          
-    //       let index: number = theRemainingAmountProducts.findIndex(theRemainingAmountProduct=>theRemainingAmountProduct._id === product._id);
-    //       if(index>=0){
-    //         product.theRemainingAmount = theRemainingAmountProducts[index].theRemainingAmount;
-    //       }
-    //     }
-    //     this.setProduct(products);
-    //   }
-    // })
-  }
-
-  checkMatchingQuantity(): Array<Product>{
-    let cart: Cart = this.get();
-    let products: Array<Product> = cart.products;
-    let productsIsNotMatching: Array<Product> = [];
-    if(products.length>0){
-      for(let i=0; i<=products.length-1; i++){
-        let product = products[i];
-  
-        if(product.theRemainingAmount < product.quantity!){
-          productsIsNotMatching.push(product);
-        }
-      }
-    }
-
-    return productsIsNotMatching;
-  }
-}
-
-export interface Cart{
-  deliverTo: Address | null,
-  products: Array<Product>,
-  status: 'inLocalStorageCart'
 }

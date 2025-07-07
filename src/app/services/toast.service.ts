@@ -11,20 +11,22 @@ export class ToastService {
   ) { }
 
   shortToastSuccess(message:string, title:string){
-    return this.toastrService.success(message, title,{
-      timeOut: 3000
+    return this.toastrService.success(message, title, {
+      timeOut: 3000,
+      tapToDismiss: true
     });
   };
 
   shortToastWarning(message:string, title:string){
-    return this.toastrService.warning(message, title,{
-      timeOut: 4000
+    return this.toastrService.warning(message, title, {
+      timeOut: 4000,
+      tapToDismiss: true
     })
   }
 
   shortToastError(message:string, title:string){
-    return this.toastrService.error(message, title,{
-      timeOut: 4000
+    return this.toastrService.error(message, title, {
+      tapToDismiss: true
     })
   }
 }

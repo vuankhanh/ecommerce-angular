@@ -7,20 +7,19 @@ import { MainComponent, TypeLogin } from '../sharing/modal/main/main.component';
 
 //Model
 import { UserInformation, JwtDecoded } from '../models/UserInformation';
-import { Address } from '../models/Address';
 
 //Service
 import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
 import { CheckTokenService } from './api/check-token.service';
 import { CartService } from './cart.service';
-import { CustomerAddressService, ResponseAddress } from './api/customer-address.service';
 import { InProgressSpinnerService } from './in-progress-spinner.service';
 import { SocialAuthenticationService } from './api/social-login/social-authentication';
 import { ToastService } from './toast.service';
 
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TToken } from '../models/token.interface';
+import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +33,6 @@ export class AuthService {
     private localStorageService: LocalStorageService,
     private checkTokenService: CheckTokenService,
     private cartService: CartService,
-    private customerAddressService: CustomerAddressService,
     private inProgressSpinnerService: InProgressSpinnerService,
     private socialAuthenticationService: SocialAuthenticationService,
     private toastService: ToastService
@@ -62,9 +60,9 @@ export class AuthService {
 
   afterLogin(token: TToken){
     this.checkTokenValidation(token.accessToken);
-    this.setDeliveryTo(token.accessToken);
+    // this.setDeliveryTo(token.accessToken);
     let jwtPayload: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(token.accessToken);
-    this.localStorageService.set(this.localStorageService.tokenStoragedKey, token);
+    this.localStorageService.set(LocalStorageKey.ACCESSTOKEN, JSON.stringify(token));
     if(jwtPayload){
       console.log('Token Information:', jwtPayload);
       
@@ -73,12 +71,12 @@ export class AuthService {
   }
 
   updateAccessToken(newAccessToken: string){
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if(tokenStoraged){
       tokenStoraged.accessToken = newAccessToken;
       let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(tokenStoraged.accessToken);
       if(tokenInformation){
-        this.localStorageService.set(this.localStorageService.tokenStoragedKey, tokenStoraged);
+        this.localStorageService.set(LocalStorageKey.ACCESSTOKEN, JSON.stringify(tokenStoraged));
         this.setUserInformation(tokenInformation);
       }
     }
@@ -100,32 +98,22 @@ export class AuthService {
     })
   }
 
-  setDeliveryTo(accessToken: string){
-    this.customerAddressService.get(accessToken).subscribe({
-      next: (res: ResponseAddress) => {
-        let isHeadquartersAddress: Address | null = this.getIsHeadquartersAddress(res.address);
-        this.cartService.setDelivery(isHeadquartersAddress);
-      },
-      error: (err: Error) => {
-        console.log('Error fetching addresses:', err);
-        this.inProgressSpinnerService.progressSpinnerStatus(false);
-        this.toastService.shortToastError('Không thể lấy địa chỉ giao hàng', 'Lỗi');
-      }
-    })
-  }
-
-  getIsHeadquartersAddress(addresses: Array<Address>): Address | null {
-    if(!addresses || addresses.length===0){
-      return null;
-    }else{
-      let index = addresses.findIndex(address=> address.isHeadquarters);
-      let address: Address = index >= 0 ? addresses[index] : addresses[0];
-      return address;
-    }
-  }
+  // setDeliveryTo(accessToken: string){
+  //   this.customerAddressService.get(accessToken).subscribe({
+  //     next: (res: ResponseAddress) => {
+  //       let isHeadquartersAddress: Address | null = this.getIsHeadquartersAddress(res.address);
+  //       this.cartService.setDelivery(isHeadquartersAddress);
+  //     },
+  //     error: (err: Error) => {
+  //       console.log('Error fetching addresses:', err);
+  //       this.inProgressSpinnerService.progressSpinnerStatus(false);
+  //       this.toastService.shortToastError('Không thể lấy địa chỉ giao hàng', 'Lỗi');
+  //     }
+  //   })
+  // }
 
   getUserInfoFromTokenStoraged(){
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if(tokenStoraged){
       let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(tokenStoraged.accessToken);
       if(tokenInformation){
@@ -136,8 +124,8 @@ export class AuthService {
 
   logout(){
     this.bJwtPayload.next(null);
-    this.cartService.setDelivery(null);
-    this.localStorageService.remove(this.localStorageService.tokenStoragedKey);
+    // this.cartService.setDelivery(null);
+    this.localStorageService.remove(LocalStorageKey.ACCESSTOKEN);
     this.socialAuthenticationService.signOut();
     return this.router.navigate(['']);
   }

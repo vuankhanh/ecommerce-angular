@@ -11,7 +11,7 @@ import { CustomerMenu, Menu, MenusList } from '../mock-data/menu';
 import { AppServicesService } from '../services/app-services.service';
 import { AuthService } from '../services/auth.service';
 import { CheckTokenService } from '../services/api/check-token.service';
-import { Cart, CartService } from '../services/cart.service';
+import { CartService } from '../services/cart.service';
 import { UrlChangeService } from '../services/url-change.service';
 
 import { Subscription } from 'rxjs';
@@ -35,8 +35,8 @@ export class DrawerComponent implements OnInit {
   @ViewChild('accordion') accordion?: MatAccordion;
   @ViewChild('userAccordion') userAccordion?: MatAccordion;
   @Output() toggleDrawer = new EventEmitter();
-  menusList: Array<Menu>;
-  customerMenu: Array<Menu>;
+  menusList: Array<Menu> = MenusList;
+  customerMenu: Array<Menu> = CustomerMenu;
   productCategorys: Array<ProductCategory> = [];
   badgeCart: number = 0;
   currentUrl: string = this.router.url;
@@ -53,8 +53,6 @@ export class DrawerComponent implements OnInit {
     private checkTokenService: CheckTokenService,
     private cartService: CartService
   ) {
-    this.menusList = MenusList;
-    this.customerMenu = CustomerMenu;
     this.appServicesService.productCategory$.subscribe(res => {
       this.productCategorys = res;
       for (let i in this.menusList) {
@@ -66,10 +64,11 @@ export class DrawerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cartService.listenCartChange().subscribe((cart: Cart) => {
-      let badgeCart = this.cartService.sumQuantityOfCart(cart.products);
-      this.badgeCart = badgeCart;
-    });
+    this.subscription.add(
+      this.cartService.cartStoraged$.subscribe(cart=>{
+        this.badgeCart = cart.totalQuantity;
+      })
+    )
 
     this.subscription.add(
       this.urlChangeService.urlChange().subscribe((event) => {

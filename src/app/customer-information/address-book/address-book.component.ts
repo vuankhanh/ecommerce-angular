@@ -12,9 +12,17 @@ import { ToastService } from '../../services/toast.service';
 import { AddressModificationService } from '../../services/address-modification.service';
 import { TToken } from '../../models/token.interface';
 import { ConfirmActionComponent } from '../../sharing/modal/confirm-action/confirm-action.component';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../sharing/module/material';
+import { LocalStorageKey } from '../../sharing/constant/local_storage.constant';
 @Component({
   selector: 'app-address-book',
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+
+    MaterialModule
+  ],
   templateUrl: './address-book.component.html',
   styleUrls: ['./address-book.component.scss']
 })
@@ -34,7 +42,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   }
 
   listenCustomerAddress(){
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if(tokenStoraged){
       this.subscription.add(
         this.customerAddressService.get(tokenStoraged.accessToken).subscribe(res=>{
@@ -77,7 +85,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
-        let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+        let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
         if(tokenStoraged){
           this.customerAddressService.remove(tokenStoraged.accessToken, address).subscribe(res=>{
             if(res){

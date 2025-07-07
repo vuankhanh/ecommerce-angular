@@ -5,8 +5,6 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root'
 })
 export class LocalStorageService {
-  tokenStoragedKey = 'carota-token';
-  carotaCartKey = 'carota-cart';
   isBrowser: boolean;
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object
@@ -16,7 +14,11 @@ export class LocalStorageService {
 
   get(key: string){
     if (this.isBrowser) {
-      return JSON.parse(localStorage.getItem(key) || "null");
+      try {
+        return JSON.parse(localStorage.getItem(key) || "null");
+      } catch (error) {
+        return null
+      }
     }
   }
 

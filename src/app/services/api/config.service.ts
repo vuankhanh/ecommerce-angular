@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 import { BehaviorSubject, Observable } from 'rxjs';
-import { OrderStatus, ServerConfig } from '../../models/ServerConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +10,9 @@ import { OrderStatus, ServerConfig } from '../../models/ServerConfig';
 export class ConfigService {
   private urlConfig: string = environment.backendApi+'/config';
 
-  private orderStatus: Array<OrderStatus> = [];
-  private bConfig: BehaviorSubject<ServerConfig | null> = new BehaviorSubject<ServerConfig | null>(null);
-  config$: Observable<ServerConfig | null> = this.bConfig.asObservable();
+  private orderStatus: Array<any> = [];
+  private bConfig: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  config$: Observable<any> = this.bConfig.asObservable();
   constructor(
     private httpClient: HttpClient
   ) { }
@@ -22,10 +21,10 @@ export class ConfigService {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    return this.httpClient.get<ServerConfig>(this.urlConfig, { headers: headers })
+    return this.httpClient.get(this.urlConfig, { headers: headers })
   }
 
-  set(config: ServerConfig){
+  set(config: any){
     this.orderStatus = config.orderStatus;
     this.bConfig.next(config);
   }

@@ -21,7 +21,6 @@ import { Subscription } from 'rxjs';
 
     DrawerComponent,
     HeaderComponent,
-    BreadCrumbComponent,
     FooterComponent,
 
     MaterialModule
@@ -149,7 +148,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   onScroll = (event: any): void => {
     let target: HTMLDivElement = <HTMLDivElement>event.target;
     let index: number = target.scrollTop;
+    let indexBottom = target.scrollHeight - target.clientHeight;
+    
     this.mainContainerScrollService.setPositionTop(index);
+    this.mainContainerScrollService.setPositionBottom(indexBottom - index);
   };
 
   setScroll(){

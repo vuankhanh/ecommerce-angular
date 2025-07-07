@@ -7,7 +7,6 @@
     <mat-drawer-content #drawerContent (scroll)="onScroll($event)">
       <div class="main-container">
         <app-header #appHeader (toggleDrawer)="toggle($event)"></app-header>
-        <app-bread-crumb></app-bread-crumb>
         <router-outlet (activate)="onActivate()"></router-outlet>
         <app-footer (toggleDrawer)="toggle($event)"></app-footer>
       </div>

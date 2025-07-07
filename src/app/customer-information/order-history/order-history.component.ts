@@ -8,7 +8,7 @@ import { CustomPaginator } from '../../providers/CustomPaginatorConfiguration';
 import { Subscription } from 'rxjs';
 import { OrderResponse, OrderService } from '../../services/api/order.service';
 import { PaginationParams } from '../../models/PaginationParams';
-import { Order } from '../../models/Order';
+import { Order } from '../../models/order.interface';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ConfigService } from '../../services/api/config.service';
 import { TToken } from '../../models/token.interface';

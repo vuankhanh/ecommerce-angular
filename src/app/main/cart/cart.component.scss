@@ -28,6 +28,7 @@
 
       .product-price-container {
         width: 100%;
+        align-items: center;
 
         .product-info {
           width: 100%;
@@ -39,42 +40,8 @@
         }
 
         .price-unit-container {
-          justify-content: space-between;
-
-          .price-text {
-            white-space: nowrap;
-            font-size: 16px;
-            color: #ed1c24;
-          }
-
-          .change-quantity-container {
-            white-space: nowrap;
-
-            .button-change {
-              width: 30px;
-              height: 24px;
-              border: 1px solid var(--normal-text);
-              color: var(--normal-text);
-              border-radius: 5px 0px 0px 5px;
-            }
-
-            .button-change:last-child {
-              border-radius: 0px 5px 5px 0px;
-            }
-
-            .product-quantity {
-              width: 36px;
-              height: 24px;
-              box-sizing: border-box;
-              text-align: center;
-              border: 1px solid var(--normal-text);
-              color: var(--normal-text);
-              border-radius: 0;
-              border-right: 0;
-              border-left: 0;
-              outline-color: var(--normal-text);
-            }
-          }
+          text-wrap: nowrap;
+          align-items: center;
 
           .button-container {
             justify-content: flex-end;
@@ -90,8 +57,8 @@
       }
     }
 
-    .cart-item:last-child {
-      margin: 0;
+    mat-divider {
+      border-top-color: var(--normal-text);
     }
   }
 
@@ -104,52 +71,6 @@
       top: 85px;
       width: 100%;
       // background: #ededed;
-
-      .customer-information {
-        background: #ededed;
-        padding: 15px;
-        box-sizing: border-box;
-        border-radius: 5px;
-
-        .address-action {
-          justify-content: space-between;
-        }
-
-        .customer-contact {
-          justify-content: space-between;
-
-        }
-
-        .customer-address {
-          line-height: 1.2;
-        }
-
-        .addAddress {
-          height: 30px;
-          border: 1px solid #333333;
-          border-radius: 5px;
-          cursor: pointer;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .addAddressWarning {
-          border-color: #F89406;
-        }
-      }
-
-      .customer-form-container {
-        background: #ededed;
-        padding: 15px;
-        box-sizing: border-box;
-        border-radius: 5px;
-
-        form {
-          mat-form-field {
-            width: 100%;
-          }
-        }
-      }
 
       .total-price-frame {
         background: #ededed;
@@ -206,15 +127,15 @@
 
         .product-price-container {
           flex-direction: column;
-
           .price-unit-container {
             .price-text {
               margin: 10px 0;
             }
 
-            .button-container {
-              margin-top: 10px;
-            }
+          }
+          .button-container {
+            width: 100%;
+            justify-content: flex-end;
           }
         }
       }

@@ -1,6 +1,6 @@
 import { TAlbumModel } from "../models/album.interface";
 import { TProductCategoryModel } from "../models/product-category.interface";
-import { IProductReview, TProductModel } from "../models/product.interface";
+import { IProductReviewModel, TProductModel } from "../models/product.interface";
 
 export class ProductDetailEntity implements TProductModel {
   name: string;
@@ -13,7 +13,7 @@ export class ProductDetailEntity implements TProductModel {
   productCategoryId?: string | undefined;
   productCategory?: TProductCategoryModel | undefined;
   inStock: boolean;
-  reviews?: IProductReview[] | undefined;
+  reviews?: IProductReviewModel[] | undefined;
   averageRating?: number | undefined;
   totalReviews?: number | undefined;
   
@@ -22,6 +22,7 @@ export class ProductDetailEntity implements TProductModel {
   updatedAt: string;
 
   quantity: number = 1;
+  totalPrice: number = 0;
 
   constructor(
     product: TProductModel
@@ -42,6 +43,10 @@ export class ProductDetailEntity implements TProductModel {
     this._id = product._id;
     this.createdAt = product.createdAt;
     this.updatedAt = product.updatedAt;
+  }
+
+  private setTotalPrice() {
+    this.totalPrice = this.price * this.quantity;
   }
 
   increseQuantity() {

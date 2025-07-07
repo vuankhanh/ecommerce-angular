@@ -1,10 +1,10 @@
-import { Address } from './Address';
+import { IAddress } from './vn-public-apis.interface';
 
 export interface Identification {
   logo: Logo,
   phoneNumber: Array<PhoneNumber>,
   social: Array<SocialNetwork>,
-  address: Array<Address>
+  address: Array<IAddress>
 }
 
 export interface Logo {

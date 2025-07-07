@@ -6,6 +6,7 @@
   --hightlight-text: #001727;
   --normal-border: rgba(84, 112, 255, 0.3);
   --ahamove-normal-text: #16254e;
+  --warn: #ee4d2d;
 }
 
 ::-webkit-scrollbar {
@@ -243,6 +244,16 @@ fieldset {
 
 .secondary-key {
   color: #333333;
+}
+
+table[mat-table] {
+  thead {
+    tr {
+      th {
+        text-wrap: nowrap;
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: 768px) {

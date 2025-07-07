@@ -1,96 +1,125 @@
 <div class="product-detail-container">
   @if (product) {
-    <mat-card class="product-card">
-      <div class="product-content">
-        <!-- Image Gallery Section -->
-        <div class="image-section">
-          <mat-card class="gallery-card">
-            <gallery [objectFit]="'contain'" [items]="(product.album?.media || []) | gallery"></gallery>
-          </mat-card>
-        </div>
-  
-        <!-- Product Info Section -->
-        <div class="info-section">
-          <mat-card-header>
-            <mat-card-title class="product-title">{{product.name}}</mat-card-title>
-            <mat-card-subtitle>
-              <div class="facebook-container">
-                <ng-template [ngTemplateOutlet]="facebookLikeButton"></ng-template>
-              </div>
-            </mat-card-subtitle>
-          </mat-card-header>
-  
-          <mat-card-content>
-            <!-- Product Description -->
-            <p class="product-description">{{product.shortDescription}}</p>
-  
-            <!-- Price -->
-            <div class="price-container">
-              <mat-chip-set>
-                <mat-chip class="price-chip" color="primary" selected>
-                  {{ product.price | vndCurrency}}
-                </mat-chip>
-              </mat-chip-set>
-            </div>
-  
-            <div class="quantity-section">
-              <label class="quantity-label">Số lượng</label>
-              <app-number-input (valueChange)="product.quantity = $event"></app-number-input>
-            </div>
-  
-            <!-- Action Buttons -->
-            <mat-card-actions class="action-buttons">
-              <button mat-raised-button color="primary" class="buy-now-btn" (click)="bookNow(product)">
-                <mat-icon>shopping_cart</mat-icon>
-                Đặt hàng ngay
-              </button>
-  
-              <button mat-stroked-button color="primary" (click)="addToCart(product)">
-                <mat-icon>add_shopping_cart</mat-icon>
-                Thêm vào giỏ
-              </button>
-            </mat-card-actions>
-  
-            <!-- Contact Section -->
-            <ng-container *ngIf="identification">
-              <mat-expansion-panel class="contact-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <mat-icon>support_agent</mat-icon>
-                    Trò chuyện thêm
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-  
-                <div class="contact-options">
-                  <a mat-stroked-button href="https://m.me/thuy.hai.san.carota" target="_blank"
-                    (click)="contactUs('messenger')" class="contact-btn messenger">
-                    <mat-icon svgIcon="messenger"></mat-icon>
-                    Facebook Messenger
-                  </a>
-  
-                  <a mat-stroked-button href="https://zalo.me/0834517989" target="_blank" (click)="contactUs('zalo')"
-                    class="contact-btn zalo">
-                    <mat-icon svgIcon="zalo-new"></mat-icon>
-                    Zalo
-                  </a>
-  
-                  <a mat-stroked-button [href]="'tel: 0834517989'" target="_blank" (click)="contactUs('call')"
-                    class="contact-btn call">
-                    <mat-icon>phone</mat-icon>
-                    Gọi điện
-                  </a>
-                </div>
-              </mat-expansion-panel>
-            </ng-container>
-          </mat-card-content>
-        </div>
+  <mat-card class="product-card">
+    <div class="product-content">
+      <!-- Image Gallery Section -->
+      <div class="image-section">
+        <mat-card class="gallery-card">
+          <gallery [objectFit]="'contain'" [items]="(product.album?.media || []) | gallery"></gallery>
+        </mat-card>
       </div>
-    </mat-card>
-  }@else {
-    <!-- spinner material -->
-    <div class="loading-spinner">
-      <mat-spinner diameter="50"></mat-spinner>
+
+      <!-- Product Info Section -->
+      <div class="info-section">
+        <mat-card-header>
+          <mat-card-title class="product-title">{{product.name}}</mat-card-title>
+          <mat-card-subtitle>
+            <div class="facebook-container">
+              <ng-template [ngTemplateOutlet]="facebookLikeButton"></ng-template>
+            </div>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <!-- Product Description -->
+          <p class="product-description">{{product.shortDescription}}</p>
+
+          <!-- Price -->
+          <div class="price-container">
+            <mat-chip-set>
+              <mat-chip class="price-chip" color="primary" selected>
+                {{ product.price | vndCurrency}}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <div class="quantity-section horizontal-container">
+            <label for="quantity-input" class="quantity-label">Số lượng</label>
+            <app-number-input id="quantity-input" (valueChange)="product.quantity = $event"></app-number-input>
+          </div>
+
+          <!-- Product Description -->
+          <div class="description-section">
+            <div class="description-header">
+              <h3>Mô tả chi tiết</h3>
+            </div>
+            <div class="description-content" [innerHTML]="product.description"></div>
+          </div>
+
+          <!-- Product Reviews -->
+          <div class="reviews-section" *ngIf="product.reviews && product.reviews.length > 0">
+            <div class="reviews-header">
+              <mat-icon>rate_review</mat-icon>
+              <h3>Đánh giá ({{product.reviews.length}})</h3>
+            </div>
+            
+            <div class="reviews-content">
+              <div class="review-item" *ngFor="let review of product.reviews">
+                <div class="review-header">
+                  <span class="reviewer-name">{{review.userName || 'Khách hàng'}}</span>
+                  <div class="review-rating">
+                    <mat-icon *ngFor="let star of [1,2,3,4,5]" [class.filled]="star <= review.rating"
+                      class="star-icon">star</mat-icon>
+                  </div>
+                </div>
+                <p class="review-text">{{review.comment}}</p>
+                <span class="review-date" *ngIf="review.createdAt">{{review.createdAt | date:'dd/MM/yyyy'}}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Section -->
+          <ng-container *ngIf="identification">
+            <mat-expansion-panel class="contact-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>support_agent</mat-icon>
+                  Trò chuyện thêm
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="contact-options">
+                <a mat-stroked-button href="https://m.me/thuy.hai.san.carota" target="_blank"
+                  (click)="contactUs('messenger')" class="contact-btn messenger">
+                  <mat-icon svgIcon="messenger"></mat-icon>
+                  Facebook Messenger
+                </a>
+
+                <a mat-stroked-button href="https://zalo.me/0834517989" target="_blank" (click)="contactUs('zalo')"
+                  class="contact-btn zalo">
+                  <mat-icon svgIcon="zalo-new"></mat-icon>
+                  Zalo
+                </a>
+
+                <a mat-stroked-button [href]="'tel: 0834517989'" target="_blank" (click)="contactUs('call')"
+                  class="contact-btn call">
+                  <mat-icon>phone</mat-icon>
+                  Gọi điện
+                </a>
+              </div>
+            </mat-expansion-panel>
+          </ng-container>
+        </mat-card-content>
+        <!-- Action Buttons -->
+        <mat-card-actions class="action-buttons" [ngClass]="{'scrolled': (((scrollBottom$ | async) ?? 0) > 6)}">
+          <button mat-raised-button color="primary" class="buy-now-btn" (click)="bookNow(product)">
+            <mat-icon>shopping_cart</mat-icon>
+            Đặt hàng ngay
+          </button>
+
+          <button mat-stroked-button color="primary" (click)="addToCart(product)">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Thêm vào giỏ
+          </button>
+        </mat-card-actions>
+      </div>
     </div>
+  </mat-card>
+  }@else {
+  <!-- spinner material -->
+  <div class="loading-spinner">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
   }
 </div>
 

@@ -16,8 +16,7 @@
           <div class="vertical-container dropdown-container">
             <button matRippleDisabled="false" class="title-menu" [routerLink]="[menu.route]"
               [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{exact: true}" [matBadge]="badgeCart"
-              [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart"
-              (mouseenter)="closeAlertAddedToCart()">
+              [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart">
               {{menu.title}}
             </button>
           </div>
@@ -52,7 +51,7 @@
       </div>
       <div class="address-container vertical-container">
         <ng-container *ngFor="let address of identification.address">
-          <a *ngIf="address.isHeadquarters" class="horizontal-container"
+          <a class="horizontal-container"
             [href]="'https://www.google.com/maps/place/Th%E1%BB%A7y+H%E1%BA%A3i+S%E1%BA%A3n+Carota/@20.9631999,105.8244628,17z/data=!4m5!3m4!1s0x0:0xfa2d7145a9279994!8m2!3d20.9632111!4d105.8266494'"
             target="_blank">
             <mat-icon>place</mat-icon>

@@ -4,6 +4,7 @@ import { TProductCategoryModel } from "./product-category.interface";
 
 export interface IProductReview {
   userId: string;
+  userName: string,
   rating: number; // 1-5
   comment: string;
 }
@@ -19,9 +20,10 @@ export interface IProduct {
   productCategoryId?: string; // ID của danh mục sản phẩm
   productCategory?: TProductCategoryModel; // Danh mục sản phẩm
   inStock: boolean;
-  reviews?: IProductReview[];
+  reviews?: IProductReviewModel[];
   averageRating?: number;   // Tính trung bình từ reviews
   totalReviews?: number;
 }
 
 export type TProductModel = IProduct & IMongodbDocument;
+export type IProductReviewModel = IProductReview & IMongodbDocument;

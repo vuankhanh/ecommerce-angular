@@ -1,11 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 
 import { animationSlide } from '../../animation/slide-show';
 
-import { CartService } from '../../services/cart.service';
-import { HeaderService } from '../../services/header.service';
-import { AppServicesService } from '../../services/app-services.service';
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
 import { Subscription } from 'rxjs';
@@ -27,7 +23,7 @@ import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe'
   styleUrls: ['./slide-show.component.scss'],
   animations: [animationSlide]
 })
-export class SlideShowComponent implements OnInit, OnDestroy {
+export class SlideShowComponent {
   slideShow$ = this.slideShowService.get();
 
   customOptions: OwlOptions = {
@@ -49,19 +45,7 @@ export class SlideShowComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription = new Subscription();
   constructor(
-    private router: Router,
-    private cartService: CartService,
-    private headerService: HeaderService,
-    private appServicesService: AppServicesService,
     private readonly slideShowService: SlideShowService
   ) { }
-
-  ngOnInit(): void {
-    
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
 
 }

@@ -8,8 +8,7 @@ import { ProductCategory } from '../models/ProductCategory';
 
 import { ConfigService } from '../services/api/config.service';
 import { AppServicesService } from '../services/app-services.service';
-import { Cart, CartService } from '../services/cart.service';
-import { HeaderService } from '../services/header.service';
+import { CartService } from '../services/cart.service';
 import { SupportService } from '../services/api/support.service';
 
 import { Subscription } from 'rxjs';
@@ -47,7 +46,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     private configService: ConfigService,
-    private headerService: HeaderService,
     private cartService: CartService,
     private appServicesService: AppServicesService,
     private supportService: SupportService
@@ -65,10 +63,11 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.cartService.listenCartChange().subscribe((cart: Cart) => {
-      let badgeCart = this.cartService.sumQuantityOfCart(cart.products);
-      this.badgeCart = badgeCart;
-    });
+    this.subscription.add(
+      this.cartService.cartStoraged$.subscribe(cart=>{
+        this.badgeCart = cart.totalQuantity;
+      })
+    )
 
     this.listenConfig();
     this.listenSupport();
@@ -95,10 +94,6 @@ export class FooterComponent implements OnInit, OnDestroy {
         complete: () => console.log('Hỗ trợ đã được lấy thành công')
       })
     )
-  }
-
-  closeAlertAddedToCart() {
-    this.headerService.set(false);
   }
 
   toggleDrawerEmit() {

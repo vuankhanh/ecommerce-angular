@@ -15,8 +15,7 @@ import { Identification } from '../models/Identification';
 import { Menu, MenusList, CustomerMenu } from '../mock-data/menu';
 
 //Service
-import { HeaderService } from '../services/header.service';
-import { Cart, CartService } from '../services/cart.service';
+import { CartService } from '../services/cart.service';
 import { UrlChangeService } from '../services/url-change.service';
 import { JwtDecodedService } from '../services/jwt-decoded.service';
 import { AuthService } from '../services/auth.service';
@@ -26,7 +25,7 @@ import { CheckTokenService } from '../services/api/check-token.service';
 import { ConfigService } from '../services/api/config.service';
 import { SocialAuthenticationService } from '../services/api/social-login/social-authentication';
 
-import { Subscription } from 'rxjs';
+import { distinctUntilChanged, map, Subscription } from 'rxjs';
 import { MaterialModule } from '../sharing/module/material';
 import { TToken } from '../models/token.interface';
 import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
@@ -70,7 +69,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private ren: Renderer2,
     private bottomSheet: MatBottomSheet,
-    public headerService: HeaderService,
     private urlChangeService: UrlChangeService,
     private cartService: CartService,
     private jwtDecodedService: JwtDecodedService,
@@ -92,14 +90,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     })
-    this.closeAlertAddedToCart();
   }
 
   ngOnInit(): void {
-    this.cartService.listenCartChange().subscribe((cart: Cart)=>{
-      let badgeCart = this.cartService.sumQuantityOfCart(cart.products);
-      this.badgeCart = badgeCart;
-    });
+    this.subscription.add(
+      this.cartService.cartStoraged$.subscribe(cart=>{
+        this.badgeCart = cart.totalQuantity;
+      })
+    )
 
     this.subscription.add(
       this.urlChangeService.urlChange().subscribe((event)=>{
@@ -129,20 +127,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  closeAlertAddedToCart(){
-    this.headerService.set(false);
-  }
-
   listentMainContainerScroll(){
     this.subscription.add(
-      this.mainContainerScrollService.listenScrollTop$.subscribe(position=>{
-        this.changeStyleHeader(position);
+      this.mainContainerScrollService.listenScrollTop$.pipe(
+        map(position=> {
+          return !!(position > 0);
+        }),
+        distinctUntilChanged()
+      ).subscribe(notTop=>{
+        this.changeStyleHeader(notTop);
       })
     )
   }
 
-  changeStyleHeader(index: number): void{
-    if(index){
+  changeStyleHeader(notTop: boolean): void{
+    if(notTop){
       this.ren.addClass(this.header?.nativeElement, 'header-container-scrolled')
     }else{
       this.ren.removeClass(this.header?.nativeElement, 'header-container-scrolled');
@@ -150,26 +149,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   listenUserInformation(){
-    this.subscription.add(
-      this.headerService.get().subscribe(res=>{
-        if(!res){
-          this.showAlertAddedToCart=res;
-        }else{
-          setTimeout(() => {
-            if(res) {
-              if(this.screenWidthSize != 'full'){
-                this.bottomSheet.open(AlertTitleComponent, {
-                  panelClass: 'add-to-card-bottom-sheet'
-                });
-              }else{
-                this.showAlertAddedToCart=res;
-              }
-            }
-          }, 1);
-        }
-      })
-    );
-
     this.subscription.add(
       this.configService.getConfig().subscribe({
         next: (config)=> this.configService.set(config),

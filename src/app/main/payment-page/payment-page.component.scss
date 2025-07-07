@@ -1,77 +1,43 @@
 .payment-confirm-container {
-  margin-bottom: 15px;
+  padding: 15px 0;
 
-  .table-cart-container {
-    .customer-information {
-      background: #ededed;
-      padding: 15px;
-      box-sizing: border-box;
-      border-radius: 5px;
+  .address-card {
+    background-color: #ededed;
+    margin-bottom: 15px;
 
-      .address-action {
+    mat-card-header {
+      mat-card-title {
+        display: flex;
+        flex-direction: row;
         justify-content: space-between;
-      }
-
-      .customer-contact {
-        justify-content: space-between;
-
-      }
-
-      .customer-address {
-        line-height: 1.2;
-      }
-
-      .addAddress {
-        height: 30px;
-        border: 1px solid #333333;
-        border-radius: 5px;
-        cursor: pointer;
-        justify-content: center;
         align-items: center;
       }
-
-      .addAddressWarning {
-        border-color: #F89406;
-      }
     }
 
-    .ahamove-shipping-fee-container {
-      border-color: var(--ahamove-normal-text);
+    mat-card-content {
+      .address-container {
+        margin-top: 16px;
 
-      legend {
-        height: 30px;
-
-        img {
-          border-radius: 5px;
-        }
-      }
-
-      .shipping-info {
-        color: var(--ahamove-normal-text);
-
-        .estimate-time {
-          font-weight: 500;
-        }
-
-        .free-shipping-text {
-          color: #ed1c24;
-          font-weight: 500;
+        >*:not(:first-child) {
+          margin-left: 10px;
         }
       }
     }
 
-    .mat-table {
+    mat-card-actions {
+      button {
+        color: var(--warn);
+        min-width: 100px;
+      }
+    }
+  }
+
+  .table-cart-container {
+    table[mat-table] {
       width: 100%;
 
-      .mat-row {
-        .mat-column-thumbnail {
-          padding: 5px 0;
-          min-width: 50px;
-        }
-
-        .mat-column-name {
-          padding: 0 5px;
-        }
+      .mat-column-price {
+        text-wrap: nowrap;
       }
     }
 
@@ -88,10 +54,6 @@
         mat-icon {
           margin-right: 5px;
         }
-      }
-
-      .provisional {
-        justify-content: space-between;
       }
 
       .total-price {
@@ -113,66 +75,32 @@
 
 @media only screen and (max-width: 768px) {
   .payment-confirm-container {
+    padding: 15px;
     margin-bottom: 15px;
 
+    .address-card {
+
+      mat-card-content {
+        .address-container {
+          flex-direction: column;
+
+          >* {
+            margin: 0 !important;
+          }
+        }
+      }
+
+      mat-card-actions {
+        justify-content: flex-end;
+      }
+    }
+
     .table-cart-container {
-      .customer-information {
-        background: #ededed;
-        padding: 15px;
-        box-sizing: border-box;
-        border-radius: 5px;
-
-        .address-action {
-          justify-content: space-between;
-        }
-
-        .customer-contact {
-          justify-content: space-between;
-
-        }
-
-        .customer-address {
-          line-height: 1.2;
-        }
-
-        .addAddress {
-          height: 30px;
-          border: 1px solid #333333;
-          border-radius: 5px;
-          cursor: pointer;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .addAddressWarning {
-          border-color: #F89406;
-        }
-      }
-
-      .mat-table {
-        width: 100%;
-
-        .mat-row {
-          .mat-column-thumbnail {
-            padding: 5px 0;
-            min-width: 50px;
-          }
-
-          .mat-column-name {
-            padding: 0 5px;
-          }
-        }
-      }
-
       .total-price-frame {
         background: #ededed;
         padding: 15px;
         box-sizing: border-box;
         border-radius: 5px;
-
-        .provisional {
-          justify-content: space-between;
-        }
 
         .total-price {
           justify-content: space-between;

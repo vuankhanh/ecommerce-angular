@@ -33,9 +33,9 @@ export class RatingComponent implements OnInit {
   }
 
   listenConfig(){
-    this.configService.getConfig().subscribe(res=>{
+    this.configService.getConfig().subscribe((res:any)=>{
       let ratings = res.rating;
-      ratings.forEach(rating=>{
+      ratings.forEach((rating:any)=>{
         if(rating.value === this.ratingValueFloor){
           this.ratingTitle = rating.title;
         }

@@ -6,14 +6,12 @@
     <div class="content-container vertical-container">
       <div class="text">
         <h3>ĐẶT HÀNG THÀNH CÔNG</h3>
-        <p>Đơn hàng {{ data.order.code }} đã được gửi!</p>
+        <p>Đơn hàng {{ orderModel.code }} đã được gửi!</p>
         <p>Cảm ơn Quý Khách đã đặt hàng tại carota.vn!</p>
       </div>
       <div class="button-container horizontal-container">
-        <ng-container *ngIf="data.isLoyalCustomer">
-          <button mat-button (click)="goOrderHistory()">Lịch sử mua hàng</button>
-          <div class="width-space"></div>
-        </ng-container>
+        <button mat-button (click)="goOrderHistory()">Lịch sử mua hàng</button>
+        <div class="width-space"></div>
         <button mat-button (click)="dialogRef.close()">Đóng</button>
       </div>
     </div>

@@ -50,7 +50,6 @@
   <div class="height-space"></div>
 
   <mat-accordion class="menu-list" #accordion="matAccordion" [multi]="true">
-    <!-- <mat-divider></mat-divider> -->
     <mat-expansion-panel *ngFor="let menu of menusList; let i=index" [hideToggle]="menu.child.length===0"
       [ngClass]="menu.child.length===0 ? 'disabled-menu-item' : ''" class="menu-item">
       <mat-expansion-panel-header matRippleDisabled="false"
@@ -68,11 +67,15 @@
 
       </mat-expansion-panel-header>
 
-      <div *ngFor="let menuChild of menu.child" routerLink="{{menu.route+'/'+menuChild.route}}"
-        class="child-menu horizontal-container"
-        [ngStyle]="{ background: currentUrl.includes(menuChild.route) ? '#ededed': '' }" (click)="closeSideMenu()">
-        {{ menuChild.name }}
-      </div>
+      @if (menu.child && menu.child.length) {
+        @for (menuChild of menu.child; track menuChild) {
+          <div routerLink="{{menu.route+'/'+menuChild.route}}"
+            class="child-menu horizontal-container"
+            [ngStyle]="{ background: currentUrl.includes(menuChild.route) ? '#ededed': '' }" (click)="closeSideMenu()">
+            {{ menuChild.name }}
+          </div>
+        }
+      }
     </mat-expansion-panel>
 
   </mat-accordion>

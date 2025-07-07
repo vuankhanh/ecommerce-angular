@@ -12,6 +12,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { PrefixBackendStaticPipe } from './sharing/pipe/prefix-backend.pipe';
+import { provideNgxMask } from 'ngx-mask';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-bottom-center',
       preventDuplicates: true,
     }),
-    PrefixBackendStaticPipe
+    PrefixBackendStaticPipe,
+    provideNgxMask()
   ]
 };

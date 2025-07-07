@@ -17,6 +17,7 @@ import { DirectionPostion, MainContainerScrollService } from './main-container-s
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, filter, take } from 'rxjs/operators';
 import { TToken } from '../models/token.interface';
+import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 
 const defaultPageTitle = 'Thủy Hải Sản Carota';
 @Injectable({
@@ -79,7 +80,7 @@ export class AppServicesService {
 
     this.addIconSvgService.addIcon();
 
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+    let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if(tokenStoraged && tokenStoraged.accessToken){
       let accessToken = tokenStoraged.accessToken;
       this.authService.checkTokenValidation(accessToken);
