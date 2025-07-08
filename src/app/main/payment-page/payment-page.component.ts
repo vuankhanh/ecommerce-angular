@@ -25,12 +25,14 @@ import { DeliveryService } from '../../services/delivery.service';
 import { AddressPipe } from '../../sharing/pipe/address.pipe';
 import { DeliveryComponent } from '../../sharing/modal/delivery/delivery.component';
 import { IAddress } from '../../models/vn-public-apis.interface';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-payment-page',
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     RouterLink,
 
     PrefixBackendStaticPipe,
@@ -53,6 +55,8 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   cartItemProducts$: Observable<ProductDetailEntity[]> = this.cart$.pipe(
     map(cart => cart.cartItems.map(cartItem => cartItem.product))
   );
+
+  noteControl: FormControl = new FormControl<string>('');
 
   displayedColumns: string[] = ['thumbnail', 'name', 'price', 'quantity'];
 

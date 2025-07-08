@@ -71,6 +71,53 @@
       min-width: 150px;
     }
   }
+
+  .more-info-container {
+    >*:not(:first-child) {
+      margin-left: 15px;
+    }
+
+    mat-form-field {
+      width: 400px;
+
+      textarea {
+        height: 100%;
+        min-height: 100px;
+        /* Hoặc chiều cao tối thiểu bạn muốn */
+        max-height: 150px;
+        /* Chiều cao tối đa */
+        resize: none;
+        /* Ẩn resize handle */
+        overflow-y: auto;
+      }
+    }
+
+    .total-price-frame {
+      background: #ededed;
+      padding: 15px;
+      box-sizing: border-box;
+      border-radius: 5px;
+
+      .provisional {
+        justify-content: space-between;
+      }
+
+      .total-price {
+        justify-content: space-between;
+
+        .secondary-key {
+          color: #ed1c24;
+          font-weight: bold;
+          font-size: 18px;
+        }
+      }
+    }
+
+    .button-style {
+      min-width: 150px;
+      width: 100%;
+    }
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -95,27 +142,14 @@
       }
     }
 
-    .table-cart-container {
-      .total-price-frame {
-        background: #ededed;
-        padding: 15px;
-        box-sizing: border-box;
-        border-radius: 5px;
-
-        .total-price {
-          justify-content: space-between;
-
-          .secondary-key {
-            color: #ed1c24;
-            font-weight: bold;
-            font-size: 18px;
-          }
-        }
-      }
-
-      .button-style {
-        min-width: 150px;
+    .more-info-container {
+      flex-direction: column;
+      mat-form-field {
         width: 100%;
+      }
+      
+      >*:not(:first-child){
+        margin: 15px 0 0 0 !important;
       }
     }
   }

@@ -9,12 +9,12 @@
         </mat-card-title>
       </mat-card-header>
       @if(delivery$ | async; as delivery) {
-        <mat-card-content>
-          <div class="address-container horizontal-container">
-            <div><b>{{ delivery.name +" - "+ delivery.phoneNumber}}</b></div>
-            <div>{{ delivery.address | address }}</div>
-          </div>
-        </mat-card-content>
+      <mat-card-content>
+        <div class="address-container horizontal-container">
+          <div><b>{{ delivery.name +" - "+ delivery.phoneNumber}}</b></div>
+          <div>{{ delivery.address | address }}</div>
+        </div>
+      </mat-card-content>
       }
       <mat-card-actions>
         <button mat-button (click)="chooseAddress()">Thay đổi</button>
@@ -61,32 +61,39 @@
 
       <div class="height-space"></div>
 
-      <div class="total-price-frame vertical-container">
+      <div class="more-info-container horizontal-container">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Thông tin lưu ý</mat-label>
+          <textarea matInput type="text" [formControl]="noteControl" dkTextareaAutosize
+            cdkAutosizeMinRows="4" cdkAutosizeMaxRows="4"></textarea>
+        </mat-form-field>
 
-        <div class="primary-key discount horizontal-container">
-          <mat-icon svgIcon="discount"></mat-icon>
-          Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG
-        </div>
-        <div class="height-space"></div>
-
-        <div class="provisional horizontal-container">
-          <div class="primary-key">
-            Tạm tính
+        <div class="total-price-frame vertical-container">
+          <div class="primary-key discount horizontal-container">
+            <mat-icon svgIcon="discount"></mat-icon>
+            Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG
           </div>
-          <div class="secondary-key">
-            {{ cart.totalValue | vndCurrency }}
+          <div class="height-space"></div>
+
+          <div class="provisional horizontal-container">
+            <div class="primary-key">
+              Tạm tính
+            </div>
+            <div class="secondary-key">
+              {{ cart.totalValue | vndCurrency }}
+            </div>
           </div>
-        </div>
 
-        <div class="height-space"></div>
+          <div class="height-space"></div>
 
-        <div class="total-price horizontal-container">
-          <div class="primary-key">
-            Thành tiền
-          </div>
+          <div class="total-price horizontal-container">
+            <div class="primary-key">
+              Thành tiền
+            </div>
 
-          <div class="secondary-key">
-            {{ cart.totalValue | vndCurrency }}
+            <div class="secondary-key">
+              {{ cart.totalValue | vndCurrency }}
+            </div>
           </div>
         </div>
       </div>
