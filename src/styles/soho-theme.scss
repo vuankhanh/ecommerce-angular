@@ -1,0 +1,108 @@
+@use '@angular/material' as mat;
+
+// Custom text colors cho SOHO theme
+:root {
+  --soho-text-primary: #2c2c2c;
+  --soho-text-secondary: #666666;
+  --soho-text-hint: #999999;
+  --soho-text-disabled: #cccccc;
+  --soho-text-on-primary: #ffffff;
+  --soho-text-on-accent: #2c2c2c;
+}
+
+// Global text styles
+body {
+  color: var(--soho-text-primary);
+  font-family: 'Roboto', sans-serif;
+}
+
+.text-secondary {
+  color: var(--soho-text-secondary);
+}
+
+.text-hint {
+  color: var(--soho-text-hint);
+}
+
+// Bảng màu vàng đồng (primary)
+$soho-primary: mat.m2-define-palette((
+  50:  #fff8e1,
+  100: #ffecb3,
+  200: #ffe082,
+  300: #ffd54f,
+  400: #ffca28,
+  500: #e6b800, // Màu chủ đạo vàng đồng
+  600: #d4af37, // vàng đồng sậm
+  700: #bfa027,
+  800: #a88a1b,
+  900: #7c660f,
+  A100: #fff8e1,
+  A200: #ffecb3,
+  A400: #ffe082,
+  A700: #ffd700,
+  contrast: (
+    50:  #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #000,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #000,
+    A400: #000,
+    A700: #000
+  )
+), 500);
+
+// Accent (vàng sáng hơn)
+$soho-accent: mat.m2-define-palette((
+  50: #fffde7,
+  100: #fff9c4,
+  200: #fff59d,
+  300: #fff176,
+  400: #ffee58,
+  500: #ffd700,
+  600: #ffc700,
+  700: #ffb700,
+  800: #ffa700,
+  900: #ff9700,
+  A100: #fff8e1,
+  A200: #ffecb3,
+  A400: #ffe082,
+  A700: #ffd700,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #000,
+    500: #000,
+    600: #000,
+    700: #000,
+    800: #000,
+    900: #000,
+    A100: #000,
+    A200: #000,
+    A400: #000,
+    A700: #000
+  )
+), 500);
+
+// Warn dùng màu đỏ mặc định của Material
+$soho-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+// Tạo theme SOHO
+$soho-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $soho-primary,
+    accent: $soho-accent,
+    warn: $soho-warn,
+  )
+));
+
+// Apply theme cho toàn app
+@include mat.all-component-themes($soho-theme);

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.development';
 import { ProductCategory } from '../../../models/ProductCategory';
 import { Product } from '../../../models/Product';
 import { PaginationParams } from '../../../models/PaginationParams';

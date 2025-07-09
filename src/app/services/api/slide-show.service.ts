@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { TAlbumModel } from '../../models/album.interface';
 import { ISuccess } from '../../models/success.interface';
 import { HttpClient } from '@angular/common/http';

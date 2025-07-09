@@ -10,7 +10,7 @@ import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/c
 import { SocketIoService } from './services/socket/socket-io.service';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.development';
 import { PrefixBackendStaticPipe } from './sharing/pipe/prefix-backend.pipe';
 import { provideNgxMask } from 'ngx-mask';
 

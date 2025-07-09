@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { merge, Observable, fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Product } from '../../models/Product';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'

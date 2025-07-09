@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { PaginationParams } from '../../models/PaginationParams';
 import { TOrderModel } from '../../models/order.interface';
 import { ISuccess } from '../../models/success.interface';

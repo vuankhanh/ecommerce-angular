@@ -42,23 +42,6 @@
   }
 }
 
-.carota-container:after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-image: url('../assets/imgs/bg-cold.webp');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  width: 100%;
-  height: 100%;
-  opacity: 0.45;
-  z-index: -1;
-}
-
-
 @media only screen and (max-width: 768px) {
   .carota-container {
     mat-drawer-container {
