@@ -6,8 +6,9 @@ import { MatInput } from '@angular/material/input';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { isEqual } from 'lodash';
-import { IAddress, IProvince } from '../../../models/vn-public-apis.interface';
 import { VnPublicService } from '../../../services/api/vn-public.service';
+import { IAddress } from '../../../models/address.interface';
+import { IDistrict, IProvince, IWard } from '../../../models/vn-public-apis.interface';
 
 @Component({
   selector: 'app-address-selector',
@@ -35,8 +36,8 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   private readonly vnPublicService = inject(VnPublicService);
   addressForm: FormGroup;
   provinces$: Observable<IProvince[]> = of([]);
-  districts$: Observable<IProvince[]> = of([]);
-  wards$: Observable<IProvince[]> = of([]);
+  districts$: Observable<IDistrict[]> = of([]);
+  wards$: Observable<IWard[]> = of([]);
 
   bProvinceInputChange = new BehaviorSubject<string>('');
   bDistrictInputChange = new BehaviorSubject<string>('');
@@ -133,11 +134,11 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
 
   private setDistrict$(provinceCode: string) {
     this.districts$ = this.vnPublicService.getDistricts(provinceCode).pipe(
-      switchMap((districts: IProvince[]) => this.bDistrictInputChange.pipe(
+      switchMap((districts: IDistrict[]) => this.bDistrictInputChange.pipe(
         startWith(''),
         map((value: string) => {
           const filterValue = value.toLowerCase();
-          return districts.filter((district: IProvince) => district.name.toLowerCase().includes(filterValue));
+          return districts.filter((district: IDistrict) => district.name.toLowerCase().includes(filterValue));
         })
       ))
     );
@@ -145,11 +146,11 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
 
   private setWard$(districtCode: string) {
     this.wards$ = this.vnPublicService.getWards(districtCode).pipe(
-      switchMap((wards: IProvince[]) => this.bWardInputChange.pipe(
+      switchMap((wards: IWard[]) => this.bWardInputChange.pipe(
         startWith(''),
         map((value: string) => {
           const filterValue = value.toLowerCase();
-          return wards.filter((ward: IProvince) => ward.name.toLowerCase().includes(filterValue));
+          return wards.filter((ward: IWard) => ward.name.toLowerCase().includes(filterValue));
         })
       ))
     );

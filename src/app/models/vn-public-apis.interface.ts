@@ -35,34 +35,3 @@ export interface IWard {
   parent_code: string; // Code of the parent district
   isDeleted: boolean; // Indicates if the ward is deleted or active
 }
-
-export interface IAddress {
-  province: IProvince; // Province object
-  district: IDistrict; // District object
-  ward: IWard; // Ward object
-  street: string; // Street name or address
-}
-
-export interface IProvinceResponse extends ISuccess {
-  metaData: {
-    nItems: number; // Number of items in the response
-    nPages: number; // Number of pages in the response
-    data: IProvince[]; // Array of provinces
-  }
-}
-
-export interface IDistrictResponse extends ISuccess {
-  metaData: {
-    nItems: number; // Number of items in the response
-    nPages: number; // Number of pages in the response
-    data: IDistrict[]; // Array of districts
-  }
-}
-
-export interface IWardResponse extends ISuccess {
-  metaData: {
-    nItems: number; // Number of items in the response
-    nPages: number; // Number of pages in the response
-    data: IWard[]; // Array of wards
-  }
-}

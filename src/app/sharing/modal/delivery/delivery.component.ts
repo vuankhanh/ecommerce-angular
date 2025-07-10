@@ -8,9 +8,9 @@ import { MaterialModule } from '../../module/material';
 import { DeliveryEntity } from '../../../entity/deliverty.entity';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AddressSelectorComponent } from '../address-selector/address-selector.component';
-import { IAddress } from '../../../models/vn-public-apis.interface';
 import { Validators } from 'ngx-editor';
 import { NgxMaskDirective } from 'ngx-mask';
+import { IAddress } from '../../../models/address.interface';
 
 @Component({
   selector: 'app-delivery',

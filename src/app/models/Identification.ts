@@ -1,4 +1,4 @@
-import { IAddress } from './vn-public-apis.interface';
+import { IAddress } from "./address.interface"
 
 export interface Identification {
   logo: Logo,

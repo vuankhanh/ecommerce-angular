@@ -29,7 +29,7 @@
         <div class="sub-menu-container">
           <div *ngFor="let child of menu.child">
             <button routerLink="{{menu.route+'/'+child.route}}"
-              [ngStyle]="{ color: currentUrl.includes(child.route) ? 'var(--hightlight-text)': '' }">
+              [ngStyle]="{ color: currentUrl.includes(child.route) ? 'var(bep4than-hightlight-text)': '' }">
               {{child.name}}
             </button>
           </div>
@@ -42,7 +42,7 @@
   <div class="user-information">
 
     <div class="user-information-block horizontal-container"
-      [ngStyle]="{ color: currentUrl.includes('customer') ? 'var(--hightlight-text)': '' }">
+      [ngStyle]="{ color: currentUrl.includes('customer') ? 'var(--bep4than-hightlight-text)': '' }">
       <div class="user-information-block_icon vertical-container">
         <mat-icon>person_outline</mat-icon>
       </div>

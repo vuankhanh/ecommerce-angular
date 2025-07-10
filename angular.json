@@ -41,7 +41,15 @@
             "prerender": true,
             "ssr": {
               "entry": "server.ts"
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "socket.io-client",
+              "socket.io-parser",
+              "engine.io-client",
+              "debug",
+              "xmlhttprequest-ssl"
+            ]
           },
           "configurations": {
             "production": {

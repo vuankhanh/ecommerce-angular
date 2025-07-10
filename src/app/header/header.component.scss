@@ -40,15 +40,15 @@ button {
 
       .title-menu {
         height: 70px;
-        color: var(--normal-text);
+        color: var(--bep4than-text-primary);
       }
 
       .title-menu:hover {
-        color: var(--hightlight-text);
+        color: var(--bep4than-hightlight-text);
       }
 
       .is-active {
-        color: var(--hightlight-text);
+        color: var(--bep4than-hightlight-text);
       }
 
       button {
@@ -69,7 +69,7 @@ button {
         button {
           width: 100%;
           text-align: left;
-          color: var(--normal-text);
+          color: var(--bep4than-text-primary);
         }
       }
     }
@@ -79,7 +79,7 @@ button {
         display: block;
 
         button:hover {
-          color: var(--hightlight-text);
+          color: var(--bep4than-hightlight-text);
         }
       }
     }
@@ -143,7 +143,7 @@ button {
           padding: 5px 15px;
           box-sizing: border-box;
           font-size: 14px;
-          color: var(--normal-text);
+          color: var(--bep4than-text-primary);
         }
 
         mat-list-item:hover {
@@ -215,7 +215,7 @@ button {
 
   .user-information:hover {
     .user-information-block {
-      color: var(--hightlight-text);
+      color: var(--bep4than-hightlight-text);
     }
 
     .listButton {

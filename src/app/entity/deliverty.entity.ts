@@ -1,5 +1,4 @@
-import { IDelivery } from "../models/address.interface";
-import { IAddress } from "../models/vn-public-apis.interface";
+import { IAddress, IDelivery } from "../models/address.interface";
 
 export class DeliveryEntity implements IDelivery {
   name: string;

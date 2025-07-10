@@ -69,7 +69,7 @@ export class GenerateTableContentsDirective implements AfterViewInit {
   private generateTableContents(tableContents: Array<TableContent>){
     let tableContentsContainer: HTMLDivElement = <HTMLDivElement>document.createElement("DIV");
     tableContentsContainer.style.borderRadius = '5px';
-    tableContentsContainer.style.border = '1px dotted var(--normal-text)';
+    tableContentsContainer.style.border = '1px dotted var(--bep4than-text-primary)';
     
     tableContentsContainer.style.marginBottom = '10px';
 

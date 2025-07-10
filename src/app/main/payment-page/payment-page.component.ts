@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { PaymentSuccessfulComponent } from '../../sharing/modal/payment-successful/payment-successful.component';
 import { UserInformation } from '../../models/UserInformation';
 import { CartService } from '../../services/cart.service';
-import { take, map, Observable, Subscription, switchMap, filter } from 'rxjs';
+import { take, map, Observable, Subscription, switchMap, filter, lastValueFrom, combineLatest, tap, startWith } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/api/order.service';
 import { LocalStorageService } from '../../services/local-storage.service';
@@ -18,14 +18,15 @@ import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe'
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { EmptyCartComponent } from '../../sharing/component/empty-cart/empty-cart.component';
 import { LocalStorageKey } from '../../sharing/constant/local_storage.constant';
-import { CartEntity } from '../../entity/cart.entity';
+import { CartEntity, CartItemEntity } from '../../entity/cart.entity';
 import { ProductDetailEntity } from '../../entity/product-detail.entity';
 import { DeliveryEntity } from '../../entity/deliverty.entity';
 import { DeliveryService } from '../../services/delivery.service';
 import { AddressPipe } from '../../sharing/pipe/address.pipe';
 import { DeliveryComponent } from '../../sharing/modal/delivery/delivery.component';
-import { IAddress } from '../../models/vn-public-apis.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { IOrderCreateRequest, IOrderItemsRequest } from '../../services/api/order-request.interface';
+import { PaymentMethod } from '../../sharing/constant/payment.constant';
 
 @Component({
   selector: 'app-payment-page',
@@ -51,12 +52,41 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
 
   delivery$: Observable<DeliveryEntity | null> = this.deliveryService.deliveryStoraged$;
   cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
-
-  cartItemProducts$: Observable<ProductDetailEntity[]> = this.cart$.pipe(
-    map(cart => cart.cartItems.map(cartItem => cartItem.product))
-  );
+  private cartItem$ = this.cart$.pipe(
+    map(cart => cart.cartItems)
+  )
 
   noteControl: FormControl = new FormControl<string>('');
+
+  lastValue$ = combineLatest([this.cartItem$, this.delivery$, this.noteControl.valueChanges.pipe(startWith(''))]).pipe(
+    tap(([cartItems, delivery, note]) => {
+      console.log(cartItems, delivery, note);
+      
+    }),
+    filter(([cartItems, delivery, note]) => {
+      return !!cartItems && cartItems.length > 0 && !!delivery;
+    }),
+    map(([cartItems, delivery, note]) => {
+      const orderItemsRequests: IOrderItemsRequest[] = cartItems.map((item: CartItemEntity) => {
+        return {
+          productId: item.product._id,
+          quantity: item.quantity
+        }
+      });
+      return { cartItems: orderItemsRequests, delivery, note };
+    }),
+    map(value => {
+      const orderCreateRequest: IOrderCreateRequest = {
+        orderItems: value.cartItems,
+        paymentMethod: PaymentMethod.CASH,
+        deliveryFee: 0,
+        discount: 0,
+        note: this.noteControl.value,
+        delivery: value.delivery as DeliveryEntity
+      }
+      return orderCreateRequest;
+    })
+  )
 
   displayedColumns: string[] = ['thumbnail', 'name', 'price', 'quantity'];
 
@@ -84,16 +114,22 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
           panelClass: 'delivery-modal',
           data: delivery
         }).afterClosed()),
-        filter(delivery=> !!delivery)
+        filter(delivery => !!delivery)
       ).subscribe((delivery: DeliveryEntity) => {
         console.log(delivery);
-        
+
         this.deliveryService.modifyDelivery(delivery);
       })
     )
   }
 
-  confirmPayment() {
+  async confirmPayment() {
+    this.lastValue$.pipe(
+      switchMap((orderCreateRequest: IOrderCreateRequest) => this.orderService.create(orderCreateRequest)),
+      take(1),
+    ).subscribe(order => {
+      console.log(order)
+    })
     // if (this.userInformation) {
     //   let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     //   if (tokenStoraged && tokenStoraged.accessToken) {

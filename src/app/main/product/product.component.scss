@@ -2,11 +2,9 @@
   padding: 16px;
 }
 mat-card {
-  background-color: unset;
 }
 .categories-card {
   margin-bottom: 24px;
-  background-color: unset;
 }
 
 .categories-grid {
@@ -26,8 +24,7 @@ mat-card {
   }
   
   &.is-active {
-    border: 2px solid #1976d2;
-    background-color: #e3f2fd;
+    border: 2px solid var(--bep4than-primary-border);
   }
 }
 

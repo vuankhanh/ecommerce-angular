@@ -1,15 +1,5 @@
-@import './styles/soho-theme.scss';
-
-:root {
-  --primary-background: #5470ff;
-  --secondary-background: #37b5ff;
-  --tertiary-background: #333333;
-  --normal-text: #0a5185;
-  --hightlight-text: #001727;
-  --normal-border: rgba(84, 112, 255, 0.3);
-  --ahamove-normal-text: #16254e;
-  --warn: #ee4d2d;
-}
+// @import './styles/soho-theme.scss';
+@import './styles/bep4than-theme.scss';
 
 ::-webkit-scrollbar {
   width: 12px;
@@ -46,7 +36,7 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  color: var(--normal-text);
+  color: var(--bep4than-text-primary);
 }
 
 .vertical-container {
@@ -112,17 +102,17 @@ body {
 }
 
 .button-primary {
-  background-color: var(--primary-background);
+  background-color: var(--bep4than-primary-background);
   color: white;
 }
 
 .button-secondary {
-  background-color: var(--secondary-background);
+  background-color: var(--bep4than-text-secondary);
   color: white;
 }
 
 .button-substyle {
-  background-color: var(--secondary-background);
+  background-color: var(--bep4than-text-secondary);
   color: white;
 }
 
@@ -145,7 +135,7 @@ body {
 
   mat-dialog-container {
     // background: white;
-    color: var(--normal-text);
+    color: var(--bep4than-text-primary);
   }
 }
 
@@ -156,7 +146,7 @@ body {
 .thanks-for-the-review-component {
   mat-dialog-container {
     padding: 0;
-    color: var(--normal-text);
+    color: var(--bep4than-text-primary);
   }
 }
 
@@ -228,7 +218,7 @@ img {
 
 fieldset {
   border-radius: 5px;
-  border: 1px dotted var(--normal-text);
+  border: 1px dotted var(--bep4than-primary-border);
   padding: 5px;
 
   legend {

@@ -1,0 +1,96 @@
+@use '@angular/material' as mat;
+
+// Custom text colors cho bep4than theme
+:root {
+  --bep4than-text-primary: #2c2c2c;
+  --bep4than-text-secondary: #666666;
+  --bep4than-hightlight-text: #b85450;
+  --bep4than-primary-background: #b85450;
+  --bep4than-secondary-background: #ff6f43;
+  --bep4than-primary-border: rgba(184, 84, 80, 0.3);
+  --bep4than-text-hint: #999999;
+  --bep4than-text-disabled: #cccccc;
+  --bep4than-text-on-primary: #ffffff;
+  --bep4than-text-on-accent: #2c2c2c;
+  --bep4than-text-on-warn: #f44336;
+}
+
+.text-secondary {
+  color: var(--bep4than-text-secondary);
+}
+
+.text-hint {
+  color: var(--bep4than-text-hint);
+}
+
+// Bảng màu đỏ gạch theo logo (primary)
+$bep4than-primary: mat.m2-define-palette((50: #fdf2f0,
+      100: #fce4e0,
+      200: #f9c6bf,
+      300: #f5a59a,
+      400: #ef8675,
+      500: #b85450, // Màu chủ đạo từ logo
+      600: #a64842,
+      700: #8f3f37,
+      800: #78362d,
+      900: #5d2a23,
+      A100: #fdf2f0,
+      A200: #fce4e0,
+      A400: #f9c6bf,
+      A700: #f5a59a,
+      contrast: (50: #000,
+        100: #000,
+        200: #000,
+        300: #000,
+        400: #000,
+        500: #fff,
+        600: #fff,
+        700: #fff,
+        800: #fff,
+        900: #fff,
+        A100: #000,
+        A200: #000,
+        A400: #000,
+        A700: #000)), 500);
+
+// Accent (đỏ cam nhẹ hơn)
+$bep4than-accent: mat.m2-define-palette((50: #fff8f5,
+      100: #ffeee6,
+      200: #ffd5c2,
+      300: #ffb99e,
+      400: #ff9d7a,
+      500: #ff6f43,
+      600: #e55a2b,
+      700: #cc4a1a,
+      800: #b33c0d,
+      900: #8a2e08,
+      A100: #fff8f5,
+      A200: #ffeee6,
+      A400: #ffd5c2,
+      A700: #ffb99e,
+      contrast: (50: #000,
+        100: #000,
+        200: #000,
+        300: #000,
+        400: #000,
+        500: #fff,
+        600: #fff,
+        700: #fff,
+        800: #fff,
+        900: #fff,
+        A100: #000,
+        A200: #000,
+        A400: #000,
+        A700: #000)), 500);
+
+// Warn dùng màu đỏ mặc định của Material
+$bep4than-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+// Tạo theme bep4than
+$bep4than-theme: mat.m2-define-light-theme((color: (primary: $bep4than-primary,
+        accent: $bep4than-accent,
+        warn: $bep4than-warn,
+      )));
+
+// Apply theme cho toàn app
+@include mat.all-component-themes($bep4than-theme);

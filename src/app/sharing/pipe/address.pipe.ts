@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IAddress } from '../../models/vn-public-apis.interface';
+import { IAddress } from '../../models/address.interface';
 
 @Pipe({
   name: 'address'

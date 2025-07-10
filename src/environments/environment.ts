@@ -11,8 +11,8 @@ const firebase: FirebaseOptions = {
 }
 
 export const environment = {
-  backendApi: 'http://admin.bep4than.online/api',
-  backendStatic: 'http://admin.bep4than.online/static',
-  socket: 'http://admin.bep4than.online',
+  backendApi: 'https://admin.bep4than.online/api',
+  backendStatic: 'https://admin.bep4than.online/static',
+  socket: 'https://admin.bep4than.online',
   firebase
 };

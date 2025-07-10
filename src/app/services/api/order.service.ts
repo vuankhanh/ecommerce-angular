@@ -6,12 +6,13 @@ import { TOrderModel } from '../../models/order.interface';
 import { ISuccess } from '../../models/success.interface';
 import { IPagination } from './pagination.interface';
 import { map, Observable } from 'rxjs';
+import { IOrderCreateRequest } from './order-request.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private url = environment.backendApi + '/client/order';
+  private url = environment.backendApi + '/order';
 
   private urlOrderFromVisitorsInsert = environment.backendApi + '/order-from-visitors/insert';
   constructor(
@@ -43,7 +44,7 @@ export class OrderService {
     return this.httpClient.get<OrderDetailResponse>(this.url, { params });
   }
 
-  create(data: any) {
+  create(data: IOrderCreateRequest): Observable<TOrderModel> {
     return this.httpClient.post<OrderDetailResponse>(this.url, data).pipe(
       map(res => res.metaData)
     );

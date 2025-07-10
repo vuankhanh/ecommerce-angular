@@ -100,7 +100,7 @@
 
       <div class="height-space"></div>
 
-      <button (click)="confirmPayment()" class="button-style button-primary">
+      <button (click)="confirmPayment()" [disabled]="!(lastValue$| async)" class="button-style button-primary">
         Đặt mua
       </button>
     </div>
