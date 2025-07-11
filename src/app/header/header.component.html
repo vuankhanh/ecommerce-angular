@@ -48,10 +48,10 @@
       </div>
       <div class="user-information-block_showListButton vertical-container">
         <div class="user-information-block_showListButton_status">
-          {{ (userInformation$ | async) && (isLogin$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
+          {{ (userInformation$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
         </div>
         <div class="user-information-block_showListButton_account horizontal-container">
-          <span>{{ (userInformation$ | async) && (isLogin$ | async) ? (userInformation$ | async)?.name ?
+          <span>{{ (userInformation$ | async) ? (userInformation$ | async)?.name ?
             (userInformation$ | async)?.name : (userInformation$ | async)?.email :
             'Tài khoản'}}</span>
           <mat-icon>arrow_drop_down</mat-icon>
@@ -60,12 +60,12 @@
     </div>
 
     <div class="listButton vertical-container">
-      <ng-container *ngIf="(userInformation$ | async) && (isLogin$ | async); else menuAuthentication">
+      <ng-container *ngIf="(userInformation$ | async); else menuAuthentication">
         <mat-list role="list">
           <div class="micro-height-space"></div>
 
           <mat-list-item role="listitem" *ngFor="let cMenu of customerMenu; let i=index;"
-            routerLink="/customer/{{cMenu.route}}">
+            routerLink="/khach-hang/{{cMenu.route}}">
             {{ cMenu.title }}
           </mat-list-item>
 
@@ -95,7 +95,7 @@
           <div class="button-loginRegister loginFacebook horizontal-container"
             (click)="socialAuthentication('facebook')">
             <div class="icon">
-              <mat-icon *ngIf="isBrowser" svgIcon="facebook"></mat-icon>
+              <mat-icon *ngIf="isBrowser" fontSet="fab" fontIcon="fa-facebook-f"></mat-icon>
             </div>
             <div class="textButton horizontal-container">
               Đăng nhập bằng Facebook
@@ -106,7 +106,7 @@
 
           <div class="button-loginRegister loginGoogle horizontal-container" (click)="socialAuthentication('google')">
             <div class="icon">
-              <mat-icon *ngIf="isBrowser" svgIcon="google-plus"></mat-icon>
+              <mat-icon *ngIf="isBrowser" fontSet="fab" fontIcon="fa-google"></mat-icon>
             </div>
             <div class="textButton horizontal-container">
               Đăng nhập bằng Google

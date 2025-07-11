@@ -1,21 +1,36 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Order } from '../../models/order.interface';
-import { TToken } from '../../models/token.interface';
 import { OrderService } from '../../services/api/order.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { Product } from '../../models/Product';
+import { TOrderModel } from '../../models/order.interface';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../sharing/module/material';
+import { TOrderDetailResponseModel } from '../../models/order-response.interface';
+import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
+import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 
 @Component({
   selector: 'app-order-history-detail',
+  standalone: true,
+  imports: [
+    CommonModule,
+
+    RouterLink,
+
+    PrefixBackendStaticPipe,
+    CurrencyCustomPipe,
+
+    MaterialModule
+  ],
   templateUrl: './order-history-detail.component.html',
   styleUrls: ['./order-history-detail.component.scss']
 })
 export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
   orderId: string;
 
-  order?: Order;
+  order?: TOrderDetailResponseModel;
 
   displayedColumns: string[] = ['name', 'price', 'quantity'];
 
@@ -33,34 +48,28 @@ export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
     this.listenOrderHistoryDetail(this.orderId);
   }
 
-  listenOrderHistoryDetail(orderId: string){
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-    if(tokenStoraged && tokenStoraged.accessToken){
-      this.subscription.add(
-        this.orderService.getDetail(tokenStoraged.accessToken, orderId).subscribe(res=>{
-          this.order = res;
-          
-        })
-      )
-    }
+  listenOrderHistoryDetail(orderId: string) {
+    this.subscription.add(
+      this.orderService.getDetail(orderId).subscribe(res => {
+        this.order = res;
+
+      })
+    )
   }
 
-  showDetail(product: Product){
-    this.router.navigate(['san-pham/'+product.category.route, product._id]);
+  showDetail(product: Product) {
+    this.router.navigate(['san-pham/' + product.category.route, product._id]);
   }
 
-  revoke(id: string){
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-    if(tokenStoraged && tokenStoraged.accessToken && this.order?._id != 'revoke'){
-      this.subscription.add(
-        this.orderService.revoke(tokenStoraged.accessToken, id).subscribe(res=>{
-          this.order = res;
-        })
-      )
-    }
+  revoke(id: string) {
+    // this.subscription.add(
+    //   this.orderService.revoke(id).subscribe(res => {
+    //     this.order = res;
+    //   })
+    // )
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 

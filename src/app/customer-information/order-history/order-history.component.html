@@ -30,7 +30,7 @@
             <ng-container matColumnDef="totalValue">
                 <th mat-header-cell *matHeaderCellDef> Tổng tiền </th>
                 <td mat-cell *matCellDef="let order; let i = index;">
-                    {{ order.totalValue | currency:'VND':'symbol' | replaceSpace }}
+                    {{ order.totalValue | vndCurrency }}
                 </td>
             </ng-container>
           
@@ -45,7 +45,7 @@
         </table>
     </div>
     <mat-paginator
-        *ngIf="orderResponse"
+        *ngIf="configPagination"
         [length]="configPagination.totalItems"
         [pageIndex]="configPagination.page"
         [pageSize]="configPagination.size"

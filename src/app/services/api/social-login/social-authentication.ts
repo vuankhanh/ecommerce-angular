@@ -16,20 +16,14 @@ export class SocialAuthenticationService {
   private firebaseAuthUrl: string = environment.backendApi + '/auth/firebase-authentication';
   constructor(
     private httpClient: HttpClient,
-    private auth: Auth,
-    private inProgressSpinnerService: InProgressSpinnerService
+    private auth: Auth
   ) { }
 
   async authentication(provider: 'google' | 'facebook'): Promise<TToken> {
-    this.inProgressSpinnerService.progressSpinnerStatus(true);
-    let resultAuthentication;
+    
     if (provider !== 'google' && provider !== 'facebook') return Promise.reject(new Error('Unsupported provider'));
-
-    if (provider === 'google') {
-      resultAuthentication = await this.signInWithGoogle();
-    } else {
-      resultAuthentication = await this.signInWithFB();
-    }
+    
+    let resultAuthentication = provider === 'google' ? await this.signInWithGoogle() : await this.signInWithFB();
     const { idToken, email } = resultAuthentication;
     
     return await this.checkTokenFirebase(idToken, email);

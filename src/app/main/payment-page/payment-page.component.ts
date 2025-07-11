@@ -61,7 +61,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   lastValue$ = combineLatest([this.cartItem$, this.delivery$, this.noteControl.valueChanges.pipe(startWith(''))]).pipe(
     tap(([cartItems, delivery, note]) => {
       console.log(cartItems, delivery, note);
-      
+
     }),
     filter(([cartItems, delivery, note]) => {
       return !!cartItems && cartItems.length > 0 && !!delivery;
@@ -106,7 +106,6 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void { }
 
   chooseAddress() {
-    console.log('chooseAddress');
     this.subscription.add(
       this.delivery$.pipe(
         take(1),
@@ -116,20 +115,30 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
         }).afterClosed()),
         filter(delivery => !!delivery)
       ).subscribe((delivery: DeliveryEntity) => {
-        console.log(delivery);
-
         this.deliveryService.modifyDelivery(delivery);
       })
     )
   }
 
   async confirmPayment() {
-    this.lastValue$.pipe(
-      switchMap((orderCreateRequest: IOrderCreateRequest) => this.orderService.create(orderCreateRequest)),
-      take(1),
-    ).subscribe(order => {
-      console.log(order)
-    })
+    this.subscription.add(
+      this.lastValue$.pipe(
+        switchMap((orderCreateRequest: IOrderCreateRequest) => this.orderService.create(orderCreateRequest)),
+        take(1),
+      ).subscribe(order => {
+        console.log(order)
+        this.router.navigate(['/san-pham']);
+        this.cartService.reset();
+        this.deliveryService.reset();
+        this.dialog.open(PaymentSuccessfulComponent,
+          {
+            panelClass: 'payment-success-modal',
+            data: { isLoyalCustomer: false, order },
+            autoFocus: false
+          }
+        )
+      })
+    )
     // if (this.userInformation) {
     //   let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     //   if (tokenStoraged && tokenStoraged.accessToken) {
@@ -146,7 +155,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     //         ).afterClosed().subscribe(res => {
     //           let result: 'goProduct' | 'goOrderHistory' = res;
     //           if (result === 'goOrderHistory') {
-    //             this.router.navigate(['/customer/order-history']);
+    //             this.router.navigate(['/khach-hang/order-history']);
     //           }
     //         })
     //       }, error => {

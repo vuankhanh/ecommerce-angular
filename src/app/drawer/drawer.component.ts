@@ -10,7 +10,6 @@ import { CustomerMenu, Menu, MenusList } from '../mock-data/menu';
 
 import { AppServicesService } from '../services/app-services.service';
 import { AuthService } from '../services/auth.service';
-import { CheckTokenService } from '../services/api/check-token.service';
 import { CartService } from '../services/cart.service';
 import { UrlChangeService } from '../services/url-change.service';
 
@@ -41,7 +40,6 @@ export class DrawerComponent implements OnInit {
   badgeCart: number = 0;
   currentUrl: string = this.router.url;
 
-  isLogin$ = this.checkTokenService.check$;
   userInformation$ = this.authService.jwtPayload$;
 
   subscription: Subscription = new Subscription();
@@ -50,7 +48,6 @@ export class DrawerComponent implements OnInit {
     private urlChangeService: UrlChangeService,
     private appServicesService: AppServicesService,
     private authService: AuthService,
-    private checkTokenService: CheckTokenService,
     private cartService: CartService
   ) {
     this.appServicesService.productCategory$.subscribe(res => {

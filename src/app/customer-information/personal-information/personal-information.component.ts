@@ -17,10 +17,18 @@ import { LocalStorageService } from '../../services/local-storage.service';
 import { ToastService } from '../../services/toast.service';
 import { AppServicesService } from '../../services/app-services.service';
 import { TToken } from '../../models/token.interface';
+import { LocalStorageKey } from '../../sharing/constant/local_storage.constant';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../sharing/module/material';
 
 @Component({
   selector: 'app-personal-information',
   standalone: true,
+  imports: [
+    CommonModule,
+
+    MaterialModule
+  ],
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.scss']
 })
@@ -47,9 +55,9 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
 
   listenUserInformation(){
     this.subscription.add(
-      this.authService.getUserInformation().subscribe(userInfo=>{
-        this.formInit(userInfo);
-        this.setDisablePasswordControls(this.checkedChangePassword);
+      this.authService.jwtPayload$.subscribe(userInfo=>{
+        // this.formInit(userInfo);
+        // this.setDisablePasswordControls(this.checkedChangePassword);
       })
     );
   }
@@ -66,16 +74,6 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     if(userInformation){
       
       this.informationGroup = this.formBuilder.group({
-        userName: [
-          {
-            value: userInformation?.userName,
-            disabled: true
-          },
-          {
-            validators: [Validators.required, tiengVietKhongDau()],
-            updateOn: 'blur'
-          }
-        ],
         name: [userInformation?.name, Validators.required],
         email: [
           {
@@ -125,7 +123,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
   update(){
     if(this.informationGroup.valid){
       this.informationGroup.controls['confirmPassword'].disable();
-      let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
+      let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
       if(tokenStoraged){
         this.updatePersonalInformationService.update(tokenStoraged.accessToken, this.informationGroup.value).subscribe(res=>{
           this.informationGroup.controls['confirmPassword'].enable();

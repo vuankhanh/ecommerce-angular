@@ -75,7 +75,7 @@ export class CartService {
     this.set(cart);
   }
 
-  resetProduct() {
+  reset() {
     const cart: CartEntity = this.bCartStoraged.getValue();
     cart.resetCart();
     this.bCartStoraged.next(cart);

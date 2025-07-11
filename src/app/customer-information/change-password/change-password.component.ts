@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-change-password',
-  standalone: false,
+  standalone: true,
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss']
 })

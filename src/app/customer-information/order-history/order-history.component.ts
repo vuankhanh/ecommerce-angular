@@ -8,14 +8,25 @@ import { CustomPaginator } from '../../providers/CustomPaginatorConfiguration';
 import { Subscription } from 'rxjs';
 import { OrderResponse, OrderService } from '../../services/api/order.service';
 import { PaginationParams } from '../../models/PaginationParams';
-import { Order } from '../../models/order.interface';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ConfigService } from '../../services/api/config.service';
 import { TToken } from '../../models/token.interface';
+import { OrderEntity } from '../../entity/order.entity';
+import { TOrderModel } from '../../models/order.interface';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../sharing/module/material';
+import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 
 @Component({
   selector: 'app-order-history',
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+
+    CurrencyCustomPipe,
+
+    MaterialModule
+  ],
   templateUrl: './order-history.component.html',
   styleUrls: ['./order-history.component.scss'],
   providers: [
@@ -25,10 +36,9 @@ import { TToken } from '../../models/token.interface';
 export class OrderHistoryComponent implements OnInit {
   displayedColumns: string[] = ['orderCode', 'createdAt', 'name', 'totalValue', 'status'];
 
-  orderResponse?: OrderResponse;
   configPagination?: PaginationParams;
-  orders: Array<Order> = [];
-  
+  orders: Array<TOrderModel> = [];
+
   subscription: Subscription = new Subscription();
 
   count: number = 0;
@@ -40,37 +50,34 @@ export class OrderHistoryComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.listenOrder();
+    // this.listenOrder();
   }
 
-  listenOrder(paginationParams?: PaginationParams){
-    
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-    if(tokenStoraged && tokenStoraged.accessToken){
-      this.subscription.add(
-        this.orderService.get(tokenStoraged.accessToken, paginationParams).subscribe(res=>{
-          this.orderResponse = res;
-          this.configPagination = {
-            totalItems: this.orderResponse.totalItems,
-            page: this.orderResponse.page-1,
-            size: this.orderResponse.size,
-            totalPages: this.orderResponse.totalPages
-          };
-          this.orders = this.orderResponse.data;
-        })
-      )
-    }
+  listenOrder(paginationParams?: PaginationParams) {
+    this.subscription.add(
+      this.orderService.getAll(paginationParams?.page, paginationParams?.size).subscribe(res => {
+        const { data, paging } = res;
+
+        this.configPagination = {
+          totalItems: paging.totalItems,
+          page: paging.page - 1,
+          size: paging.size,
+          totalPages: paging.totalPages
+        };
+        this.orders = data;
+      })
+    )
   }
 
-  handlePageEvent(event: PageEvent){
+  handlePageEvent(event: PageEvent) {
     if (this.configPagination === undefined) return;
-    this.configPagination.page = event.pageIndex+1;
+    this.configPagination.page = event.pageIndex + 1;
     this.configPagination.size = event.pageSize;
     this.listenOrder(this.configPagination)
   }
 
-  showDetail(order: Order){
-    this.router.navigate(['/customer/order-history', order._id]);
+  showDetail(order: TOrderModel) {
+    this.router.navigate(['/khach-hang/order-history', order._id]);
   }
 
 }

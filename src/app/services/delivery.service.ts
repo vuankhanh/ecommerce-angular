@@ -46,4 +46,9 @@ export class DeliveryService {
     this.bDeliveryStoraged.next(delivery);
     this.set(delivery);
   }
+
+  reset(): void {
+    this.bDeliveryStoraged.next(null);
+    this.set(null);
+  }
 }

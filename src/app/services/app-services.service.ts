@@ -10,7 +10,6 @@ import { ProductCategory } from '../models/ProductCategory';
 import { ProductService } from './api/product/product.service';
 import { AuthService } from './auth.service';
 import { LocalStorageService } from './local-storage.service';
-import { AddIconSvgService } from './add-icon-svg.service';
 // import { SocketIoService } from './socket/socket-io.service';
 import { DirectionPostion, MainContainerScrollService } from './main-container-scroll.service';
 
@@ -41,7 +40,6 @@ export class AppServicesService {
     private productService: ProductService,
     private localStorageService: LocalStorageService,
     private authService: AuthService,
-    private addIconSvgService: AddIconSvgService,
     // private socketIoService: SocketIoService,
     private mainContainerScrollService: MainContainerScrollService
   ) {
@@ -62,29 +60,6 @@ export class AppServicesService {
       }
     }));
 
-    this.productService.getCategory().pipe(
-      take(1)
-    ).subscribe({
-      next: (res) => this.bProductCategory.next(res),
-      error: (err) => console.log('Có lỗi xảy ra khi lấy danh sách danh mục sản phẩm: ', err.message),
-      complete: () => console.log('Đã lấy xong danh sách danh mục sản phẩm')
-    });
-
-    this.productService.getProductHightlight().pipe(
-      take(1)
-    ).subscribe({
-      next: (res) => this.bProductHightlight.next(res),
-      error: (err) => console.log('Có lỗi xảy ra khi lấy danh sách sản phẩm nổi bật: ', err.message),
-      complete: () => console.log('Đã lấy xong danh sách sản phẩm nổi bật')
-    });
-
-    this.addIconSvgService.addIcon();
-
-    let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
-    if(tokenStoraged && tokenStoraged.accessToken){
-      let accessToken = tokenStoraged.accessToken;
-      this.authService.checkTokenValidation(accessToken);
-    }
 
     //Set Title For Page
     this.router.events.pipe(

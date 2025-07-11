@@ -7,6 +7,7 @@ import { ISuccess } from '../../models/success.interface';
 import { IPagination } from './pagination.interface';
 import { map, Observable } from 'rxjs';
 import { IOrderCreateRequest } from './order-request.interface';
+import { TOrderDetailResponseModel } from '../../models/order-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,8 @@ export class OrderService {
     private httpClient: HttpClient
   ) { }
 
-  getAll(token: string, page?: number, size?: number): Observable<TOrder> {
+  getAll(page?: number, size?: number): Observable<TOrder> {
     let params = new HttpParams();
-    if (token != undefined) {
-      params = params.append('token', token)
-    }
 
     if (page != undefined) {
       params = params.append('page', page)
@@ -36,15 +34,17 @@ export class OrderService {
     )
   }
 
-  getDetail(id: string) {
+  getDetail(id: string): Observable<TOrderDetailResponseModel> {
     let params = new HttpParams();
     if (id != undefined) {
       params = params.append('id', id)
     }
-    return this.httpClient.get<OrderDetailResponse>(this.url, { params });
+    return this.httpClient.get<OrderDetailResponse>(this.url, { params }).pipe(
+      map(response => response.metaData)
+    );
   }
 
-  create(data: IOrderCreateRequest): Observable<TOrderModel> {
+  create(data: IOrderCreateRequest): Observable<TOrderDetailResponseModel> {
     return this.httpClient.post<OrderDetailResponse>(this.url, data).pipe(
       map(res => res.metaData)
     );
@@ -61,5 +61,5 @@ export interface OrderResponse extends ISuccess {
 }
 
 export interface OrderDetailResponse extends ISuccess {
-  metaData: TOrderModel;
+  metaData: TOrderDetailResponseModel;
 }

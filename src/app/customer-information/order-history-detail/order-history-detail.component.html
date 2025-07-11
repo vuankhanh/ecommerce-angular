@@ -1,26 +1,26 @@
 <ng-container *ngIf="order; else notFound">
-    <div class="order-history-detail-container">
-        <div class="title">
-            <span>
-                {{ 'Chi tiết đơn hàng #'+ order.code + ' - '}}
-                <span class="status">{{ configService.filterNameOrderStatus(order.status) }}</span>
-            </span>
-        </div>
+  <div class="order-history-detail-container">
+    <div class="title">
+      <span>
+        {{ 'Chi tiết đơn hàng #'+ order.orderCode + ' - '}}
+        <span class="status">{{ order.status }}</span>
+      </span>
+    </div>
 
-        <div class="height-space"></div>
+    <div class="height-space"></div>
 
-        <div class="created-at">
-            <span>{{ order.createdAt | date:'HH:mm dd/MM/yyyy' }}</span>
-        </div>
-    
-        <div class="height-space"></div>
-    
-        <div class="customer-information" *ngIf="order.deliverTo as address">
+    <div class="created-at">
+      <span>{{ order.createdAt | date:'HH:mm dd/MM/yyyy' }}</span>
+    </div>
 
-            <div class="horizontal-container address-action">
-                <div>Giao tới</div>
-            </div>
-            <div class="mini-height-space"></div>
+    <div class="height-space"></div>
+
+    <div class="customer-information" *ngIf="order.delivery">
+
+      <div class="horizontal-container address-action">
+        <div>Giao tới</div>
+      </div>
+      <!-- <div class="mini-height-space"></div>
             <div class="horizontal-container customer-contact">
                 <div class="name">{{address.responsiblePerson + ' | ' + address.phoneNumber}}</div>
             </div>
@@ -34,49 +34,50 @@
                 <span class="demo-2">, </span>
                 <span class="demo-2">{{ address.province.name }}</span>
             </div>
-        </div>
-    
-        <div class="height-space"></div>
-    
-        <table mat-table [dataSource]="order.products">
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Sản phẩm </th>
-                <td mat-cell *matCellDef="let order; let i = index">
-                    <div class="horizontal-container">
-                        <div class="img-container">
-                            <img [src]="order.productId.thumbnailUrl | galleryRoute" [alt]="order.productId.name" (click)="showDetail(order.productId)">
-                        </div>
+        </div> -->
 
-                        <div class="micro-width-space"></div>
+      <div class="height-space"></div>
 
-                        <div class="product-name horizontal-container">
-                            {{order.productId.name}}
-                        </div>
-                    </div>
-                </td>
-            </ng-container>
+      <table mat-table [dataSource]="order.orderItems">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Sản phẩm </th>
+          <td mat-cell *matCellDef="let order; let i = index">
+            <div class="horizontal-container">
+              <div class="img-container">
+                <img [src]="order.productId.thumbnailUrl | prefixBackendStatic" [alt]="order.productId.name"
+                  (click)="showDetail(order.productId)">
+              </div>
 
-            <!-- Price Column -->
-            <ng-container matColumnDef="price">
-                <th mat-header-cell *matHeaderCellDef> Giá </th>
-                <td mat-cell *matCellDef="let order"> {{ order.productId.price  | currency:'VND':'symbol' | replaceSpace }} </td>
-            </ng-container>
+              <div class="micro-width-space"></div>
 
-            <!-- Quantity Column -->
-            <ng-container matColumnDef="quantity">
-                <th mat-header-cell *matHeaderCellDef> Số lượng </th>
-                <td mat-cell *matCellDef="let order"> {{order.quantity}} </td>
-            </ng-container>
-        
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-        
-        <div class="height-space"></div>
-    
-        <div class="total-price-frame vertical-container">
-            <!-- <div class="provisional horizontal-container">
+              <div class="product-name horizontal-container">
+                {{order.productId.name}}
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef> Giá </th>
+          <td mat-cell *matCellDef="let order"> {{ order.productId.price | vndCurrency }} </td>
+        </ng-container>
+
+        <!-- Quantity Column -->
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef> Số lượng </th>
+          <td mat-cell *matCellDef="let order"> {{order.quantity}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div class="height-space"></div>
+
+      <div class="total-price-frame vertical-container">
+        <!-- <div class="provisional horizontal-container">
                 <div class="primary-key">
                     Tạm tính
                 </div>
@@ -87,36 +88,36 @@
 
             <div class="height-space"></div> -->
 
-            <div class="total-price horizontal-container">
-                <div class="primary-key">
-                    Tổng tiền
-                </div>
-                <div class="secondary-key">
-                    {{ order.totalValue | currency:'VND':'symbol' | replaceSpace }}
-                </div>
-            </div>
+        <div class="total-price horizontal-container">
+          <div class="primary-key">
+            Tổng tiền
+          </div>
+          <div class="secondary-key">
+            {{ order.total | vndCurrency}}
+          </div>
         </div>
+      </div>
 
-        <ng-container *ngIf="order.status != 'revoke'">
-            <div class="height-space"></div>
-    
-            <div class="horizontal-container revoke-container">
-                <button mat-button class="button-style button-secondary" (click)="revoke(order._id)">
-                    Hủy đơn hàng
-                </button>
-            </div>
-        </ng-container>
+      <ng-container *ngIf="order.status === 'cancelled'">
+        <div class="height-space"></div>
+
+        <div class="horizontal-container revoke-container">
+          <button mat-button class="button-style button-secondary" (click)="revoke(order._id)">
+            Hủy đơn hàng
+          </button>
+        </div>
+      </ng-container>
     </div>
+  </div>
 </ng-container>
 
 <ng-template #notFound>
-    Không tìm thấy
+  Không tìm thấy
 </ng-template>
 
 <div class="height-space"></div>
 
 <div>
-    <span class="textLink" [routerLink]="['/customer/order-history']">
-        {{'<< Quay lại lịch sử mua hàng' }}
-    </span>
+  <span class="textLink" [routerLink]="['/khach-hang/order-history']">
+    {{'<< Quay lại lịch sử mua hàng' }} </span>
 </div>

@@ -1,56 +1,77 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { LoginService } from './login.service';
+import { inject } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandlerFn,
+  HttpEvent,
+  HttpErrorResponse,
+  HttpInterceptorFn
+} from '@angular/common/http';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { AuthService } from '../auth.service';
 import { LocalStorageService } from '../local-storage.service';
+import { LocalStorageKey } from '../../sharing/constant/local_storage.constant';
+import { LoginService } from './login.service';
 
-import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
-import { catchError, switchMap, filter, take } from 'rxjs/operators';
-import { IRefreshTokenResponse, TToken } from '../../models/token.interface';
+let isRefreshing = false;
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RefreshTokenInterceptorService implements HttpInterceptor {
-  
-  constructor(
-    private router: Router,
-    private loginService: LoginService,
-    private localStorageService: LocalStorageService
-  ){}
+export const authInterceptor: HttpInterceptorFn = (
+  request: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
+  const authService = inject(AuthService);
+  const loginService = inject(LoginService);
+  const localStorageService = inject(LocalStorageService);
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
-    return next.handle(req).pipe(catchError(error => {
-      if (error instanceof HttpErrorResponse && error.status === 401) {
-        let tokenStoraged: TToken = <TToken>this.localStorageService.get(this.localStorageService.tokenStoragedKey);
-        if(tokenStoraged){
-          return this.handle401Error(tokenStoraged, req, next);
-        }else{
-          this.router.navigate(['']);
-          return throwError(error);
+  if (!request.url.includes('/login')) {
+    const accessToken = localStorageService.get(LocalStorageKey.ACCESSTOKEN);
+
+    if (accessToken) {
+      const cloned = request.clone({
+        headers: request.headers.set("authorization", "Bearer " + accessToken)
+      });
+      return next(cloned).pipe(
+        catchError(error => {
+          if (error instanceof HttpErrorResponse && !request.url.includes('/login') && error.status === 401) {
+            return handle401Error(request, next, authService, loginService, localStorageService);
+          }
+          return throwError(() => error);
+        })
+      );
+    }
+  }
+  return next(request);
+};
+
+function handle401Error(
+  request: HttpRequest<any>,
+  next: HttpHandlerFn,
+  authService: AuthService,
+  loginService: LoginService,
+  localStorageService: LocalStorageService
+): Observable<HttpEvent<any>> {
+  if (!isRefreshing) {
+    isRefreshing = true;
+
+    const refreshToken = localStorageService.get(LocalStorageKey.REFRESHTOKEN);
+    const refreshTokenRequest = loginService.refreshToken(refreshToken!);
+    return refreshTokenRequest.pipe(
+      switchMap(accessToken => {
+        localStorageService.set(LocalStorageKey.ACCESSTOKEN, accessToken);
+        isRefreshing = false;
+        const cloned = request.clone({
+          headers: request.headers.set("authorization", "Bearer " + accessToken)
+        });
+        return next(cloned);
+      }),
+      catchError((error) => {
+        isRefreshing = false;
+        if (error.status == '403') {
+          authService.logout();
         }
-      } else {
-        return throwError(error);
-      }
-    }));
+        return throwError(() => error);
+      })
+    );
   }
 
-  private handle401Error(tokenStoraged: TToken, request: HttpRequest<any>, next: HttpHandler) {
-    return this.loginService.refreshToken(tokenStoraged.refreshToken).pipe(
-      switchMap((token) => {
-        tokenStoraged.accessToken = token.accessToken;
-        this.localStorageService.set(this.localStorageService.tokenStoragedKey, tokenStoraged);
-        return next.handle(this.addToken(request, token.accessToken));
-      }
-    ));
-  }
-
-  private addToken(request: HttpRequest<any>, token: string) {
-    return request.clone({
-      setHeaders: {
-        'x-access-token': token
-      }
-    });
-  }
+  return next(request);
 }

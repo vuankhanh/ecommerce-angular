@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,8 @@ import { AddressSelectorComponent } from '../address-selector/address-selector.c
 import { Validators } from 'ngx-editor';
 import { NgxMaskDirective } from 'ngx-mask';
 import { IAddress } from '../../../models/address.interface';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { vietnamesePhoneNumberValidator } from '../../validator/vietnamese-phone-number.validator';
 
 @Component({
   selector: 'app-delivery',
@@ -31,12 +33,21 @@ export class DeliveryComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<DeliveryComponent>);
   readonly data = inject<DeliveryEntity | null>(MAT_DIALOG_DATA);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  private readonly bControlFormChanged: BehaviorSubject<{ [key: string]: any }> = new BehaviorSubject<{ [key: string]: any }>({});
+  private readonly controlFormChanged$: Observable<{ [key: string]: any }> = this.bControlFormChanged.asObservable();
+  isFormChanged$: Observable<boolean> = this.controlFormChanged$.pipe(
+    map((value: { [key: string]: any }) => {
+      return Object.keys(value).length > 0;
+    }),
+  );
 
   addressValid: boolean = false;
 
   formGroup: FormGroup = this.formBuilder.group({
     name: ['', Validators.required],
-    phoneNumber: ['', Validators.required],
+    phoneNumber: ['', [Validators.required, vietnamesePhoneNumberValidator()]],
     address: [{
       province: '',
       district: '',
@@ -54,12 +65,28 @@ export class DeliveryComponent implements OnInit {
       this.formGroup.patchValue({
         ...this.data
       });
+
+      this.cdr.detectChanges();
+
+      this.formGroup.valueChanges.subscribe((value) => {
+        //Lấy ra các control đã thay đổi
+        const changedControls: { [key: string]: any } = {};
+        Object.keys(value).forEach(key => {
+          if (!this.data) return;
+          const jsonValue = JSON.stringify(value[key]);
+          const jsonData = JSON.stringify(this.data[key as keyof DeliveryEntity]);
+          if (jsonValue !== jsonData) {
+            if(value[key] === '') return;
+            changedControls[key] = value[key];
+          }
+        });
+
+        this.bControlFormChanged.next(changedControls);
+      })
     }
   }
 
   addressSelectionChange(address: IAddress) {
-    console.log(address);
-    
     this.addressControl.patchValue(address)
   }
 
@@ -73,8 +100,6 @@ export class DeliveryComponent implements OnInit {
 
   onSubmit(): void {
     if (this.formGroup.valid) {
-      console.log('Form submitted:', this.formGroup.value);
-      
       const delivery: DeliveryEntity = new DeliveryEntity(this.formGroup.value);
       this.dialogRef.close(delivery);
     } else {

@@ -21,7 +21,6 @@ import { JwtDecodedService } from '../services/jwt-decoded.service';
 import { AuthService } from '../services/auth.service';
 import { AppServicesService } from '../services/app-services.service';
 import { MainContainerScrollService } from '../services/main-container-scroll.service';
-import { CheckTokenService } from '../services/api/check-token.service';
 import { ConfigService } from '../services/api/config.service';
 import { SocialAuthenticationService } from '../services/api/social-login/social-authentication';
 
@@ -29,6 +28,7 @@ import { distinctUntilChanged, map, Subscription } from 'rxjs';
 import { MaterialModule } from '../sharing/module/material';
 import { TToken } from '../models/token.interface';
 import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
+import { InProgressSpinnerService } from '../services/in-progress-spinner.service';
 
 @Component({
   selector: 'app-header',
@@ -58,12 +58,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   showAlertAddedToCart: boolean = false;
   screenWidthSize: 'full' | 'normal' | 'mini' = 'normal';
 
-  isLogin$ = this.checkTokenService.check$;
   userInformation$ = this.authService.jwtPayload$;
 
   isBrowser: boolean;
 
-  subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     private router: Router,
@@ -75,9 +74,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     public authService: AuthService,
     private appServicesService: AppServicesService,
     private mainContainerScrollService: MainContainerScrollService,
-    private checkTokenService: CheckTokenService,
     private configService: ConfigService,
-    private socialAuthenticationService: SocialAuthenticationService
+    private socialAuthenticationService: SocialAuthenticationService,
+    private readonly inProgressSpinnerService: InProgressSpinnerService,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.menusList = MenusList;
@@ -164,11 +163,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async socialAuthentication(provider: 'google' | 'facebook'){
+    this.inProgressSpinnerService.progressSpinnerStatus(true);
     try {
       const token: TToken = await this.socialAuthenticationService.authentication(provider);
       this.authService.afterLogin(token);
+      this.inProgressSpinnerService.progressSpinnerStatus(false);
     } catch (error) {
-      
+      this.inProgressSpinnerService.progressSpinnerStatus(false);
     }
   }
 

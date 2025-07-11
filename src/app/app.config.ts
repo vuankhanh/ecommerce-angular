@@ -13,6 +13,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment.development';
 import { PrefixBackendStaticPipe } from './sharing/pipe/prefix-backend.pipe';
 import { provideNgxMask } from 'ngx-mask';
+import { provideIconConfig } from './sharing/provider/icon-config.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideAnimations(),
     provideAnimationsAsync(),
+    provideIconConfig(),
     provideAppInitializer((()=>{
       inject(SocketIoService);
     })),

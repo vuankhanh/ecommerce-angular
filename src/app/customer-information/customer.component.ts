@@ -1,26 +1,22 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Event, NavigationStart, Router } from '@angular/router';
+import { Event, NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
 
 import { Subscription } from 'rxjs';
-import { CustomerMenu, Menu } from '../../mock-data/menu';
-import { UrlChangeService } from '../../services/url-change.service';
-import { ConfigService } from '../../services/api/config.service';
-import { AuthService } from '../../services/auth.service';
-import { MaterialModule } from '../../sharing/module/material';
+import { CustomerMenu, Menu } from '../mock-data/menu';
+import { UrlChangeService } from '../services/url-change.service';
+import { ConfigService } from '../services/api/config.service';
+import { AuthService } from '../services/auth.service';
+import { MaterialModule } from '../sharing/module/material';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MainCustomerRoutingModule } from './main-customer-routing.module';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RefreshTokenInterceptorService } from '../../services/api/refresh-token-interceptor.service';
-import { ReplaceProtocolNamePipe } from '../../sharing/pipe/replace-protocol-name.pipe';
-import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
-import { SanitizeHtmlBindingPipe } from '../../sharing/pipe/sanitize-html-binding.pipe';
-import { AddressModifyComponent } from '../../sharing/modal/address-modify/address-modify.component';
-import { PersonalInformationComponent } from '../personal-information/personal-information.component';
-import { ChangePasswordComponent } from '../change-password/change-password.component';
-import { AddressBookComponent } from '../address-book/address-book.component';
-import { OrderHistoryComponent } from '../order-history/order-history.component';
+import { ReplaceProtocolNamePipe } from '../sharing/pipe/replace-protocol-name.pipe';
+import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
+import { SanitizeHtmlBindingPipe } from '../sharing/pipe/sanitize-html-binding.pipe';
+import { PersonalInformationComponent } from './personal-information/personal-information.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+
+import { OrderHistoryComponent } from './order-history/order-history.component';
 
 @Component({
   selector: 'app-main-customer',
@@ -29,7 +25,9 @@ import { OrderHistoryComponent } from '../order-history/order-history.component'
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MainCustomerRoutingModule,
+
+    RouterLink,
+    RouterOutlet,
 
     MaterialModule,
 
@@ -37,27 +35,19 @@ import { OrderHistoryComponent } from '../order-history/order-history.component'
     PrefixBackendStaticPipe,
     SanitizeHtmlBindingPipe,
 
-    AddressModifyComponent,
-
-    MainCustomerComponent,
     PersonalInformationComponent,
     ChangePasswordComponent,
-    AddressBookComponent,
     OrderHistoryComponent,
 
     MaterialModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: RefreshTokenInterceptorService,
-      multi: true
-    }
+    
   ],
-  templateUrl: './main-customer.component.html',
-  styleUrls: ['./main-customer.component.scss']
+  templateUrl: './customer.component.html',
+  styleUrls: ['./customer.component.scss']
 })
-export class MainCustomerComponent implements OnInit, OnDestroy {
+export class CustomerComponent implements OnInit, OnDestroy {
   @ViewChild('userAccordion') userAccordion?: MatAccordion;
   customerMenu: Array<Menu> = CustomerMenu;
   currentUrl: string;
