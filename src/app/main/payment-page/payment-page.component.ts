@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
 
 import { PaymentSuccessfulComponent } from '../../sharing/modal/payment-successful/payment-successful.component';
-import { UserInformation } from '../../models/UserInformation';
 import { CartService } from '../../services/cart.service';
 import { take, map, Observable, Subscription, switchMap, filter, lastValueFrom, combineLatest, tap, startWith } from 'rxjs';
 import { AuthService } from '../../services/auth.service';

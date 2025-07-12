@@ -3,8 +3,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { OrderService } from '../../services/api/order.service';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { Product } from '../../models/Product';
-import { TOrderModel } from '../../models/order.interface';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { TOrderDetailResponseModel } from '../../models/order-response.interface';
@@ -57,7 +55,7 @@ export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
     )
   }
 
-  showDetail(product: Product) {
+  showDetail(product: any) {
     this.router.navigate(['san-pham/' + product.category.route, product._id]);
   }
 

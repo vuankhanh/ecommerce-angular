@@ -1,6 +1,6 @@
 <div class="carota-container horizontal-container">
   <mat-drawer-container autosize>
-    <mat-drawer #drawer mode="over" *ngIf="screenWidthSize === 'mini'">
+    <mat-drawer #drawer mode="over" *ngIf="breakpointDetection$ | async">
       <app-drawer (toggleDrawer)="toggle($event)"></app-drawer>
     </mat-drawer>
   

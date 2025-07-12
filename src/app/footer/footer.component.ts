@@ -1,13 +1,9 @@
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
-import { Menu, MenusList } from '../mock-data/menu';
-
 import { Identification } from '../models/Identification';
-import { ProductCategory } from '../models/ProductCategory';
 
 import { ConfigService } from '../services/api/config.service';
-import { AppServicesService } from '../services/app-services.service';
 import { CartService } from '../services/cart.service';
 import { SupportService } from '../services/api/support.service';
 
@@ -15,6 +11,8 @@ import { Subscription } from 'rxjs';
 import { Support } from '../models/Support';
 import { MaterialModule } from '../sharing/module/material';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TMenu } from '../models/menu.interface';
+import { Menu } from '../sharing/constant/menu.constant';
 @Component({
   selector: 'app-footer',
   standalone: true,
@@ -34,11 +32,9 @@ export class FooterComponent implements OnInit, OnDestroy {
   identification?: Identification;
 
   badgeCart: number = 0;
-  menusList: Array<Menu>;
+  menusList: Array<TMenu> = Menu;
 
   supports: Array<Support> = [];
-
-  productCategorys: Array<ProductCategory> = [];
 
   isBrowser: boolean;
 
@@ -47,19 +43,9 @@ export class FooterComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) platformId: Object,
     private configService: ConfigService,
     private cartService: CartService,
-    private appServicesService: AppServicesService,
     private supportService: SupportService
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    this.menusList = MenusList;
-    this.appServicesService.productCategory$.subscribe(res => {
-      this.productCategorys = res;
-      for (let i in this.menusList) {
-        if (this.menusList[i].route === 'san-pham') {
-          this.menusList[i].child = this.productCategorys
-        }
-      }
-    });
   }
 
   ngOnInit(): void {

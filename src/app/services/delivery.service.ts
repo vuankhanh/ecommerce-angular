@@ -24,22 +24,12 @@ export class DeliveryService {
   }
 
   private get() {
-    const delivertyLocalStoraged: string = this.localStorageService.get(LocalStorageKey.DELIVERY);
-    let delivery: DeliveryEntity | null;
-    try {
-      delivery = JSON.parse(delivertyLocalStoraged);
-    } catch (error: any) {
-      this.toastService.shortToastError('Lỗi khi lấy thông tin giao hàng từ LocalStorage', 'Lỗi');
-      this.set(null); // Nếu có lỗi thì khởi tạo giỏ hàng mới
-      delivery = null;
-    }
-
-    this.bDeliveryStoraged.next(delivery);
+    const delivertyLocalStoraged: DeliveryEntity | null = this.localStorageService.get(LocalStorageKey.DELIVERY);
+    this.bDeliveryStoraged.next(delivertyLocalStoraged);
   }
 
   private set(delivery: DeliveryEntity | null) {
-    const deliveryStringify: string = JSON.stringify(delivery); // Chỉ lưu trữ data, không cần methods
-    return this.localStorageService.set(LocalStorageKey.DELIVERY, deliveryStringify);
+    return this.localStorageService.set(LocalStorageKey.DELIVERY, delivery);
   }
 
   modifyDelivery(delivery: DeliveryEntity): void {

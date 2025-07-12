@@ -1,82 +1,92 @@
 <div class="drawer-container">
-  <mat-accordion class="user-information" #userAccordion="matAccordion" [multi]="true">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header collapsedHeight='64px' expandedHeight='64px'>
-        <div class="user-information-block horizontal-container">
-          <div class="user-information-block_icon vertical-container">
-            <mat-icon>person_outline</mat-icon>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header collapsedHeight='64px' expandedHeight='64px'>
+      <div class="user-information-block horizontal-container">
+        <div class="user-information-block_icon vertical-container">
+          <mat-icon>person_outline</mat-icon>
+        </div>
+        <div class="user-information-block_showListButton vertical-container">
+          <div class="user-information-block_showListButton_status">
+            {{ (userInformation$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
           </div>
-          <div class="user-information-block_showListButton vertical-container">
-            <div class="user-information-block_showListButton_status">
-              {{ (userInformation$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
-            </div>
-            <div class="user-information-block_showListButton_account horizontal-container">
-              <span>{{ (userInformation$ | async) ? (userInformation$ | async)?.name ?
-                (userInformation$ | async)?.name : (userInformation$ | async)?.email : 'Tài khoản'}}</span>
-            </div>
+          <div class="user-information-block_showListButton_account horizontal-container">
+            <span>{{ (userInformation$ | async) ? (userInformation$ | async)?.name ?
+              (userInformation$ | async)?.name : (userInformation$ | async)?.email : 'Tài khoản'}}</span>
           </div>
         </div>
-      </mat-expansion-panel-header>
-      <mat-list class="user-information-menu" *ngIf="userInformation$ | async">
-        <mat-list-item *ngFor="let customer of customerMenu" [routerLink]="['/khach-hang/'+customer.route]"
-          [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: customer.route ? false : true }"
-          (click)="closeSideMenu()">
-          <mat-icon>{{customer.icon}}</mat-icon>
-          <span>{{ customer.title }}</span>
-        </mat-list-item>
+      </div>
+    </mat-expansion-panel-header>
+    <mat-list class="user-information-menu" *ngIf="userInformation$ | async">
+      <mat-list-item *ngFor="let customer of customerMenu" [routerLink]="['/khach-hang/'+customer.route]"
+        [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: customer.route ? false : true }"
+        (click)="closeSideMenu()">
+        @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
+        <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
+        }
+        <span>{{ customer.name }}</span>
+      </mat-list-item>
 
-        <div class="height-space"></div>
+      <div class="height-space"></div>
 
-        <mat-list-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Thoát tài khoản</span>
-        </mat-list-item>
-      </mat-list>
+      <mat-list-item (click)="logout()">
+        <mat-icon fontSet="fa" fontIcon="fa-sign-out" matListItemIcon></mat-icon>
+        <span>Thoát tài khoản</span>
+      </mat-list-item>
+    </mat-list>
 
-      <mat-list *ngIf="!(userInformation$ | async)">
-        <mat-list-item (click)="login('login')">
-          <mat-icon>login</mat-icon>
-          <span>Đăng nhập</span>
-        </mat-list-item>
-        <mat-list-item (click)="login('register')">
-          <mat-icon>add</mat-icon>
-          <span>Đăng ký</span>
-        </mat-list-item>
-      </mat-list>
-    </mat-expansion-panel>
-
-  </mat-accordion>
+    <mat-list *ngIf="!(userInformation$ | async)">
+      <mat-list-item (click)="login('login')">
+        <mat-icon>login</mat-icon>
+        <span>Đăng nhập</span>
+      </mat-list-item>
+      <mat-list-item (click)="login('register')">
+        <mat-icon>add</mat-icon>
+        <span>Đăng ký</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
 
   <div class="height-space"></div>
 
-  <mat-accordion class="menu-list" #accordion="matAccordion" [multi]="true">
-    <mat-expansion-panel *ngFor="let menu of menusList; let i=index" [hideToggle]="menu.child.length===0"
-      [ngClass]="menu.child.length===0 ? 'disabled-menu-item' : ''" class="menu-item">
-      <mat-expansion-panel-header matRippleDisabled="false"
-        [ngStyle]="{ background: currentUrl.includes(menu.route) ? '#ededed': '' }"
-        (click)="navigationMenuItem(menu.child.length, menu.route)" collapsedHeight='48px' expandedHeight='48px'>
-        <div class="horizontal-container title-item">
-          <span class="horizontal-container text-item">
-            <mat-icon>{{menu.icon}}</mat-icon>
-            {{menu.title}}
-          </span>
-          <span class="badge" *ngIf="menu.route === 'cart' && badgeCart" [matBadge]="badgeCart"
-            [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart">
-          </span>
-        </div>
-
+  <mat-nav-list>
+    <mat-list-item role="listitem" routerLink="" routerLinkActive="active-menu-item"
+      [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon fontSet="fa-solid" fontIcon="fa-house" matListItemIcon></mat-icon>
+      Trang chủ
+    </mat-list-item>
+    @for (nav of menusList; track $index) {
+    @if (!!nav.children?.length) {
+    <mat-expansion-panel hideToggle #expansionPanel [appAutoExpand]="nav.children" routerLinkActive="active-parent-menu"
+      [routerLinkActiveOptions]="{ exact: false }">
+      <mat-expansion-panel-header>
+        <mat-list-item>
+          @if (!!nav.icon?.fontSet && !!nav.icon?.fontIcon) {
+          <mat-icon [fontSet]="nav.icon!.fontSet" [fontIcon]="nav.icon!.fontIcon" matListItemIcon></mat-icon>
+          }
+          {{ nav.name }}
+          <div matListItemMeta>
+            <mat-icon>{{expansionPanel.expanded ? 'expand_less' : 'expand_more'}}</mat-icon>
+          </div>
+        </mat-list-item>
       </mat-expansion-panel-header>
 
-      @if (menu.child && menu.child.length) {
-        @for (menuChild of menu.child; track menuChild) {
-          <div routerLink="{{menu.route+'/'+menuChild.route}}"
-            class="child-menu horizontal-container"
-            [ngStyle]="{ background: currentUrl.includes(menuChild.route) ? '#ededed': '' }" (click)="closeSideMenu()">
-            {{ menuChild.name }}
-          </div>
-        }
+      @for (child of nav.children; track $index) {
+      <mat-list-item role="listitem" [routerLink]="child.route" routerLinkActive="active-menu-item"
+        [routerLinkActiveOptions]="{ exact: false }">
+        {{ child.name }}
+      </mat-list-item>
       }
     </mat-expansion-panel>
+    }@else {
+    <mat-list-item role="listitem" [routerLink]="nav.route" routerLinkActive="active-menu-item"
+      [routerLinkActiveOptions]="{ exact: false }">
+      @if (!!nav.icon?.fontSet && !!nav.icon?.fontIcon) {
+      <mat-icon [fontSet]="nav.icon!.fontSet" [fontIcon]="nav.icon!.fontIcon" matListItemIcon></mat-icon>
+      }
+      {{ nav.name }}
+    </mat-list-item>
+    }
+    }
+  </mat-nav-list>
 
-  </mat-accordion>
 </div>

@@ -6,17 +6,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { MainComponent, TypeLogin } from '../sharing/modal/main/main.component';
 
 //Model
-import { UserInformation, JwtDecoded } from '../models/UserInformation';
+import { IJwtDecoded } from '../models/token.interface';
 
 //Service
 import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
-import { CartService } from './cart.service';
-import { InProgressSpinnerService } from './in-progress-spinner.service';
 import { SocialAuthenticationService } from './api/social-login/social-authentication';
-import { ToastService } from './toast.service';
 
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TToken } from '../models/token.interface';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 import { AuthenticationUtil } from '../sharing/util/authentication.util';
@@ -24,22 +21,15 @@ import { AuthenticationUtil } from '../sharing/util/authentication.util';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly bJwtPayload: BehaviorSubject<JwtDecoded | null> = new BehaviorSubject<JwtDecoded | null>(null);
-  public readonly jwtPayload$: Observable<JwtDecoded | null> = this.bJwtPayload.asObservable();
+  private readonly bJwtPayload: BehaviorSubject<IJwtDecoded | null> = new BehaviorSubject<IJwtDecoded | null>(null);
+  public jwtPayload$: Observable<IJwtDecoded | null> = this.bJwtPayload.asObservable();
   constructor(
     private router: Router,
     private dialog: MatDialog,
     private jwtDecodedService: JwtDecodedService,
     private localStorageService: LocalStorageService,
-    private cartService: CartService,
-    private inProgressSpinnerService: InProgressSpinnerService,
-    private socialAuthenticationService: SocialAuthenticationService,
-    private toastService: ToastService
-  ) {
-    this.getUserInfoFromTokenStoraged();
-    console.log('AuthService initialized');
-
-  }
+    private socialAuthenticationService: SocialAuthenticationService
+  ) {}
 
   login(type: 'login' | 'register' | 'forgotPassword') {
     if (type === 'login' || type === 'register' || type === 'forgotPassword') {
@@ -61,40 +51,26 @@ export class AuthService {
 
   afterLogin(token: TToken) {
     this.updateAccessToken(token.accessToken);
-    this.localStorageService.set(LocalStorageKey.REFRESHTOKEN, JSON.stringify(token.refreshToken));
+    this.localStorageService.set(LocalStorageKey.REFRESHTOKEN, token.refreshToken);
   }
 
   updateAccessToken(newAccessToken: string) {
-    let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(newAccessToken);
+    const tokenInformation: IJwtDecoded = <IJwtDecoded>this.jwtDecodedService.jwtDecoded(newAccessToken);
     if (!tokenInformation) {
       console.error('Invalid access token');
       return;
     }
-    this.localStorageService.set(LocalStorageKey.ACCESSTOKEN, JSON.stringify(newAccessToken));
-    this.setUserInformation(tokenInformation);
+    this.localStorageService.set(LocalStorageKey.ACCESSTOKEN, newAccessToken);
+    this.userInformation = tokenInformation;
   }
 
-  // setDeliveryTo(accessToken: string){
-  //   this.customerAddressService.get(accessToken).subscribe({
-  //     next: (res: ResponseAddress) => {
-  //       let isHeadquartersAddress: Address | null = this.getIsHeadquartersAddress(res.address);
-  //       this.cartService.setDelivery(isHeadquartersAddress);
-  //     },
-  //     error: (err: Error) => {
-  //       console.log('Error fetching addresses:', err);
-  //       this.inProgressSpinnerService.progressSpinnerStatus(false);
-  //       this.toastService.shortToastError('Không thể lấy địa chỉ giao hàng', 'Lỗi');
-  //     }
-  //   })
-  // }
-
   getUserInfoFromTokenStoraged() {
-    let accessTokenStoraged: string = this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
+    const accessTokenStoraged: string | null = this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if (accessTokenStoraged) {
-      let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(accessTokenStoraged);
+      const tokenInformation: IJwtDecoded = <IJwtDecoded>this.jwtDecodedService.jwtDecoded(accessTokenStoraged);
       if (tokenInformation) {
         const isTokenValid: boolean = AuthenticationUtil.checkTokenExpires(tokenInformation);
-        if (isTokenValid) this.setUserInformation(tokenInformation);
+        if (isTokenValid) this.userInformation = tokenInformation;
       }
     }
   }
@@ -108,7 +84,7 @@ export class AuthService {
     return this.router.navigate(['']);
   }
 
-  setUserInformation(jwtPayload: JwtDecoded) {
+  private set userInformation(jwtPayload: IJwtDecoded) {
     this.bJwtPayload.next(jwtPayload);
   }
 }

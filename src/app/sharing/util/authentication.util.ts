@@ -1,7 +1,7 @@
-import { JwtDecoded } from "../../models/UserInformation";
+import { IJwtDecoded } from "../../models/token.interface";
 
 export class AuthenticationUtil {
-  static checkTokenExpires(jwtDecoded: JwtDecoded): boolean {
+  static checkTokenExpires(jwtDecoded: IJwtDecoded): boolean {
     if (!jwtDecoded || !jwtDecoded.exp) {
       return false; // Invalid token or no expiration time
     }

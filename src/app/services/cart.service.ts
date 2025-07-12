@@ -30,23 +30,22 @@ export class CartService {
   }
 
   private get() {
-    const cartItemsLocalStoraged: string = this.localStorageService.get(LocalStorageKey.CART);
+    const cartItemsLocalStoraged: CartItemEntity[] | null = this.localStorageService.get(LocalStorageKey.CART);
+    console.log(typeof cartItemsLocalStoraged);
+    
     let cart: CartEntity;
-    try {
-      const jsonParse: CartItemEntity[] = JSON.parse(cartItemsLocalStoraged);
-      cart = new CartEntity(jsonParse);
-    } catch (error: any) {
-      this.toastService.shortToastError('Lỗi khi lấy dữ liệu giỏ hàng từ LocalStorage', 'Lỗi');
+    if(!cartItemsLocalStoraged) {
       this.set(this.rawCart); // Nếu có lỗi thì khởi tạo giỏ hàng mới
       cart = this.rawCart;
+    }else {
+      cart = new CartEntity(cartItemsLocalStoraged);
     }
 
     this.bCartStoraged.next(cart);
   }
 
   private set(cart: CartEntity) {
-    const cartStringify: string = JSON.stringify(cart.cartItems); // Chỉ lưu trữ data, không cần methods
-    return this.localStorageService.set(LocalStorageKey.CART, cartStringify);
+    return this.localStorageService.set(LocalStorageKey.CART, cart.cartItems);
   }
 
   addToCart(cartItem: CartItemEntity): void {

@@ -6,7 +6,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
-import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { SocketIoService } from './services/socket/socket-io.service';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -14,6 +14,8 @@ import { environment } from '../environments/environment.development';
 import { PrefixBackendStaticPipe } from './sharing/pipe/prefix-backend.pipe';
 import { provideNgxMask } from 'ngx-mask';
 import { provideIconConfig } from './sharing/provider/icon-config.provider';
+import { AuthService } from './services/auth.service';
+import { authInterceptor } from './sharing/core/interceptor/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,8 +24,13 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideAnimationsAsync(),
     provideIconConfig(),
-    provideAppInitializer((()=>{
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
+    provideAppInitializer((() => {
       inject(SocketIoService);
+      const authService = inject(AuthService);
+      authService.getUserInfoFromTokenStoraged();
     })),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),

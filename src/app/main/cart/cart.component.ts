@@ -3,7 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
-import { JwtDecoded } from '../../models/UserInformation';
+import { IJwtDecoded } from '../../models/token.interface';
 
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
@@ -13,11 +13,9 @@ import { MaterialModule } from '../../sharing/module/material';
 import { EmptyCartComponent } from '../../sharing/component/empty-cart/empty-cart.component';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
-import { ProductDetailEntity } from '../../entity/product-detail.entity';
 import { NumberInputComponent } from '../../sharing/component/number-input/number-input.component';
-import { AddressSelectorComponent } from '../../sharing/modal/address-selector/address-selector.component';
 
-import { Observable, Subscription, take, filter, map, lastValueFrom, tap } from 'rxjs';
+import { Observable, Subscription, take, map, lastValueFrom, tap } from 'rxjs';
 import { CartEntity, CartItemEntity } from '../../entity/cart.entity';
 
 @Component({
@@ -35,7 +33,6 @@ import { CartEntity, CartItemEntity } from '../../entity/cart.entity';
 
     PrefixBackendStaticPipe,
     CurrencyCustomPipe,
-    AddressSelectorComponent,
 
     MaterialModule
   ],
@@ -51,7 +48,7 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   );
 
-  jwtDecoded$: Observable<JwtDecoded | null> = this.authService.jwtPayload$;
+  jwtDecoded$: Observable<IJwtDecoded | null> = this.authService.jwtPayload$;
 
   private subscription: Subscription = new Subscription();
   constructor(

@@ -1,25 +1,18 @@
 import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ViewChild, AfterViewInit, Output, EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { NavigationStart, Event, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
-//Component
-import { AlertTitleComponent } from '../sharing/component/alert-title/alert-title.component'
-
-//Model
-import { ProductCategory } from '../models/ProductCategory';
-import { UserInformation, JwtDecoded } from '../models/UserInformation';
 import { Identification } from '../models/Identification';
 
 //Mock Data
-import { Menu, MenusList, CustomerMenu } from '../mock-data/menu';
+import { Menu, CustomerMenu } from '../sharing/constant/menu.constant';
 
 //Service
 import { CartService } from '../services/cart.service';
 import { UrlChangeService } from '../services/url-change.service';
 import { JwtDecodedService } from '../services/jwt-decoded.service';
 import { AuthService } from '../services/auth.service';
-import { AppServicesService } from '../services/app-services.service';
 import { MainContainerScrollService } from '../services/main-container-scroll.service';
 import { ConfigService } from '../services/api/config.service';
 import { SocialAuthenticationService } from '../services/api/social-login/social-authentication';
@@ -29,6 +22,7 @@ import { MaterialModule } from '../sharing/module/material';
 import { TToken } from '../models/token.interface';
 import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
 import { InProgressSpinnerService } from '../services/in-progress-spinner.service';
+import { TMenu } from '../models/menu.interface';
 
 @Component({
   selector: 'app-header',
@@ -50,13 +44,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() toggleDrawer = new EventEmitter();
 
   identification?: Identification;
-  menusList: Array<Menu>;
-  customerMenu: Array<Menu>;
-  productCategorys: Array<ProductCategory> = [];
+  menusList: Array<TMenu> = Menu;
+  customerMenu: Array<TMenu> = CustomerMenu;
   currentUrl: string = this.router.url;
   badgeCart: number = 0;
   showAlertAddedToCart: boolean = false;
-  screenWidthSize: 'full' | 'normal' | 'mini' = 'normal';
 
   userInformation$ = this.authService.jwtPayload$;
 
@@ -72,23 +64,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private cartService: CartService,
     private jwtDecodedService: JwtDecodedService,
     public authService: AuthService,
-    private appServicesService: AppServicesService,
     private mainContainerScrollService: MainContainerScrollService,
     private configService: ConfigService,
     private socialAuthenticationService: SocialAuthenticationService,
     private readonly inProgressSpinnerService: InProgressSpinnerService,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    this.menusList = MenusList;
-    this.customerMenu = CustomerMenu;
-    this.appServicesService.productCategory$.subscribe(res=>{
-      this.productCategorys = res;
-      for(let i in this.menusList){
-        if(this.menusList[i].route === 'san-pham'){
-          this.menusList[i].child = this.productCategorys
-        }
-      }
-    })
   }
 
   ngOnInit(): void {
@@ -107,7 +88,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     this.listenUserInformation();
-    this.listenIsMobile();
   }
 
   ngAfterViewInit(): void{
@@ -118,12 +98,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleDrawerEmit(){
     this.toggleDrawer.emit();
-  }
-
-  listenIsMobile(){
-    this.appServicesService.checkScreenWidthSize$.subscribe(res=>{
-      this.screenWidthSize = res;
-    })
   }
 
   listentMainContainerScroll(){
@@ -155,11 +129,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         complete: () => console.log('Cấu hình đã được lấy thành công')
       })
     );
-  }
-
-  decodeJwtUserInfo(accessToken: string){
-    let tokenInformation: JwtDecoded = <JwtDecoded>this.jwtDecodedService.jwtDecoded(accessToken);
-    this.authService.setUserInformation(tokenInformation);
   }
 
   async socialAuthentication(provider: 'google' | 'facebook'){

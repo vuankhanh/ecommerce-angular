@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 //Validation Form
-import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../../services/formCustom/validators'
+import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../validator/validators'
 
 //Service
 import { RegisterService, Account } from '../../../services/api/register.service';

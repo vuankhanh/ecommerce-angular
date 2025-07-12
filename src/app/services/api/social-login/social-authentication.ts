@@ -7,7 +7,8 @@ import { Auth, FacebookAuthProvider, GoogleAuthProvider, signInWithPopup, signOu
 
 import { FirebaseError } from 'firebase/app';
 import { firstValueFrom, map } from 'rxjs';
-import { ITokenResponse, TToken } from '../../../models/token.interface';
+import { TToken } from '../../../models/token.interface';
+import { TokenResponse } from '../login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,7 @@ export class SocialAuthenticationService {
 
   private async checkTokenFirebase(idToken: string, email: string): Promise<TToken> {
     try {
-      return await firstValueFrom(this.httpClient.post<ITokenResponse>(this.firebaseAuthUrl, { idToken, email }).pipe(
+      return await firstValueFrom(this.httpClient.post<TokenResponse>(this.firebaseAuthUrl, { idToken, email }).pipe(
       map(res=>res.metaData)
       ));
     } catch (error) {

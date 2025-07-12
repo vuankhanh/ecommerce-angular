@@ -47,10 +47,6 @@ button {
         color: var(--bep4than-hightlight-text);
       }
 
-      .is-active {
-        color: var(--bep4than-hightlight-text);
-      }
-
       button {
         border: none;
         background: none;
@@ -176,6 +172,7 @@ button {
               height: 20px;
               display: flex;
               justify-content: center;
+              align-items: center;
             }
           }
 
@@ -228,6 +225,10 @@ button {
 
 .header-container-scrolled {
   background: rgb(255, 255, 255, .75);
+}
+
+.is-active {
+  color: var(--bep4than-hightlight-text);
 }
 
 @media only screen and (max-width: 768px) {

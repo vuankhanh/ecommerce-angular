@@ -24,8 +24,6 @@ export class CartEntity implements ICart {
 
   addItem(cartItemEntity: CartItemEntity) {
     let index = this.cartItems.findIndex((cartItem: CartItemEntity) => cartItem.product._id === cartItemEntity.product._id);
-    console.log(index);
-    
     if (index < 0) {
       this.cartItems.push(cartItemEntity);
     }else {

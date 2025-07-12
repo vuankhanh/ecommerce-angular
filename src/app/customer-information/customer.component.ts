@@ -3,7 +3,7 @@ import { Event, NavigationStart, Router, RouterLink, RouterOutlet } from '@angul
 import { MatAccordion } from '@angular/material/expansion';
 
 import { Subscription } from 'rxjs';
-import { CustomerMenu, Menu } from '../mock-data/menu';
+import { CustomerMenu, Menu } from '../sharing/constant/menu.constant';
 import { UrlChangeService } from '../services/url-change.service';
 import { ConfigService } from '../services/api/config.service';
 import { AuthService } from '../services/auth.service';
@@ -17,6 +17,7 @@ import { PersonalInformationComponent } from './personal-information/personal-in
 import { ChangePasswordComponent } from './change-password/change-password.component';
 
 import { OrderHistoryComponent } from './order-history/order-history.component';
+import { TMenu } from '../models/menu.interface';
 
 @Component({
   selector: 'app-main-customer',
@@ -49,9 +50,9 @@ import { OrderHistoryComponent } from './order-history/order-history.component';
 })
 export class CustomerComponent implements OnInit, OnDestroy {
   @ViewChild('userAccordion') userAccordion?: MatAccordion;
-  customerMenu: Array<Menu> = CustomerMenu;
+  customerMenu: Array<TMenu> = CustomerMenu;
   currentUrl: string;
-  activeMenu: Menu;
+  activeMenu: TMenu;
   private subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
@@ -84,8 +85,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
     )
   }
 
-  getActiveMenu(route: string, arrayMenu: Array<Menu>) {
-    let index: number = arrayMenu.findIndex(menu => route.includes(menu.route));
+  getActiveMenu(route: string, arrayMenu: Array<TMenu>) {
+    let index: number = arrayMenu.findIndex(menu => route.includes(menu.route || ''));
     return arrayMenu[index];
   }
 

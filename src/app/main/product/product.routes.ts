@@ -1,6 +1,5 @@
 import { Routes } from "@angular/router";
 import { ProductComponent } from "./product.component";
-import { redirectToFirstProductCategoryGuard } from "../../sharing/core/guards/redirect-to-first-product-category.guard";
 
 export const routes: Routes = [
   {

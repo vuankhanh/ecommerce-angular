@@ -1,5 +1,4 @@
 import { ProductDetailEntity } from "../entity/product-detail.entity";
-import { Product } from "./Product";
 
 export interface ICartItem {
   product: ProductDetailEntity;

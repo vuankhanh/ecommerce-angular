@@ -10,31 +10,38 @@
   </div>
 
   <div class="cart-container vertical-container">
-    <button mat-icon-button routerLink="/gio-hang">
+    <button mat-icon-button routerLink="/gio-hang" [routerLinkActive]="['is-active']">
       <mat-icon [matBadge]="badgeCart" [matBadgeHidden]="!badgeCart">shopping_cart</mat-icon>
     </button>
   </div>
 
   <div class="menu-container horizontal-container">
+    <div class="vertical-container dropdown-container">
+      <button matRippleDisabled="false" class="title-menu" routerLink=""
+        [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: true }">
+        <span>Trang chủ</span>
 
+      </button>
+    </div>
     @for (menu of menusList; track menu) {
     <div class="vertical-container dropdown-container">
       <button matRippleDisabled="false" class="title-menu" [routerLink]="['/'+menu.route]"
         [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: menu.route ? false : true }">
         <span [matBadge]="badgeCart"
-          [matBadgeHidden]="(menu.route === 'gio-hang' ? false : true) || !badgeCart">{{menu.title}}</span>
+          [matBadgeHidden]="(menu.route === 'gio-hang' ? false : true) || !badgeCart">{{menu.name}}</span>
 
       </button>
-      <ng-container *ngIf="menu.child.length>0">
-        <div class="sub-menu-container">
-          <div *ngFor="let child of menu.child">
-            <button routerLink="{{menu.route+'/'+child.route}}"
-              [ngStyle]="{ color: currentUrl.includes(child.route) ? 'var(bep4than-hightlight-text)': '' }">
-              {{child.name}}
-            </button>
-          </div>
+      @if (menu.children && menu.children.length) {
+      <div class="sub-menu-container">
+        <div *ngFor="let child of menu.children">
+          <button [routerLink]="[menu.route + '/' + child.route]" [routerLinkActive]="['is-active']"
+            [routerLinkActiveOptions]="{ exact: false }">
+            {{child.name}}
+          </button>
         </div>
-      </ng-container>
+      </div>
+      }
+
     </div>
     }
   </div>
@@ -42,7 +49,9 @@
   <div class="user-information">
 
     <div class="user-information-block horizontal-container"
-      [ngStyle]="{ color: currentUrl.includes('customer') ? 'var(--bep4than-hightlight-text)': '' }">
+      routerLink="/khach-hang"
+      [routerLinkActive]="['is-active']"
+      [routerLinkActiveOptions]="{ exact: false }">
       <div class="user-information-block_icon vertical-container">
         <mat-icon>person_outline</mat-icon>
       </div>
@@ -64,10 +73,12 @@
         <mat-list role="list">
           <div class="micro-height-space"></div>
 
-          <mat-list-item role="listitem" *ngFor="let cMenu of customerMenu; let i=index;"
-            routerLink="/khach-hang/{{cMenu.route}}">
-            {{ cMenu.title }}
+          @for (cMenu of customerMenu; track $index; let i = $index;) {
+          <mat-list-item role="listitem" [routerLink]="['/khach-hang'+'/'+cMenu.route]"
+            routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
+            {{ cMenu.name }}
           </mat-list-item>
+          }
 
           <div class="height-space"></div>
           <mat-list-item role="listitem" (click)="logout()">Thoát tài khoản</mat-list-item>

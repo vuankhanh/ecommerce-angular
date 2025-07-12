@@ -1,9 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 
-import { ProductCategory } from '../../models/ProductCategory';
-
-import { AppServicesService } from '../../services/app-services.service';
-
 import { Observable } from 'rxjs';
 import { SlideShowComponent } from '../slide-show/slide-show.component';
 import { ProductCategoryHomePageComponent } from '../product-category-home-page/product-category-home-page.component';
@@ -31,7 +27,6 @@ import { TProductCategoryModel } from '../../models/product-category.interface';
 export class HomePageComponent implements OnInit, AfterViewInit {
   productCategory$: Observable<TProductCategoryModel[]> = this.productCategoryService.getAllData();
   constructor(
-    private appServiceService: AppServicesService,
     private productCategoryService: ProductCategoryService
   ) {}
 

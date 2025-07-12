@@ -4,97 +4,74 @@
 
 .drawer-container {
   height: 100%;
-  background: var(--bep4than-primary-background);
+  min-width: 250px;
 
-  .user-information {
-    mat-expansion-panel {
-      mat-expansion-panel-header {
-        .user-information-block {
+  mat-expansion-panel {
+    mat-expansion-panel-header {
+      .user-information-block {
+        max-width: 100%;
+
+        .user-information-block_showListButton {
           max-width: 100%;
 
-          .user-information-block_showListButton {
-            max-width: 100%;
-
-            .user-information-block_showListButton_account {
-              span {}
-            }
+          .user-information-block_showListButton_account {
+            span {}
           }
         }
       }
     }
   }
 
-  .menu-list {
-    .menu-item {
-      width: 100%;
-      text-align: left;
-      // background: none !important;
-      border: none;
-      border-radius: unset;
-      // padding: 10px;
-      // color: white;
-      font-weight: bold;
-
-      .mat-expansion-panel-header {
-        .title-item {
-          width: 100%;
-          min-height: 22px;
-          justify-content: space-between;
-          align-items: center;
-
-          .text-item {
-            align-items: center;
-          }
-
-          .mat-badge {
-            height: 100%;
-
-            .mat-badge-content {
-              right: 0;
-              top: 0;
-            }
-          }
-        }
-      }
-
-      // .mat-expansion-panel-header[aria-disabled=true]{
-      //     color: unset;
-      // }
-      ::ng-deep .mat-expansion-panel-body {
-        padding-right: 0;
-      }
-
-      .child-menu {
-        height: 48px;
-        align-items: center;
-      }
-
+  mat-nav-list {
+    mat-icon {
+      font-size: 21px;
     }
-
-    .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover {
-      background: #ededed;
-    }
-
-    .mat-expansion-panel-spacing {
-      margin: 0;
-    }
-
-
   }
 }
 
-.mat-accordion {
-  .mat-expansion-panel-header {
-    font-size: 16px !important;
-  }
+.active-parent-menu .mat-expansion-panel-header {
+  background-color: var(--bep4than-primary-background) !important;
+}
 
-  .mat-expansion-panel {
-    border-radius: unset;
-  }
+.active-parent-menu .mat-list-item {
+  color: #fff !important;
+  font-weight: 500 !important;
+}
 
-  .disabled-menu-item {
-    ::ng-deep .mat-expansion-panel-content {
-      display: none;
-    }
+.active-parent-menu mat-icon {
+  color: #fff !important;
+}
+
+.active-menu-item {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+}
+
+.active-menu-item mat-icon {
+  color: #fff !important;
+}
+
+/* Alternative styling for Material theme */
+.mat-mdc-list-item.active-menu-item {
+  background-color: var(--bep4than-primary-background) !important;
+  border-left: 4px solid var(--mat-primary-500);
+  color: #fff !important;
+}
+
+::ng-deep .mat-mdc-list-item.active-menu-item {
+  .mdc-list-item__primary-text {
+    font-weight: 500;
+    color: #fff !important;
   }
+}
+
+::ng-deep mat-expansion-panel {
+  mat-expansion-panel-header {
+    padding: 0 !important;
+  }
+}
+
+::ng-deep .mat-content-hide-toggle {
+  margin-right: 0 !important;
 }

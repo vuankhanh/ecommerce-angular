@@ -6,7 +6,7 @@ import { ResetPasswordService } from '../../services/api/reset-password.service'
 import { ToastService } from '../../services/toast.service';
 
 //Validation Form
-import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../services/formCustom/validators'
+import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../sharing/validator/validators'
 
 import { filter, map, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';

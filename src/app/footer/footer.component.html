@@ -17,7 +17,7 @@
             <button matRippleDisabled="false" class="title-menu" [routerLink]="[menu.route]"
               [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{exact: true}" [matBadge]="badgeCart"
               [matBadgeHidden]="(menu.route === 'cart' ? false : true) || !badgeCart">
-              {{menu.title}}
+              {{menu.route}}
             </button>
           </div>
         </ng-container>

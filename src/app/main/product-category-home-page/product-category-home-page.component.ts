@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { Router } from '@angular/router';
 
 import { PaginationParams } from '../../models/PaginationParams';
-import { ProductCategory } from '../../models/ProductCategory';
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -35,7 +34,6 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
 
   configPagination?: PaginationParams;
   products: TProductModel[] = [];
-  productCategorys: Array<ProductCategory> = [];
 
   private readonly subscription: Subscription = new Subscription();
   constructor(
