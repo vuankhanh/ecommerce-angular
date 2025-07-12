@@ -1,3 +1,4 @@
+import { IMongodbDocument } from "./mongo.interface";
 import { IDistrict, IProvince, IWard } from "./vn-public-apis.interface";
 
 export interface IAddress {
@@ -12,3 +13,5 @@ export interface IDelivery {
   phoneNumber: string,
   address: IAddress
 }
+
+export type TDeliveryModel = IDelivery & IMongodbDocument;
