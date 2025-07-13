@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
-import { ISuccess } from '../../models/success.interface';
-import { TUserInformationModel } from '../../models/user-information.interface';
+import { environment } from '../../../../environments/environment.development';
+import { ISuccess } from '../../../models/success.interface';
+import { TUserInformationModel } from '../../../models/user-information.interface';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -19,9 +19,6 @@ export class PersonalService {
       map(response => response.metaData),
       map(userInfo => {
         userInfo.hasPassword = this.parseStringToBoolean(userInfo.hasPassword);
-
-        console.log('userInfo', userInfo);
-
         return userInfo;
       })
     );

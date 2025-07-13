@@ -11,7 +11,7 @@ import { AddressSelectorComponent } from '../address-selector/address-selector.c
 import { Validators } from 'ngx-editor';
 import { NgxMaskDirective } from 'ngx-mask';
 import { IAddress } from '../../../models/address.interface';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, map, Observable, take, tap } from 'rxjs';
 import { vietnamesePhoneNumberValidator } from '../../validator/vietnamese-phone-number.validator';
 
 @Component({
@@ -98,10 +98,15 @@ export class DeliveryComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onSubmit(): void {
+  async onSubmit() {
     if (this.formGroup.valid) {
-      const delivery: DeliveryEntity = new DeliveryEntity(this.formGroup.value);
-      this.dialogRef.close(delivery);
+      if(this.data) {
+        const partialDelivery = await lastValueFrom(this.controlFormChanged$.pipe(take(1)));
+        this.dialogRef.close(partialDelivery)
+      }else {
+        const delivery: DeliveryEntity = new DeliveryEntity(this.formGroup.value);
+        this.dialogRef.close(delivery);
+      }
     } else {
       console.error('Form is invalid');
     }

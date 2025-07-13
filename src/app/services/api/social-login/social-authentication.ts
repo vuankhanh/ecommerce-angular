@@ -8,7 +8,7 @@ import { Auth, FacebookAuthProvider, GoogleAuthProvider, signInWithPopup, signOu
 import { FirebaseError } from 'firebase/app';
 import { firstValueFrom, map } from 'rxjs';
 import { TToken } from '../../../models/token.interface';
-import { TokenResponse } from '../login.service';
+import { TokenResponse } from '../local-authentication.service';
 
 @Injectable({
   providedIn: 'root'

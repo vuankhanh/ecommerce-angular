@@ -14,4 +14,9 @@ export interface IDelivery {
   address: IAddress
 }
 
-export type TDeliveryModel = IDelivery & IMongodbDocument;
+export interface IDeliveryResponse extends IDelivery {
+  addressDetail: string,
+  isDefault: boolean
+}
+
+export type TDeliveryModel = IDeliveryResponse & IMongodbDocument;

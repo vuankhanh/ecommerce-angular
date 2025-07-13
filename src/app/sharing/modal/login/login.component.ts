@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { LoginService } from '../../../services/api/login.service';
+import { LocalAuthenticationService } from '../../../services/api/local-authentication.service';
 import { ToastService } from '../../../services/toast.service';
 import { SocialAuthenticationService } from '../../../services/api/social-login/social-authentication';
 import { InProgressSpinnerService } from '../../../services/in-progress-spinner.service';
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   constructor(
     private formBuilder: FormBuilder,
-    private loginService: LoginService,
+    private localAuthenticationService: LocalAuthenticationService,
     private authService: AuthService,
     private socialAuthenticationService: SocialAuthenticationService,
     private toastService: ToastService,
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.loginGroup.valid) {
       this.inProgressSpinnerService.progressSpinnerStatus(true);
       this.subscription.add(
-        this.loginService.login(this.loginGroup.value).subscribe(res => {
+        this.localAuthenticationService.login(this.loginGroup.value).subscribe(res => {
           this.inProgressSpinnerService.progressSpinnerStatus(false);
 
           if (res.status === 205) {

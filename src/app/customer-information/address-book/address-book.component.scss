@@ -1,70 +1,67 @@
-.address-container{
-    .addAddress{
-        height: 30px;
-        border: 1px solid #333333;
-        border-radius: 5px;
-        cursor: pointer;
-        justify-content: center;
-        align-items: center;
-    }
+.address-container {
+  mat-list {
+    max-width: 900px;
 
-    
-    mat-list{
-        max-width: 900px;
-        mat-list-item{
-            border: 1px solid #ededed;
-            border-radius: 5px;
-            margin: 15px 0;
-            padding: 15px;
-            box-sizing: border-box;
-            height: unset;
-            ::ng-deep .mat-list-item-content{
-                width: 100%;
-                justify-content: space-between;
-            }
-            .address-content{
-                min-height: 30px;
-                justify-content: space-around;
-                max-width: calc( 100% - 70px);
-                .mat-line{
-                    font-size: 14px;
-                    max-width: 100%;
-                    overflow-wrap: break-word;
-                    word-break: break-word;
-                    white-space: normal;
-                    line-height: 1.2;
-                }
-                .address-content-default{
-                    color: green;
-                    font-size: 12px;
-                    margin-top: 5px;
-                    mat-icon{
-                        height: 14px;
-                        width: 14px;
-                        font-size: 10px;
-                        border-radius: 100%;
-                        padding: 1px;
-                        box-sizing: border-box;
-                        
-                        border: 1px solid green;
-                    }
-                }
-            }
-            .address-action{
-                mat-icon{
-                    font-size: 18px;
-                    height: 30px;
-                    width: 30px;
-                    cursor: pointer;
-                    border-radius: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                mat-icon:hover{
-                    background: #ededed;
-                }
-            }
+    mat-list-item {
+      border: 1px solid #ededed;
+      border-radius: 5px;
+      margin: 15px 0;
+      padding: 15px;
+      box-sizing: border-box;
+      height: unset;
+
+      div[matListItemLine] {
+        text-wrap: auto;
+      }
+
+      div[matListItemMeta] {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        margin-right: 0;
+
+        .button-container {
+          justify-content: flex-end;
+          .default-address {
+            color: var(--bep4than-hightlight-text);
+          }
         }
+      }
+
+      div[matListItemMeta]::before {
+        display: none !important;
+      }
     }
+  }
+}
+
+@media screen and (max-width: 799px) {
+  .address-container {
+    mat-list {
+      max-width: 100%;
+
+      mat-list-item {
+        display: flex;
+        flex-direction: column;
+
+        div[matListItemTitle]::before {
+          display: none !important;
+        }
+
+        div[matListItemMeta] {
+          width: 100%;
+          margin: 10px 0 0 0;
+          flex-direction: row-reverse;
+          justify-content: space-between;
+
+          .button-container {
+            button[matButton="outlined"] {
+              height: 48px;
+            }
+          }
+        }
+      }
+    }
+  }
+
 }

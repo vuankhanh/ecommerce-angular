@@ -10,7 +10,7 @@ import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { LocalStorageKey } from '../../constant/local_storage.constant';
-import { LoginService } from '../../../services/api/login.service';
+import { LocalAuthenticationService } from '../../../services/api/local-authentication.service';
 
 let isRefreshing = false;
 
@@ -19,9 +19,9 @@ export const authInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
-  const loginService = inject(LoginService);
+  const localAuthenticationService = inject(LocalAuthenticationService);
   const localStorageService = inject(LocalStorageService);
-  if (request.url.includes('/api/client')) {
+  if (request.url.includes('/api/client') || request.url.includes('/api/auth/config')) {
     const accessToken = localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     
     if (accessToken) {
@@ -33,7 +33,7 @@ export const authInterceptor: HttpInterceptorFn = (
           console.log('Error in auth interceptor:', error);
           
           if (error instanceof HttpErrorResponse && !request.url.includes('/login') && error.status === 401) {
-            return handle401Error(request, next, authService, loginService, localStorageService);
+            return handle401Error(request, next, authService, localAuthenticationService, localStorageService);
           }
           return throwError(() => error);
         })
@@ -47,21 +47,20 @@ function handle401Error(
   request: HttpRequest<any>,
   next: HttpHandlerFn,
   authService: AuthService,
-  loginService: LoginService,
+  localAuthenticationService: LocalAuthenticationService,
   localStorageService: LocalStorageService
 ): Observable<HttpEvent<any>> {
   if (!isRefreshing) {
     isRefreshing = true;
 
     const refreshToken: string | null = localStorageService.get(LocalStorageKey.REFRESHTOKEN);
-    console.log(refreshToken);
     if (!refreshToken) {
       authService.logout();
       isRefreshing = false;
       return throwError(() => new Error('No refresh token available'));
     }
 
-    const refreshTokenRequest = loginService.refreshToken(refreshToken);
+    const refreshTokenRequest = localAuthenticationService.refreshToken(refreshToken);
     return refreshTokenRequest.pipe(
       switchMap(accessToken => {
         localStorageService.set(LocalStorageKey.ACCESSTOKEN, accessToken);

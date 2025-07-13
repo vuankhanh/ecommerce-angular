@@ -13,10 +13,12 @@ import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
 import { SocialAuthenticationService } from './api/social-login/social-authentication';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import { TToken } from '../models/token.interface';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 import { AuthenticationUtil } from '../sharing/util/authentication.util';
+import { LocalAuthenticationService } from './api/local-authentication.service';
+import { last } from 'lodash';
 @Injectable({
   providedIn: 'root'
 })
@@ -28,8 +30,9 @@ export class AuthService {
     private dialog: MatDialog,
     private jwtDecodedService: JwtDecodedService,
     private localStorageService: LocalStorageService,
-    private socialAuthenticationService: SocialAuthenticationService
-  ) {}
+    private socialAuthenticationService: SocialAuthenticationService,
+    private localAuthenticationService: LocalAuthenticationService
+  ) { }
 
   login(type: 'login' | 'register' | 'forgotPassword') {
     if (type === 'login' || type === 'register' || type === 'forgotPassword') {
@@ -64,13 +67,19 @@ export class AuthService {
     this.userInformation = tokenInformation;
   }
 
-  getUserInfoFromTokenStoraged() {
+  async getUserInfoFromTokenStoraged() {
     const accessTokenStoraged: string | null = this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if (accessTokenStoraged) {
       const tokenInformation: IJwtDecoded = <IJwtDecoded>this.jwtDecodedService.jwtDecoded(accessTokenStoraged);
       if (tokenInformation) {
-        const isTokenValid: boolean = AuthenticationUtil.checkTokenExpires(tokenInformation);
-        if (isTokenValid) this.userInformation = tokenInformation;
+        // const isTokenExpire: boolean = AuthenticationUtil.checkTokenExpires(tokenInformation);
+        try {
+          const response = await lastValueFrom(this.localAuthenticationService.config());
+          this.userInformation = tokenInformation;
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+          
+        }
       }
     }
   }

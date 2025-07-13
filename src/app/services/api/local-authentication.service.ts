@@ -10,21 +10,24 @@ import { IAccessToken, TToken } from '../../models/token.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
-  private urlLogin = environment.backendApi+'/auth/login';
-  private urlRefreshToken = environment.backendApi+'/auth/refresh_token';
+export class LocalAuthenticationService {
+  private url = environment.backendApi+'/auth';
   constructor(
     private httpClient: HttpClient
   ) { }
 
   login(userName: UserName){
-    return this.httpClient.post(this.urlLogin, userName, { observe: 'response' });
+    return this.httpClient.post(this.url+'/login', userName, { observe: 'response' });
   }
 
   refreshToken(refreshToken: string){
-    return this.httpClient.post<RefreshTokenResponse>(this.urlRefreshToken, { refreshToken }).pipe(
+    return this.httpClient.post<RefreshTokenResponse>(this.url+'/refresh_token', { refreshToken }).pipe(
       map(res=>res.metaData)
     );
+  }
+
+  config(){
+    return this.httpClient.post(this.url+'/config', {});
   }
 }
 
