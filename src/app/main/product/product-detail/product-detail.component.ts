@@ -96,10 +96,9 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(data=>{
-      console.log('Activated Route Data:', data);
+    this.activatedRoute.data.subscribe(data => {
       const { product } = data;
-        this.product = product;
+      this.product = product;
     });
 
     this.listenConfig();
@@ -127,7 +126,6 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   // }
 
   bookNow(product: ProductDetailEntity) {
-    console.log('Book now clicked for product:', product);
     const cartItem = new CartItemEntity(product);
     this.cartService.addToCart(cartItem)
     this.router.navigate(['/gio-hang']);

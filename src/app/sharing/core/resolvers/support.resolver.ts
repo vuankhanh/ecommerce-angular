@@ -16,7 +16,6 @@ export const supportResolver: ResolveFn<SupportDetail> = (
 ): Observable<SupportDetail> => {
   const supportService = inject(SupportService);
   const supportRoute = route.paramMap.get('route') || '';
-  console.log(supportRoute);
-  
+
   return supportService.getDetail(supportRoute);
 };

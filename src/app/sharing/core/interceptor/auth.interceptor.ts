@@ -30,8 +30,6 @@ export const authInterceptor: HttpInterceptorFn = (
       });
       return next(cloned).pipe(
         catchError(error => {
-          console.log('Error in auth interceptor:', error);
-          
           if (error instanceof HttpErrorResponse && !request.url.includes('/login') && error.status === 401) {
             return handle401Error(request, next, authService, localAuthenticationService, localStorageService);
           }

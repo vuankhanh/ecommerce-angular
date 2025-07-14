@@ -18,7 +18,7 @@ export class CartService {
   private readonly rawCart: CartEntity = new CartEntity([]);
   private readonly bCartStoraged: BehaviorSubject<CartEntity> = new BehaviorSubject<CartEntity>(this.rawCart);
   cartStoraged$: Observable<CartEntity> = this.bCartStoraged.asObservable();
-  
+
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
     private localStorageService: LocalStorageService,
@@ -33,11 +33,16 @@ export class CartService {
     const cartItemsLocalStoraged: CartItemEntity[] | null = this.localStorageService.get(LocalStorageKey.CART);
 
     let cart: CartEntity;
-    if(!cartItemsLocalStoraged) {
+    if (!cartItemsLocalStoraged) {
       this.set(this.rawCart); // Nếu có lỗi thì khởi tạo giỏ hàng mới
       cart = this.rawCart;
-    }else {
-      cart = new CartEntity(cartItemsLocalStoraged);
+    } else {
+      try {
+        cart = new CartEntity(cartItemsLocalStoraged);
+      } catch (error) {
+        this.set(this.rawCart); // Nếu có lỗi thì khởi tạo giỏ hàng mới
+        cart = this.rawCart;
+      }
     }
 
     this.bCartStoraged.next(cart);

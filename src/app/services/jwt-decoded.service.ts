@@ -13,7 +13,6 @@ export class JwtDecodedService {
     try {
       return jwtDecode(token);
     } catch (error) {
-      console.log(error)
       return null;
     }
   }

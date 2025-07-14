@@ -66,13 +66,6 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     filter(([cartItems, delivery, note]) => {
       return !!cartItems && cartItems.length > 0 && !!delivery;
     }),
-    tap(([cartItems, delivery, note]) => {
-      console.log('Payment Page Values:');
-      console.log('Cart Items:', cartItems);
-      console.log('Delivery:', delivery);
-      console.log('Note:', note);
-
-    }),
     map(([cartItems, delivery, note]) => {
       const orderItemsRequests: IOrderItemsRequest[] = cartItems.map((item: CartItemEntity) => {
         return {
@@ -174,8 +167,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     const lastValue = await lastValueFrom(this.lastValue$.pipe(
       take(1)
     ));
-    console.log('Last Value:', lastValue);
-    
+
     if (!jwtPayload) {
       this.orderFromVisitors(lastValue);
     } else {

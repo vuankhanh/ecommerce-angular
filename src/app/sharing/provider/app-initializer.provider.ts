@@ -2,8 +2,9 @@ import { inject } from "@angular/core";
 import { SocketIoService } from "../../services/socket/socket-io.service";
 import { AuthService } from "../../services/auth.service";
 import { DeliveryService } from "../../services/delivery.service";
-import { lastValueFrom, take } from "rxjs";
+import { catchError, filter, lastValueFrom, map, of, take } from "rxjs";
 import { DeliveryPersonalApiService } from "../../services/api/personal/delivery-personal.api.service";
+import { DeliveryEntity } from "../../entity/deliverty.entity";
 
 export function provideAppInitializerConfig() {
   return async () => {
@@ -14,11 +15,19 @@ export function provideAppInitializerConfig() {
     const isAuthenticated = await authService.getUserInfoFromTokenStoraged();
     if (isAuthenticated) {
       const delivery = await lastValueFrom(deliveryService.deliveryStoraged$.pipe(take(1)));
+
       if (!delivery) {
-        const defaultDelivery = await lastValueFrom(deliveryPersonalApiService.getDefault().pipe(take(1)));
-        deliveryService.setDelivery(defaultDelivery);
+        const defaultDelivery = await lastValueFrom(deliveryPersonalApiService.getDefault().pipe(
+          take(1),
+          map((response) => {
+            return new DeliveryEntity(response);
+          }),
+        )).catch(_=>null);
+
+        if (defaultDelivery) {
+          deliveryService.setDelivery(defaultDelivery);
+        }
       }
-      console.log(delivery);
     }
   };
 }

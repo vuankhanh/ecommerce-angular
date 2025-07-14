@@ -46,15 +46,11 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log(this.productCategory);
-    
     this.subscription.add(
       this.productService.getAll('', this.productCategory._id).subscribe(res => {
         // this.productResponse = res;
         const data = res.data;
         this.products = data;
-        console.log(this.products);
-        
       })
     )
   }

@@ -15,6 +15,9 @@
 
         .user-information-block_icon {
           margin-right: 16px;
+          img {
+            max-height: 50px;
+          }
         }
 
         .user-information-block_showListButton {

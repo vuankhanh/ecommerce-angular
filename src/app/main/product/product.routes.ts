@@ -34,7 +34,6 @@ export const routes: Routes = [
         },
         data: {
           breadcrumb: (data: any)=>{
-            console.log(data);
             return data.product?.name || 'Chi tiết sản phẩm'
           }
         }

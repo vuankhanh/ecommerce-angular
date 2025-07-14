@@ -38,8 +38,7 @@ export class BreadcrumbService {
     if (route) {
       // Construct the route URL
       const routeUrl = parentUrl.concat(route.url.map(url => url.path));
-      console.log(route.data['breadcrumb']);
-      
+
       // Add an element for the current route part
       if(route.data['breadcrumb']) {
         //Nếu là chi tiết sản phẩm, lấy tên sản phẩm từ data và thêm danh mục sản phẩm vào trước sản phẩm
@@ -47,8 +46,6 @@ export class BreadcrumbService {
           if(route.data['product']){
             const product: ProductDetailEntity = route.data['product'];
             let newRouteUrl = routeUrl;
-            console.log(newRouteUrl);
-            
             newRouteUrl.splice(-1);
             const breadcrumb = {
               label: product.productCategory!.name,

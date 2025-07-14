@@ -43,12 +43,8 @@ export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const orderId = this.activatedRoute.snapshot.params['id'];
-    console.log('Order ID:', orderId);
-    
     this.subscription.add(
       this.orderPersonalApiService.getDetail(orderId).subscribe(res => {
-        console.log(res);
-        
         this.orderDetail = res;
       })
     )

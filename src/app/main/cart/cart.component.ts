@@ -42,11 +42,7 @@ import { CartEntity, CartItemEntity } from '../../entity/cart.entity';
 export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
   private isBrowser: boolean;
 
-  cart$: Observable<CartEntity> = this.cartService.cartStoraged$.pipe(
-    tap(cart => {
-      console.log(cart);
-    })
-  );
+  cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
 
   jwtDecoded$: Observable<IJwtDecoded | null> = this.authService.jwtPayload$;
 
@@ -84,7 +80,6 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
       take(1),
       map(cart => cart.cartItems)
     ));
-    console.log(cartItems);
 
     if (cartItems.length === 0) {
       this.toastService.shortToastError('Giỏ hàng của bạn đang trống!', 'Vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng.');
