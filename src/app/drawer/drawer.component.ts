@@ -12,6 +12,7 @@ import { MaterialModule } from '../sharing/module/material';
 import { TMenu } from '../models/menu.interface';
 import { CustomerMenu, Menu } from '../sharing/constant/menu.constant';
 import { AutoExpandMatExpansionPanelDirective } from '../sharing/directive/auto-expand-mat-expansion-panel.directive';
+import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
 
 @Component({
   selector: 'app-drawer',
@@ -20,6 +21,8 @@ import { AutoExpandMatExpansionPanelDirective } from '../sharing/directive/auto-
     CommonModule,
     RouterLink,
     RouterLinkActive,
+
+    PrefixBackendStaticPipe,
 
     AutoExpandMatExpansionPanelDirective,
 

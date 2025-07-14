@@ -31,8 +31,7 @@ export class CartService {
 
   private get() {
     const cartItemsLocalStoraged: CartItemEntity[] | null = this.localStorageService.get(LocalStorageKey.CART);
-    console.log(typeof cartItemsLocalStoraged);
-    
+
     let cart: CartEntity;
     if(!cartItemsLocalStoraged) {
       this.set(this.rawCart); // Nếu có lỗi thì khởi tạo giỏ hàng mới

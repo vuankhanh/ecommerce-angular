@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
-import { DeliveryService } from '../../services/api/personal/delivery.service';
+import { DeliveryPersonalApiService } from '../../services/api/personal/delivery-personal.api.service';
 import { filter, map, Subscription, switchMap } from 'rxjs';
 import { IDelivery, TDeliveryModel } from '../../models/address.interface';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,14 +24,13 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   private readonly subscription = new Subscription();
   constructor(
-    private deliveryService: DeliveryService,
+    private deliveryPersonalApiService: DeliveryPersonalApiService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
     this.subscription.add(
-      this.deliveryService.get().pipe(
-        map(response => response.data)
+      this.deliveryPersonalApiService.getAllData().pipe(
       ).subscribe((deliverys: TDeliveryModel[]) => {
         this.deliverys = deliverys;
       })
@@ -44,7 +43,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
         panelClass: 'delivery-modal'
       }).afterClosed().pipe(
         filter(delivery => !!delivery),
-        switchMap((delivery: IDelivery) => this.deliveryService.create(delivery)),
+        switchMap((delivery: IDelivery) => this.deliveryPersonalApiService.create(delivery)),
       ).subscribe((delivery: TDeliveryModel) => {
         this.deliverys.push(delivery);
         this.deliverys = [...this.deliverys];
@@ -54,7 +53,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   onModifyAddress(index: number, delivery: TDeliveryModel): void {
     this.subscription.add(
-      this.deliveryService.getDetail(delivery._id).pipe(
+      this.deliveryPersonalApiService.getDetail(delivery._id).pipe(
         switchMap((delivery: TDeliveryModel) => {
           return this.dialog.open(DeliveryComponent, {
             panelClass: 'delivery-modal',
@@ -62,7 +61,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
           }).afterClosed()
         }),
         filter(deliveryResult => !!deliveryResult),
-        switchMap((deliveryResult: IDelivery) => this.deliveryService.update(delivery._id, deliveryResult))
+        switchMap((deliveryResult: IDelivery) => this.deliveryPersonalApiService.update(delivery._id, deliveryResult))
       ).subscribe((deliveryResult: TDeliveryModel) => {
         this.deliverys[index] = deliveryResult;
       })
@@ -75,7 +74,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
         data: 'Bạn có chắc chắn muốn xóa địa chỉ này không?'
       }).afterClosed().pipe(
         filter(confirm => confirm),
-        switchMap(() => this.deliveryService.remove(delivery._id))
+        switchMap(() => this.deliveryPersonalApiService.remove(delivery._id))
       ).subscribe((delivery: TDeliveryModel) => {
         this.deliverys.splice(index, 1);
         this.deliverys = [...this.deliverys]; // Trigger change detection
@@ -85,7 +84,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   onSetDefaultAddress(index: number, delivery: TDeliveryModel): void {
     this.subscription.add(
-      this.deliveryService.setDefault(delivery._id).pipe(
+      this.deliveryPersonalApiService.setDefault(delivery._id).pipe(
       ).subscribe(_=>{
         this.deliverys.forEach((item) => item.isDefault = false);
         this.deliverys[index].isDefault = true;

@@ -4,20 +4,46 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { IPagination } from '../pagination.interface';
 import { ISuccess } from '../../../models/success.interface';
 import { IDelivery, TDeliveryModel } from '../../../models/address.interface';
-import { map, Observable } from 'rxjs';
+import { EMPTY, expand, map, Observable, toArray } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DeliveryService {
+export class DeliveryPersonalApiService {
   private readonly url: string = environment.backendApi + '/client/address';
   constructor(
     private httpClient: HttpClient
   ) { }
 
-  get(): Observable<TDelivery> {
-    return this.httpClient.get<DeliveryResponse>(this.url).pipe(
+  private getAll(name?: string, page?: number, size?: number): Observable<TDelivery> {
+    let params = new HttpParams();
+    if (name) {
+      params = params.append('name', name);
+    }
+    if (page) {
+      params = params.append('page', page);
+    }
+    if (size) {
+      params = params.append('size', size);
+    }
+    return this.httpClient.get<DeliveryResponse>(this.url, { params }).pipe(
       map(response => response.metaData)
+    );
+  }
+
+  getAllData(): Observable<TDeliveryModel[]> {
+    let page = 1;
+    return this.getAll().pipe(
+      expand(metaData => {
+        page++;
+        const paging = metaData.paging;
+        return page <= paging.totalPages ? this.getAll('', page) : EMPTY
+      }),
+      toArray(),
+      map((arr: Array<TDelivery>) => {
+        const data = arr.map(res => res.data).flat();
+        return data;
+      })
     );
   }
 
@@ -31,6 +57,12 @@ export class DeliveryService {
     return this.httpClient.get<DeliveryDetailResponse>(`${this.url}/detail`, { params }).pipe(
       map(response => response.metaData)
     )
+  }
+
+  getDefault(): Observable<TDeliveryModel> {
+    return this.httpClient.get<DeliveryDetailResponse>(`${this.url}/default`).pipe(
+      map(response => response.metaData)
+    );
   }
 
   create(delivery: IDelivery): Observable<TDeliveryModel> {
@@ -68,7 +100,7 @@ export class DeliveryService {
   }
 
   remove(deliveryId: string): Observable<TDeliveryModel> {
-    if(!deliveryId) {
+    if (!deliveryId) {
       throw new Error('Delivery ID là bắt buộc để xóa địa chỉ.');
     }
     let params: HttpParams = new HttpParams();

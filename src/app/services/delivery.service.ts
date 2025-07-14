@@ -5,13 +5,14 @@ import { LocalStorageService } from './local-storage.service';
 import { ToastService } from './toast.service';
 import { isPlatformBrowser } from '@angular/common';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
+import { TDeliveryModel } from '../models/address.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeliveryService {
-  private readonly bDeliveryStoraged: BehaviorSubject<DeliveryEntity | null> = new BehaviorSubject<DeliveryEntity | null>(null);
-  deliveryStoraged$: Observable<DeliveryEntity | null> = this.bDeliveryStoraged.asObservable();
+  private readonly bDeliveryStoraged: BehaviorSubject<DeliveryEntity | TDeliveryModel | null> = new BehaviorSubject<DeliveryEntity | TDeliveryModel | null>(null);
+  deliveryStoraged$: Observable<DeliveryEntity | TDeliveryModel | null> = this.bDeliveryStoraged.asObservable();
 
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
@@ -24,15 +25,15 @@ export class DeliveryService {
   }
 
   private get() {
-    const delivertyLocalStoraged: DeliveryEntity | null = this.localStorageService.get(LocalStorageKey.DELIVERY);
+    const delivertyLocalStoraged: DeliveryEntity | TDeliveryModel | null = this.localStorageService.get(LocalStorageKey.DELIVERY);
     this.bDeliveryStoraged.next(delivertyLocalStoraged);
   }
 
-  private set(delivery: DeliveryEntity | null) {
+  private set(delivery: DeliveryEntity | TDeliveryModel | null) {
     return this.localStorageService.set(LocalStorageKey.DELIVERY, delivery);
   }
 
-  modifyDelivery(delivery: DeliveryEntity): void {
+  setDelivery(delivery: DeliveryEntity | TDeliveryModel): void {
     this.bDeliveryStoraged.next(delivery);
     this.set(delivery);
   }

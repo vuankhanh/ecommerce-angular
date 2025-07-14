@@ -1,55 +1,50 @@
 <div class="order-history-container">
-    <div class="table-container">
+  <div class="cards-container">
+    @for (order of orders; track order) {
+    <mat-card class="order-card" (click)="showDetail(order)">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-chip>{{ order.status }}</mat-chip>
+          <span class="order-date">{{order.createdAt | date:'hh:mm:ss dd/MM/yyyy'}}</span>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <mat-list>
+          @for (orderItem of order.orderItems; track $index) {
+          <mat-list-item>
+            <div matListItemAvatar class="horizontal-container"> 
+              <img [src]="orderItem.productThumbnail | prefixBackendStatic" [alt]="orderItem.productName"
+                class="product-image">
+            </div>
+            <div matListItemTitle>
+              <span class="product-name">{{orderItem.productName}}</span>
+            </div>
+            <div matListItemLine>
+              <span>{{orderItem.productCode}}</span>
+            </div>
+            <div matListItemLine>
+              <span>{{'('+(orderItem.price | vndCurrency)+')'}} x {{orderItem.quantity}}</span>
+            </div>
+          </mat-list-item>
+          }
+        </mat-list>
 
-        <table mat-table [dataSource]="orders" class="mat-elevation-z8">
-            <!-- Order Code Column -->
-            <ng-container matColumnDef="orderCode" sticky>
-                <th mat-header-cell *matHeaderCellDef> Mã đơn hàng </th>
-                <td mat-cell *matCellDef="let order; let i = index" (click)="showDetail(order)">
-                    {{order.code}}
-                </td>
-            </ng-container>
-        
-            <!-- Created At Column -->
-            <ng-container matColumnDef="createdAt">
-                <th mat-header-cell *matHeaderCellDef> Ngày đặt hàng </th>
-                <td mat-cell *matCellDef="let order"> {{order.createdAt | date:'dd/MM/yyyy'}} </td>
-            </ng-container>
-        
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Sản phẩm </th>
-                <td mat-cell *matCellDef="let order">
-                    <div class="vertical-container">
-                        {{ order.products.length + ' món hàng' }}
-                    </div>
-                </td>
-            </ng-container>
-        
-            <!-- Name Column -->
-            <ng-container matColumnDef="totalValue">
-                <th mat-header-cell *matHeaderCellDef> Tổng tiền </th>
-                <td mat-cell *matCellDef="let order; let i = index;">
-                    {{ order.totalValue | vndCurrency }}
-                </td>
-            </ng-container>
-          
-            <!-- Status Column -->
-            <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-                <td mat-cell *matCellDef="let order"> {{ configService.filterNameOrderStatus(order.status) }} </td>
-            </ng-container>
-          
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-    </div>
-    <mat-paginator
-        *ngIf="configPagination"
-        [length]="configPagination.totalItems"
-        [pageIndex]="configPagination.page"
-        [pageSize]="configPagination.size"
-        [pageSizeOptions]="[10, 20, 100]"
-        (page)="handlePageEvent($event)"
-    ></mat-paginator>
+        <div class="order-summary horizontal-container">
+          Tổng số tiền ({{order.orderItems.length}} sản phẩm): <b>{{(order.total | vndCurrency)}}</b>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="showDetail(order)">
+          Xem chi tiết
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    }
+  </div>
+
+  <mat-paginator *ngIf="configPagination" [length]="configPagination.totalItems" [pageIndex]="configPagination.page"
+    [pageSize]="configPagination.size" [pageSizeOptions]="[10, 20, 100]" (page)="handlePageEvent($event)">
+  </mat-paginator>
 </div>

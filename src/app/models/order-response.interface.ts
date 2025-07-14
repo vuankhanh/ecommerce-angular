@@ -1,13 +1,21 @@
 
 import { OrderStatus } from "../sharing/constant/order.constant";
-import { IDelivery } from "./address.interface";
-import { ICart } from "./cart.interface";
+import { IDelivery, TDeliveryModel } from "./address.interface";
 import { IMongodbDocument } from "./mongo.interface";
 import { TPaymentMethod } from "./payment.interface";
 
 export type TOrderStatus = `${OrderStatus}`;
 
 export interface IOrderResponse {
+  orderItems: IOrderItem[];
+  status: TOrderStatus;
+  paymentMethod: TPaymentMethod;
+  subTotal: number;
+  total: number;
+  discount: number;
+  deliveryFee: number;
+}
+export interface IOrderDetailResponse {
   customerId: string;
   orderCode: string;
   orderItems: IOrderItem[];
@@ -17,7 +25,7 @@ export interface IOrderResponse {
   total: number;
   discount: number;
   deliveryFee: number;
-  delivery: IDelivery;
+  delivery: TDeliveryModel;
   note: string;
 }
 
@@ -29,4 +37,5 @@ export interface IOrderItem {
   price: number;
 }
 
-export type TOrderDetailResponseModel = IOrderResponse & IMongodbDocument
+export type TOrderModel = IOrderResponse & IMongodbDocument;
+export type TOrderDetailModel = IOrderDetailResponse & IMongodbDocument

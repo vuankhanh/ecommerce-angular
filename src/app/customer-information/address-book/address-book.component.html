@@ -1,7 +1,7 @@
 <div class="address-container">
   <section>
     <div class="group-button-row">
-      <button mat-raised-button color="primary" (click)="onCreateAddress()">
+      <button mat-raised-button (click)="onCreateAddress()">
         <mat-icon>add</mat-icon>
         Thêm địa chỉ giao hàng
       </button>
@@ -13,7 +13,11 @@
     @for (delivery of deliverys; track $index; let index = $index) {
     <mat-list-item>
       <div matListItemTitle>
-        <b>{{delivery.name}}</b> - {{delivery.phoneNumber}}
+        <span class="delivery-name">
+          <b>{{delivery.name}}</b>
+        </span>
+        <span class="separator">{{' - '}}</span>
+        <span class="delivery-phone">{{delivery.phoneNumber}}</span>
       </div>
       <div matListItemLine>{{delivery.addressDetail}}</div>
       <div matListItemMeta>
@@ -27,11 +31,11 @@
         </div>
         <div class="button-container horizontal-container">
           @if (delivery.isDefault) {
-            <span class="default-address" color="primary">Địa chỉ mặc định</span>
+          <span class="default-address" color="primary">Địa chỉ mặc định</span>
           }@else {
-            <button matButton="outlined" (click)="onSetDefaultAddress(index, delivery)">
-              Đặt làm mặc định
-            </button>
+          <button matButton="outlined" (click)="onSetDefaultAddress(index, delivery)">
+            Đặt làm mặc định
+          </button>
           }
         </div>
       </div>

@@ -10,4 +10,12 @@ export class DeliveryEntity implements IDelivery {
     this.phoneNumber = delivery.phoneNumber;
     this.address = delivery.address
   }
+
+  toPlainObject(): IDelivery {
+    return {
+      name: this.name,
+      phoneNumber: this.phoneNumber,
+      address: this.address
+    };
+  }
 }

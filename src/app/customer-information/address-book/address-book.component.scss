@@ -10,6 +10,30 @@
       box-sizing: border-box;
       height: unset;
 
+      div[matListItemTitle] {
+        display: flex;
+        margin-bottom: unset;
+        height: 20px;
+
+        .delivery-name {
+          font-weight: bold;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .separator {
+          margin: 0 5px 0 5px;
+        }
+
+        .separator,
+        .delivery-phone {
+          flex-shrink: 0;
+          white-space: nowrap;
+        }
+      }
+
       div[matListItemLine] {
         text-wrap: auto;
       }

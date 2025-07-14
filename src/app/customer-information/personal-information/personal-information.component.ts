@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
-import { PersonalService } from '../../services/api/personal/personal.service';
+import { PersonalService } from '../../services/api/personal/personal.api.service';
 
 @Component({
   selector: 'app-personal-information',

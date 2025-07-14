@@ -1,0 +1,43 @@
+<div class="delivery-selection-container">
+  <h2 mat-dialog-title>Chọn địa chỉ giao hàng</h2>
+
+  <mat-dialog-content>
+    <mat-radio-group class="delivery-radio-group" [(ngModel)]="selectedDeliveryId">
+      <mat-list>
+        @for (delivery of deliverys; track $index; let index = $index) {
+        <mat-list-item class="delivery-item">
+          <mat-radio-button matListItemAvatar class="delivery-radio" [value]="delivery._id">
+          </mat-radio-button>
+
+          <div matListItemTitle>
+            <span class="delivery-name">
+              <b>{{delivery.name}}</b>
+            </span>
+            <span class="separator">{{' - '}}</span>
+            <span class="delivery-phone">{{delivery.phoneNumber}}</span>
+          </div>
+          <div matListItemLine>{{delivery.addressDetail}}</div>
+          @if (delivery.isDefault) {
+          <div matListItemLine><span class="default-address">Địa chỉ mặc định</span></div>
+          }
+
+          <div matListItemMeta>
+            <div class="button-container horizontal-container">
+              <button mat-icon-button (click)="onModifyAddress(index, delivery)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-list-item>
+        }
+      </mat-list>
+    </mat-radio-group>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button matButton (click)="onNoClick()">Trở lại</button>
+    <button mat-raised-button color="primary" (click)="confirm()">
+      Xác nhận
+    </button>
+  </mat-dialog-actions>
+</div>

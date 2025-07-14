@@ -1,3 +1,7 @@
+.active-menu-item {
+  background: #d5d5d5;
+}
+
 button {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
@@ -90,6 +94,7 @@ button {
       padding: 0 15px;
 
       .user-information-block_icon {
+        margin-right: 16px;
         mat-icon {
           height: 32px;
           width: 32px;
@@ -228,7 +233,7 @@ button {
 }
 
 .is-active {
-  color: var(--bep4than-hightlight-text);
+  color: var(--bep4than-hightlight-text) !important;
 }
 
 @media only screen and (max-width: 768px) {

@@ -36,6 +36,7 @@ import { NumberInputComponent } from '../../../sharing/component/number-input/nu
 import { SkeletonComponent } from '../../../sharing/component/skeleton/skeleton.component';
 import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
 import { CartItemEntity } from '../../../entity/cart.entity';
+import { error } from 'console';
 
 const headerOffset = 85;
 @Component({
@@ -73,7 +74,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   scrollBottom$ = this.mainContainerScrollService.listenScrollBottom$;
   isBrowser: boolean;
 
-  product?: ProductDetailEntity;
+  product: ProductDetailEntity | null = null;
 
   identification?: Identification;
 
@@ -95,26 +96,11 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    this.activatedRoute.params.pipe(
-      map(params => params['productSlug'] as string),
-      filter(productSlug => !!productSlug),
-      switchMap(productSlug => {
-        this.product = undefined;
-        return this.productService.getDetail(undefined, productSlug);
-      })
-    ).subscribe({
-      next: (product: ProductDetailEntity) => {
+    this.activatedRoute.data.subscribe(data=>{
+      console.log('Activated Route Data:', data);
+      const { product } = data;
         this.product = product;
-      },
-      error: (err) => {
-        console.error('Lỗi khi lấy chi tiết sản phẩm:', err.message);
-        // this.inProgressSpinnerService.hide();
-      },
-      complete: () => {
-        console.log('Chi tiết sản phẩm đã được lấy thành công');
-
-      }
-    })
+    });
 
     this.listenConfig();
   }

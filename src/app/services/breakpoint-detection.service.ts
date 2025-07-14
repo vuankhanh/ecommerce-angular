@@ -14,7 +14,7 @@ export class BreakpointDetectionService {
 
   constructor(
     private breakpointObserver: BreakpointObserver
-  ) { }
+  ) {}
 
   detection$(){
     return this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.HandsetPortrait, Breakpoints.HandsetLandscape]).pipe(

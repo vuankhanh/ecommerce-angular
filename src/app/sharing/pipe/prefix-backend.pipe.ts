@@ -6,9 +6,18 @@ import { environment } from '../../../environments/environment.development';
   standalone: true
 })
 export class PrefixBackendStaticPipe implements PipeTransform {
-  private backend: string = environment.backendStatic;
-  transform(url: string): string {
-    return this.backend + '/'+ url;
+  private backendStatic: string = environment.backendStatic;
+  transform(value: string): string {
+    if (!value) return '';
+    // Nếu là tuyệt đối thì trả về nguyên giá trị
+    if (
+      value.startsWith('http://') ||
+      value.startsWith('https://') ||
+      value.startsWith('/')
+    ) {
+      return value;
+    }
+    return this.backendStatic + '/' + value;
   }
 
 }

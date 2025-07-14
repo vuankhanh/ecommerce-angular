@@ -13,12 +13,12 @@ import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
 import { SocialAuthenticationService } from './api/social-login/social-authentication';
 
-import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Observable, take } from 'rxjs';
 import { TToken } from '../models/token.interface';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 import { AuthenticationUtil } from '../sharing/util/authentication.util';
 import { LocalAuthenticationService } from './api/local-authentication.service';
-import { last } from 'lodash';
+import { DeliveryService } from './delivery.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -31,7 +31,8 @@ export class AuthService {
     private jwtDecodedService: JwtDecodedService,
     private localStorageService: LocalStorageService,
     private socialAuthenticationService: SocialAuthenticationService,
-    private localAuthenticationService: LocalAuthenticationService
+    private localAuthenticationService: LocalAuthenticationService,
+    private deliveryService: DeliveryService,
   ) { }
 
   login(type: 'login' | 'register' | 'forgotPassword') {
@@ -67,7 +68,7 @@ export class AuthService {
     this.userInformation = tokenInformation;
   }
 
-  async getUserInfoFromTokenStoraged() {
+  async getUserInfoFromTokenStoraged(): Promise<boolean> {
     const accessTokenStoraged: string | null = this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if (accessTokenStoraged) {
       const tokenInformation: IJwtDecoded = <IJwtDecoded>this.jwtDecodedService.jwtDecoded(accessTokenStoraged);
@@ -76,12 +77,15 @@ export class AuthService {
         try {
           const response = await lastValueFrom(this.localAuthenticationService.config());
           this.userInformation = tokenInformation;
+          return true;
         } catch (error) {
           console.error('Error fetching user info:', error);
-          
+          return false
         }
       }
     }
+
+    return false;
   }
 
   logout() {

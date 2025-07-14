@@ -5,6 +5,7 @@ import { Breadcrumb } from '../models/Breadcrumb';
 
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { ProductDetailEntity } from '../entity/product-detail.entity';
 
 
 @Injectable({
@@ -37,14 +38,20 @@ export class BreadcrumbService {
     if (route) {
       // Construct the route URL
       const routeUrl = parentUrl.concat(route.url.map(url => url.path));
+      console.log(route.data['breadcrumb']);
+      
       // Add an element for the current route part
       if(route.data['breadcrumb']) {
-        if(route.routeConfig?.path === ':category/:route'){
+        //Nếu là chi tiết sản phẩm, lấy tên sản phẩm từ data và thêm danh mục sản phẩm vào trước sản phẩm
+        if(route.routeConfig?.path === ':productCategory/:productSlug'){
           if(route.data['product']){
+            const product: ProductDetailEntity = route.data['product'];
             let newRouteUrl = routeUrl;
+            console.log(newRouteUrl);
+            
             newRouteUrl.splice(-1);
             const breadcrumb = {
-              label: route.data['product'].category.name,
+              label: product.productCategory!.name,
               url: '/' + newRouteUrl.join('/')
             };
             breadcrumbs.push(breadcrumb);

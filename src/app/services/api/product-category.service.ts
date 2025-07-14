@@ -47,13 +47,12 @@ export class ProductCategoryService {
     );
   }
 
-  getDetail(id?: string, slug?: string): Observable<TProductCategoryModel> {
-    if (!id && !slug) {
-      throw new Error('Id và slug là bắt buộc để cập nhật danh mục sản phẩm');
+  getDetail(slug?: string): Observable<TProductCategoryModel> {
+    if (!slug) {
+      throw new Error('Slug là bắt buộc để cập nhật danh mục sản phẩm');
     }
 
     let params = new HttpParams();
-    if(id) params = params.append('id', id);
     if(slug) params = params.append('slug', slug);
 
     return this.httpClient.get<IProductCategoryDetailResponse>(`${this.url}/detail`, { params }).pipe(

@@ -16,6 +16,7 @@ import { provideNgxMask } from 'ngx-mask';
 import { provideIconConfig } from './sharing/provider/icon-config.provider';
 import { AuthService } from './services/auth.service';
 import { authInterceptor } from './sharing/core/interceptor/auth.interceptor';
+import { provideAppInitializerConfig } from './sharing/provider/app-initializer.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,11 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
-    provideAppInitializer((() => {
-      inject(SocketIoService);
-      const authService = inject(AuthService);
-      authService.getUserInfoFromTokenStoraged();
-    })),
+    provideAppInitializer(provideAppInitializerConfig()),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideToastr({

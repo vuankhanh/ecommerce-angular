@@ -4,18 +4,16 @@ import { PageEvent, MatPaginatorIntl } from '@angular/material/paginator';
 
 import { CustomPaginator } from '../../providers/CustomPaginatorConfiguration';
 
-
 import { Subscription } from 'rxjs';
-import { OrderResponse, OrderService } from '../../services/api/order.service';
 import { PaginationParams } from '../../models/PaginationParams';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ConfigService } from '../../services/api/config.service';
-import { TToken } from '../../models/token.interface';
-import { OrderEntity } from '../../entity/order.entity';
-import { TOrderModel } from '../../models/order.interface';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
+import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
+import { TOrderModel } from '../../models/order-response.interface';
+import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 
 @Component({
   selector: 'app-order-history',
@@ -24,6 +22,7 @@ import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
     CommonModule,
 
     CurrencyCustomPipe,
+    PrefixBackendStaticPipe,
 
     MaterialModule
   ],
@@ -39,23 +38,23 @@ export class OrderHistoryComponent implements OnInit {
   configPagination?: PaginationParams;
   orders: Array<TOrderModel> = [];
 
-  subscription: Subscription = new Subscription();
-
+  
   count: number = 0;
+  private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
     private localStorageService: LocalStorageService,
-    private orderService: OrderService,
+    private orderPersonalApiService: OrderPersonalApiService,
     public configService: ConfigService
   ) { }
 
   ngOnInit(): void {
-    // this.listenOrder();
+    this.listenOrder();
   }
 
   listenOrder(paginationParams?: PaginationParams) {
     this.subscription.add(
-      this.orderService.getAll(paginationParams?.page, paginationParams?.size).subscribe(res => {
+      this.orderPersonalApiService.getAll(paginationParams?.page, paginationParams?.size).subscribe(res => {
         const { data, paging } = res;
 
         this.configPagination = {

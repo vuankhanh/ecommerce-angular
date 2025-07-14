@@ -8,8 +8,14 @@
 
   mat-expansion-panel {
     mat-expansion-panel-header {
+      padding: 0 16px !important;
+
       .user-information-block {
         max-width: 100%;
+
+        .user-information-block_icon {
+          margin-right: 16px;
+        }
 
         .user-information-block_showListButton {
           max-width: 100%;

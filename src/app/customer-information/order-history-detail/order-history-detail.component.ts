@@ -5,9 +5,11 @@ import { OrderService } from '../../services/api/order.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
-import { TOrderDetailResponseModel } from '../../models/order-response.interface';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
+import { OrderPersonalApiService, TOrder } from '../../services/api/personal/order-personal.api.service';
+import { TOrderDetailModel } from '../../models/order-response.interface';
+import { AddressPipe } from '../../sharing/pipe/address.pipe';
 
 @Component({
   selector: 'app-order-history-detail',
@@ -19,6 +21,7 @@ import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 
     PrefixBackendStaticPipe,
     CurrencyCustomPipe,
+    AddressPipe,
 
     MaterialModule
   ],
@@ -26,46 +29,35 @@ import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
   styleUrls: ['./order-history-detail.component.scss']
 })
 export class OrderHistoryDetailComponent implements OnInit, OnDestroy {
-  orderId: string;
-
-  order?: TOrderDetailResponseModel;
+  orderDetail?: TOrderDetailModel;
 
   displayedColumns: string[] = ['name', 'price', 'quantity'];
 
-  subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private orderService: OrderService,
-    private localStorageService: LocalStorageService
+    private orderPersonalApiService: OrderPersonalApiService
   ) {
-    this.orderId = this.activatedRoute.snapshot.params['id'];
   }
 
   ngOnInit(): void {
-    this.listenOrderHistoryDetail(this.orderId);
-  }
-
-  listenOrderHistoryDetail(orderId: string) {
+    const orderId = this.activatedRoute.snapshot.params['id'];
+    console.log('Order ID:', orderId);
+    
     this.subscription.add(
-      this.orderService.getDetail(orderId).subscribe(res => {
-        this.order = res;
-
+      this.orderPersonalApiService.getDetail(orderId).subscribe(res => {
+        console.log(res);
+        
+        this.orderDetail = res;
       })
     )
   }
 
-  showDetail(product: any) {
-    this.router.navigate(['san-pham/' + product.category.route, product._id]);
+  cancelOrder() {
+
   }
 
-  revoke(id: string) {
-    // this.subscription.add(
-    //   this.orderService.revoke(id).subscribe(res => {
-    //     this.order = res;
-    //   })
-    // )
-  }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

@@ -4,13 +4,13 @@ import { Router, RouterLink } from '@angular/router';
 
 import { PaymentSuccessfulComponent } from '../../sharing/modal/payment-successful/payment-successful.component';
 import { CartService } from '../../services/cart.service';
-import { take, map, Observable, Subscription, switchMap, filter, lastValueFrom, combineLatest, tap, startWith } from 'rxjs';
+import { take, map, Observable, Subscription, switchMap, filter, lastValueFrom, combineLatest, tap, startWith, firstValueFrom } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/api/order.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ToastService } from '../../services/toast.service';
 
-import { TToken } from '../../models/token.interface';
+import { IJwtDecoded, TToken } from '../../models/token.interface';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
@@ -26,6 +26,10 @@ import { DeliveryComponent } from '../../sharing/modal/delivery/delivery.compone
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IOrderCreateRequest, IOrderItemsRequest } from '../../services/api/order-request.interface';
 import { PaymentMethod } from '../../sharing/constant/payment.constant';
+import { DeliverySelectionComponent } from '../../sharing/modal/delivery-selection/delivery-selection.component';
+import { DialogRef } from '@angular/cdk/dialog';
+import { TDeliveryModel } from '../../models/address.interface';
+import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 
 @Component({
   selector: 'app-payment-page',
@@ -49,7 +53,8 @@ import { PaymentMethod } from '../../sharing/constant/payment.constant';
 export class PaymentPageComponent implements OnInit, OnDestroy {
   @ViewChild('btnInsertAddress') btnInsertAddress!: ElementRef;
 
-  delivery$: Observable<DeliveryEntity | null> = this.deliveryService.deliveryStoraged$;
+  jwtPayload$ = this.authService.jwtPayload$;
+  delivery$: Observable<DeliveryEntity | TDeliveryModel | null> = this.deliveryService.deliveryStoraged$;
   cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
   private cartItem$ = this.cart$.pipe(
     map(cart => cart.cartItems)
@@ -58,12 +63,15 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   noteControl: FormControl = new FormControl<string>('');
 
   lastValue$ = combineLatest([this.cartItem$, this.delivery$, this.noteControl.valueChanges.pipe(startWith(''))]).pipe(
-    tap(([cartItems, delivery, note]) => {
-      console.log(cartItems, delivery, note);
-
-    }),
     filter(([cartItems, delivery, note]) => {
       return !!cartItems && cartItems.length > 0 && !!delivery;
+    }),
+    tap(([cartItems, delivery, note]) => {
+      console.log('Payment Page Values:');
+      console.log('Cart Items:', cartItems);
+      console.log('Delivery:', delivery);
+      console.log('Note:', note);
+
     }),
     map(([cartItems, delivery, note]) => {
       const orderItemsRequests: IOrderItemsRequest[] = cartItems.map((item: CartItemEntity) => {
@@ -72,7 +80,8 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
           quantity: item.quantity
         }
       });
-      return { cartItems: orderItemsRequests, delivery, note };
+      const newDelivery: DeliveryEntity = new DeliveryEntity(delivery!);
+      return { cartItems: orderItemsRequests, delivery: newDelivery.toPlainObject(), note };
     }),
     map(value => {
       const orderCreateRequest: IOrderCreateRequest = {
@@ -81,11 +90,12 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
         deliveryFee: 0,
         discount: 0,
         note: this.noteControl.value,
-        delivery: value.delivery as DeliveryEntity
+        delivery: value.delivery
       }
+
       return orderCreateRequest;
     })
-  )
+  );
 
   displayedColumns: string[] = ['thumbnail', 'name', 'price', 'quantity'];
 
@@ -94,91 +104,133 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private renderer2: Renderer2,
+    private toastService: ToastService,
     private cartService: CartService,
     private readonly deliveryService: DeliveryService,
     private authService: AuthService,
     private orderService: OrderService,
-    private localStorageService: LocalStorageService,
-    private toastService: ToastService
+    private orderPersonalApiService: OrderPersonalApiService,
   ) { }
 
   ngOnInit(): void { }
 
-  chooseAddress() {
+  async chooseAddress() {
+    const payload = await lastValueFrom(this.jwtPayload$.pipe(
+      take(1)
+    ));
+
+    if (!payload) {
+      this.singleDeliverySelection();
+    } else {
+      this.multipleDeliverySelection();
+    }
+  }
+
+  private singleDeliverySelection() {
     this.subscription.add(
       this.delivery$.pipe(
         take(1),
         switchMap(delivery => this.dialog.open(DeliveryComponent, {
           panelClass: 'delivery-modal',
           data: delivery
-        }).afterClosed()),
-        filter(delivery => !!delivery)
+        }).afterClosed().pipe(
+          filter(deliveryResult => !!deliveryResult),
+          map(deliveryResult => {
+            if (delivery) return {
+              ...delivery,
+              ...deliveryResult
+            };
+            return deliveryResult;
+          })
+        )),
+
       ).subscribe((delivery: DeliveryEntity) => {
-        this.deliveryService.modifyDelivery(delivery);
+        this.deliveryService.setDelivery(delivery);
+      })
+    )
+  }
+
+  private multipleDeliverySelection() {
+    this.subscription.add(
+      this.delivery$.pipe(
+        take(1),
+        switchMap(delivery => this.dialog.open(DeliverySelectionComponent, {
+          panelClass: 'delivery-selection-modal',
+          data: delivery && '_id' in delivery ? (delivery as any)._id : null
+        }).afterClosed().pipe(
+          filter(deliveryResult => !!deliveryResult),
+        ))
+      ).subscribe((delivery: DeliveryEntity) => {
+        this.deliveryService.setDelivery(delivery);
       })
     )
   }
 
   async confirmPayment() {
-    this.subscription.add(
-      this.lastValue$.pipe(
-        switchMap((orderCreateRequest: IOrderCreateRequest) => this.orderService.create(orderCreateRequest)),
-        take(1),
-      ).subscribe(order => {
-        console.log(order)
-        this.router.navigate(['/san-pham']);
-        this.cartService.reset();
-        this.deliveryService.reset();
-        this.dialog.open(PaymentSuccessfulComponent,
-          {
-            panelClass: 'payment-success-modal',
-            data: { isLoyalCustomer: false, order },
-            autoFocus: false
-          }
-        )
-      })
-    )
-    // if (this.userInformation) {
-    //   let tokenStoraged: TToken = <TToken>this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
-    //   if (tokenStoraged && tokenStoraged.accessToken) {
-    //     this.subscription.add(
-    //       this.orderService.insert(tokenStoraged.accessToken, this.cart!).subscribe(async order => {
-    //         await this.router.navigate(['/san-pham']);
-    //         this.cartService.resetProduct();
-    //         this.dialog.open(PaymentSuccessfulComponent,
-    //           {
-    //             panelClass: 'payment-success-modal',
-    //             data: { isLoyalCustomer: true, order },
-    //             autoFocus: false
-    //           }
-    //         ).afterClosed().subscribe(res => {
-    //           let result: 'goProduct' | 'goOrderHistory' = res;
-    //           if (result === 'goOrderHistory') {
-    //             this.router.navigate(['/khach-hang/order-history']);
-    //           }
-    //         })
-    //       }, error => {
-    //         this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
-    //       })
-    //     )
-    //   }
-    // } else {
-    //   this.subscription.add(
-    //     this.orderService.insertFromVitors(this.cart!).subscribe(async order => {
-    //       await this.router.navigate(['/san-pham']);
-    //       this.cartService.resetProduct();
-    //       this.dialog.open(PaymentSuccessfulComponent,
-    //         {
-    //           panelClass: 'payment-success-modal',
-    //           data: { isLoyalCustomer: false, order },
-    //           autoFocus: false
-    //         }
-    //       )
-    //     }, error => {
-    //       this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
-    //     })
-    //   )
-    // }
+    const jwtPayload = await lastValueFrom(this.jwtPayload$.pipe(
+      take(1)
+    ));
+
+    const lastValue = await lastValueFrom(this.lastValue$.pipe(
+      take(1)
+    ));
+    console.log('Last Value:', lastValue);
+    
+    if (!jwtPayload) {
+      this.orderFromVisitors(lastValue);
+    } else {
+      this.orderFromLoyalty(lastValue);
+    }
+  }
+
+  async orderFromVisitors(orderCreateRequest: IOrderCreateRequest) {
+    try {
+      const order = await firstValueFrom(this.orderService.create(orderCreateRequest).pipe(
+        take(1)
+      ));
+      const dialogRef = this.dialog.open(PaymentSuccessfulComponent,
+        {
+          panelClass: 'payment-success-modal',
+          data: { isLoyalCustomer: false, order },
+          autoFocus: false
+        }
+      );
+
+      this.router.navigate(['/san-pham']);
+      this.cartService.reset();
+      this.deliveryService.reset();
+
+      let result: 'goProduct' | 'goOrderHistory' = await lastValueFrom(dialogRef.afterClosed().pipe(
+        filter(res => !!res),
+        take(1)
+      ));
+
+      if (result === 'goOrderHistory') {
+        this.router.navigate(['/khach-hang/order-history']);
+      }
+    } catch (error: any) {
+      this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
+    }
+  }
+
+  async orderFromLoyalty(orderCreateRequest: IOrderCreateRequest) {
+    try {
+      const order = await firstValueFrom(this.orderPersonalApiService.create(orderCreateRequest).pipe(
+        take(1)
+      ));
+      this.dialog.open(PaymentSuccessfulComponent,
+        {
+          panelClass: 'payment-success-modal',
+          data: { isLoyalCustomer: true, order },
+          autoFocus: false
+        }
+      )
+      this.router.navigate(['/san-pham']);
+      this.cartService.reset();
+      this.deliveryService.reset();
+    } catch (error: any) {
+      this.toastService.shortToastError(error.error.message, 'Đã có lỗi xảy ra');
+    }
   }
 
   ngOnDestroy() {

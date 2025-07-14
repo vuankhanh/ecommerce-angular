@@ -1,39 +1,48 @@
 <div class="customer-container horizontal-container">
-  <div class="customer-menu">
-    <mat-list role="list">
-      <mat-list-item *ngFor="let customer of customerMenu; let i = index" [routerLink]="'/khach-hang/'+customer.route"
-        [ngClass]="currentUrl.includes('/khach-hang/'+customer.route) ? 'activeLink': '' ">
-        @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
-        <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
-        }
-        <span>{{ customer.name }}</span>
-      </mat-list-item>
-    </mat-list>
-  </div>
-  <div class="customer-menu-mobile">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header collapsedHeight='64px' expandedHeight='64px'>
-        <span>{{ activeMenu.name ? activeMenu.name : 'HEADER' }}</span>
-      </mat-expansion-panel-header>
-      <mat-list class="user-information-menu">
-
-        <mat-list-item *ngFor="let customer of customerMenu; let i = index" [routerLink]="'/khach-hang/'+customer.route"
-          [ngClass]="currentUrl.includes('/khach-hang/'+customer.route) ? 'activeLink': '' " (click)="closeAccordion()">
+  @if (isMobile$ | async) {
+  <mat-expansion-panel #customerMenuPanel>
+    <mat-expansion-panel-header>
+      <span>{{ activeMenu.name ? activeMenu.name : 'HEADER' }}</span>
+    </mat-expansion-panel-header>
+    <mat-list class="user-information-menu">
+      @for (customer of customerMenu; track $index; let i = $index) {
+        <mat-list-item
+          [routerLink]="'/khach-hang/'+customer.route"
+          [routerLinkActive]="['active-menu-item']"
+          [routerLinkActiveOptions]="{ exact: false }"
+          (click)="customerMenuPanel.close()">
           @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
           <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
           }
           <span>{{ customer.name }}</span>
         </mat-list-item>
+      }
 
-        <div class="height-space"></div>
-        <mat-list-item (click)="logout()">
-          <mat-icon fontSet="fa" fontIcon="fa-sign-out" matListItemIcon></mat-icon>
-          <span>Thoát tài khoản</span>
+      <div class="height-space"></div>
+      <mat-list-item (click)="logout()">
+        <mat-icon fontSet="fa" fontIcon="fa-sign-out" matListItemIcon></mat-icon>
+        <span>Thoát tài khoản</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+  <mat-divider></mat-divider>
+  }@else {
+  <div class="customerMenu">
+    <mat-list role="list">
+      @for (customer of customerMenu; track $index; let i = $index) {
+        <mat-list-item
+          [routerLink]="'/khach-hang/'+customer.route"
+          [ngClass]="currentUrl.includes('/khach-hang/'+customer.route) ? 'active-menu-item': '' ">
+          @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
+          <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
+          }
+          <span>{{ customer.name }}</span>
         </mat-list-item>
-      </mat-list>
-    </mat-expansion-panel>
+      }
+    </mat-list>
   </div>
-  <div class="width-space"></div>
+
+  }
   <div class="customer-body">
     <router-outlet></router-outlet>
   </div>

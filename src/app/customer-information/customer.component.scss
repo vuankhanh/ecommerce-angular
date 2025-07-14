@@ -1,4 +1,4 @@
-.activeLink {
+.active-menu-item {
   background: #d5d5d5;
 }
 
@@ -6,35 +6,33 @@
   padding: 15px;
   box-sizing: border-box;
 
-  .customer-menu {
+  .customerMenu {
+    margin-right: 16px;
     mat-list {
       background: #ededed;
-
+  
       mat-list-item {
         padding: 0 15px;
         box-sizing: border-box;
         height: 40px;
         cursor: pointer;
       }
-
+  
       mat-list-item:hover {
         background: #d5d5d5;
       }
-
     }
   }
 
-  .customer-menu-mobile {
-    display: none;
+  mat-expansion-panel {
+    margin-bottom: 16px;
+    mat-expansion-panel-header {
+      padding: 0 16px !important;
+      background: var(--bep4than-secondary-background);
+      color: white;
 
-    mat-expansion-panel {
-      mat-expansion-panel-header {
-        background: var(--bep4than-primary-background);
+      ::ng-deep .mat-expansion-indicator::after {
         color: white;
-
-        ::ng-deep .mat-expansion-indicator::after {
-          color: white;
-        }
       }
     }
   }
@@ -44,18 +42,18 @@
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 599px) {
   .customer-container {
     flex-direction: column;
     padding-top: 0;
 
-    .customer-menu {
-      display: none;
-    }
-
-    .customer-menu-mobile {
-      display: block;
-      margin-bottom: 15px;
+    .customer-body {
+      margin-top: 16px;
     }
   }
+}
+
+
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+  background: var(--bep4than-secondary-background);
 }

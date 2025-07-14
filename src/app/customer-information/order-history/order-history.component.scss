@@ -1,32 +1,58 @@
-.order-history-container{
-    .table-container{
-        .mat-table{
-            width: 100%;
-            .mat-column-orderCode{
-                color: var(--bep4than-text-primary);
-                cursor: pointer;
-            }
-        }
+.order-history-container {
+  .cards-container{
+    .order-card:not(:first-child){
+      margin-top: 16px;
     }
-}
+    .order-card {
+      mat-card-header {
+        padding: 16px;
+        justify-content: flex-end;
+        mat-card-title {
+          > *:not(:first-child) {
+            margin-left: 10px;
+          }
+        }
+      }
+      mat-card-content {
+        padding: 16px 16px 0 16px;
+        mat-list {
+          margin-bottom: 10px;
+          mat-list-item:not(:last-child) {
+            margin-bottom: 10px;
+          }
+          mat-list-item {
+            height: unset;
+            padding: 0;
+            div[matListItemAvatar] {
+              margin: 0 16px 0 0;
+              width: 160px;
+              height: 90px;
+              src {
+                width: 100%;
+              }
+            }
+            div[matListItemTitle] {
+              margin: unset
+            }
+            div[matListItemTitle]::before {
+              display: none;
+            }
 
-@media only screen and (max-width: 768px) {
-    .order-history-container{
-        .table-container{
-            width: 100%;
-            overflow-x: scroll;
-            .mat-table{
-                .mat-header-cell, .mat-cell{
-                    min-width: 100px;
-                    padding: 0 5px;
-                }
-                .mat-table-sticky-border-elem-right {
-                    border-left: 1px solid #e0e0e0;
-                }
-                .mat-table-sticky-border-elem-left {
-                    border-right: 1px solid #e0e0e0;
-                }
+            div[matListItemLine]:before{
+              display: none;
             }
+          }
         }
+        .order-summary {
+          justify-content: flex-end;
+          b {
+            margin-left: 5px;
+          }
+        }
+      }
+      mat-card-actions {
+        justify-content: flex-end;
+      }
     }
+  }
 }

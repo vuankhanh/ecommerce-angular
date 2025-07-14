@@ -17,8 +17,8 @@
 
   <div class="menu-container horizontal-container">
     <div class="vertical-container dropdown-container">
-      <button matRippleDisabled="false" class="title-menu" routerLink=""
-        [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: true }">
+      <button matRippleDisabled="false" class="title-menu" routerLink="" [routerLinkActive]="['is-active']"
+        [routerLinkActiveOptions]="{ exact: true }">
         <span>Trang chủ</span>
 
       </button>
@@ -48,12 +48,16 @@
 
   <div class="user-information">
 
-    <div class="user-information-block horizontal-container"
-      routerLink="/khach-hang"
-      [routerLinkActive]="['is-active']"
+    <div class="user-information-block horizontal-container" routerLink="/khach-hang" [routerLinkActive]="['is-active']"
       [routerLinkActiveOptions]="{ exact: false }">
       <div class="user-information-block_icon vertical-container">
+        @if (userInformation$ | async; as userInformation) {
+        <img
+          [src]="(userInformation && userInformation?.avatar) ? (userInformation!.avatar | prefixBackendStatic) : 'assets/avatar/default.svg'"
+          [alt]="userInformation?.name" class="user-avatar">
+        }@else {
         <mat-icon>person_outline</mat-icon>
+        }
       </div>
       <div class="user-information-block_showListButton vertical-container">
         <div class="user-information-block_showListButton_status">

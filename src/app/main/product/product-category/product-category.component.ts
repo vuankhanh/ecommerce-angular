@@ -35,20 +35,24 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.activatedRoute.params.pipe(
-        map(params => params['productCategory'] as string),
-        filter(productCategory => !!productCategory),
-        switchMap(productCategory => {
-          this.products = [];
-          return this.productService.getAllDataByCategorySlug(productCategory);
-        })
-      )
-      .subscribe(res => {
-        this.products = res;
-        console.log('Products:', this.products);
-      })
-    );
+    this.activatedRoute.data.subscribe(data => {
+      const { productFromCategorySlug } = data;
+      this.products = productFromCategorySlug || [];
+    })
+    // this.subscription.add(
+    //   this.activatedRoute.params.pipe(
+    //     map(params => params['productCategory'] as string),
+    //     filter(productCategory => !!productCategory),
+    //     switchMap(productCategory => {
+    //       this.products = [];
+    //       return this.productService.getAllDataByCategorySlug(productCategory);
+    //     })
+    //   )
+    //   .subscribe(res => {
+    //     this.products = res;
+    //     console.log('Products:', this.products);
+    //   })
+    // );
   }
 
   showDetail(product: TProductModel) {

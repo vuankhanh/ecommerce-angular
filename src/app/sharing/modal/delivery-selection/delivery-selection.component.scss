@@ -1,0 +1,87 @@
+mat-dialog-content {
+  mat-list {
+    max-width: 900px;
+
+    mat-list-item {
+      border: 1px solid #ededed;
+      border-radius: 5px;
+      margin: 15px 0;
+      padding: 15px;
+      box-sizing: border-box;
+      height: unset;
+
+      mat-radio-button[matListItemAvatar] {
+        margin-left: 0;
+      }
+
+      div[matListItemTitle] {
+        display: flex;
+        margin-bottom: unset;
+        height: 20px;
+
+        .delivery-name {
+          font-weight: bold;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .separator {
+          margin: 0 5px 0 5px;
+        }
+
+        .separator,
+        .delivery-phone {
+          flex-shrink: 0;
+          white-space: nowrap;
+        }
+      }
+
+      div[matListItemLine] {
+        text-wrap: auto;
+
+        .default-address {
+          color: var(--bep4than-hightlight-text);
+        }
+      }
+
+      div[matListItemMeta] {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        margin-right: 0;
+
+        // .button-container {
+        //   justify-content: flex-end;
+        //   .default-address {
+        //     color: var(--bep4than-hightlight-text);
+        //   }
+        // }
+      }
+
+      div[matListItemMeta]::before {
+        display: none !important;
+      }
+    }
+  }
+}
+
+mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 799px) {
+  ::ng-deep .delivery-selection-modal {
+    width: 100%;
+    height: 100%;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+
+  mat-dialog-content {
+    mat-list {
+      max-width: 100%;
+    }
+  }
+}

@@ -3,7 +3,12 @@
     <mat-expansion-panel-header collapsedHeight='64px' expandedHeight='64px'>
       <div class="user-information-block horizontal-container">
         <div class="user-information-block_icon vertical-container">
+          @if (userInformation$ | async; as userInformation) {
+          <img [src]="(userInformation && userInformation?.avatar) ? (userInformation!.avatar | prefixBackendStatic) : 'assets/avatar/default.svg'" [alt]="userInformation?.name"
+            class="user-avatar">
+          }@else {
           <mat-icon>person_outline</mat-icon>
+          }
         </div>
         <div class="user-information-block_showListButton vertical-container">
           <div class="user-information-block_showListButton_status">

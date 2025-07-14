@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Event, NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Event, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
 
 import { Subscription } from 'rxjs';
@@ -18,6 +18,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 
 import { OrderHistoryComponent } from './order-history/order-history.component';
 import { TMenu } from '../models/menu.interface';
+import { BreakpointDetectionService } from '../services/breakpoint-detection.service';
 
 @Component({
   selector: 'app-main-customer',
@@ -28,6 +29,7 @@ import { TMenu } from '../models/menu.interface';
     ReactiveFormsModule,
 
     RouterLink,
+    RouterLinkActive,
     RouterOutlet,
 
     MaterialModule,
@@ -53,9 +55,12 @@ export class CustomerComponent implements OnInit, OnDestroy {
   customerMenu: Array<TMenu> = CustomerMenu;
   currentUrl: string;
   activeMenu: TMenu;
+
+  isMobile$ = this.breakpointDetectionService.detection$();
   private subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
+    private breakpointDetectionService: BreakpointDetectionService,
     private urlChangeService: UrlChangeService,
     private configService: ConfigService,
     private authService: AuthService
@@ -73,8 +78,6 @@ export class CustomerComponent implements OnInit, OnDestroy {
         }
       })
     );
-
-
 
     this.subscription.add(
       this.configService.getConfig().subscribe({

@@ -4,16 +4,21 @@ import {
   ActivatedRouteSnapshot,
   ResolveFn
 } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Product } from '../../../models/Product';
-import { ProductService } from '../../../services/api/product/product.service';
+import { catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { ProductService } from '../../../services/api/product.service';
+import { ProductDetailEntity } from '../../../entity/product-detail.entity';
 
-export const productDetailResolver: ResolveFn<Product> =
+export const productDetailResolver: ResolveFn<ProductDetailEntity | null> =
   (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<Product> => {
+  ): Observable<ProductDetailEntity | null> => {
     const productService = inject(ProductService);
-    const productRoute = route.paramMap.get('route') || '';
-    return productService.getProductRoute(productRoute);
+    const productSlug = route.paramMap.get('productSlug') as string;
+    if(!productSlug) {
+      return of(null);
+    }
+    return productService.getDetail(undefined, productSlug).pipe(
+      catchError(_=> of(null)) // trả về null nếu lỗi
+    );
   };
