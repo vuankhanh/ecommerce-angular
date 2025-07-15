@@ -44,7 +44,9 @@
     }
   </div>
 
-  <mat-paginator *ngIf="configPagination" [length]="configPagination.totalItems" [pageIndex]="configPagination.page"
-    [pageSize]="configPagination.size" [pageSizeOptions]="[10, 20, 100]" (page)="handlePageEvent($event)">
-  </mat-paginator>
+  @if (pagination$ | async; as pagination) {
+    <mat-paginator [length]="pagination.totalItems" [pageIndex]="pagination.page"
+      [pageSize]="pagination.size" [pageSizeOptions]="[10, 20, 100]" (page)="handlePageEvent($event)">
+    </mat-paginator>
+  }
 </div>

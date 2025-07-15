@@ -4,8 +4,6 @@ import { PageEvent, MatPaginatorIntl } from '@angular/material/paginator';
 
 import { CustomPaginator } from '../../providers/CustomPaginatorConfiguration';
 
-import { Subscription } from 'rxjs';
-import { PaginationParams } from '../../models/PaginationParams';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { ConfigService } from '../../services/api/config.service';
 import { CommonModule } from '@angular/common';
@@ -14,7 +12,9 @@ import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 import { TOrderModel } from '../../models/order-response.interface';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
-
+import { BehaviorSubject, Subscription, switchMap } from 'rxjs';
+import { IPagination } from '../../services/api/pagination.interface';
+import { PaginationConstant } from '../../sharing/constant/pagination.constant';
 @Component({
   selector: 'app-order-history',
   standalone: true,
@@ -35,11 +35,14 @@ import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe'
 export class OrderHistoryComponent implements OnInit {
   displayedColumns: string[] = ['orderCode', 'createdAt', 'name', 'totalValue', 'status'];
 
-  configPagination?: PaginationParams;
   orders: Array<TOrderModel> = [];
-
+  private readonly bPagination: BehaviorSubject<IPagination> = new BehaviorSubject<IPagination>(PaginationConstant);
+  pagination$ = this.bPagination.asObservable();
   
-  count: number = 0;
+  orderPersonal$ = this.pagination$.pipe(
+    switchMap(paginationParams => this.orderPersonalApiService.getAll(paginationParams.page, paginationParams.size))
+  );
+
   private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
@@ -52,27 +55,30 @@ export class OrderHistoryComponent implements OnInit {
     this.listenOrder();
   }
 
-  listenOrder(paginationParams?: PaginationParams) {
+  listenOrder() {
     this.subscription.add(
-      this.orderPersonalApiService.getAll(paginationParams?.page, paginationParams?.size).subscribe(res => {
+      this.orderPersonal$.subscribe(res => {
         const { data, paging } = res;
 
-        this.configPagination = {
+        const paginationParams: IPagination = {
           totalItems: paging.totalItems,
-          page: paging.page - 1,
+          page: paging.page,
           size: paging.size,
           totalPages: paging.totalPages
-        };
+        }
+
+        this.bPagination.next(paginationParams);
         this.orders = data;
       })
     )
   }
 
   handlePageEvent(event: PageEvent) {
-    if (this.configPagination === undefined) return;
-    this.configPagination.page = event.pageIndex + 1;
-    this.configPagination.size = event.pageSize;
-    this.listenOrder(this.configPagination)
+    const currentPagination =  this.bPagination.getValue();
+    currentPagination.page = event.pageIndex + 1;
+    currentPagination.size = event.pageSize;
+
+    this.bPagination.next(currentPagination);
   }
 
   showDetail(order: TOrderModel) {

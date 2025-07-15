@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
-import { PaginationParams } from '../../../models/PaginationParams';
 import { ISuccess } from '../../../models/success.interface';
 import { IPagination } from '../pagination.interface';
 import { map, Observable } from 'rxjs';

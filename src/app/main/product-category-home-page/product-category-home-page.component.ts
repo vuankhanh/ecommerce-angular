@@ -1,8 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { PaginationParams } from '../../models/PaginationParams';
-
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SkeletonComponent } from '../../sharing/component/skeleton/skeleton.component';
@@ -32,7 +30,6 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
   @Input() isSameCategory?: boolean;
   @Output() emitChangeRoute: EventEmitter<string> = new EventEmitter();
 
-  configPagination?: PaginationParams;
   products: TProductModel[] = [];
 
   private readonly subscription: Subscription = new Subscription();

@@ -1,5 +1,3 @@
-import { ISuccess } from "./success.interface";
-
 export interface IProvince {
   _id: string; // Unique identifier for the province
   name: string; // Name of the province

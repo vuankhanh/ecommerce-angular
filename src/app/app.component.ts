@@ -8,7 +8,6 @@ import { MouseEventEmitService } from './services/mouse-event-emit.service';
 import { MainContainerScrollService } from './services/main-container-scroll.service';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { BreadCrumbComponent } from './main/bread-crumb/bread-crumb.component';
 import { Observable, Subscription } from 'rxjs';
 import { BreakpointDetectionService } from './services/breakpoint-detection.service';
 

@@ -25,7 +25,6 @@ import { FormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { PostsComponent } from '../../../sharing/component/posts/posts.component';
 import { RatingComponent } from '../../../sharing/component/rating/rating.component';
-import { PaginationComponent } from '../../../sharing/component/pagination/pagination.component';
 import { ProductCategoryHomePageComponent } from '../../product-category-home-page/product-category-home-page.component';
 import { PrefixBackendStaticPipe } from '../../../sharing/pipe/prefix-backend.pipe';
 import { GalleryComponent } from '@daelmaak/ngx-gallery';
@@ -59,7 +58,6 @@ const headerOffset = 85;
     SkeletonComponent,
     PostsComponent,
     RatingComponent,
-    PaginationComponent,
     ProductCategoryHomePageComponent,
 
     MaterialModule
