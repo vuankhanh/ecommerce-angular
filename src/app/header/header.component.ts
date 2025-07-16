@@ -14,7 +14,6 @@ import { UrlChangeService } from '../services/url-change.service';
 import { JwtDecodedService } from '../services/jwt-decoded.service';
 import { AuthService } from '../services/auth.service';
 import { MainContainerScrollService } from '../services/main-container-scroll.service';
-import { ConfigService } from '../services/api/config.service';
 import { SocialAuthenticationService } from '../services/api/social-login/social-authentication';
 
 import { distinctUntilChanged, map, Subscription } from 'rxjs';
@@ -65,7 +64,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private jwtDecodedService: JwtDecodedService,
     public authService: AuthService,
     private mainContainerScrollService: MainContainerScrollService,
-    private configService: ConfigService,
     private socialAuthenticationService: SocialAuthenticationService,
     private readonly inProgressSpinnerService: InProgressSpinnerService,
   ) {
@@ -86,8 +84,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       })
     );
-
-    this.listenUserInformation();
   }
 
   ngAfterViewInit(): void{
@@ -119,16 +115,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     }else{
       this.ren.removeClass(this.header?.nativeElement, 'header-container-scrolled');
     }
-  }
-
-  listenUserInformation(){
-    this.subscription.add(
-      this.configService.getConfig().subscribe({
-        next: (config)=> this.configService.set(config),
-        error: (err) => console.error('Lỗi lấy cấu hình:', err.message),
-        complete: () => console.log('Cấu hình đã được lấy thành công')
-      })
-    );
   }
 
   async socialAuthentication(provider: 'google' | 'facebook'){

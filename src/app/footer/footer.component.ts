@@ -3,7 +3,6 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { Identification } from '../models/Identification';
 
-import { ConfigService } from '../services/api/config.service';
 import { CartService } from '../services/cart.service';
 import { SupportService } from '../services/api/support.service';
 
@@ -41,7 +40,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
-    private configService: ConfigService,
     private cartService: CartService,
     private supportService: SupportService
   ) {
@@ -53,21 +51,9 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.cartService.cartStoraged$.subscribe(cart=>{
         this.badgeCart = cart.totalQuantity;
       })
-    )
+    );
 
-    this.listenConfig();
     this.listenSupport();
-  }
-
-
-  listenConfig() {
-    this.subscription.add(
-      this.configService.getConfig().subscribe({
-        next: (config) => this.configService.set(config),
-        error: (err) => console.error('Lỗi lấy cấu hình:', err.message),
-        complete: () => console.log('Cấu hình đã được lấy thành công')
-      })
-    )
   }
 
   listenSupport() {

@@ -4,15 +4,13 @@ import { PageEvent, MatPaginatorIntl } from '@angular/material/paginator';
 
 import { CustomPaginator } from '../../providers/CustomPaginatorConfiguration';
 
-import { LocalStorageService } from '../../services/local-storage.service';
-import { ConfigService } from '../../services/api/config.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 import { TOrderModel } from '../../models/order-response.interface';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
-import { BehaviorSubject, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
 import { IPagination } from '../../services/api/pagination.interface';
 import { PaginationConstant } from '../../sharing/constant/pagination.constant';
 @Component({
@@ -40,15 +38,14 @@ export class OrderHistoryComponent implements OnInit {
   pagination$ = this.bPagination.asObservable();
   
   orderPersonal$ = this.pagination$.pipe(
+    distinctUntilChanged((prev, curr) => prev.page === curr.page && prev.size === curr.size),
     switchMap(paginationParams => this.orderPersonalApiService.getAll(paginationParams.page, paginationParams.size))
   );
 
   private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
-    private localStorageService: LocalStorageService,
     private orderPersonalApiService: OrderPersonalApiService,
-    public configService: ConfigService
   ) { }
 
   ngOnInit(): void {

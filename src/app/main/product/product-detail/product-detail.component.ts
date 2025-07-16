@@ -14,7 +14,6 @@ import { CartService } from '../../../services/cart.service';
 import { AuthService } from '../../../services/auth.service';
 import { SEOService } from '../../../services/seo.service';
 import { InProgressSpinnerService } from '../../../services/in-progress-spinner.service';
-import { ConfigService } from '../../../services/api/config.service';
 import { MainContainerScrollService } from '../../../services/main-container-scroll.service';
 
 import { Subscription } from 'rxjs';
@@ -46,7 +45,6 @@ const headerOffset = 85;
 
     FormsModule,
 
-    PrefixBackendStaticPipe,
     NumberInputComponent,
     GalleryPipe,
     TheDayOfWeekPipe,
@@ -86,7 +84,6 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     private authService: AuthService,
     private seoService: SEOService,
     private inProgressSpinnerService: InProgressSpinnerService,
-    private configService: ConfigService,
     private mainContainerScrollService: MainContainerScrollService,
     private productService: ProductService
   ) {
@@ -99,17 +96,6 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
       this.product = product;
     });
 
-    this.listenConfig();
-  }
-
-  listenConfig() {
-    this.subscription.add(
-      this.configService.getConfig().subscribe({
-        next: (config) => this.configService.set(config),
-        error: (err) => console.error('Lỗi lấy cấu hình:', err.message),
-        complete: () => console.log('Cấu hình đã được lấy thành công')
-      })
-    )
   }
 
   ngAfterViewInit() {

@@ -1,22 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Event, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
 
 import { Subscription } from 'rxjs';
-import { CustomerMenu, Menu } from '../sharing/constant/menu.constant';
+import { CustomerMenu } from '../sharing/constant/menu.constant';
 import { UrlChangeService } from '../services/url-change.service';
-import { ConfigService } from '../services/api/config.service';
 import { AuthService } from '../services/auth.service';
 import { MaterialModule } from '../sharing/module/material';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ReplaceProtocolNamePipe } from '../sharing/pipe/replace-protocol-name.pipe';
-import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
-import { SanitizeHtmlBindingPipe } from '../sharing/pipe/sanitize-html-binding.pipe';
-import { PersonalInformationComponent } from './personal-information/personal-information.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-
-import { OrderHistoryComponent } from './order-history/order-history.component';
 import { TMenu } from '../models/menu.interface';
 import { BreakpointDetectionService } from '../services/breakpoint-detection.service';
 
@@ -33,14 +25,6 @@ import { BreakpointDetectionService } from '../services/breakpoint-detection.ser
     RouterOutlet,
 
     MaterialModule,
-
-    ReplaceProtocolNamePipe,
-    PrefixBackendStaticPipe,
-    SanitizeHtmlBindingPipe,
-
-    PersonalInformationComponent,
-    ChangePasswordComponent,
-    OrderHistoryComponent,
 
     MaterialModule
   ],
@@ -62,7 +46,6 @@ export class CustomerComponent implements OnInit, OnDestroy {
     private router: Router,
     private breakpointDetectionService: BreakpointDetectionService,
     private urlChangeService: UrlChangeService,
-    private configService: ConfigService,
     private authService: AuthService
   ) {
     this.currentUrl = this.router.url;
@@ -78,14 +61,6 @@ export class CustomerComponent implements OnInit, OnDestroy {
         }
       })
     );
-
-    this.subscription.add(
-      this.configService.getConfig().subscribe({
-        next: (config) => this.configService.set(config),
-        error: (err) => console.error('Lỗi lấy cấu hình:', err.message),
-        complete: () => console.log('Cấu hình đã được lấy thành công')
-      })
-    )
   }
 
   getActiveMenu(route: string, arrayMenu: Array<TMenu>) {

@@ -1,23 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { OrderService } from '../../services/api/order.service';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
-import { OrderPersonalApiService, TOrder } from '../../services/api/personal/order-personal.api.service';
+import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 import { TOrderDetailModel } from '../../models/order-response.interface';
 import { AddressPipe } from '../../sharing/pipe/address.pipe';
+
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-order-history-detail',
   standalone: true,
   imports: [
     CommonModule,
-
-    RouterLink,
 
     PrefixBackendStaticPipe,
     CurrencyCustomPipe,

@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, } from '@angular/core';
-import { ConfigService } from '../../../services/api/config.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 
@@ -21,26 +20,10 @@ export class RatingComponent implements OnInit {
   ratingValueFloor: number = 0;
   totalNumberOfStars = Array(totalNumberOfStars).fill(null).map((value, index)=>index+1);
   ratingTitle?: string;
-  constructor(
-    private configService: ConfigService
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.ratingValueFloor = Math.floor(this.ratingValue);
-    if(this.showRatingTitle){
-      this.listenConfig();
-    }
-  }
-
-  listenConfig(){
-    this.configService.getConfig().subscribe((res:any)=>{
-      let ratings = res.rating;
-      ratings.forEach((rating:any)=>{
-        if(rating.value === this.ratingValueFloor){
-          this.ratingTitle = rating.title;
-        }
-      })
-    })
   }
 
 }
