@@ -1,14 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormField } from '@angular/material/input';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../module/material';
 import { DeliveryEntity } from '../../../entity/deliverty.entity';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddressSelectorComponent } from '../address-selector/address-selector.component';
-import { Validators } from 'ngx-editor';
 import { NgxMaskDirective } from 'ngx-mask';
 import { IAddress } from '../../../models/address.interface';
 import { BehaviorSubject, lastValueFrom, map, Observable, take, tap } from 'rxjs';

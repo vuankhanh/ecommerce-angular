@@ -39,6 +39,9 @@ testem.log
 
 /nginx
 
+# Environment files
+/src/environments/*
+
 # System files
 .DS_Store
 Thumbs.db
