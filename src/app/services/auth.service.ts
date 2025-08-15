@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 //Component
-import { MainComponent, TypeLogin } from '../sharing/modal/main/main.component';
 
 //Model
 import { IJwtDecoded } from '../models/token.interface';
@@ -13,21 +12,27 @@ import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
 import { SocialAuthenticationService } from './api/social-login/social-authentication';
 
-import { BehaviorSubject, lastValueFrom, Observable, take } from 'rxjs';
+import { BehaviorSubject, filter, lastValueFrom, Observable, switchMap, take } from 'rxjs';
 import { TToken } from '../models/token.interface';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 import { AuthenticationUtil } from '../sharing/util/authentication.util';
 import { LocalAuthenticationService } from './api/local-authentication.service';
 import { DeliveryService } from './delivery.service';
+import { AuthComponent, TypeLogin } from '../sharing/modal/auth/auth.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { BreakpointDetectionService } from './breakpoint-detection.service';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private isMobile$: Observable<boolean> = this.breakpointDetectionService.detection$();
   private readonly bJwtPayload: BehaviorSubject<IJwtDecoded | null> = new BehaviorSubject<IJwtDecoded | null>(null);
   public jwtPayload$: Observable<IJwtDecoded | null> = this.bJwtPayload.asObservable();
   constructor(
     private router: Router,
-    private dialog: MatDialog,
+    private _dialog: MatDialog,
+    private _bottomSheet: MatBottomSheet,
+    private readonly breakpointDetectionService: BreakpointDetectionService,
     private jwtDecodedService: JwtDecodedService,
     private localStorageService: LocalStorageService,
     private socialAuthenticationService: SocialAuthenticationService,
@@ -36,21 +41,30 @@ export class AuthService {
   ) { }
 
   login(type: 'login' | 'register' | 'forgotPassword') {
-    if (type === 'login' || type === 'register' || type === 'forgotPassword') {
-      let data: TypeLogin = { type: type };
-      const dialogRef = this.dialog.open(MainComponent, {
-        panelClass: 'login-modal',
-        data: data,
-      });
+    let data: TypeLogin = { type: type };
+    this.openAuthenticationComponent(data).pipe(
+      filter(result => !!result),
+      take(1)
+    ).subscribe(result => {
+      this.afterLogin(result);
+    });
+  }
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.afterLogin(result);
-        }
+  private openAuthenticationComponent(data: TypeLogin) {
+    return this.isMobile$.pipe(
+      take(1),
+      switchMap(isMobile => {
+        if (isMobile) return this._bottomSheet.open(AuthComponent, {
+          panelClass: 'login-modal',
+          data: data
+        }).afterDismissed();
+
+        return this._dialog.open(AuthComponent, {
+          panelClass: 'login-modal',
+          data: data
+        }).afterClosed()
       })
-    } else {
-      console.log('Không đúng Modal Login')
-    }
+    )
   }
 
   afterLogin(token: TToken) {

@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../../module/material';
-import { ResetPasswordService } from '../../../services/api/reset-password.service';
-import { ToastService } from '../../../services/toast.service';
+import { MaterialModule } from '../../../module/material';
+import { ResetPasswordService } from '../../../../services/api/reset-password.service';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-forgot-password',

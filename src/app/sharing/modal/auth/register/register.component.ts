@@ -2,16 +2,16 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 //Validation Form
-import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../validator/validators'
+import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../../validator/validators'
 
 //Service
-import { RegisterService, Account } from '../../../services/api/register.service';
+import { RegisterService, Account } from '../../../../services/api/register.service';
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../../module/material';
-import { CheckExistsAccountService } from '../../../services/api/check-exists-account.service';
-import { ToastService } from '../../../services/toast.service';
+import { MaterialModule } from '../../../module/material';
+import { CheckExistsAccountService } from '../../../../services/api/check-exists-account.service';
+import { ToastService } from '../../../../services/toast.service';
 @Component({
   selector: 'app-register',
   standalone: true,

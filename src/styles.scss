@@ -257,8 +257,6 @@ table[mat-table] {
   }
 
   .cdk-overlay-pane {
-    max-width: calc(100% - 30px) !important;
-    // width: calc(100% - 30px) !important;
     max-height: calc(100% - 30px) !important;
     overflow: auto;
   }
@@ -267,7 +265,7 @@ table[mat-table] {
     width: 100%;
 
     mat-dialog-container {
-      app-check-account-main {
+      app-auth {
         .close-button {
           animation: secondss 0s forwards !important;
           animation-delay: .45s !important;
@@ -277,16 +275,6 @@ table[mat-table] {
         .register-container,
         .forgot-password-container {
           width: 100%;
-        }
-
-        .register-container {
-          .input-information-container {
-            flex-direction: column;
-
-            .vertical-container {
-              width: 100% !important;
-            }
-          }
         }
       }
     }

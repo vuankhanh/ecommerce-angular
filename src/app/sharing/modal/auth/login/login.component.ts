@@ -5,13 +5,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { LocalAuthenticationService } from '../../../services/api/local-authentication.service';
-import { ToastService } from '../../../services/toast.service';
-import { SocialAuthenticationService } from '../../../services/api/social-login/social-authentication';
-import { InProgressSpinnerService } from '../../../services/in-progress-spinner.service';
-import { MaterialModule } from '../../module/material';
-import { TToken } from '../../../models/token.interface';
-import { AuthService } from '../../../services/auth.service';
+import { LocalAuthenticationService } from '../../../../services/api/local-authentication.service';
+import { ToastService } from '../../../../services/toast.service';
+import { SocialAuthenticationService } from '../../../../services/api/social-login/social-authentication';
+import { InProgressSpinnerService } from '../../../../services/in-progress-spinner.service';
+import { MaterialModule } from '../../../module/material';
+import { TToken } from '../../../../models/token.interface';
+import { AuthService } from '../../../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,

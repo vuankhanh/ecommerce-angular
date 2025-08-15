@@ -1,0 +1,29 @@
+<div class="close-button" (click)="closeModal()">
+  <mat-icon>close</mat-icon>
+</div>
+@if(historyModalComponent.length>1){
+<div class="back-button">
+  <mat-icon (click)="back()">chevron_left</mat-icon>
+  <div class="height-space"></div>
+</div>
+}
+
+@if(data && data.type; as type){
+@switch (type) {
+@case ('login') {
+<app-login (valueChange)="changeComponent($event)" (closeModal)="closeModal($event)"></app-login>
+}
+@case ('register') {
+<app-register (valueChange)="changeComponent($event)"></app-register>
+}
+@case ('forgotPassword') {
+<app-forgot-password (valueChange)="changeComponent($event)"></app-forgot-password>
+}
+@case ('registerSuccessful') {
+<app-register-successful></app-register-successful>
+}
+@case ('forgotPasswordSuccessful') {
+<app-forgot-password-successful></app-forgot-password-successful>
+}
+}
+}
