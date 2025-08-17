@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { MatSpinner } from '@angular/material/progress-spinner';
+import { ProgressSpinnerComponent } from '../sharing/component/progress-spinner/progress-spinner.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class InProgressSpinnerService {
   progressSpinnerStatus(status: boolean){
     if(status){
       if(!this.spinnerTopRef.hasAttached()){
-        this.spinnerTopRef.attach(new ComponentPortal(MatSpinner));
+        this.spinnerTopRef.attach(new ComponentPortal(ProgressSpinnerComponent));
       }
     }else{
       if(this.spinnerTopRef.hasAttached()){

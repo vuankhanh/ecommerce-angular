@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { LocalAuthenticationService } from '../../../../services/api/local-authentication.service';
+import { LocalAuthenticationService, TokenResponse } from '../../../../services/api/local-authentication.service';
 import { ToastService } from '../../../../services/toast.service';
 import { SocialAuthenticationService } from '../../../../services/api/social-login/social-authentication';
 import { InProgressSpinnerService } from '../../../../services/in-progress-spinner.service';
@@ -56,22 +56,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.loginGroup.valid) {
       this.inProgressSpinnerService.progressSpinnerStatus(true);
       this.subscription.add(
-        this.localAuthenticationService.login(this.loginGroup.value).subscribe(res => {
-          this.inProgressSpinnerService.progressSpinnerStatus(false);
-
-          if (res.status === 205) {
-            this.toastService.shortToastWarning('Tài khoản chưa kích hoạt', 'Đăng nhập');
-          } else if (res.status === 200) {
-            this.closeModal.emit(res.body);
-            this.toastService.shortToastSuccess('Đăng nhập thành công', '');
-          }
-        }, error => {
-
-          this.inProgressSpinnerService.progressSpinnerStatus(false);
-          if (error.status === 403) {
-            this.toastService.shortToastError('Tài khoản hoặc Mật khẩu không đúng', 'Lỗi đăng nhập');
-          } else {
-            this.toastService.shortToastError('Đã xảy ra lỗi không xác định', 'Lỗi đăng nhập');
+        this.localAuthenticationService.login(this.loginGroup.value).subscribe({
+          next: (res: TokenResponse) => {
+            this.inProgressSpinnerService.progressSpinnerStatus(false);
+            if (res.statusCode === 205) {
+              this.toastService.shortToastWarning('Tài khoản chưa kích hoạt', 'Đăng nhập');
+            } else if (res.statusCode === 200) {
+              this.closeModal.emit(res.metaData);
+              this.toastService.shortToastSuccess('Đăng nhập thành công', '');
+            }
+          },
+          error: (error: any) => {
+            this.inProgressSpinnerService.progressSpinnerStatus(false);
+            if (error.status === 403) {
+              this.toastService.shortToastError('Tài khoản hoặc Mật khẩu không đúng', 'Lỗi đăng nhập');
+            } else {
+              this.toastService.shortToastError('Đã xảy ra lỗi không xác định', 'Lỗi đăng nhập');
+            }
+          },
+          complete: () => {
+            this.inProgressSpinnerService.progressSpinnerStatus(false);
           }
         })
       );

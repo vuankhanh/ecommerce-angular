@@ -17,7 +17,7 @@ export class LocalAuthenticationService {
   ) { }
 
   login(userName: UserName){
-    return this.httpClient.post(this.url+'/login', userName, { observe: 'response' });
+    return this.httpClient.post<TokenResponse>(this.url+'/login', userName);
   }
 
   refreshToken(refreshToken: string){
