@@ -15,6 +15,7 @@
 
         .user-information-block_icon {
           margin-right: 16px;
+
           img {
             max-height: 50px;
           }
@@ -29,12 +30,16 @@
         }
       }
     }
+
+    ::ng-deep .mat-expansion-panel-content {
+      .mat-expansion-panel-body {
+        padding: 0 16px 16px;
+      }
+    }
   }
 
-  mat-nav-list {
-    mat-icon {
-      font-size: 21px;
-    }
+  mat-icon[matlistitemicon] {
+    font-size: 21px;
   }
 }
 

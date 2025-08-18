@@ -4,8 +4,9 @@
       <div class="user-information-block horizontal-container">
         <div class="user-information-block_icon vertical-container">
           @if (userInformation$ | async; as userInformation) {
-          <img [src]="(userInformation && userInformation?.avatar) ? (userInformation!.avatar | prefixBackendStatic) : 'assets/avatar/default.svg'" [alt]="userInformation?.name"
-            class="user-avatar">
+          <img
+            [src]="(userInformation && userInformation?.avatar) ? (userInformation!.avatar | prefixBackendStatic) : 'assets/avatar/default.svg'"
+            [alt]="userInformation?.name" class="user-avatar">
           }@else {
           <mat-icon>person_outline</mat-icon>
           }
@@ -21,7 +22,8 @@
         </div>
       </div>
     </mat-expansion-panel-header>
-    <mat-list class="user-information-menu" *ngIf="userInformation$ | async">
+    @if (userInformation$ | async) {
+    <mat-list class="user-information-menu">
       <mat-list-item *ngFor="let customer of customerMenu" [routerLink]="['/khach-hang/'+customer.route]"
         [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: customer.route ? false : true }"
         (click)="closeSideMenu()">
@@ -38,23 +40,24 @@
         <span>Thoát tài khoản</span>
       </mat-list-item>
     </mat-list>
-
-    <mat-list *ngIf="!(userInformation$ | async)">
+    }@else {
+    <mat-list>
       <mat-list-item (click)="login('login')">
-        <mat-icon>login</mat-icon>
+        <mat-icon fontSet="fa" fontIcon="fa-sign-in" matListItemIcon></mat-icon>
         <span>Đăng nhập</span>
       </mat-list-item>
       <mat-list-item (click)="login('register')">
-        <mat-icon>add</mat-icon>
+        <mat-icon fontSet="fa" fontIcon="fa-user-plus" matListItemIcon></mat-icon>
         <span>Đăng ký</span>
       </mat-list-item>
     </mat-list>
+    }
   </mat-expansion-panel>
 
   <div class="height-space"></div>
 
   <mat-nav-list>
-    <mat-list-item role="listitem" routerLink="" routerLinkActive="active-menu-item"
+    <mat-list-item (click)="closeSideMenu()" role="listitem" routerLink="" routerLinkActive="active-menu-item"
       [routerLinkActiveOptions]="{ exact: true }">
       <mat-icon fontSet="fa-solid" fontIcon="fa-house" matListItemIcon></mat-icon>
       Trang chủ
@@ -76,14 +79,14 @@
       </mat-expansion-panel-header>
 
       @for (child of nav.children; track $index) {
-      <mat-list-item role="listitem" [routerLink]="child.route" routerLinkActive="active-menu-item"
+      <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="child.route" routerLinkActive="active-menu-item"
         [routerLinkActiveOptions]="{ exact: false }">
         {{ child.name }}
       </mat-list-item>
       }
     </mat-expansion-panel>
     }@else {
-    <mat-list-item role="listitem" [routerLink]="nav.route" routerLinkActive="active-menu-item"
+    <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="nav.route" routerLinkActive="active-menu-item"
       [routerLinkActiveOptions]="{ exact: false }">
       @if (!!nav.icon?.fontSet && !!nav.icon?.fontIcon) {
       <mat-icon [fontSet]="nav.icon!.fontSet" [fontIcon]="nav.icon!.fontIcon" matListItemIcon></mat-icon>

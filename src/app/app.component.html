@@ -1,8 +1,10 @@
 <div class="carota-container horizontal-container">
   <mat-drawer-container autosize>
-    <mat-drawer #drawer mode="over" *ngIf="breakpointDetection$ | async">
-      <app-drawer (toggleDrawer)="toggle($event)"></app-drawer>
-    </mat-drawer>
+    @if (breakpointDetection$ | async) {
+      <mat-drawer #drawer mode="over">
+        <app-drawer (toggleDrawer)="toggle($event)"></app-drawer>
+      </mat-drawer>
+    }
   
     <mat-drawer-content #drawerContent (scroll)="onScroll($event)">
       <div class="main-container">
