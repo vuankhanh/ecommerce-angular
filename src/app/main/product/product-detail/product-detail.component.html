@@ -46,59 +46,67 @@
             <div class="description-content" [innerHTML]="product.description"></div>
           </div>
 
+          @if (product.reviews && product.reviews.length > 0) {
           <!-- Product Reviews -->
-          <div class="reviews-section" *ngIf="product.reviews && product.reviews.length > 0">
+          <div class="reviews-section">
             <div class="reviews-header">
               <mat-icon>rate_review</mat-icon>
               <h3>Đánh giá ({{product.reviews.length}})</h3>
             </div>
-            
+
             <div class="reviews-content">
-              <div class="review-item" *ngFor="let review of product.reviews">
-                <div class="review-header">
-                  <span class="reviewer-name">{{review.userName || 'Khách hàng'}}</span>
-                  <div class="review-rating">
-                    <mat-icon *ngFor="let star of [1,2,3,4,5]" [class.filled]="star <= review.rating"
-                      class="star-icon">star</mat-icon>
+              @for (review of product.reviews; track $index) {
+                <div class="review-item">
+                  <div class="review-header">
+                    <span class="reviewer-name">{{review.userName || 'Khách hàng'}}</span>
+                    <div class="review-rating">
+                      @for (star of [1,2,3,4,5]; track $index) {
+                        <mat-icon [class.filled]="star <= review.rating"
+                          class="star-icon">star</mat-icon>
+                      }
+                    </div>
                   </div>
+                  <p class="review-text">{{review.comment}}</p>
+                  @if (review.createdAt) {
+                  <span class="review-date">{{review.createdAt | date:'dd/MM/yyyy'}}</span>
+                  }
                 </div>
-                <p class="review-text">{{review.comment}}</p>
-                <span class="review-date" *ngIf="review.createdAt">{{review.createdAt | date:'dd/MM/yyyy'}}</span>
-              </div>
+              }
             </div>
           </div>
+          }
 
           <!-- Contact Section -->
-          <ng-container *ngIf="identification">
-            <mat-expansion-panel class="contact-panel">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon>support_agent</mat-icon>
-                  Trò chuyện thêm
-                </mat-panel-title>
-              </mat-expansion-panel-header>
+          @if (identification) {
+          <mat-expansion-panel class="contact-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>support_agent</mat-icon>
+                Trò chuyện thêm
+              </mat-panel-title>
+            </mat-expansion-panel-header>
 
-              <div class="contact-options">
-                <a mat-stroked-button href="https://m.me/thuy.hai.san.carota" target="_blank"
-                  (click)="contactUs('messenger')" class="contact-btn messenger">
-                  <mat-icon svgIcon="messenger"></mat-icon>
-                  Facebook Messenger
-                </a>
+            <div class="contact-options">
+              <a mat-stroked-button href="https://m.me/thuy.hai.san.carota" target="_blank"
+                (click)="contactUs('messenger')" class="contact-btn messenger">
+                <mat-icon svgIcon="messenger"></mat-icon>
+                Facebook Messenger
+              </a>
 
-                <a mat-stroked-button href="https://zalo.me/0834517989" target="_blank" (click)="contactUs('zalo')"
-                  class="contact-btn zalo">
-                  <mat-icon svgIcon="zalo-new"></mat-icon>
-                  Zalo
-                </a>
+              <a mat-stroked-button href="https://zalo.me/0834517989" target="_blank" (click)="contactUs('zalo')"
+                class="contact-btn zalo">
+                <mat-icon svgIcon="zalo-new"></mat-icon>
+                Zalo
+              </a>
 
-                <a mat-stroked-button [href]="'tel: 0834517989'" target="_blank" (click)="contactUs('call')"
-                  class="contact-btn call">
-                  <mat-icon>phone</mat-icon>
-                  Gọi điện
-                </a>
-              </div>
-            </mat-expansion-panel>
-          </ng-container>
+              <a mat-stroked-button [href]="'tel: 0834517989'" target="_blank" (click)="contactUs('call')"
+                class="contact-btn call">
+                <mat-icon>phone</mat-icon>
+                Gọi điện
+              </a>
+            </div>
+          </mat-expansion-panel>
+          }
         </mat-card-content>
         <!-- Action Buttons -->
         <mat-card-actions class="action-buttons" [ngClass]="{'scrolled': (((scrollBottom$ | async) ?? 0) > 6)}">

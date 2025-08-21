@@ -1,26 +1,27 @@
-<div class="products-container vertical-container" *ngIf="(products && products.length>0);else loadingSkeleton">
+@if (products && products.length>0) {
+<div class="products-container">
   <div class="flex-me">
-    <ng-container *ngFor="let product of products; let i = index;">
-      <div class="product-frame">
-        <div class="img-container">
-          <img [src]="(product.album?.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy"
-            (click)="showDetail(product)">
-        </div>
-        <div class="product-info">
-          <div class="text-container" (click)="showDetail(product)">
-            <h3 class="heading">{{product.name}}</h3>
-            <div class="product-price">
-              <span class="amount-of-money">{{ product.price | vndCurrency}}</span>
-            </div>
-            <div class="content-p">
-              {{product.shortDescription}}
-            </div>
+    @for (product of products; track $index; let index = $index) {
+    <div class="product-frame">
+      <div class="img-container">
+        <img [src]="(product.album?.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy"
+          (click)="showDetail(product)">
+      </div>
+      <div class="product-info">
+        <div class="text-container" (click)="showDetail(product)">
+          <h3 class="heading">{{product.name}}</h3>
+          <div class="product-price">
+            <span class="amount-of-money">{{ product.price | vndCurrency}}</span>
+          </div>
+          <div class="content-p">
+            {{product.shortDescription}}
           </div>
         </div>
       </div>
-    </ng-container>
+    </div>
+    }
   </div>
 </div>
-<ng-template #loadingSkeleton>
-  <app-skeleton></app-skeleton>
-</ng-template>
+}@else {
+<app-skeleton></app-skeleton>
+}

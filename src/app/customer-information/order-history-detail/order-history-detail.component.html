@@ -78,24 +78,21 @@
             <span class="label">Địa chỉ:</span>
             <span class="value">{{orderDetail.delivery.address| address}}</span>
           </div>
-          <!-- <div class="delivery-row" *ngIf="orderDetail.delivery.estimatedDelivery">
-            <mat-icon>schedule</mat-icon>
-            <span class="label">Dự kiến giao:</span>
-            <span class="value">{{orderDetail.delivery.estimatedDelivery | date:'dd/MM/yyyy'}}</span>
-          </div> -->
         </div>
       </mat-card-content>
     </mat-card>
   
-    <!-- Order Note -->
-    <mat-card class="order-note" *ngIf="orderDetail.note">
-      <mat-card-header>
-        <mat-card-title>Ghi chú đơn hàng</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{orderDetail.note}}</p>
-      </mat-card-content>
-    </mat-card>
+    @if (orderDetail.note) {
+      <!-- Order Note -->
+      <mat-card class="order-note">
+        <mat-card-header>
+          <mat-card-title>Ghi chú đơn hàng</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{orderDetail.note}}</p>
+        </mat-card-content>
+      </mat-card>
+    }
   
     <!-- Order Summary -->
     <mat-card class="order-summary">
@@ -107,10 +104,12 @@
           <span class="label">Tạm tính:</span>
           <span class="value">{{orderDetail.subTotal | currency:'VND':'symbol':'1.0-0'}}</span>
         </div>
-        <div class="summary-row" *ngIf="orderDetail.discount > 0">
-          <span class="label">Giảm giá:</span>
-          <span class="value discount">-{{orderDetail.discount | currency:'VND':'symbol':'1.0-0'}}</span>
-        </div>
+        @if(orderDetail.discount > 0){
+          <div class="summary-row">
+            <span class="label">Giảm giá:</span>
+            <span class="value discount">-{{orderDetail.discount | currency:'VND':'symbol':'1.0-0'}}</span>
+          </div>
+        }
         <div class="summary-row">
           <span class="label">Phí giao hàng:</span>
           <span class="value">{{orderDetail.deliveryFee | currency:'VND':'symbol':'1.0-0'}}</span>

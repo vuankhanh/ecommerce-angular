@@ -24,16 +24,17 @@
     </mat-expansion-panel-header>
     @if (userInformation$ | async) {
     <mat-list class="user-information-menu">
-      <mat-list-item *ngFor="let customer of customerMenu" [routerLink]="['/khach-hang/'+customer.route]"
-        [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: customer.route ? false : true }"
-        (click)="closeSideMenu()">
-        @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
-        <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
-        }
-        <span>{{ customer.name }}</span>
-      </mat-list-item>
-
-      <div class="height-space"></div>
+      @for (customer of customerMenu; track $index) {
+        <mat-list-item [routerLink]="['/khach-hang/'+customer.route]"
+          [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: customer.route ? false : true }"
+          (click)="closeSideMenu()">
+          @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
+          <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
+          }
+          <span>{{ customer.name }}</span>
+        </mat-list-item>
+        <div class="height-space"></div>
+      }
 
       <mat-list-item (click)="logout()">
         <mat-icon fontSet="fa" fontIcon="fa-sign-out" matListItemIcon></mat-icon>

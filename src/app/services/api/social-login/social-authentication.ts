@@ -17,16 +17,16 @@ export class SocialAuthenticationService {
   private firebaseAuthUrl: string = environment.backendApi + '/auth/firebase-authentication';
   constructor(
     private httpClient: HttpClient,
-    private auth: Auth
+    private auth: Auth,
   ) { }
 
   async authentication(provider: 'google' | 'facebook'): Promise<TToken> {
-    
     if (provider !== 'google' && provider !== 'facebook') return Promise.reject(new Error('Unsupported provider'));
-    
+
     let resultAuthentication = provider === 'google' ? await this.signInWithGoogle() : await this.signInWithFB();
+
     const { idToken, email } = resultAuthentication;
-    
+
     return await this.checkTokenFirebase(idToken, email);
   }
 
@@ -39,11 +39,11 @@ export class SocialAuthenticationService {
       const idToken = await result.user.getIdToken();
       const email = result.user.email || '';
       if (!email) {
-        return Promise.reject(new FirebaseError('auth/invalid-email', 'Email is required for linking with Firebase'));
+        throw new Error('auth/invalid-email');
       }
       return { idToken, email };
     } catch (error) {
-      return Promise.reject(error);
+      throw error;
     }
   }
 
@@ -56,21 +56,21 @@ export class SocialAuthenticationService {
       const idToken = await result.user.getIdToken();
       const email = result.user.providerData[0]?.email || '';
       if (!email) {
-        return Promise.reject(new FirebaseError('auth/invalid-email', 'Email is required for linking with Firebase'));
+        throw new Error('auth/invalid-email');
       }
       return { idToken, email };
     } catch (error) {
-      return Promise.reject(error);
+      throw error;
     }
   }
 
   private async checkTokenFirebase(idToken: string, email: string): Promise<TToken> {
     try {
       return await firstValueFrom(this.httpClient.post<TokenResponse>(this.firebaseAuthUrl, { idToken, email }).pipe(
-      map(res=>res.metaData)
+        map(res => res.metaData)
       ));
     } catch (error) {
-      return Promise.reject(error);
+      throw error;
     }
   }
 

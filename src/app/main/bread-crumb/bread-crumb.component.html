@@ -1,11 +1,13 @@
-<ng-container *ngIf="breadcrumbs$ | async as breadcrumbs">
-  <ng-container *ngIf="!(breadcrumbs.length === 1 && breadcrumbs[0].url==='/')">
-    <div class="breadcrumb-container horizontal-container">
-      <ul>
-        <li *ngFor="let breadcrumb of breadcrumbs">
-          <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
-        </li>
-      </ul>
-    </div>
-  </ng-container>
-</ng-container>
+@if (breadcrumbs$ | async; as breadcrumbs) {
+@if (!(breadcrumbs.length === 1 && breadcrumbs[0].url==='/')) {
+<div class="breadcrumb-container horizontal-container">
+  <ul>
+    @for (breadcrumb of breadcrumbs; track $index) {
+      <li>
+        <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+      </li>
+    }
+  </ul>
+</div>
+}
+}

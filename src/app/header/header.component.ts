@@ -22,6 +22,7 @@ import { TToken } from '../models/token.interface';
 import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
 import { InProgressSpinnerService } from '../services/in-progress-spinner.service';
 import { TMenu } from '../models/menu.interface';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-header',
@@ -62,6 +63,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private urlChangeService: UrlChangeService,
     private cartService: CartService,
     private jwtDecodedService: JwtDecodedService,
+    private toastService: ToastService,
     public authService: AuthService,
     private mainContainerScrollService: MainContainerScrollService,
     private socialAuthenticationService: SocialAuthenticationService,
@@ -123,7 +125,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       const token: TToken = await this.socialAuthenticationService.authentication(provider);
       this.authService.afterLogin(token);
       this.inProgressSpinnerService.progressSpinnerStatus(false);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.message === 'auth/invalid-email'){
+        this.toastService.shortToastError('Không lấy được email', 'Lỗi xác thực');
+      }
       this.inProgressSpinnerService.progressSpinnerStatus(false);
     }
   }

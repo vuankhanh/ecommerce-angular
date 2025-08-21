@@ -9,9 +9,9 @@
         <mat-form-field [ngClass]="registerGroup.controls['userName'].valid ? 'mat-form-field-done' : ''">
           <mat-label>Tài khoản *</mat-label>
           <input matInput type="text" formControlName="userName" (blur)="checkExistsUserName()">
-          <mat-error *ngIf="registerGroup.controls['userName'].hasError('isAlreadyExist')">
-            Tài khoản đã tồn tại.
-          </mat-error>
+          @if (registerGroup.controls['userName'].hasError('isAlreadyExist')) {
+            <mat-error>Tài khoản đã tồn tại.</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field [ngClass]="passwordValid() ? 'mat-form-field-done' : ''">
@@ -42,9 +42,9 @@
         <mat-form-field [ngClass]="registerGroup.controls['email'].valid ? 'mat-form-field-done' : ''">
           <mat-label>Email *</mat-label>
           <input matInput type="text" formControlName="email" (blur)="checkExistsEmail()">
-          <mat-error *ngIf="registerGroup.controls['email'].hasError('isAlreadyExist')">
-            Email đã tồn tại.
-          </mat-error>
+          @if (registerGroup.controls['email'].hasError('isAlreadyExist')) {
+            <mat-error>Email đã tồn tại.</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field [ngClass]="registerGroup.controls['phoneNumber'].valid ? 'mat-form-field-done' : ''">
@@ -56,32 +56,46 @@
 
     <div class="warning">
       <div class="caps-lock-warning" (capsLock)="capsOn=$event">
-        <span *ngIf="capsOn">Caps Lock đang bật</span>
+        @if (capsOn) {
+          <span>Caps Lock đang bật</span>
+        }
       </div>
-      <div *ngIf="registerGroup.controls['userName'].hasError('containsSpecialCharacter')">
-        Tài khoản viết thường, không dấu và không được chứa ký tự đặc biệt
-      </div>
-      <div *ngIf="registerGroup.controls['password'].hasError('safePassword')">
-        Mật khẩu gồm 6 ký tự chữ cái, viết thường, viết hoa và số
-      </div>
-      <div *ngIf="registerGroup.controls['confirmPassword'].hasError('passwordIsNotSame')">
-        Mật khẩu chưa trùng khớp
-      </div>
-      <div *ngIf="registerGroup.controls['email'].hasError('pattern')">
-        Email không đúng định dạng
-      </div>
-      <div *ngIf="registerGroup.controls['phoneNumber'].hasError('pattern')">
-        Số điện thoại bao gồm 10 chữ số và bắt đầu bằng số 0
-      </div>
+      @if(registerGroup.controls['userName'].hasError('containsSpecialCharacter')){
+        <div>
+          Tài khoản viết thường, không dấu và không được chứa ký tự đặc biệt
+        </div>
+      }
+      @if (registerGroup.controls['password'].hasError('safePassword')) {
+        <div>
+          Mật khẩu gồm 6 ký tự chữ cái, viết thường, viết hoa và số
+        </div>
+      }
+      @if (registerGroup.controls['confirmPassword'].hasError('passwordIsNotSame')) {
+        <div>
+          Mật khẩu chưa trùng khớp
+        </div>
+      }
+      @if (registerGroup.controls['email'].hasError('pattern')) {
+        <div>
+          Email không đúng định dạng
+        </div>
+      }
+      @if (registerGroup.controls['phoneNumber'].hasError('pattern')) {
+        <div>
+          Số điện thoại bao gồm 10 chữ số và bắt đầu bằng số 0
+        </div>
+      }
     </div>
     <div class="height-space"></div>
     <button mat-button type="submit" class="submit-button button-primary" [disabled]="registerGroup.invalid || loading">
-      <span *ngIf="!loading; else loadingSpinner">Đăng ký</span>
-      <ng-template #loadingSpinner>
+      @if (!loading) {
+        <span>Đăng ký</span>
+
+      }@else {
         <div class="horizontal-container">
           <mat-spinner diameter="30"></mat-spinner>
         </div>
-      </ng-template>
+      }
     </button>
     <div class="height-space"></div>
     <div class="change-component horizontal-container">

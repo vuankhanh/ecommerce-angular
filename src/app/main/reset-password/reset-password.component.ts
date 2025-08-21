@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ResetPasswordService } from '../../services/api/reset-password.service';
@@ -10,9 +10,18 @@ import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../
 
 import { filter, map, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../sharing/module/material';
 
 @Component({
   selector: 'app-reset-password',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+
+    MaterialModule
+  ],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })

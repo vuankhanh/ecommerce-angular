@@ -4,14 +4,14 @@
   <div class="height-space"></div>
 
   <div class="product-category-home-page-container">
-    <ng-container *ngFor="let productCategory of productCategory$ | async">
-      <div class="category-name horizontal-container" [routerLink]="['/san-pham/'+productCategory.slug]">
-        <h2>{{ productCategory.name }}</h2>
-        <span class="horizontal-container">
-          Xem thêm<mat-icon>arrow_right</mat-icon>
-        </span>
-      </div>
-      <app-product-category-home-page [productCategory]="productCategory"></app-product-category-home-page>
-    </ng-container>
+    @for (productCategory of productCategory$ | async; track $index) {
+    <div class="category-name horizontal-container" [routerLink]="['/san-pham/'+productCategory.slug]">
+      <h2>{{ productCategory.name }}</h2>
+      <span class="horizontal-container">
+        Xem thêm<mat-icon>arrow_right</mat-icon>
+      </span>
+    </div>
+    <app-product-category-home-page [productCategory]="productCategory"></app-product-category-home-page>
+    }
   </div>
 </div>

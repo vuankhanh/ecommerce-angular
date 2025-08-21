@@ -16,6 +16,6 @@ export class VerifyEmailService {
     params = params.append('userId', userId);
     params = params.append('emailToken', emailToken);
 
-    return this.httpClient.get(this.urlVerifyEmail, {params});
+    return this.httpClient.get(this.urlVerifyEmail, { params });
   }
 }

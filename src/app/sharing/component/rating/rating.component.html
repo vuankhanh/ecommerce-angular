@@ -1,17 +1,20 @@
 <div class="rating-container horizontal-container">
-  <div class="star-container horizontal-container" *ngIf="ratingValueFloor">
-    <ng-container *ngFor="let star of totalNumberOfStars;">
-      <mat-icon *ngIf="ratingValueFloor>star">star</mat-icon>
-      <ng-container *ngIf="ratingValueFloor===star">
-        <mat-icon>star</mat-icon>
-      </ng-container>
-      <ng-container *ngIf="ratingValueFloor<star">
-        <ng-container *ngIf="(star-ratingValue) as result">
-          <mat-icon>
-            {{ result<.3 ? 'star' : (result>=.3 && result<=.7) ? 'star_half' : 'star_border' }} </mat-icon>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-
-  </div>
+  @if (ratingValueFloor) {
+    <div class="star-container horizontal-container">
+      @for (star of totalNumberOfStars; track $index) {
+        @if(ratingValueFloor===star){
+          <mat-icon>star</mat-icon>
+        }@else {
+          @if (ratingValueFloor>star) {
+            <mat-icon>star</mat-icon>
+          }@else {
+            @if ((star-ratingValue); as result) {
+              <mat-icon>
+                {{ result<.3 ? 'star' : (result>=.3 && result<=.7) ? 'star_half' : 'star_border' }} </mat-icon>
+            }
+          }
+        }
+      }
+    </div>
+  }
 </div>
