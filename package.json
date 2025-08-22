@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open --port 4211",
-    "start:ssl": "ng serve --ssl true --ssl-key ./ssl/server.key --ssl-cert ./ssl/server.crt",
+    "sync-xlf": "node sync-xlf.js",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
@@ -20,6 +20,7 @@
     "@angular/core": "^20.0.2",
     "@angular/fire": "^20.0.1",
     "@angular/forms": "^20.0.2",
+    "@angular/localize": "^20.2.1",
     "@angular/material": "^20.0.2",
     "@angular/platform-browser": "^20.0.2",
     "@angular/platform-browser-dynamic": "^20.0.2",
@@ -29,6 +30,8 @@
     "@angular/youtube-player": "^20.0.2",
     "@daelmaak/ngx-gallery": "^3.1.1",
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "@xmldom/xmldom": "^0.8.11",
+    "chalk": "^4.1.2",
     "express": "^4.18.2",
     "firebase": "^11.9.1",
     "jwt-decode": "^4.0.0",
@@ -40,6 +43,7 @@
     "rxjs": "~7.8.0",
     "socket.io-client": "^4.8.1",
     "tslib": "^2.4.0",
+    "xml-formatter": "^3.6.6",
     "zone.js": "~0.15.1"
   },
   "devDependencies": {

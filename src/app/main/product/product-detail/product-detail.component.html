@@ -56,21 +56,20 @@
 
             <div class="reviews-content">
               @for (review of product.reviews; track $index) {
-                <div class="review-item">
-                  <div class="review-header">
-                    <span class="reviewer-name">{{review.userName || 'Khách hàng'}}</span>
-                    <div class="review-rating">
-                      @for (star of [1,2,3,4,5]; track $index) {
-                        <mat-icon [class.filled]="star <= review.rating"
-                          class="star-icon">star</mat-icon>
-                      }
-                    </div>
+              <div class="review-item">
+                <div class="review-header">
+                  <span class="reviewer-name">{{review.userName || 'Khách hàng'}}</span>
+                  <div class="review-rating">
+                    @for (star of [1,2,3,4,5]; track $index) {
+                    <mat-icon [class.filled]="star <= review.rating" class="star-icon">star</mat-icon>
+                    }
                   </div>
-                  <p class="review-text">{{review.comment}}</p>
-                  @if (review.createdAt) {
-                  <span class="review-date">{{review.createdAt | date:'dd/MM/yyyy'}}</span>
-                  }
                 </div>
+                <p class="review-text">{{review.comment}}</p>
+                @if (review.createdAt) {
+                <span class="review-date">{{review.createdAt | date:'dd/MM/yyyy'}}</span>
+                }
+              </div>
               }
             </div>
           </div>

@@ -35,12 +35,12 @@
       @if (menu.children && menu.children.length) {
       <div class="sub-menu-container">
         @for (child of menu.children; track $index) {
-          <div>
-            <button [routerLink]="[menu.route + '/' + child.route]" [routerLinkActive]="['is-active']"
-              [routerLinkActiveOptions]="{ exact: false }">
-              {{child.name}}
-            </button>
-          </div>
+        <div>
+          <button [routerLink]="[menu.route + '/' + child.route]" [routerLinkActive]="['is-active']"
+            [routerLinkActiveOptions]="{ exact: false }">
+            {{child.name}}
+          </button>
+        </div>
         }
       </div>
       }
@@ -78,60 +78,59 @@
     <div class="listButton vertical-container">
       @if(userInformation$ | async) {
 
-        <mat-list role="list">
-          <div class="micro-height-space"></div>
-  
-          @for (cMenu of customerMenu; track $index; let i = $index;) {
-          <mat-list-item role="listitem" [routerLink]="['/khach-hang'+'/'+cMenu.route]"
-            routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
-            {{ cMenu.name }}
-          </mat-list-item>
-          }
-  
-          <div class="height-space"></div>
-          <mat-list-item role="listitem" (click)="logout()">Thoát tài khoản</mat-list-item>
-          <div class="micro-height-space"></div>
-        </mat-list>
+      <mat-list role="list">
+        <div class="micro-height-space"></div>
+
+        @for (cMenu of customerMenu; track $index; let i = $index;) {
+        <mat-list-item role="listitem" [routerLink]="['/khach-hang'+'/'+cMenu.route]"
+          routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
+          {{ cMenu.name }}
+        </mat-list-item>
+        }
+
+        <div class="height-space"></div>
+        <mat-list-item role="listitem" (click)="logout()">Thoát tài khoản</mat-list-item>
+        <div class="micro-height-space"></div>
+      </mat-list>
       }@else {
 
-        <div class="authentication-action-container">
-          <div class="button-loginRegister loginRegister button-primary horizontal-container">
-            <div class="textButton horizontal-container" (click)="authService.login('login')">
-              Đăng nhập
-            </div>
-          </div>
-  
-          <div class="mini-height-space"></div>
-  
-          <div class="button-loginRegister loginRegister button-primary horizontal-container">
-            <div class="textButton horizontal-container" (click)="authService.login('register')">
-              Đăng ký
-            </div>
-          </div>
-  
-          <div class="mini-height-space"></div>
-  
-          <div class="button-loginRegister loginFacebook horizontal-container"
-            (click)="socialAuthentication('facebook')">
-            <div class="icon">
-              <mat-icon fontSet="fab" fontIcon="fa-facebook-f"></mat-icon>
-            </div>
-            <div class="textButton horizontal-container">
-              Đăng nhập bằng Facebook
-            </div>
-          </div>
-  
-          <div class="mini-height-space"></div>
-  
-          <div class="button-loginRegister loginGoogle horizontal-container" (click)="socialAuthentication('google')">
-            <div class="icon">
-              <mat-icon fontSet="fab" fontIcon="fa-google"></mat-icon>
-            </div>
-            <div class="textButton horizontal-container">
-              Đăng nhập bằng Google
-            </div>
+      <div class="authentication-action-container">
+        <div class="button-loginRegister loginRegister button-primary horizontal-container">
+          <div class="textButton horizontal-container" (click)="authService.login('login')">
+            Đăng nhập
           </div>
         </div>
+
+        <div class="mini-height-space"></div>
+
+        <div class="button-loginRegister loginRegister button-primary horizontal-container">
+          <div class="textButton horizontal-container" (click)="authService.login('register')">
+            Đăng ký
+          </div>
+        </div>
+
+        <div class="mini-height-space"></div>
+
+        <div class="button-loginRegister loginFacebook horizontal-container" (click)="socialAuthentication('facebook')">
+          <div class="icon">
+            <mat-icon fontSet="fab" fontIcon="fa-facebook-f"></mat-icon>
+          </div>
+          <div class="textButton horizontal-container">
+            Đăng nhập bằng Facebook
+          </div>
+        </div>
+
+        <div class="mini-height-space"></div>
+
+        <div class="button-loginRegister loginGoogle horizontal-container" (click)="socialAuthentication('google')">
+          <div class="icon">
+            <mat-icon fontSet="fab" fontIcon="fa-google"></mat-icon>
+          </div>
+          <div class="textButton horizontal-container">
+            Đăng nhập bằng Google
+          </div>
+        </div>
+      </div>
       }
     </div>
   </div>

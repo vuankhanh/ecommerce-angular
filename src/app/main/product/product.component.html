@@ -9,18 +9,18 @@
     <mat-card-content>
       <div class="categories-grid">
         @for (category of productCategorys; track $index; let index = $index) {
-          <mat-card class="category-card" [routerLink]="['/san-pham/'+category.slug]" [routerLinkActive]="['is-active']"
-            mat-ripple>
-            <mat-card-header>
-              <div mat-card-avatar class="category-avatar">
-                <img [src]="category.album.thumbnailUrl | prefixBackendStatic" [alt]="category.name"
-                  (load)="dosomething($event)">
-              </div>
-              <mat-card-title>{{ category.name }}</mat-card-title>
-            </mat-card-header>
-  
-            <!-- Hoặc sử dụng mat-card-content cho layout khác -->
-            <!-- <mat-card-content>
+        <mat-card class="category-card" [routerLink]="['/san-pham/'+category.slug]" [routerLinkActive]="['is-active']"
+          mat-ripple>
+          <mat-card-header>
+            <div mat-card-avatar class="category-avatar">
+              <img [src]="category.album.thumbnailUrl | prefixBackendStatic" [alt]="category.name"
+                (load)="dosomething($event)">
+            </div>
+            <mat-card-title>{{ category.name }}</mat-card-title>
+          </mat-card-header>
+
+          <!-- Hoặc sử dụng mat-card-content cho layout khác -->
+          <!-- <mat-card-content>
                 <div class="category-image">
                   <img [src]="category.album.thumbnailUrl | prefixBackendStatic" 
                        [alt]="category.name" 
@@ -31,7 +31,7 @@
               <mat-card-actions>
                 <span>{{ category.name }}</span>
               </mat-card-actions> -->
-          </mat-card>
+        </mat-card>
         }
       </div>
     </mat-card-content>

@@ -1,11 +1,11 @@
 <div class="carota-container horizontal-container">
   <mat-drawer-container autosize>
     @if (breakpointDetection$ | async) {
-      <mat-drawer #drawer mode="over">
-        <app-drawer (toggleDrawer)="toggle($event)"></app-drawer>
-      </mat-drawer>
+    <mat-drawer #drawer mode="over">
+      <app-drawer (toggleDrawer)="toggle($event)"></app-drawer>
+    </mat-drawer>
     }
-  
+
     <mat-drawer-content #drawerContent (scroll)="onScroll($event)">
       <div class="main-container">
         <app-header #appHeader (toggleDrawer)="toggle($event)"></app-header>
@@ -13,6 +13,6 @@
         <app-footer (toggleDrawer)="toggle($event)"></app-footer>
       </div>
     </mat-drawer-content>
-  
+
   </mat-drawer-container>
 </div>

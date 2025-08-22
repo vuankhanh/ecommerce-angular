@@ -21,6 +21,7 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
+              "src/polyfills.ts",
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
@@ -81,6 +82,11 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "en": {
+              "localize": [
+                "en"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -93,6 +99,9 @@
             },
             "development": {
               "buildTarget": "ecommerce-angular:build:development"
+            },
+            "en": {
+              "buildTarget": "ecommerce-angular:build:en"
             }
           },
           "defaultConfiguration": "development"
@@ -122,6 +131,13 @@
             ],
             "scripts": []
           }
+        }
+      },
+      "i18n": {
+        "sourceLocale": "vi",
+        "locales": {
+          "en": "messages.en.xlf",
+          "ja": "messages.ja.xlf"
         }
       }
     }
