@@ -7,18 +7,17 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
-import { SocketIoService } from './services/socket/socket-io.service';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from '../environments/environment.development';
 import { PrefixBackendStaticPipe } from './sharing/pipe/prefix-backend.pipe';
 import { provideNgxMask } from 'ngx-mask';
 import { provideIconConfig } from './sharing/provider/icon-config.provider';
-import { AuthService } from './services/auth.service';
 import { authInterceptor } from './sharing/core/interceptor/auth.interceptor';
 import { provideAppInitializerConfig } from './sharing/provider/app-initializer.provider';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './providers/CustomPaginatorConfiguration';
+import { LangPipe } from './sharing/pipe/lang.pipe';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,6 +38,7 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     PrefixBackendStaticPipe,
+    LangPipe,
     provideNgxMask()
   ]
 };

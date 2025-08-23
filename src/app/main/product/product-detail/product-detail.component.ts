@@ -1,13 +1,11 @@
 import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Identification } from '../../../models/Identification';
 
 import { CartService } from '../../../services/cart.service';
 import { AuthService } from '../../../services/auth.service';
-import { SEOService } from '../../../services/seo.service';
-import { InProgressSpinnerService } from '../../../services/in-progress-spinner.service';
 import { MainContainerScrollService } from '../../../services/main-container-scroll.service';
 
 import { Subscription } from 'rxjs';
@@ -16,11 +14,13 @@ import { FormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { GalleryComponent } from '@daelmaak/ngx-gallery';
 import { GalleryPipe } from '../../../sharing/pipe/gallery.pipe';
-import { ProductService } from '../../../services/api/product.service';
 import { ProductDetailEntity } from '../../../entity/product-detail.entity';
 import { NumberInputComponent } from '../../../sharing/component/number-input/number-input.component';
 import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
 import { CartItemEntity } from '../../../entity/cart.entity';
+import { LangPipe } from '../../../sharing/pipe/lang.pipe';
+import { LangService } from '../../../services/lang.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-detail',
@@ -33,6 +33,7 @@ import { CartItemEntity } from '../../../entity/cart.entity';
     NumberInputComponent,
     GalleryPipe,
     CurrencyCustomPipe,
+    LangPipe,
 
     YouTubePlayerModule,
 
@@ -46,7 +47,8 @@ import { CartItemEntity } from '../../../entity/cart.entity';
 export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('listImg') listImg?: ElementRef;
   @ViewChild('mainContainer') mainContainer?: ElementRef;
-
+  currentLang: string = 'vi';
+  sanitizedFacebookUrl!: SafeResourceUrl;
   scrollBottom$ = this.mainContainerScrollService.listenScrollBottom$;
   isBrowser: boolean;
 
@@ -57,15 +59,14 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   private readonly subscription: Subscription = new Subscription();
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
-    @Inject(DOCUMENT) private _document: Document,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private cartService: CartService,
     private authService: AuthService,
-    private seoService: SEOService,
-    private inProgressSpinnerService: InProgressSpinnerService,
     private mainContainerScrollService: MainContainerScrollService,
-    private productService: ProductService
+    private readonly langService: LangService,
+    private readonly langPipe: LangPipe,
+    private sanitizer: DomSanitizer
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
@@ -75,7 +76,14 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
       const { product } = data;
       this.product = product;
     });
+    this.currentLang = this.langService.getCurrentLang();
+    this.updateFacebookUrl();
+  }
 
+  private updateFacebookUrl() {
+    const locale = this.currentLang ? this.langPipe.transform(this.currentLang, 'locale') : 'vi_VN';
+    const url = `https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbep.4.than&width=450&layout&action&size&share=true&height=35&appId&locale=${locale}`;
+    this.sanitizedFacebookUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   ngAfterViewInit() {

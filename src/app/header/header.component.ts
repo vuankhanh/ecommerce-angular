@@ -79,8 +79,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     )
     
     this.currentLang = this.langService.getCurrentLang();
-    console.log(this.currentLang);
-    
   }
 
   ngAfterViewInit(): void{
