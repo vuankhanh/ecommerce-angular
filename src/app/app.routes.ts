@@ -34,5 +34,9 @@ export const routes: Routes = [
     path: 'khach-hang',
     loadChildren: () => import('./customer-information/customer.routes').then(m => m.routes),
     canActivate: [permissionGuard]
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];

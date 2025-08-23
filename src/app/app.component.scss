@@ -1,4 +1,4 @@
-.carota-container {
+.ecommerce-container {
   position: relative;
   justify-content: center;
   height: 100%;
@@ -6,7 +6,6 @@
 
   mat-drawer {
     max-width: calc(100% - 70px);
-    display: none;
   }
 
   mat-drawer-container {
@@ -33,7 +32,7 @@
         margin: auto;
 
         app-header {
-          z-index: 2;
+          z-index: 12;
           position: sticky;
           top: 0;
         }
@@ -41,15 +40,3 @@
     }
   }
 }
-
-@media only screen and (max-width: 768px) {
-  .carota-container {
-    mat-drawer-container {
-      mat-drawer {
-        display: block;
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: 414px) {}
