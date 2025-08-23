@@ -55,14 +55,14 @@
         <ng-container>
           <div class="primary-key discount horizontal-container">
             <mat-icon fontSet="fa-solid" fontIcon="fa-percent"></mat-icon>
-            Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG
+            <span i18n>Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG</span>
           </div>
           <div class="height-space"></div>
         </ng-container>
 
         <div class="provisional horizontal-container">
           <div class="primary-key">
-            Tạm tính
+            <span i18n>Tạm tính</span>
           </div>
           <div class="secondary-key">
             {{ cart.totalValue | vndCurrency }}
@@ -73,17 +73,16 @@
 
         <div class="total-price horizontal-container">
           <div class="primary-key">
-            Thành tiền
+            <span i18n>Thành tiền</span>
           </div>
           <div class="secondary-key">
-
             {{ cart.totalValue| vndCurrency }}
           </div>
         </div>
       </div>
       <div class="height-space"></div>
       <button (click)="order()" class="button-style button-primary">
-        Tiến hành đặt hàng
+        <span i18n>Tiến hành đặt hàng</span>
       </button>
     </div>
   </div>

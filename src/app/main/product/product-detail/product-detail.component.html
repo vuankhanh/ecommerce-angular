@@ -34,14 +34,14 @@
           </div>
 
           <div class="quantity-section horizontal-container">
-            <label for="quantity-input" class="quantity-label">Số lượng</label>
+            <label for="quantity-input" class="quantity-label" i18n>Số lượng</label>
             <app-number-input id="quantity-input" (valueChange)="product.quantity = $event"></app-number-input>
           </div>
 
           <!-- Product Description -->
           <div class="description-section">
             <div class="description-header">
-              <h3>Mô tả chi tiết</h3>
+              <h3 i18n>Mô tả chi tiết</h3>
             </div>
             <div class="description-content" [innerHTML]="product.description"></div>
           </div>
@@ -51,14 +51,14 @@
           <div class="reviews-section">
             <div class="reviews-header">
               <mat-icon>rate_review</mat-icon>
-              <h3>Đánh giá ({{product.reviews.length}})</h3>
+              <h3 i18n>Đánh giá ({{product.reviews.length}})</h3>
             </div>
 
             <div class="reviews-content">
               @for (review of product.reviews; track $index) {
               <div class="review-item">
                 <div class="review-header">
-                  <span class="reviewer-name">{{review.userName || 'Khách hàng'}}</span>
+                  <span class="reviewer-name" i18n>{{review.userName || 'Khách hàng'}}</span>
                   <div class="review-rating">
                     @for (star of [1,2,3,4,5]; track $index) {
                     <mat-icon [class.filled]="star <= review.rating" class="star-icon">star</mat-icon>
@@ -111,12 +111,12 @@
         <mat-card-actions class="action-buttons" [ngClass]="{'scrolled': (((scrollBottom$ | async) ?? 0) > 6)}">
           <button mat-raised-button color="primary" class="buy-now-btn" (click)="bookNow(product)">
             <mat-icon>shopping_cart</mat-icon>
-            Đặt hàng ngay
+            <span i18n>Đặt hàng ngay</span>
           </button>
 
           <button mat-stroked-button color="primary" (click)="addToCart(product)">
             <mat-icon>add_shopping_cart</mat-icon>
-            Thêm vào giỏ
+            <span i18n>Thêm vào giỏ</span>
           </button>
         </mat-card-actions>
       </div>

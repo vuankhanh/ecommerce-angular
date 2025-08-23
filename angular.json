@@ -87,6 +87,11 @@
               "localize": [
                 "en"
               ]
+            },
+            "ja": {
+              "localize": [
+                "ja"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -102,6 +107,9 @@
             },
             "en": {
               "buildTarget": "ecommerce-angular:build:en"
+            },
+            "ja": {
+              "buildTarget": "ecommerce-angular:build:ja"
             }
           },
           "defaultConfiguration": "development"

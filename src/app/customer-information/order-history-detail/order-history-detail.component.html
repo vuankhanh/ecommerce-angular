@@ -3,8 +3,8 @@
     <!-- Header -->
     <mat-card class="order-header">
       <mat-card-header>
-        <mat-card-title>Chi tiết đơn hàng</mat-card-title>
-        <mat-card-subtitle>Mã đơn hàng: {{orderDetail.orderCode}}</mat-card-subtitle>
+        <mat-card-title i18n>Chi tiết đơn hàng</mat-card-title>
+        <mat-card-subtitle i18n>Mã đơn hàng: {{orderDetail.orderCode}}</mat-card-subtitle>
       </mat-card-header>
     </mat-card>
   
@@ -14,14 +14,14 @@
         <div class="status-row">
           <div class="status-item">
             <mat-icon>local_shipping</mat-icon>
-            <span class="label">Trạng thái:</span>
+            <span class="label" i18n>Trạng thái:</span>
             <mat-chip selected>
               {{orderDetail.status}}
             </mat-chip>
           </div>
           <div class="status-item">
             <mat-icon>payment</mat-icon>
-            <span class="label">Thanh toán:</span>
+            <span class="label" i18n>Thanh toán:</span>
             <span class="value">{{orderDetail.paymentMethod}}</span>
           </div>
         </div>
@@ -31,7 +31,7 @@
     <!-- Order Items -->
     <mat-card class="order-items">
       <mat-card-header>
-        <mat-card-title>Sản phẩm đã đặt</mat-card-title>
+        <mat-card-title i18n>Sản phẩm đã đặt</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <mat-list>
@@ -59,23 +59,23 @@
     <!-- Delivery Information -->
     <mat-card class="delivery-info">
       <mat-card-header>
-        <mat-card-title>Thông tin giao hàng</mat-card-title>
+        <mat-card-title i18n>Thông tin giao hàng</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="delivery-details">
           <div class="delivery-row">
             <mat-icon>person</mat-icon>
-            <span class="label">Người nhận:</span>
+            <span class="label" i18n>Người nhận:</span>
             <span class="value">{{orderDetail.delivery.name}}</span>
           </div>
           <div class="delivery-row">
             <mat-icon>phone</mat-icon>
-            <span class="label">Số điện thoại:</span>
+            <span class="label" i18n>Số điện thoại:</span>
             <span class="value">{{orderDetail.delivery.phoneNumber}}</span>
           </div>
           <div class="delivery-row">
             <mat-icon>location_on</mat-icon>
-            <span class="label">Địa chỉ:</span>
+            <span class="label" i18n>Địa chỉ:</span>
             <span class="value">{{orderDetail.delivery.address| address}}</span>
           </div>
         </div>
@@ -86,7 +86,7 @@
       <!-- Order Note -->
       <mat-card class="order-note">
         <mat-card-header>
-          <mat-card-title>Ghi chú đơn hàng</mat-card-title>
+          <mat-card-title i18n>Ghi chú đơn hàng</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <p>{{orderDetail.note}}</p>
@@ -97,26 +97,26 @@
     <!-- Order Summary -->
     <mat-card class="order-summary">
       <mat-card-header>
-        <mat-card-title>Tổng kết đơn hàng</mat-card-title>
+        <mat-card-title i18n>Tổng kết đơn hàng</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="summary-row">
-          <span class="label">Tạm tính:</span>
+          <span class="label" i18n>Tạm tính:</span>
           <span class="value">{{orderDetail.subTotal | currency:'VND':'symbol':'1.0-0'}}</span>
         </div>
         @if(orderDetail.discount > 0){
           <div class="summary-row">
-            <span class="label">Giảm giá:</span>
+            <span class="label" i18n>Giảm giá:</span>
             <span class="value discount">-{{orderDetail.discount | currency:'VND':'symbol':'1.0-0'}}</span>
           </div>
         }
         <div class="summary-row">
-          <span class="label">Phí giao hàng:</span>
+          <span class="label" i18n>Phí giao hàng:</span>
           <span class="value">{{orderDetail.deliveryFee | currency:'VND':'symbol':'1.0-0'}}</span>
         </div>
         <mat-divider></mat-divider>
         <div class="summary-row total">
-          <span class="label">Tổng cộng:</span>
+          <span class="label" i18n>Tổng cộng:</span>
           <span class="value">{{orderDetail.total | currency:'VND':'symbol':'1.0-0'}}</span>
         </div>
       </mat-card-content>
@@ -126,7 +126,7 @@
     <div class="action-buttons">
       <button mat-raised-button color="warn" (click)="cancelOrder()">
         <mat-icon>cancel</mat-icon>
-        Hủy đơn
+        <span i18n>Hủy đơn</span>
       </button>
     </div>
   </div>

@@ -1,6 +1,6 @@
 <mat-card class="info-card">
   <mat-card-header>
-    <mat-card-title>Thông tin cá nhân</mat-card-title>
+    <mat-card-title i18n>Thông tin cá nhân</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>
@@ -8,7 +8,7 @@
     <mat-list class="info-list">
       <mat-list-item>
         <mat-icon matListItemIcon>person</mat-icon>
-        <div matListItemTitle>Tên hiển thị</div>
+        <div matListItemTitle i18n>Tên hiển thị</div>
         <div matListItemLine>{{userInfo.name}}</div>
       </mat-list-item>
 
@@ -16,7 +16,7 @@
 
       <mat-list-item>
         <mat-icon matListItemIcon>email</mat-icon>
-        <div matListItemTitle>Email</div>
+        <div matListItemTitle i18n>Email</div>
         <div matListItemLine>{{userInfo.email}}</div>
       </mat-list-item>
 
@@ -24,17 +24,17 @@
 
       <mat-list-item>
         <mat-icon matListItemIcon>lock</mat-icon>
-        <div matListItemTitle>Mật khẩu</div>
+        <div matListItemTitle i18n>Mật khẩu</div>
         <div matListItemMeta>
           @if (userInfo.hasPassword) {
             <button mat-button>
               <mat-icon>cached</mat-icon>
-              Đổi
+              <span i18n>Đổi</span>
             </button>
           }@else {
             <button mat-button>
               <mat-icon>edit</mat-icon>
-              Tạo
+              <span i18n>Tạo</span>
             </button>
           }
         </div>
@@ -44,12 +44,19 @@
 
       <mat-list-item>
         <mat-icon matListItemIcon>phone</mat-icon>
-        <div matListItemTitle>Số điện thoại</div>
-        <div matListItemLine>{{userInfo.phoneNumber || 'Chưa cập nhật'}}</div>
+        <div matListItemTitle i18n>Số điện thoại</div>
+        <div matListItemLine>
+          @if(userInfo.phoneNumber){
+            <span>{{userInfo.phoneNumber}}</span>
+          }@else {
+            <span i18n>Chưa cập nhật</span>
+          }
+          
+        </div>
         <div matListItemMeta>
           <button mat-button>
             <mat-icon>edit</mat-icon>
-            Đổi
+            <span i18n>Đổi</span>
           </button>
         </div>
       </mat-list-item>
@@ -59,7 +66,7 @@
     } @else {
     <div class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
-      <p>Đang tải thông tin...</p>
+      <p i18n>Đang tải thông tin...</p>
     </div>
     }
   </mat-card-content>

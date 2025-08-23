@@ -3,7 +3,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
 
-  customPaginatorIntl.itemsPerPageLabel = 'Số dòng hiển thị:';
+  customPaginatorIntl.itemsPerPageLabel = $localize`:@@paginator.itemsPerPageLabel:Số dòng hiển thị:`;
 
   return customPaginatorIntl;
 }

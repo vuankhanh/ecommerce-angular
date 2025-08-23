@@ -11,7 +11,7 @@ import { Support } from '../models/Support';
 import { MaterialModule } from '../sharing/module/material';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TMenu } from '../models/menu.interface';
-import { Menu } from '../sharing/constant/menu.constant';
+import { getMenu } from '../sharing/constant/menu.constant';
 @Component({
   selector: 'app-footer',
   standalone: true,
@@ -31,7 +31,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   identification?: Identification;
 
   badgeCart: number = 0;
-  menusList: Array<TMenu> = Menu;
+  menusList: Array<TMenu> = getMenu();
 
   supports: Array<Support> = [];
 

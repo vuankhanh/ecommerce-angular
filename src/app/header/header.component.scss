@@ -36,199 +36,211 @@ button {
     justify-content: center;
   }
 
-  .menu-container {
-    align-items: center;
-
-    .dropdown-container {
-      position: relative;
-
-      .title-menu {
-        height: 70px;
-        color: var(--bep4than-text-primary);
-      }
-
-      .title-menu:hover {
-        color: var(--bep4than-hightlight-text);
-      }
-
-      button {
-        border: none;
-        background: none;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .sub-menu-container {
-        display: none;
-        position: absolute;
-        white-space: nowrap;
-        background: white;
-        top: 70px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-
-        button {
-          width: 100%;
-          text-align: left;
+  .not-mobile-container {
+    width: 100%;
+    justify-content: space-between;
+    .menu-container {
+      align-items: center;
+  
+      .dropdown-container {
+        position: relative;
+  
+        .title-menu {
+          height: 70px;
           color: var(--bep4than-text-primary);
         }
-      }
-    }
-
-    .dropdown-container:hover {
-      .sub-menu-container {
-        display: block;
-
-        button:hover {
+  
+        .title-menu:hover {
           color: var(--bep4than-hightlight-text);
         }
-      }
-    }
-  }
-
-  .user-information {
-    .user-information-block {
-      position: relative;
-      align-items: center;
-      height: 100%;
-      cursor: pointer;
-      padding: 0 15px;
-
-      .user-information-block_icon {
-        margin-right: 16px;
-        img {
-          max-height: 60px;
-        }
-        mat-icon {
-          height: 32px;
-          width: 32px;
-          font-size: 32px;
-        }
-      }
-
-      .user-information-block_showListButton {
-        .user-information-block_showListButton_status {
-          font-size: 12px;
-        }
-
-        .user-information-block_showListButton_account {
-          height: 14px;
-
-          span {
-            font-size: 14px;
-          }
-
-          mat-icon {
-            font-size: 14px;
-            width: 14px;
-            height: 14px;
-          }
-        }
-      }
-    }
-
-    .listButton {
-      display: none;
-      position: absolute;
-      top: 70px;
-      right: 15px;
-      white-space: nowrap;
-      background: white;
-      border-radius: 10px;
-      border: 1px solid #ededed;
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-
-      mat-list {
-        padding: 0;
-
-        mat-list-item {
-          cursor: pointer;
-          min-width: 200px;
-          height: unset;
-          padding: 5px 15px;
-          box-sizing: border-box;
-          font-size: 14px;
-          color: var(--bep4than-text-primary);
-        }
-
-        mat-list-item:hover {
-          background-color: #ededed;
-        }
-      }
-
-      .authentication-action-container {
-        padding: 15px;
-
-        .button-loginRegister {
-          cursor: pointer;
-          align-items: center;
-          justify-content: space-between;
-          height: 40px;
-          min-width: 200px;
-          border-radius: 40px;
+  
+        button {
           border: none;
-
-          .icon {
-            width: 40px;
-            height: 40px;
-            padding: 10px;
-            box-sizing: border-box;
-            border-radius: 40px 0 0 40px;
-            box-shadow: 1px 0 3px -2px #ededed;
-
+          background: none;
+          font-weight: bold;
+          cursor: pointer;
+        }
+  
+        .sub-menu-container {
+          display: none;
+          position: absolute;
+          white-space: nowrap;
+          background: white;
+          top: 70px;
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  
+          button {
+            width: 100%;
+            text-align: left;
+            color: var(--bep4than-text-primary);
+          }
+        }
+      }
+  
+      .dropdown-container:hover {
+        .sub-menu-container {
+          display: block;
+  
+          button:hover {
+            color: var(--bep4than-hightlight-text);
+          }
+        }
+      }
+    }
+  
+    ::ng-deep .language-selector {
+      justify-content: center;
+      div[matformfieldlineripple] {
+        display: none;
+      }
+    }
+  
+    .user-information {
+      .user-information-block {
+        position: relative;
+        align-items: center;
+        height: 100%;
+        cursor: pointer;
+        padding: 0 15px;
+  
+        .user-information-block_icon {
+          margin-right: 16px;
+          img {
+            max-height: 60px;
+          }
+          mat-icon {
+            height: 32px;
+            width: 32px;
+            font-size: 32px;
+          }
+        }
+  
+        .user-information-block_showListButton {
+          .user-information-block_showListButton_status {
+            font-size: 12px;
+          }
+  
+          .user-information-block_showListButton_account {
+            height: 14px;
+  
+            span {
+              font-size: 14px;
+            }
+  
             mat-icon {
-              font-size: 20px;
-              height: 20px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
+              font-size: 14px;
+              width: 14px;
+              height: 14px;
             }
           }
-
-          .textButton {
-            padding: 0 15px;
-            width: 100%;
-            justify-content: center;
-          }
-        }
-
-        .loginFacebook {
-          background: #3b5998;
-          color: white;
-        }
-
-        .loginGoogle {
-          background: #db4a39;
-          color: white;
-        }
-
-        .loginZalo {
-          background: #0573ff;
-          color: white;
         }
       }
+  
+      .listButton {
+        display: none;
+        position: absolute;
+        top: 70px;
+        right: 15px;
+        white-space: nowrap;
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #ededed;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  
+        mat-list {
+          padding: 0;
+  
+          mat-list-item {
+            cursor: pointer;
+            min-width: 200px;
+            height: unset;
+            padding: 5px 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: var(--bep4than-text-primary);
+          }
+  
+          mat-list-item:hover {
+            background-color: #ededed;
+          }
+        }
+  
+        .authentication-action-container {
+          padding: 15px;
+  
+          .button-loginRegister {
+            cursor: pointer;
+            align-items: center;
+            justify-content: space-between;
+            height: 40px;
+            min-width: 200px;
+            border-radius: 40px;
+            border: none;
+  
+            .icon {
+              width: 40px;
+              height: 40px;
+              padding: 10px;
+              box-sizing: border-box;
+              border-radius: 40px 0 0 40px;
+              box-shadow: 1px 0 3px -2px #ededed;
+  
+              mat-icon {
+                font-size: 20px;
+                height: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+            }
+  
+            .textButton {
+              padding: 0 15px;
+              width: 100%;
+              justify-content: center;
+            }
+          }
+  
+          .loginFacebook {
+            background: #3b5998;
+            color: white;
+          }
+  
+          .loginGoogle {
+            background: #db4a39;
+            color: white;
+          }
+  
+          .loginZalo {
+            background: #0573ff;
+            color: white;
+          }
+        }
+      }
+  
+      .listButton::before {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        right: 15px;
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent transparent #ededed;
+        border-image: initial;
+      }
     }
-
-    .listButton::before {
-      content: "";
-      position: absolute;
-      bottom: 100%;
-      right: 15px;
-      border-width: 8px;
-      border-style: solid;
-      border-color: transparent transparent #ededed;
-      border-image: initial;
+  
+    .user-information:hover {
+      .user-information-block {
+        color: var(--bep4than-hightlight-text);
+      }
+  
+      .listButton {
+        display: block;
+      }
     }
   }
 
-  .user-information:hover {
-    .user-information-block {
-      color: var(--bep4than-hightlight-text);
-    }
-
-    .listButton {
-      display: block;
-    }
-  }
 }
 
 .header-container-scrolled {
@@ -249,11 +261,7 @@ button {
       display: flex;
     }
 
-    .menu-container {
-      display: none;
-    }
-
-    .user-information {
+    .not-mobile-container {
       display: none;
     }
   }

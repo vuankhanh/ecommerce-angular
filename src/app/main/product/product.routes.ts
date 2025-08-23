@@ -8,33 +8,33 @@ export const routes: Routes = [
   {
     path: '',
     component: ProductComponent,
-    title: 'Sản phẩm',
+    title: $localize`:@@route.product.title:Sản phẩm`,
     data: {
-      breadcrumb: 'Sản phẩm'
+      breadcrumb: $localize`:@@route.product.breadcrumb:Sản phẩm`
     },
     children: [
       {
         path: ':productCategory',
-        title: 'Danh mục sản phẩm',
+        title: $localize`:@@route.product-category.title:Danh mục sản phẩm`,
         loadComponent: () => import('./product-category/product-category.component').then(m => m.ProductCategoryComponent),
         resolve: {
           productCategory: productCategoryResolver,
           productFromCategorySlug: productFromCategorySlugResolver
         },
         data: {
-          breadcrumb: (data: any) => data.productCategory?.name || 'Danh mục sản phẩm'
+          breadcrumb: (data: any) => data.productCategory?.name || $localize`:@@route.product-category.title:Danh mục sản phẩm`
         }
       },
       {
         path: ':productCategory/:productSlug',
-        title: 'Chi tiết sản phẩm',
+        title: $localize`:@@route.product-detail.title:Chi tiết sản phẩm`,
         loadComponent: () => import('./product-detail/product-detail.component').then(m => m.ProductDetailComponent),
         resolve: {
           product: productDetailResolver
         },
         data: {
           breadcrumb: (data: any)=>{
-            return data.product?.name || 'Chi tiết sản phẩm'
+            return data.product?.name || $localize`:@@route.product-detail.title:Chi tiết sản phẩm`
           }
         }
       }

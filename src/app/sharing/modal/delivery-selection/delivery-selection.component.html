@@ -1,5 +1,5 @@
 <div class="delivery-selection-container">
-  <h2 mat-dialog-title>Chọn địa chỉ giao hàng</h2>
+  <h2 mat-dialog-title i18n>Chọn địa chỉ giao hàng</h2>
 
   <mat-dialog-content>
     <mat-radio-group class="delivery-radio-group" [(ngModel)]="selectedDeliveryId">
@@ -18,7 +18,9 @@
           </div>
           <div matListItemLine>{{delivery.addressDetail}}</div>
           @if (delivery.isDefault) {
-          <div matListItemLine><span class="default-address">Địa chỉ mặc định</span></div>
+          <div matListItemLine>
+            <span class="default-address" i18n>Địa chỉ mặc định</span>
+          </div>
           }
 
           <div matListItemMeta>
@@ -36,16 +38,16 @@
       <div class="group-button-row">
         <button mat-raised-button (click)="onCreateAddress()">
           <mat-icon>add</mat-icon>
-          Thêm địa chỉ giao hàng
+          <span i18n>Thêm địa chỉ giao hàng</span>
         </button>
       </div>
     </section>
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button matButton (click)="onNoClick()">Trở lại</button>
+    <button matButton (click)="onNoClick()" i18n>Trở lại</button>
     <button mat-raised-button color="primary" (click)="confirm()">
-      Xác nhận
+      <span i18n>Xác nhận</span>
     </button>
   </mat-dialog-actions>
 </div>

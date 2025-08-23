@@ -1,21 +1,21 @@
 <div class="register-container">
   <form [formGroup]="registerGroup" (ngSubmit)="register()">
     <div class="title">
-      <h1>Xin chào,</h1>
-      <span>Hãy đăng ký để chúng tôi phục vụ bạn tốt hơn</span>
+      <h1 i18n>Xin chào,</h1>
+      <span i18n>Hãy đăng ký để chúng tôi phục vụ bạn tốt hơn</span>
     </div>
     <div class="input-information-container horizontal-container">
       <div class="vertical-container">
         <mat-form-field [ngClass]="registerGroup.controls['userName'].valid ? 'mat-form-field-done' : ''">
-          <mat-label>Tài khoản *</mat-label>
+          <mat-label i18n>Tài khoản *</mat-label>
           <input matInput type="text" formControlName="userName" (blur)="checkExistsUserName()">
           @if (registerGroup.controls['userName'].hasError('isAlreadyExist')) {
-            <mat-error>Tài khoản đã tồn tại.</mat-error>
+            <mat-error i18n>Tài khoản đã tồn tại.</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field [ngClass]="passwordValid() ? 'mat-form-field-done' : ''">
-          <mat-label>Mật khẩu *</mat-label>
+          <mat-label i18n>Mật khẩu *</mat-label>
           <input matInput [type]="!fieldTextType ? 'password' : 'text'" formControlName="password">
           <mat-icon matSuffix (click)="fieldTextType = !fieldTextType">
             {{ !fieldTextType ? 'visibility' : 'visibility_off'}}
@@ -23,7 +23,7 @@
         </mat-form-field>
 
         <mat-form-field [ngClass]="passwordValid() ? 'mat-form-field-done' : ''">
-          <mat-label>Nhập lại mật khẩu *</mat-label>
+          <mat-label i18n>Nhập lại mật khẩu *</mat-label>
           <input matInput [type]="!repeatFieldTextType ? 'password' : 'text'" formControlName="confirmPassword">
           <mat-icon matSuffix (click)="repeatFieldTextType = !repeatFieldTextType">
             {{ !repeatFieldTextType ? 'visibility' : 'visibility_off'}}
@@ -35,20 +35,20 @@
 
       <div class="vertical-container">
         <mat-form-field [ngClass]="registerGroup.controls['name'].valid ? 'mat-form-field-done' : ''">
-          <mat-label>Tên của bạn *</mat-label>
+          <mat-label i18n>Tên của bạn *</mat-label>
           <input matInput type="text" formControlName="name">
         </mat-form-field>
 
         <mat-form-field [ngClass]="registerGroup.controls['email'].valid ? 'mat-form-field-done' : ''">
-          <mat-label>Email *</mat-label>
+          <mat-label i18n>Email *</mat-label>
           <input matInput type="text" formControlName="email" (blur)="checkExistsEmail()">
           @if (registerGroup.controls['email'].hasError('isAlreadyExist')) {
-            <mat-error>Email đã tồn tại.</mat-error>
+            <mat-error i18n>Email đã tồn tại.</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field [ngClass]="registerGroup.controls['phoneNumber'].valid ? 'mat-form-field-done' : ''">
-          <mat-label>Số điện thoại *</mat-label>
+          <mat-label i18n>Số điện thoại *</mat-label>
           <input matInput type="text" formControlName="phoneNumber">
         </mat-form-field>
       </div>
@@ -57,7 +57,7 @@
     <div class="warning">
       <div class="caps-lock-warning" (capsLock)="capsOn=$event">
         @if (capsOn) {
-          <span>Caps Lock đang bật</span>
+          <span i18n>Caps Lock đang bật</span>
         }
       </div>
       @if(registerGroup.controls['userName'].hasError('containsSpecialCharacter')){
@@ -89,7 +89,7 @@
     <div class="height-space"></div>
     <button mat-button type="submit" class="submit-button button-primary" [disabled]="registerGroup.invalid || loading">
       @if (!loading) {
-        <span>Đăng ký</span>
+        <span i18n>Đăng ký</span>
 
       }@else {
         <div class="horizontal-container">
@@ -99,7 +99,7 @@
     </button>
     <div class="height-space"></div>
     <div class="change-component horizontal-container">
-      <div class="textLink" (click)="valueChange.emit('login')">Đăng nhập</div>
+      <div class="textLink" (click)="valueChange.emit('login')" i18n>Đăng nhập</div>
     </div>
   </form>
 </div>

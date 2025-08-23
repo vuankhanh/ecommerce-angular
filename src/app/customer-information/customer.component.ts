@@ -3,7 +3,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 import { MatAccordion } from '@angular/material/expansion';
 
 import { Subscription } from 'rxjs';
-import { CustomerMenu } from '../sharing/constant/menu.constant';
+import { getCustomerMenu } from '../sharing/constant/menu.constant';
 import { UrlChangeService } from '../services/url-change.service';
 import { AuthService } from '../services/auth.service';
 import { MaterialModule } from '../sharing/module/material';
@@ -36,7 +36,7 @@ import { BreakpointDetectionService } from '../services/breakpoint-detection.ser
 })
 export class CustomerComponent implements OnInit, OnDestroy {
   @ViewChild('userAccordion') userAccordion?: MatAccordion;
-  customerMenu: Array<TMenu> = CustomerMenu;
+  customerMenu: Array<TMenu> = getCustomerMenu();
   currentUrl: string;
   activeMenu: TMenu;
 

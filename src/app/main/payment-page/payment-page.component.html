@@ -4,7 +4,7 @@
       <mat-card-header>
         <mat-card-title class="horizontal-container">
           <mat-icon>location_on</mat-icon>
-          Địa chỉ nhận hàng
+          <span i18n>Địa chỉ nhận hàng</span>
         </mat-card-title>
       </mat-card-header>
       @if(delivery$ | async; as delivery) {
@@ -16,7 +16,7 @@
       </mat-card-content>
       }
       <mat-card-actions>
-        <button mat-button (click)="chooseAddress()">Thay đổi</button>
+        <button mat-button (click)="chooseAddress()" i18n>Thay đổi</button>
       </mat-card-actions>
     </mat-card>
     @if (cart$ | async; as cart) {
@@ -25,7 +25,7 @@
       <table mat-table [dataSource]="cart.cartItems" class="mat-elevation-z8">
         <!-- Thumbnail Column -->
         <ng-container matColumnDef="thumbnail">
-          <th mat-header-cell *matHeaderCellDef> Ảnh </th>
+          <th mat-header-cell *matHeaderCellDef i18n> Ảnh </th>
           <td mat-cell *matCellDef="let cartItem">
             <div class="img-container">
               <img [src]="cartItem.product.album.thumbnailUrl | prefixBackendStatic" [alt]="cartItem.product.name"
@@ -36,13 +36,13 @@
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Sản phẩm </th>
+          <th mat-header-cell *matHeaderCellDef i18n> Sản phẩm </th>
           <td mat-cell *matCellDef="let cartItem"> {{cartItem.product.name}} </td>
         </ng-container>
 
         <!-- Weight Column -->
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef> Đơn giá </th>
+          <th mat-header-cell *matHeaderCellDef i18n> Đơn giá </th>
           <td mat-cell *matCellDef="let cartItem">
             <span>{{ cartItem.product.price | vndCurrency}}</span>
           </td>
@@ -50,7 +50,7 @@
 
         <!-- Symbol Column -->
         <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef> Số lượng </th>
+          <th mat-header-cell *matHeaderCellDef i18n> Số lượng </th>
           <td mat-cell *matCellDef="let cartItem"> {{cartItem.quantity}} </td>
         </ng-container>
 
@@ -62,7 +62,7 @@
 
       <div class="more-info-container horizontal-container">
         <mat-form-field subscriptSizing="dynamic">
-          <mat-label>Thông tin lưu ý</mat-label>
+          <mat-label i18n>Thông tin lưu ý</mat-label>
           <textarea matInput type="text" [formControl]="noteControl" dkTextareaAutosize
             cdkAutosizeMinRows="4" cdkAutosizeMaxRows="4"></textarea>
         </mat-form-field>
@@ -70,13 +70,13 @@
         <div class="total-price-frame vertical-container">
           <div class="primary-key discount horizontal-container">
             <mat-icon fontSet="fa-solid" fontIcon="fa-percent"></mat-icon>
-            Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG
+            <span i18n>Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG</span>
           </div>
           <div class="height-space"></div>
 
           <div class="provisional horizontal-container">
             <div class="primary-key">
-              Tạm tính
+              <span i18n>Tạm tính</span>
             </div>
             <div class="secondary-key">
               {{ cart.totalValue | vndCurrency }}
@@ -87,7 +87,7 @@
 
           <div class="total-price horizontal-container">
             <div class="primary-key">
-              Thành tiền
+              <span i18n>Thành tiền</span>
             </div>
 
             <div class="secondary-key">
@@ -100,7 +100,7 @@
       <div class="height-space"></div>
 
       <button (click)="confirmPayment()" [disabled]="!(lastValue$| async)" class="button-style button-primary">
-        Đặt mua
+        <span i18n>Đặt mua</span>
       </button>
     </div>
 

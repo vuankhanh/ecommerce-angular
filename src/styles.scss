@@ -1,5 +1,5 @@
 // @import './styles/soho-theme.scss';
-@import './styles/bep4than-theme.scss';
+@use './styles/bep4than-theme' as *;
 
 ::-webkit-scrollbar {
   width: 12px;

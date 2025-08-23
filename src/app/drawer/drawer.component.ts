@@ -10,15 +10,19 @@ import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../sharing/module/material';
 import { TMenu } from '../models/menu.interface';
-import { CustomerMenu, Menu } from '../sharing/constant/menu.constant';
+import { getCustomerMenu, getMenu } from '../sharing/constant/menu.constant';
 import { AutoExpandMatExpansionPanelDirective } from '../sharing/directive/auto-expand-mat-expansion-panel.directive';
 import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
+import { FormsModule } from '@angular/forms';
+import { LangService } from '../services/lang.service';
+import { getLangs } from '../sharing/constant/lang.constant';
 
 @Component({
   selector: 'app-drawer',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     RouterLink,
     RouterLinkActive,
 
@@ -36,19 +40,20 @@ export class DrawerComponent implements OnInit {
   @ViewChild('userAccordion') userAccordion?: MatAccordion;
   @Output() toggleDrawer = new EventEmitter();
 
-  menusList: Array<TMenu> = Menu;
-  customerMenu: Array<TMenu> = CustomerMenu;
+  menusList: Array<TMenu> = getMenu();
+  customerMenu: Array<TMenu> = getCustomerMenu();
+  langs = getLangs();
+  currentLang: string = 'vi';
   badgeCart: number = 0;
-  currentUrl: string = this.router.url;
 
   userInformation$ = this.authService.jwtPayload$;
 
   subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
-    private urlChangeService: UrlChangeService,
     private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private readonly langService: LangService,
   ) {
 
   }
@@ -60,13 +65,7 @@ export class DrawerComponent implements OnInit {
       })
     )
 
-    this.subscription.add(
-      this.urlChangeService.urlChange().subscribe((event) => {
-        if (event) {
-          this.currentUrl = event.url;
-        }
-      })
-    );
+    this.currentLang = this.langService.getCurrentLang();
   }
 
   navigationMenuItem(length: number, url: string) {
@@ -90,6 +89,11 @@ export class DrawerComponent implements OnInit {
   logout() {
     this.closeSideMenu();
     this.authService.logout();
+  }
+
+  changeLanguage(lang: string){
+    console.log(lang);
+    this.langService.setLang(lang);
   }
 
 }

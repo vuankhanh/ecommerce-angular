@@ -20,7 +20,11 @@ function parseTransUnits(xml) {
     const id = unit.getAttribute('id');
     const source = unit.getElementsByTagName('source')[0]?.textContent || '';
     const target = unit.getElementsByTagName('target')[0]?.textContent || '';
-    units[id] = { node: unit, source, target };
+    // Lấy danh sách context-group dạng chuỗi để dễ so sánh
+    const contextGroups = Array.from(unit.getElementsByTagName('context-group')).map(
+      cg => cg.toString()
+    );
+    units[id] = { node: unit, source, target, contextGroups };
   }
   return { doc, units };
 }
@@ -34,8 +38,8 @@ function syncLangFile(defaultUnits, langPath) {
   //redundant là danh sách trans-unit thừa của file ngôn ngữ so với mặc định
   //sourceDiff là danh sách source trong trans-unit của file ngôn ngữ khác với mặc định
   //noneTarget là danh sách không có target trong trans-unit của file ngôn ngữ
-
-  const report = { missing: [], redundant: [], sourceDiff: [], noneTarget: [] };
+  //contextGroupDiff là danh sách context-group khác với mặc định
+  const report = { missing: [], redundant: [], sourceDiff: [], noneTarget: [], contextGroupDiff: [] };
 
   // Kiểm tra thiếu trans-unit
   for (const id in defaultUnits) {
@@ -46,16 +50,40 @@ function syncLangFile(defaultUnits, langPath) {
     } else {
       // Kiểm tra source khác
       if (langUnits[id].source !== defaultUnits[id].source) {
-        // Đè source từ mặc định sang
-        const sourceNode = langUnits[id].node.getElementsByTagName('source')[0];
-        if (sourceNode) {
-          sourceNode.textContent = defaultUnits[id].source;
-        } else {
-          const newSource = doc.createElement('source');
-          newSource.textContent = defaultUnits[id].source;
-          langUnits[id].node.appendChild(newSource);
-        }
+        // // Đè source từ mặc định sang
+        // const sourceNode = langUnits[id].node.getElementsByTagName('source')[0];
+        // if (sourceNode) {
+        //   sourceNode.textContent = defaultUnits[id].source;
+        // } else {
+        //   const newSource = doc.createElement('source');
+        //   newSource.textContent = defaultUnits[id].source;
+        //   langUnits[id].node.appendChild(newSource);
+        // }
         report.sourceDiff.push(id);
+      }
+
+      // So sánh context-group chi tiết
+      const defaultCG = defaultUnits[id].contextGroups || [];
+      const langCG = langUnits[id].contextGroups || [];
+      let cgDiff = false;
+      if (defaultCG.length !== langCG.length) {
+        cgDiff = true;
+      } else {
+        for (let i = 0; i < defaultCG.length; i++) {
+          if (defaultCG[i] !== langCG[i]) {
+            cgDiff = true;
+            break;
+          }
+        }
+      }
+      if (cgDiff) {
+        // Xóa toàn bộ context-group cũ
+        const oldGroups = Array.from(langUnits[id].node.getElementsByTagName('context-group'));
+        oldGroups.forEach(node => langUnits[id].node.removeChild(node));
+        // Thêm lại context-group từ default, dùng doc.importNode để đảm bảo node thuộc về doc hiện tại
+        const newGroups = Array.from(defaultUnits[id].node.getElementsByTagName('context-group'));
+        newGroups.forEach(node => langUnits[id].node.appendChild(doc.importNode(node, true)));
+        report.contextGroupDiff.push(id);
       }
 
 
@@ -74,7 +102,7 @@ function syncLangFile(defaultUnits, langPath) {
     }
   }
 
-  if (report.missing.length || report.redundant.length || report.sourceDiff.length) {
+  if (report.missing.length || report.redundant.length || report.sourceDiff.length || report.contextGroupDiff.length) {
     const transUnits = Array.from(body.getElementsByTagName('trans-unit'));
     const idOrder = Object.keys(defaultUnits);
     transUnits
@@ -111,10 +139,11 @@ function main() {
       console.log(chalk.magenta('  Redundant:'), chalk.yellow(report.redundant.join(', ')));
     if (report.sourceDiff.length)
       console.log(chalk.blue('  Source diff:'), chalk.yellow(report.sourceDiff.join(', ')));
-
+    if (report.contextGroupDiff.length)
+      console.log(chalk.bgCyan.black('  Context-group diff:'), chalk.yellow(report.contextGroupDiff.join(', ')));
     if (report.noneTarget.length)
       console.log(chalk.bgYellow.black('  None target:'), chalk.yellow(report.noneTarget.join(', ')));
-    if (!report.missing.length && !report.redundant.length && !report.sourceDiff.length && !report.noneTarget.length)
+    if (!report.missing.length && !report.redundant.length && !report.sourceDiff.length && !report.noneTarget.length && !report.contextGroupDiff.length)
       console.log(chalk.green('  All trans-units are synced.'));
   });
 }

@@ -25,10 +25,7 @@ import { PaginationConstant } from '../../sharing/constant/pagination.constant';
     MaterialModule
   ],
   templateUrl: './order-history.component.html',
-  styleUrls: ['./order-history.component.scss'],
-  providers: [
-    { provide: MatPaginatorIntl, useValue: CustomPaginator() }  // Here
-  ]
+  styleUrls: ['./order-history.component.scss']
 })
 export class OrderHistoryComponent implements OnInit {
   displayedColumns: string[] = ['orderCode', 'createdAt', 'name', 'totalValue', 'status'];

@@ -4,12 +4,16 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open --port 4211",
+    "start:en": "ng serve --open --port 4211 --configuration=en",
+    "start:ja": "ng serve --open --port 4211 --configuration=ja",
     "sync-xlf": "node sync-xlf.js",
-    "build": "ng build",
-    "build:prod": "ng build --configuration production",
+    "build": "ng build --localize",
+    "build:prod": "ng build --localize --configuration production",
+    "start:ssr": "node ./dist/ecommerce-angular/server/vi/server.mjs",
+    "start:ssr:en": "node ./dist/ecommerce-angular/server/en/server.mjs",
+    "start:ssr:ja": "node ./dist/ecommerce-angular/server/ja/server.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:ecommerce-angular": "node dist/ecommerce-angular/server/server.mjs"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {

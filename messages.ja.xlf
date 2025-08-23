@@ -1,51 +1,804 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="vi" datatype="plaintext" original="ng2.template">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="1068832725027130245" datatype="html">
-        <source>Xin chào,</source>
+      <trans-unit id="route.home.title" datatype="html">
+        <source>Trang chủ</source>
+        <target>ホーム</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
-          <context context-type="linenumber">4,5</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5206117793639060940" datatype="html">
-        <source>Mời đăng nhập</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
-          <context context-type="linenumber">5,6</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6094954326457925948" datatype="html">
-        <source>Tài khoản</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
           <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.home.breadcrumb" datatype="html">
+        <source>Trang chủ</source>
+        <target>ホーム</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.cart.title" datatype="html">
+        <source>Giỏ hàng</source>
+        <target>カート</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.cart.breadcrumb" datatype="html">
+        <source>Giỏ hàng</source>
+        <target>カート</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.payment.title" datatype="html">
+        <source>Thanh toán</source>
+        <target>支払い</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.payment.breadcrumb" datatype="html">
+        <source>Thanh toán</source>
+        <target>支払い</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8131645157759540240" datatype="html">
+        <source>Thêm địa chỉ giao hàng</source>
+        <target>配送先住所を追加</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/address-book/address-book.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery-selection/delivery-selection.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1219749970106792471" datatype="html">
+        <source>Địa chỉ mặc định</source>
+        <target>デフォルト住所</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/address-book/address-book.component.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery-selection/delivery-selection.component.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7543248245394144267" datatype="html">
+        <source>Thoát tài khoản</source>
+        <target>ログアウト</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/customer.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/header/header.component.html</context>
+          <context context-type="linenumber">106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.customer.personal.title" datatype="html">
+        <source>Thông tin cá nhân</source>
+        <target>個人情報</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/customer.routes.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.customer.order-history.title" datatype="html">
+        <source>Lịch sử mua hàng</source>
+        <target>購入履歴</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/customer.routes.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/customer.routes.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.customer.address-book.title" datatype="html">
+        <source>Sổ địa chỉ</source>
+        <target>住所録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/customer.routes.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.customer.chat.title" datatype="html">
+        <source>Lời nhắn</source>
+        <target>チャット</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/customer.routes.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5818521733290287642" datatype="html">
+        <source>Chi tiết đơn hàng</source>
+        <target>注文詳細</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3395056602464517239" datatype="html">
+        <source>Mã đơn hàng: <x id="INTERPOLATION" equiv-text="{{orderDetail.orderCode}}"/></source>
+        <target>注文コード: <x id="INTERPOLATION" equiv-text="{{orderDetail.orderCode}}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6968955550660721294" datatype="html">
+        <source>Trạng thái:</source>
+        <target>ステータス：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6466254187475285166" datatype="html">
+        <source>Thanh toán:</source>
+        <target>支払い方法：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6728967672118575189" datatype="html">
+        <source>Sản phẩm đã đặt</source>
+        <target>注文済み商品</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7117631994467239116" datatype="html">
+        <source>Thông tin giao hàng</source>
+        <target>配送情報</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="63603514668084313" datatype="html">
+        <source>Người nhận:</source>
+        <target>受取人：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">68,69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8733158339299612461" datatype="html">
+        <source>Số điện thoại:</source>
+        <target>電話番号：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">73,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4575480883318403474" datatype="html">
+        <source>Địa chỉ:</source>
+        <target>住所：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">78,79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3765151901707168915" datatype="html">
+        <source>Ghi chú đơn hàng</source>
+        <target>注文メモ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6151063416702460836" datatype="html">
+        <source>Tổng kết đơn hàng</source>
+        <target>注文概要</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3229237651213620818" datatype="html">
+        <source>Tạm tính:</source>
+        <target>小計：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">104,105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6945335100580393436" datatype="html">
+        <source>Giảm giá:</source>
+        <target>割引：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">109,110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6330279287080882249" datatype="html">
+        <source>Phí giao hàng:</source>
+        <target>配送料：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">114,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3644255489650502296" datatype="html">
+        <source>Tổng cộng:</source>
+        <target>合計：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">119,120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3402210085962034439" datatype="html">
+        <source>Hủy đơn</source>
+        <target>注文をキャンセル</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
+          <context context-type="linenumber">129,130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8967794217816108109" datatype="html">
+        <source>Thông tin cá nhân</source>
+        <target>個人情報</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7678749019750267840" datatype="html">
+        <source>Tên hiển thị</source>
+        <target>表示名</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4768749765465246664" datatype="html">
+        <source>Email</source>
+        <target>メール</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6437488467811153146" datatype="html">
         <source>Mật khẩu</source>
+        <target>パスワード</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7145969659749264968" datatype="html">
+        <source>Đổi</source>
+        <target>変更</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">32,33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="39720072185705284" datatype="html">
+        <source>Tạo</source>
+        <target>作成</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8167279493350759414" datatype="html">
+        <source>Số điện thoại</source>
+        <target>電話番号</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8584955656751072608" datatype="html">
+        <source>Chưa cập nhật</source>
+        <target>未更新</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3712845727857761223" datatype="html">
+        <source>Đang tải thông tin...</source>
+        <target>情報を読み込み中...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/customer-information/personal-information/personal-information.component.html</context>
+          <context context-type="linenumber">69,70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6094954326457925948" datatype="html">
+        <source>Tài khoản</source>
+        <target>アカウント</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/header/header.component.html</context>
+          <context context-type="linenumber">78,79</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="515587028357065674" datatype="html">
+        <source>Đăng nhập/Đăng ký</source>
+        <target>ログイン/登録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/header/header.component.html</context>
+          <context context-type="linenumber">80,81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1425991189649446302" datatype="html">
+        <source>Đăng nhập</source>
+        <target>ログイン</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">102,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2356914890840265311" datatype="html">
+        <source>Đăng ký</source>
+        <target>登録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">92,94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7512061398120216885" datatype="html">
+        <source>Trang chủ</source>
+        <target>ホーム</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
+          <context context-type="linenumber">68,69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/header/header.component.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4102614594058210408" datatype="html">
+        <source>Ngôn ngữ</source>
+        <target>言語</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/header/header.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8795058576068444140" datatype="html">
+        <source>Giảm 10% đơn hàng MỘT TRIỆU ĐỒNG</source>
+        <target>100万ドンの注文で10％オフ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/cart/cart.component.html</context>
+          <context context-type="linenumber">58,59</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">73,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5133532331734567261" datatype="html">
+        <source>Tạm tính</source>
+        <target>小計</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/cart/cart.component.html</context>
+          <context context-type="linenumber">65,66</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">79,80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4715318968641711481" datatype="html">
+        <source>Thành tiền</source>
+        <target>合計金額</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/cart/cart.component.html</context>
+          <context context-type="linenumber">76,77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">90,91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6510777702126681317" datatype="html">
+        <source>Tiến hành đặt hàng</source>
+        <target>注文を続行</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/cart/cart.component.html</context>
+          <context context-type="linenumber">85,86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2709500617292719329" datatype="html">
+        <source>Xem thêm</source>
+        <target>もっと見る</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/home-page/home-page.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2098210024175941478" datatype="html">
+        <source>Địa chỉ nhận hàng</source>
+        <target>配送先住所</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">7,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1869837044070685794" datatype="html">
+        <source>Thay đổi</source>
+        <target>変更</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5026447147036227598" datatype="html">
+        <source> Ảnh </source>
+        <target> 画像 </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">28,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3796888975075875191" datatype="html">
+        <source> Sản phẩm </source>
+        <target> 商品 </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1502164224507272303" datatype="html">
+        <source> Đơn giá </source>
+        <target> 単価 </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="633786288987093416" datatype="html">
+        <source> Số lượng </source>
+        <target> 数量 </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="201500714448850030" datatype="html">
+        <source>Thông tin lưu ý</source>
+        <target>注意事項</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="415088918917099984" datatype="html">
+        <source>Đặt mua</source>
+        <target>購入する</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/payment-page/payment-page.component.html</context>
+          <context context-type="linenumber">103,104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="372435147621653790" datatype="html">
+        <source>Số lượng</source>
+        <target>数量</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5567835675676650833" datatype="html">
+        <source>Mô tả chi tiết</source>
+        <target>詳細説明</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="684629911605542822" datatype="html">
+        <source>Đánh giá (<x id="INTERPOLATION" equiv-text="{{product.reviews.length}}"/>)</source>
+        <target>レビュー (<x id="INTERPOLATION" equiv-text="{{product.reviews.length}}"/>)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
+          <context context-type="linenumber">54,55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="187187500641108332" datatype="html">
+        <source/>
+        <target>
+          <x id="INTERPOLATION" equiv-text="{{userInfo.phoneNumber || 'Not updated'}}"/>
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4469607901898592845" datatype="html">
+        <source>Đặt hàng ngay</source>
+        <target>今すぐ注文</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
+          <context context-type="linenumber">114,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3180168871028705329" datatype="html">
+        <source>Thêm vào giỏ</source>
+        <target>カートに追加</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
+          <context context-type="linenumber">119,120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1018191110741063776" datatype="html">
+        <source>Danh mục sản phẩm</source>
+        <target>商品カテゴリ</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.product.title" datatype="html">
+        <source>Sản phẩm</source>
+        <target>商品</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product.routes.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.product.breadcrumb" datatype="html">
+        <source>Sản phẩm</source>
+        <target>商品</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product.routes.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.product-category.title" datatype="html">
+        <source>Danh mục sản phẩm</source>
+        <target>商品カテゴリー</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product.routes.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product.routes.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="route.product-detail.title" datatype="html">
+        <source>Chi tiết sản phẩm</source>
+        <target>商品詳細</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product.routes.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/main/product/product.routes.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="paginator.itemsPerPageLabel" datatype="html">
+        <source>Số dòng hiển thị:</source>
+        <target>表示行数：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/providers/CustomPaginatorConfiguration.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1190287696035724609" datatype="html">
+        <source>Không có sản phẩm nào trong giỏ hàng của bạn.</source>
+        <target>カートに商品がありません。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/component/empty-cart/empty-cart.component.html</context>
+          <context context-type="linenumber">6,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8524975491674032501" datatype="html">
+        <source>Tiếp tục mua sắm</source>
+        <target>買い物を続ける</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/component/empty-cart/empty-cart.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.product" datatype="html">
+        <source>Sản phẩm</source>
+        <target>商品</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/constant/menu.constant.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.cart" datatype="html">
+        <source>Giỏ hàng</source>
+        <target>カート</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/constant/menu.constant.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.personal" datatype="html">
+        <source>Thông tin cá nhân</source>
+        <target>個人情報</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/constant/menu.constant.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.orderHistory" datatype="html">
+        <source>Lịch sử mua hàng</source>
+        <target>購入履歴</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/constant/menu.constant.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu.addressBook" datatype="html">
+        <source>Sổ địa chỉ</source>
+        <target>住所録</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/constant/menu.constant.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2201302970044082382" datatype="html">
+        <source>Tỉnh</source>
+        <target>都道府県</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/address-selector/address-selector.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5022957764925736226" datatype="html">
+        <source>Huyện</source>
+        <target>区</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/address-selector/address-selector.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7361295986742447699" datatype="html">
+        <source>Phường</source>
+        <target>町</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/address-selector/address-selector.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1076168920176183541" datatype="html">
+        <source>Địa chỉ</source>
+        <target>住所</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/address-selector/address-selector.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5952732544276936255" datatype="html">
+        <source>Gửi thành công email</source>
+        <target>メール送信成功</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/forgot-password-successful/forgot-password-successful.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2166692298344339006" datatype="html">
+        <source>Một thông báo vừa được gửi vào email của bạn, vui lòng kiếm tra và làm theo hướng dẫn</source>
+        <target>通知がメールに送信されました。ご確認の上、指示に従ってください。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/forgot-password-successful/forgot-password-successful.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8897643489175822956" datatype="html">
+        <source>Tìm email của bạn</source>
+        <target>メールを探す</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/forgot-password/forgot-password.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5730422674264950119" datatype="html">
+        <source>Nhập email khôi phục</source>
+        <target>復旧用メールを入力</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/forgot-password/forgot-password.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7389139134844615764" datatype="html">
+        <source>Email không đúng định dạng</source>
+        <target>メールの形式が正しくありません</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/forgot-password/forgot-password.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1068832725027130245" datatype="html">
+        <source>Xin chào,</source>
+        <target>こんにちは、</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5206117793639060940" datatype="html">
+        <source>Mời đăng nhập</source>
+        <target>ログインしてください</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4156319168524906016" datatype="html">
         <source> Đăng nhập </source>
+        <target> ログイン </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
           <context context-type="linenumber">26,27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2356914890840265311" datatype="html">
-        <source>Đăng ký</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
-          <context context-type="linenumber">30,31</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="649976638947891449" datatype="html">
         <source>Quên mật khẩu</source>
+        <target>パスワードを忘れた</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
           <context context-type="linenumber">31,32</context>
@@ -53,9 +806,222 @@
       </trans-unit>
       <trans-unit id="7402772130961748336" datatype="html">
         <source>Hoặc đăng nhập bằng</source>
+        <target>または次でログイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
           <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5046771485639196427" datatype="html">
+        <source>Đăng ký thành công</source>
+        <target>登録成功</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register-successful/register-successful.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4446446015342199623" datatype="html">
+        <source>Bạn vui lòng truy cập email để kích hoạt tài khoản</source>
+        <target>メールを確認してアカウントを有効化してください</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register-successful/register-successful.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7263209545805584832" datatype="html">
+        <source>Hãy đăng ký để chúng tôi phục vụ bạn tốt hơn</source>
+        <target>より良いサービスのためにご登録ください</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="953550330834976001" datatype="html">
+        <source>Tài khoản *</source>
+        <target>アカウント *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8570009153354896929" datatype="html">
+        <source>Tài khoản đã tồn tại.</source>
+        <target>アカウントは既に存在します。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1264863797387465130" datatype="html">
+        <source>Mật khẩu *</source>
+        <target>パスワード *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="516070194692295108" datatype="html">
+        <source>Nhập lại mật khẩu *</source>
+        <target>パスワード再入力 *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4814863928400801152" datatype="html">
+        <source>Tên của bạn *</source>
+        <target>お名前 *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1585425644523299468" datatype="html">
+        <source>Email *</source>
+        <target>メール *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2422237435045194162" datatype="html">
+        <source>Email đã tồn tại.</source>
+        <target>メールは既に存在します。</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5642913816261934348" datatype="html">
+        <source>Số điện thoại *</source>
+        <target>電話番号 *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2818302896495670481" datatype="html">
+        <source>Caps Lock đang bật</source>
+        <target>Caps Lockがオンです</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
+          <context context-type="linenumber">60,61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7898092750735591826" datatype="html">
+        <source>Hủy</source>
+        <target>キャンセル</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/confirm-action/confirm-action.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9075722956990430472" datatype="html">
+        <source>Chắc chắn</source>
+        <target>確認</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/confirm-action/confirm-action.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="457791556777677889" datatype="html">
+        <source>Chọn địa chỉ giao hàng</source>
+        <target>配送先住所を選択</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery-selection/delivery-selection.component.html</context>
+          <context context-type="linenumber">2,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5535181918100380718" datatype="html">
+        <source>Trở lại</source>
+        <target>戻る</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery-selection/delivery-selection.component.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4608577191538812224" datatype="html">
+        <source>Xác nhận</source>
+        <target>確認</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery-selection/delivery-selection.component.html</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1806540853958571351" datatype="html">
+        <source>Địa chỉ của tôi</source>
+        <target>私の住所</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5386341285423740248" datatype="html">
+        <source>Tên</source>
+        <target>名前</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="65974798133937530" datatype="html">
+        <source>Số điện thoại không đúng định dạng</source>
+        <target>電話番号の形式が正しくありません</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4672002675109618570" datatype="html">
+        <source>Hoàn thành</source>
+        <target>完了</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1511182817202918103" datatype="html">
+        <source>ĐẶT HÀNG THÀNH CÔNG</source>
+        <target>注文成功</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/payment-successful/payment-successful.component.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="105439457338579331" datatype="html">
+        <source>Đơn hàng <x id="INTERPOLATION" equiv-text="{{ orderModel.code }}"/> đã được gửi!</source>
+        <target>注文 <x id="INTERPOLATION" equiv-text="{{ orderModel.code }}"/> が送信されました！</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/payment-successful/payment-successful.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8101577681962845923" datatype="html">
+        <source>Cảm ơn Quý Khách đã đặt hàng!</source>
+        <target>ご注文ありがとうございます！</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/payment-successful/payment-successful.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7471810788907231567" datatype="html">
+        <source>Lịch sử mua hàng</source>
+        <target>購入履歴</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/payment-successful/payment-successful.component.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2303393018874874965" datatype="html">
+        <source>Đóng</source>
+        <target>閉じる</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/payment-successful/payment-successful.component.html</context>
+          <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
     </body>

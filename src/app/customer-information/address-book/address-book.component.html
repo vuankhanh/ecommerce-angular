@@ -3,7 +3,7 @@
     <div class="group-button-row">
       <button mat-raised-button (click)="onCreateAddress()">
         <mat-icon>add</mat-icon>
-        Thêm địa chỉ giao hàng
+        <span i18n>Thêm địa chỉ giao hàng</span>
       </button>
     </div>
   </section>
@@ -31,7 +31,7 @@
         </div>
         <div class="button-container horizontal-container">
           @if (delivery.isDefault) {
-          <span class="default-address" color="primary">Địa chỉ mặc định</span>
+          <span class="default-address" color="primary" i18n>Địa chỉ mặc định</span>
           }@else {
           <button matButton="outlined" (click)="onSetDefaultAddress(index, delivery)">
             Đặt làm mặc định

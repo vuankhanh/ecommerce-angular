@@ -8,9 +8,9 @@ export const routes: Routes = [
   {
     path: '',
     component: HomePageComponent,
-    title: 'Trang chủ',
+    title: $localize`:@@route.home.title:Trang chủ`,
     data: {
-      breadcrumb: 'Trang chủ'
+      breadcrumb: $localize`:@@route.home.breadcrumb:Trang chủ`
     }
   }, {
     path: 'san-pham',
@@ -18,16 +18,16 @@ export const routes: Routes = [
   }, {
     path: 'gio-hang',
     component: CartComponent,
-    title: 'Giỏ hàng',
+    title: $localize`:@@route.cart.title:Giỏ hàng`,
     data: {
-      breadcrumb: 'Giỏ hàng'
+      breadcrumb: $localize`:@@route.cart.breadcrumb:Giỏ hàng`
     }
   }, {
     path: 'thanh-toan',
     component: PaymentPageComponent,
-    title: 'Thanh toán',
+    title: $localize`:@@route.payment.title:Thanh toán`,
     data: {
-      breadcrumb: 'Thanh toán'
+      breadcrumb: $localize`:@@route.payment.breadcrumb:Thanh toán`
     }
   },
   {

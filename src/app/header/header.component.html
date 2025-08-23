@@ -16,122 +16,142 @@
     </button>
   </div>
 
-  <div class="menu-container horizontal-container">
-    <div class="vertical-container dropdown-container">
-      <button matRippleDisabled="false" class="title-menu" routerLink="" [routerLinkActive]="['is-active']"
-        [routerLinkActiveOptions]="{ exact: true }">
-        <span>Trang chủ</span>
+  <div class="not-mobile-container horizontal-container">
 
-      </button>
-    </div>
-    @for (menu of menusList; track menu) {
-    <div class="vertical-container dropdown-container">
-      <button matRippleDisabled="false" class="title-menu" [routerLink]="['/'+menu.route]"
-        [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: menu.route ? false : true }">
-        <span [matBadge]="badgeCart"
-          [matBadgeHidden]="(menu.route === 'gio-hang' ? false : true) || !badgeCart">{{menu.name}}</span>
-
-      </button>
-      @if (menu.children && menu.children.length) {
-      <div class="sub-menu-container">
-        @for (child of menu.children; track $index) {
-        <div>
-          <button [routerLink]="[menu.route + '/' + child.route]" [routerLinkActive]="['is-active']"
-            [routerLinkActiveOptions]="{ exact: false }">
-            {{child.name}}
-          </button>
+    <div class="menu-container horizontal-container">
+      <div class="vertical-container dropdown-container">
+        <button matRippleDisabled="false" class="title-menu" routerLink="" [routerLinkActive]="['is-active']"
+          [routerLinkActiveOptions]="{ exact: true }">
+          <span i18n>Trang chủ</span>
+  
+        </button>
+      </div>
+      @for (menu of menusList; track menu) {
+      <div class="vertical-container dropdown-container">
+        <button matRippleDisabled="false" class="title-menu" [routerLink]="['/'+menu.route]"
+          [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: menu.route ? false : true }">
+          <span [matBadge]="badgeCart"
+            [matBadgeHidden]="(menu.route === 'gio-hang' ? false : true) || !badgeCart">{{menu.name}}</span>
+  
+        </button>
+        @if (menu.children && menu.children.length) {
+        <div class="sub-menu-container">
+          @for (child of menu.children; track $index) {
+          <div>
+            <button [routerLink]="[menu.route + '/' + child.route]" [routerLinkActive]="['is-active']"
+              [routerLinkActiveOptions]="{ exact: false }">
+              {{child.name}}
+            </button>
+          </div>
+          }
         </div>
         }
-      </div>
-      }
-
-    </div>
-    }
-  </div>
-
-  <div class="user-information">
-
-    <div class="user-information-block horizontal-container" routerLink="/khach-hang" [routerLinkActive]="['is-active']"
-      [routerLinkActiveOptions]="{ exact: false }">
-      <div class="user-information-block_icon vertical-container">
-        @if (userInformation$ | async; as userInformation) {
-        <img
-          [src]="(userInformation && userInformation?.avatar) ? (userInformation!.avatar | prefixBackendStatic) : 'assets/avatar/default.svg'"
-          [alt]="userInformation?.name" class="user-avatar">
-        }@else {
-        <mat-icon>person_outline</mat-icon>
-        }
-      </div>
-      <div class="user-information-block_showListButton vertical-container">
-        <div class="user-information-block_showListButton_status">
-          {{ (userInformation$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
-        </div>
-        <div class="user-information-block_showListButton_account horizontal-container">
-          <span>{{ (userInformation$ | async) ? (userInformation$ | async)?.name ?
-            (userInformation$ | async)?.name : (userInformation$ | async)?.email :
-            'Tài khoản'}}</span>
-          <mat-icon>arrow_drop_down</mat-icon>
-        </div>
-      </div>
-    </div>
-
-    <div class="listButton vertical-container">
-      @if(userInformation$ | async) {
-
-      <mat-list role="list">
-        <div class="micro-height-space"></div>
-
-        @for (cMenu of customerMenu; track $index; let i = $index;) {
-        <mat-list-item role="listitem" [routerLink]="['/khach-hang'+'/'+cMenu.route]"
-          routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
-          {{ cMenu.name }}
-        </mat-list-item>
-        }
-
-        <div class="height-space"></div>
-        <mat-list-item role="listitem" (click)="logout()">Thoát tài khoản</mat-list-item>
-        <div class="micro-height-space"></div>
-      </mat-list>
-      }@else {
-
-      <div class="authentication-action-container">
-        <div class="button-loginRegister loginRegister button-primary horizontal-container">
-          <div class="textButton horizontal-container" (click)="authService.login('login')">
-            Đăng nhập
-          </div>
-        </div>
-
-        <div class="mini-height-space"></div>
-
-        <div class="button-loginRegister loginRegister button-primary horizontal-container">
-          <div class="textButton horizontal-container" (click)="authService.login('register')">
-            Đăng ký
-          </div>
-        </div>
-
-        <div class="mini-height-space"></div>
-
-        <div class="button-loginRegister loginFacebook horizontal-container" (click)="socialAuthentication('facebook')">
-          <div class="icon">
-            <mat-icon fontSet="fab" fontIcon="fa-facebook-f"></mat-icon>
-          </div>
-          <div class="textButton horizontal-container">
-            Đăng nhập bằng Facebook
-          </div>
-        </div>
-
-        <div class="mini-height-space"></div>
-
-        <div class="button-loginRegister loginGoogle horizontal-container" (click)="socialAuthentication('google')">
-          <div class="icon">
-            <mat-icon fontSet="fab" fontIcon="fa-google"></mat-icon>
-          </div>
-          <div class="textButton horizontal-container">
-            Đăng nhập bằng Google
-          </div>
-        </div>
+  
       </div>
       }
     </div>
+  
+    <div class="horizontal-container">
+      <!-- Language selector block -->
+      <div class="language-selector vertical-container">
+        <mat-form-field appearance="fill" subscriptSizing="dynamic">
+          <mat-label i18n>Ngôn ngữ</mat-label>
+          <mat-select [(ngModel)]="currentLang" (selectionChange)="changeLanguage($event.value)">
+            @for (lang of langs; track $index) {
+            <mat-option [value]="lang.code">{{ lang.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="user-information horizontal-container">
+        <div class="user-information-block horizontal-container" routerLink="/khach-hang" [routerLinkActive]="['is-active']"
+          [routerLinkActiveOptions]="{ exact: false }">
+          <div class="user-information-block_icon vertical-container">
+            @if (userInformation$ | async; as userInformation) {
+            <img
+              [src]="(userInformation && userInformation?.avatar) ? (userInformation!.avatar | prefixBackendStatic) : 'assets/avatar/default.svg'"
+              [alt]="userInformation?.name" class="user-avatar">
+            }@else {
+            <mat-icon>person_outline</mat-icon>
+            }
+          </div>
+          <div class="user-information-block_showListButton vertical-container">
+            <div class="user-information-block_showListButton_status">
+              @if(userInformation$ | async){
+              <span i18n>Tài khoản</span>
+              }@else {
+              <span i18n>Đăng nhập/Đăng ký</span>
+              }
+            </div>
+            <div class="user-information-block_showListButton_account horizontal-container">
+              <span>{{ (userInformation$ | async) ? (userInformation$ | async)?.name ?
+                (userInformation$ | async)?.name : (userInformation$ | async)?.email :
+                'Tài khoản'}}</span>
+              <mat-icon>arrow_drop_down</mat-icon>
+            </div>
+          </div>
+        </div>
+    
+        <div class="listButton vertical-container">
+          @if(userInformation$ | async) {
+    
+          <mat-list role="list">
+            <div class="micro-height-space"></div>
+    
+            @for (cMenu of customerMenu; track $index; let i = $index;) {
+            <mat-list-item role="listitem" [routerLink]="['/khach-hang'+'/'+cMenu.route]"
+              routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
+              {{ cMenu.name }}
+            </mat-list-item>
+            }
+    
+            <div class="height-space"></div>
+            <mat-list-item role="listitem" (click)="logout()" i18n>Thoát tài khoản</mat-list-item>
+            <div class="micro-height-space"></div>
+          </mat-list>
+          }@else {
+    
+          <div class="authentication-action-container">
+            <div class="button-loginRegister loginRegister button-primary horizontal-container">
+              <div class="textButton horizontal-container" (click)="authService.login('login')">
+                Đăng nhập
+              </div>
+            </div>
+    
+            <div class="mini-height-space"></div>
+    
+            <div class="button-loginRegister loginRegister button-primary horizontal-container">
+              <div class="textButton horizontal-container" (click)="authService.login('register')">
+                Đăng ký
+              </div>
+            </div>
+    
+            <div class="mini-height-space"></div>
+    
+            <div class="button-loginRegister loginFacebook horizontal-container" (click)="socialAuthentication('facebook')">
+              <div class="icon">
+                <mat-icon fontSet="fab" fontIcon="fa-facebook-f"></mat-icon>
+              </div>
+              <div class="textButton horizontal-container">
+                Đăng nhập bằng Facebook
+              </div>
+            </div>
+    
+            <div class="mini-height-space"></div>
+    
+            <div class="button-loginRegister loginGoogle horizontal-container" (click)="socialAuthentication('google')">
+              <div class="icon">
+                <mat-icon fontSet="fab" fontIcon="fa-google"></mat-icon>
+              </div>
+              <div class="textButton horizontal-container">
+                Đăng nhập bằng Google
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
   </div>
+
 </div>

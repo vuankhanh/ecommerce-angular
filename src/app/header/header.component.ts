@@ -1,17 +1,14 @@
 import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ViewChild, AfterViewInit, Output, EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { Identification } from '../models/Identification';
 
 //Mock Data
-import { Menu, CustomerMenu } from '../sharing/constant/menu.constant';
+import { getMenu, getCustomerMenu } from '../sharing/constant/menu.constant';
 
 //Service
 import { CartService } from '../services/cart.service';
-import { UrlChangeService } from '../services/url-change.service';
-import { JwtDecodedService } from '../services/jwt-decoded.service';
 import { AuthService } from '../services/auth.service';
 import { MainContainerScrollService } from '../services/main-container-scroll.service';
 import { SocialAuthenticationService } from '../services/api/social-login/social-authentication';
@@ -23,12 +20,16 @@ import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
 import { InProgressSpinnerService } from '../services/in-progress-spinner.service';
 import { TMenu } from '../models/menu.interface';
 import { ToastService } from '../services/toast.service';
+import { getLangs } from '../sharing/constant/lang.constant';
+import { LangService } from '../services/lang.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     RouterLink,
     RouterLinkActive,
 
@@ -44,9 +45,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() toggleDrawer = new EventEmitter();
 
   identification?: Identification;
-  menusList: Array<TMenu> = Menu;
-  customerMenu: Array<TMenu> = CustomerMenu;
-  currentUrl: string = this.router.url;
+  menusList: Array<TMenu> = getMenu();
+  customerMenu: Array<TMenu> = getCustomerMenu();
+  langs = getLangs();
+  currentLang: string = 'vi';
   badgeCart: number = 0;
   showAlertAddedToCart: boolean = false;
 
@@ -57,35 +59,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly subscription: Subscription = new Subscription();
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
-    private router: Router,
     private ren: Renderer2,
-    private bottomSheet: MatBottomSheet,
-    private urlChangeService: UrlChangeService,
     private cartService: CartService,
-    private jwtDecodedService: JwtDecodedService,
     private toastService: ToastService,
     public authService: AuthService,
     private mainContainerScrollService: MainContainerScrollService,
     private socialAuthenticationService: SocialAuthenticationService,
     private readonly inProgressSpinnerService: InProgressSpinnerService,
+    private readonly langService: LangService
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
-
+  
   ngOnInit(): void {
     this.subscription.add(
       this.cartService.cartStoraged$.subscribe(cart=>{
         this.badgeCart = cart.totalQuantity;
       })
     )
-
-    this.subscription.add(
-      this.urlChangeService.urlChange().subscribe((event)=>{
-        if(event) {
-          this.currentUrl = event.url;
-        }
-      })
-    );
+    
+    this.currentLang = this.langService.getCurrentLang();
+    console.log(this.currentLang);
+    
   }
 
   ngAfterViewInit(): void{
@@ -109,6 +104,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.changeStyleHeader(notTop);
       })
     )
+  }
+
+  changeLanguage(lang: string){
+    this.langService.setLang(lang);
   }
 
   changeStyleHeader(notTop: boolean): void{

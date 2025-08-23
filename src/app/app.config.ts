@@ -17,6 +17,8 @@ import { provideIconConfig } from './sharing/provider/icon-config.provider';
 import { AuthService } from './services/auth.service';
 import { authInterceptor } from './sharing/core/interceptor/auth.interceptor';
 import { provideAppInitializerConfig } from './sharing/provider/app-initializer.provider';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomPaginator } from './providers/CustomPaginatorConfiguration';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,6 +33,7 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(provideAppInitializerConfig()),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() },
     provideToastr({
       positionClass: 'toast-bottom-center',
       preventDuplicates: true,

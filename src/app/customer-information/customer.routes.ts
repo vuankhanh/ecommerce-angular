@@ -13,11 +13,11 @@ export const routes: Routes = [
     component: CustomerComponent,
     children: [
       { path: '', redirectTo: 'personal', pathMatch: 'full' },
-      { path: 'personal', component: PersonalInformationComponent, data: { title: 'Tài khoản của tôi' } },
-      { path: 'order-history', component: OrderHistoryComponent, data: { title: 'Lịch sử mua hàng' } },
-      { path: 'order-history/:id', component: OrderHistoryDetailComponent, data: { title: 'Lịch sử mua hàng' } },
-      { path: 'address-book', component: AddressBookComponent, data: { title: 'Sổ địa chỉ' } },
-      { path: 'chat', component: ChatComponent, data: { title: 'Lời nhắn' } }
+      { path: 'personal', component: PersonalInformationComponent, data: { title: $localize`:@@route.customer.personal.title:Thông tin cá nhân` } },
+      { path: 'order-history', component: OrderHistoryComponent, data: { title: $localize`:@@route.customer.order-history.title:Lịch sử mua hàng` } },
+      { path: 'order-history/:id', component: OrderHistoryDetailComponent, data: { title: $localize`:@@route.customer.order-history.title:Lịch sử mua hàng` } },
+      { path: 'address-book', component: AddressBookComponent, data: { title: $localize`:@@route.customer.address-book.title:Sổ địa chỉ` } },
+      { path: 'chat', component: ChatComponent, data: { title:  $localize`:@@route.customer.chat.title:Lời nhắn` } }
     ]
   },
 ];

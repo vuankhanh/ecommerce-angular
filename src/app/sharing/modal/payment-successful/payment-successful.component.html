@@ -5,14 +5,14 @@
     </div>
     <div class="content-container vertical-container">
       <div class="text">
-        <h3>ĐẶT HÀNG THÀNH CÔNG</h3>
-        <p>Đơn hàng {{ orderModel.code }} đã được gửi!</p>
-        <p>Cảm ơn Quý Khách đã đặt hàng tại carota.vn!</p>
+        <h3 i18n>ĐẶT HÀNG THÀNH CÔNG</h3>
+        <p i18n>Đơn hàng {{ orderModel.code }} đã được gửi!</p>
+        <p i18n>Cảm ơn Quý Khách đã đặt hàng!</p>
       </div>
       <div class="button-container horizontal-container">
-        <button mat-button (click)="goOrderHistory()">Lịch sử mua hàng</button>
+        <button mat-button (click)="goOrderHistory()" i18n>Lịch sử mua hàng</button>
         <div class="width-space"></div>
-        <button mat-button (click)="dialogRef.close()">Đóng</button>
+        <button mat-button (click)="dialogRef.close()" i18n>Đóng</button>
       </div>
     </div>
   </div>

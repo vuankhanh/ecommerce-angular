@@ -13,7 +13,11 @@
         </div>
         <div class="user-information-block_showListButton vertical-container">
           <div class="user-information-block_showListButton_status">
-            {{ (userInformation$ | async) ? 'Tài khoản' : 'Đăng nhập/Đăng ký' }}
+            @if(userInformation$ | async){
+            <span i18n>Tài khoản</span>
+            }@else {
+            <span i18n>Đăng nhập/Đăng ký</span>
+            }
           </div>
           <div class="user-information-block_showListButton_account horizontal-container">
             <span>{{ (userInformation$ | async) ? (userInformation$ | async)?.name ?
@@ -25,43 +29,40 @@
     @if (userInformation$ | async) {
     <mat-list class="user-information-menu">
       @for (customer of customerMenu; track $index) {
-        <mat-list-item [routerLink]="['/khach-hang/'+customer.route]"
-          [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: customer.route ? false : true }"
-          (click)="closeSideMenu()">
-          @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
-          <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
-          }
-          <span>{{ customer.name }}</span>
-        </mat-list-item>
-        <div class="height-space"></div>
+      <mat-list-item [routerLink]="['/khach-hang/'+customer.route]" [routerLinkActive]="['is-active']"
+        [routerLinkActiveOptions]="{ exact: customer.route ? false : true }" (click)="closeSideMenu()">
+        @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
+        <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
+        }
+        <span>{{ customer.name }}</span>
+      </mat-list-item>
+      <div class="height-space"></div>
       }
 
       <mat-list-item (click)="logout()">
         <mat-icon fontSet="fa" fontIcon="fa-sign-out" matListItemIcon></mat-icon>
-        <span>Thoát tài khoản</span>
+        <span i18n>Thoát tài khoản</span>
       </mat-list-item>
     </mat-list>
     }@else {
     <mat-list>
       <mat-list-item (click)="login('login')">
         <mat-icon fontSet="fa" fontIcon="fa-sign-in" matListItemIcon></mat-icon>
-        <span>Đăng nhập</span>
+        <span i18n>Đăng nhập</span>
       </mat-list-item>
       <mat-list-item (click)="login('register')">
         <mat-icon fontSet="fa" fontIcon="fa-user-plus" matListItemIcon></mat-icon>
-        <span>Đăng ký</span>
+        <span i18n>Đăng ký</span>
       </mat-list-item>
     </mat-list>
     }
   </mat-expansion-panel>
 
-  <div class="height-space"></div>
-
   <mat-nav-list>
     <mat-list-item (click)="closeSideMenu()" role="listitem" routerLink="" routerLinkActive="active-menu-item"
       [routerLinkActiveOptions]="{ exact: true }">
       <mat-icon fontSet="fa-solid" fontIcon="fa-house" matListItemIcon></mat-icon>
-      Trang chủ
+      <span i18n>Trang chủ</span>
     </mat-list-item>
     @for (nav of menusList; track $index) {
     @if (!!nav.children?.length) {
@@ -80,15 +81,15 @@
       </mat-expansion-panel-header>
 
       @for (child of nav.children; track $index) {
-      <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="child.route" routerLinkActive="active-menu-item"
-        [routerLinkActiveOptions]="{ exact: false }">
+      <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="child.route"
+        routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
         {{ child.name }}
       </mat-list-item>
       }
     </mat-expansion-panel>
     }@else {
-    <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="nav.route" routerLinkActive="active-menu-item"
-      [routerLinkActiveOptions]="{ exact: false }">
+    <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="nav.route"
+      routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
       @if (!!nav.icon?.fontSet && !!nav.icon?.fontIcon) {
       <mat-icon [fontSet]="nav.icon!.fontSet" [fontIcon]="nav.icon!.fontIcon" matListItemIcon></mat-icon>
       }
@@ -96,6 +97,20 @@
     </mat-list-item>
     }
     }
+  </mat-nav-list>
+
+  <mat-nav-list class="bottom-menu">
+    <div class="language-selector vertical-container">
+      <mat-form-field appearance="fill" subscriptSizing="dynamic">
+        <mat-label i18n>Ngôn ngữ</mat-label>
+        <mat-select [(ngModel)]="currentLang" (selectionChange)="changeLanguage($event.value)">
+          @for (lang of langs; track $index) {
+          <mat-option [value]="lang.code">{{ lang.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
   </mat-nav-list>
 
 </div>

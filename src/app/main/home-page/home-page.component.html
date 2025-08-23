@@ -8,7 +8,8 @@
     <div class="category-name horizontal-container" [routerLink]="['/san-pham/'+productCategory.slug]">
       <h2>{{ productCategory.name }}</h2>
       <span class="horizontal-container">
-        Xem thêm<mat-icon>arrow_right</mat-icon>
+        <span i18n>Xem thêm</span>
+        <mat-icon>arrow_right</mat-icon>
       </span>
     </div>
     <app-product-category-home-page [productCategory]="productCategory"></app-product-category-home-page>
