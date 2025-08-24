@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, Inject, isDevMode, OnInit, PLATFORM_ID, Renderer2, ViewChild, DOCUMENT } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MaterialModule } from './sharing/module/material';
@@ -29,49 +29,47 @@ import { BreakpointDetectionService } from './services/breakpoint-detection.serv
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('drawer') drawer?: MatSidenav;
-  @ViewChild ('drawerContent') drawercontent?: MatDrawerContent;
+  @ViewChild('drawerContent') drawercontent?: MatDrawerContent;
   isBrowser: boolean;
   breakpointDetection$: Observable<boolean> = this.breakpointDetectionService.detection$();
 
   ratingValue: number = 3.6;
-  
+
   private readonly subscription: Subscription = new Subscription();
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
-    @Inject(DOCUMENT) private _document: Document,
-    private renderer2: Renderer2,
     private mouseEventEmitService: MouseEventEmitService,
     private mainContainerScrollService: MainContainerScrollService,
     private breakpointDetectionService: BreakpointDetectionService
-  ){
+  ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
-  ngOnInit(){
+  ngOnInit(): void {
     this.setScroll();
   }
 
   ngAfterViewInit(): void {
-
+    
   }
 
-  toggle(event: any){
+  toggle(event: any) {
     this.drawer?.toggle();
   }
 
   onActivate() {
-    if(this.isBrowser){
+    if (this.isBrowser) {
       window.scroll({
         top: 0,
-        behavior: 'smooth' 
+        behavior: 'smooth'
       });
     }
   }
 
-  mouseEventEmit(event: MouseEvent){
-    if(event.type === 'mouseenter'){
+  mouseEventEmit(event: MouseEvent) {
+    if (event.type === 'mouseenter') {
       this.mouseEventEmitService.set(true);
-    }else if(event.type === 'mouseleave'){
+    } else if (event.type === 'mouseleave') {
       this.mouseEventEmitService.set(false);
     }
   }
@@ -80,18 +78,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     let target: HTMLDivElement = <HTMLDivElement>event.target;
     let index: number = target.scrollTop;
     let indexBottom = target.scrollHeight - target.clientHeight;
-    
+
     this.mainContainerScrollService.setPositionTop(index);
     this.mainContainerScrollService.setPositionBottom(indexBottom - index);
   };
 
-  setScroll(){
+  setScroll() {
     this.subscription.add(
-      this.mainContainerScrollService.listenDirectionPostion$.subscribe(res=>{
-        if(res){
-          if(res.direction === 'x'){
+      this.mainContainerScrollService.listenDirectionPostion$.subscribe(res => {
+        if (res) {
+          if (res.direction === 'x') {
             this.drawercontent?.scrollTo({ left: res.position, behavior: "smooth" });
-          }else if(res.direction === 'y'){
+          } else if (res.direction === 'y') {
             this.drawercontent?.scrollTo({ top: res.position, behavior: "smooth" })
           }
         }

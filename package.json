@@ -7,7 +7,7 @@
     "start:en": "ng serve --open --port 4211 --configuration=en",
     "start:ja": "ng serve --open --port 4211 --configuration=ja",
     "sync-xlf": "node sync-xlf.js",
-    "build": "ng build --localize",
+    "build": "ng build --localize --configuration development",
     "build:prod": "ng build --localize --configuration production",
     "start:ssr": "node ./dist/ecommerce-angular/server/vi/server.mjs",
     "start:ssr:en": "node ./dist/ecommerce-angular/server/en/server.mjs",

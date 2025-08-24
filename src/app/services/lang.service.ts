@@ -1,29 +1,40 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LangService {
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+  private readonly isBrowser: boolean = isPlatformBrowser(this.platformId);
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private readonly localStorageService: LocalStorageService
+  ) { }
 
-  getCurrentLang(): string {
-    if (isPlatformBrowser(this.platformId)) {
+  getLangFromHref(): string | null {
+    if (this.isBrowser) {
       const base = document.querySelector('base');
 
       if (base && base.getAttribute('href')) {
         const href = base.getAttribute('href')!;
         const match = href.match(/^\/([a-zA-Z-]+)\//);
-        return match ? match[1] : 'vi';
+        return match ? match[1] : null;
       }
     }
-    return 'vi';
+    return null;
+  }
+
+  getCurrentLang(): string {
+    return this.localStorageService.get('lang') || 'vi';
   }
 
   setLang(lang: string): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.isBrowser) {
+      this.localStorageService.set('lang', lang);
       const currentUrl = window.location.pathname + window.location.search + window.location.hash;
-      window.location.href = `/${lang}/${currentUrl.replace(/^\/[a-zA-Z-]+\//, '')}`;
+      const newUrl = `/${lang}/${currentUrl.replace(/^\/[a-zA-Z-]+\//, '')}`;
+      window.location.href = newUrl;
     }
   }
 }

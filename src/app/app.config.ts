@@ -18,6 +18,7 @@ import { provideAppInitializerConfig } from './sharing/provider/app-initializer.
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './providers/CustomPaginatorConfiguration';
 import { LangPipe } from './sharing/pipe/lang.pipe';
+import { langInterceptor } from './sharing/core/interceptor/lang.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,7 +28,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideIconConfig(),
     provideHttpClient(
-      withInterceptors([authInterceptor])
+      withInterceptors([authInterceptor, langInterceptor])
     ),
     provideAppInitializer(provideAppInitializerConfig()),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
