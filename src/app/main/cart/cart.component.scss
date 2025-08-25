@@ -32,6 +32,8 @@
 
         .product-info {
           width: 100%;
+          align-items: flex-start;
+          justify-content: space-between;
 
           .product-name-text {
             // margin-bottom: 10px;
@@ -42,17 +44,6 @@
         .price-unit-container {
           text-wrap: nowrap;
           align-items: center;
-
-          .button-container {
-            justify-content: flex-end;
-            height: fit-content;
-            align-items: center;
-            white-space: nowrap;
-
-            mat-icon {
-              cursor: pointer;
-            }
-          }
         }
       }
     }
@@ -127,15 +118,11 @@
 
         .product-price-container {
           flex-direction: column;
-          .price-unit-container {
-            .price-text {
-              margin: 10px 0;
-            }
+          gap: 10px;
 
-          }
-          .button-container {
+          .price-unit-container {
+            justify-content: space-between;
             width: 100%;
-            justify-content: flex-end;
           }
         }
       }

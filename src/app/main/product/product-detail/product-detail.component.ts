@@ -33,7 +33,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     NumberInputComponent,
     GalleryPipe,
     CurrencyCustomPipe,
-    LangPipe,
 
     YouTubePlayerModule,
 
@@ -89,13 +88,6 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   ngAfterViewInit() {
 
   }
-
-  // openThanksForTheReview(productReviews: ProductReviews) {
-  //   this.dialog.open(ThanksForTheReviewComponent, {
-  //     panelClass: 'thanks-for-the-review-component',
-  //     data: productReviews
-  //   })
-  // }
 
   bookNow(product: ProductDetailEntity) {
     const cartItem = new CartItemEntity(product);

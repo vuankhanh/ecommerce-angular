@@ -7,7 +7,8 @@ import { filter, map, Subscription, switchMap } from 'rxjs';
 import { IDelivery, TDeliveryModel } from '../../models/address.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { DeliveryComponent } from '../../sharing/modal/delivery/delivery.component';
-import { ConfirmActionComponent } from '../../sharing/modal/confirm-action/confirm-action.component';
+import { ConfirmationDialogComponent } from '../../sharing/modal/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogData } from '../../models/confirmation-dialog.interface';
 @Component({
   selector: 'app-address-book',
   standalone: true,
@@ -69,9 +70,17 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   }
 
   onRemoveAddress(index: number, delivery: TDeliveryModel): void {
+    const data: ConfirmationDialogData = {
+      title: $localize`:@@addressBook.confirmationDialog.title:Xác nhận xóa địa chỉ`,
+      message: $localize`:@@addressBook.confirmationDialog.message:Bạn có chắc chắn muốn xóa địa chỉ "${delivery.address.street}" không?`,
+      confirmText: $localize`:@@addressBook.confirmationDialog.confirmText:Có`,
+      cancelText: $localize`:@@addressBook.confirmationDialog.cancelText:Không`,
+      type: 'warning'
+    };
+
     this.subscription.add(
-      this.dialog.open(ConfirmActionComponent, {
-        data: 'Bạn có chắc chắn muốn xóa địa chỉ này không?'
+      this.dialog.open(ConfirmationDialogComponent, {
+        data
       }).afterClosed().pipe(
         filter(confirm => confirm),
         switchMap(() => this.deliveryPersonalApiService.remove(delivery._id))

@@ -11,7 +11,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./skeleton.component.scss']
 })
 export class SkeletonComponent implements OnInit {
-  @Input() quantity = 12;
+  @Input() quantity = 3;
 
   fakeArray: Array<null> = []
   constructor() { }

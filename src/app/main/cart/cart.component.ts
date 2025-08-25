@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { AfterViewInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
@@ -15,8 +15,11 @@ import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe'
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { NumberInputComponent } from '../../sharing/component/number-input/number-input.component';
 
-import { Observable, Subscription, take, map, lastValueFrom, tap } from 'rxjs';
+import { Observable, Subscription, take, map, lastValueFrom, filter } from 'rxjs';
 import { CartEntity, CartItemEntity } from '../../entity/cart.entity';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../../sharing/modal/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogData } from '../../models/confirmation-dialog.interface';
 
 @Component({
   selector: 'app-cart',
@@ -40,23 +43,19 @@ import { CartEntity, CartItemEntity } from '../../entity/cart.entity';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
-  private isBrowser: boolean;
-
   cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
 
   jwtDecoded$: Observable<IJwtDecoded | null> = this.authService.jwtPayload$;
 
   private subscription: Subscription = new Subscription();
   constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
     private router: Router,
     private renderer2: Renderer2,
     private cartService: CartService,
     private authService: AuthService,
     private toastService: ToastService,
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+    private matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void { }
 
@@ -69,10 +68,24 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   removeCartItem(cartItem: CartItemEntity, cartItemElement: HTMLDivElement) {
-    this.renderer2.addClass(cartItemElement, 'cart-item-removed');
-    setTimeout(() => {
-      this.cartService.removeItem(cartItem);
-    }, 450);
+    const data: ConfirmationDialogData = {
+      title: $localize`:@@cart.confirmationDialog.title:Xác nhận xóa sản phẩm`,
+      message: $localize`:@@cart.confirmationDialog.message:Bạn có chắc chắn muốn xóa sản phẩm "${cartItem.product.name}" khỏi giỏ hàng không?`,
+      confirmText: $localize`:@@cart.confirmationDialog.confirmText:Có`,
+      cancelText: $localize`:@@cart.confirmationDialog.confircancelTextmText:Không`,
+      type: 'warning'
+    }
+    this.matDialog.open(ConfirmationDialogComponent, {
+      data
+    }).afterClosed().pipe(
+      take(1),
+      filter(result => !!result),
+    ).subscribe(() => {
+      this.renderer2.addClass(cartItemElement, 'cart-item-removed');
+      setTimeout(() => {
+        this.cartService.removeItem(cartItem);
+      }, 450);
+    });
   }
 
   async order() {
@@ -82,7 +95,10 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
     ));
 
     if (cartItems.length === 0) {
-      this.toastService.shortToastError('Giỏ hàng của bạn đang trống!', 'Vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng.');
+      this.toastService.shortToastError(
+        $localize`:@@cart.emptyTitle:Giỏ hàng của bạn đang trống!`,
+        $localize`:@@cart.emptyMessage:Vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng.`
+      );
       return;
     }
     this.router.navigate(['/thanh-toan']);

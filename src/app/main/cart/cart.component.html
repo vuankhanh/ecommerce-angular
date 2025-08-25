@@ -16,27 +16,19 @@
       </div>
       <div class="width-space"></div>
       <div class="product-price-container horizontal-container">
-        <div class="product-info vertical-container">
+        <div class="product-info horizontal-container">
           <span class="product-name-text">{{cartItems.product.name}}</span>
-        </div>
-        <div class="width-space"></div>
-
-        <div class="price-unit-container horizontal-container">
           <span class="price-text">
             <span>{{ cartItems.product.price | vndCurrency}}</span>
           </span>
-
-          <div class="mini-height-space"></div>
-          <div class="mini-width-space"></div>
-
-          <app-number-input id="quantity-input" [value]="cartItems.quantity"
-            (valueChange)="cartItemsQuantityChange(cartItems, $event)"></app-number-input>
         </div>
 
-        <div class="button-container horizontal-container">
-          <button matIconButton color="warn">
-            <mat-icon (click)="removeCartItem(cartItems, cartItemElement)">delete</mat-icon>
-          </button>
+        <div class="price-unit-container horizontal-container">
+          <app-number-input id="quantity-input" [value]="cartItems.quantity"
+            (valueChange)="cartItemsQuantityChange(cartItems, $event)"></app-number-input>
+            <button matIconButton color="warn">
+              <mat-icon (click)="removeCartItem(cartItems, cartItemElement)">delete</mat-icon>
+            </button>
         </div>
       </div>
     </div>

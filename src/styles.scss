@@ -250,10 +250,36 @@ table[mat-table] {
   }
 }
 
+.flex-me {
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+  width: 100%;
+  gap: 15px;
+
+  .product-frame {
+    flex: 0 0 calc((100% - 45px) / 4); // 4 cột, 3 khoảng cách
+    max-width: calc((100% - 45px) / 4);
+  }
+}
+
+@media only screen and (max-width: 1080px) {
+  .flex-me {
+    .product-frame {
+      flex: 0 0 calc((100% - 30px) / 3);
+      max-width: calc((100% - 30px) / 3);
+    }
+  }
+}
+
 @media only screen and (max-width: 768px) {
+  body, * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    display: none;
   }
 
   .cdk-overlay-pane {
@@ -263,7 +289,6 @@ table[mat-table] {
 
   .login-modal {
     width: 100%;
-
     mat-dialog-container {
       app-auth {
         .close-button {
@@ -309,7 +334,24 @@ table[mat-table] {
     min-width: unset !important;
     max-width: 100%;
   }
+
+  .flex-me {
+    .product-frame {
+      flex: 0 0 calc((100% - 15px) / 2);
+      max-width: calc((100% - 15px) / 2);
+    }
+  }
 }
+
+@media only screen and (max-width: 414px) {
+  .flex-me {
+    .product-frame {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+}
+
 
 @keyframes secondss {
   0% {
