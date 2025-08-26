@@ -111,11 +111,11 @@
         <target>ログアウト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/customer-information/customer.component.html</context>
-          <context context-type="linenumber">24,25</context>
+          <context context-type="linenumber">21,22</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
-          <context context-type="linenumber">44,45</context>
+          <context context-type="linenumber">51,52</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
@@ -382,6 +382,10 @@
           <context context-type="linenumber">17,18</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">81,82</context>
         </context-group>
@@ -411,7 +415,7 @@
         <target>ログイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
-          <context context-type="linenumber">51,52</context>
+          <context context-type="linenumber">58,59</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
@@ -431,7 +435,7 @@
         <target>登録</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
-          <context context-type="linenumber">55,56</context>
+          <context context-type="linenumber">62,63</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
@@ -451,7 +455,7 @@
         <target>ホーム</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
-          <context context-type="linenumber">65,66</context>
+          <context context-type="linenumber">72,73</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
@@ -463,7 +467,7 @@
         <target>言語</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
@@ -475,7 +479,7 @@
         <target>Facebookでログイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">142,143</context>
+          <context context-type="linenumber">143,144</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8864033359681357167" datatype="html">
@@ -483,7 +487,7 @@
         <target>Googleでログイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">153,154</context>
+          <context context-type="linenumber">154,155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8795058576068444140" datatype="html">

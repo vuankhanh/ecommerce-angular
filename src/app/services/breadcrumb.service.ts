@@ -42,7 +42,7 @@ export class BreadcrumbService {
       // Add an element for the current route part
       if(route.data['breadcrumb']) {
         //Nếu là chi tiết sản phẩm, lấy tên sản phẩm từ data và thêm danh mục sản phẩm vào trước sản phẩm
-        if(route.routeConfig?.path === ':productCategory/:productSlug'){
+        if(route.routeConfig?.path === ':productSlug'){
           if(route.data['product']){
             const product: ProductDetailEntity = route.data['product'];
             let newRouteUrl = routeUrl;

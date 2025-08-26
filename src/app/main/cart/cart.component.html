@@ -11,7 +11,7 @@
         <div class="img-container">
           <img [src]="(cartItems.product.album?.thumbnailUrl || '') | prefixBackendStatic"
             [alt]="cartItems.product.name"
-            [routerLink]="['san-pham/' + cartItems.product.productCategory?.slug, cartItems.product.slug]">
+            [routerLink]="['san-pham/', cartItems.product.slug]">
         </div>
       </div>
       <div class="width-space"></div>

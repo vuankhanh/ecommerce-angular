@@ -6,7 +6,7 @@ import { LocalStorageService } from './local-storage.service';
   providedIn: 'root'
 })
 export class LangService {
-  private readonly isBrowser: boolean = isPlatformBrowser(this.platformId);
+  readonly isBrowser: boolean = isPlatformBrowser(this.platformId);
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private readonly localStorageService: LocalStorageService

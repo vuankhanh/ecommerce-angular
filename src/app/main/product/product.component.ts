@@ -56,7 +56,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         filter(children => !children.length),
         switchMap(_ => slug$)
       ).subscribe((slug) => {
-        this.router.navigate(['san-pham', slug]);
+        this.router.navigate(['san-pham','danh-muc', slug]);
       })
     );
 
@@ -65,7 +65,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         take(1),
         filter(_=>!this.activatedRoute.children.length )
       ).subscribe((slug) => {
-        this.router.navigate(['san-pham', slug]);
+        this.router.navigate(['san-pham','danh-muc', slug]);
       })
     )
   }

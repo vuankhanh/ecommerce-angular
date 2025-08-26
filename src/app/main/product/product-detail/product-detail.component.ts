@@ -21,6 +21,9 @@ import { CartItemEntity } from '../../../entity/cart.entity';
 import { LangPipe } from '../../../sharing/pipe/lang.pipe';
 import { LangService } from '../../../services/lang.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SEOService } from '../../../services/seo.service';
+import { MetaTagFacebook } from '../../../models/MetaTag';
+import { PrefixBackendStaticPipe } from '../../../sharing/pipe/prefix-backend.pipe';
 
 @Component({
   selector: 'app-product-detail',
@@ -65,16 +68,49 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     private mainContainerScrollService: MainContainerScrollService,
     private readonly langService: LangService,
     private readonly langPipe: LangPipe,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private readonly seoSerivce: SEOService,
+    private readonly prefixBackendStaticPipe: PrefixBackendStaticPipe
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(data => {
-      const { product } = data;
-      this.product = product;
-    });
+    this.subscription.add(
+      this.activatedRoute.data.subscribe({
+        next: (data) => {
+          const { product } = data;
+          this.product = product as ProductDetailEntity;
+
+          const metaTagFacebook: MetaTagFacebook = {
+            title: this.product.name,
+            image: this.prefixBackendStaticPipe.transform(this.product.album?.media[0]!.url!),
+            imageAlt: this.product.name,
+            imageType: 'image/webp',
+            imageWidth: '1045',
+            imageHeight: '587',
+            url: this.router.url,
+            description: this.product.shortDescription,
+
+            productBrand: 'Bếp Tứ Thân',
+            productAvailability: this.product.inStock ? 'in stock' : 'out of stock',
+            productCondition: 'new',
+            productPriceAmount: this.product.price.toString(),
+            productPriceCurrency: 'VND',
+            productRetailerItemId: this.product._id,
+            productItemGroupId: this.product._id,
+            googleProductCategory: this.product.productCategory?.name || '',
+          }
+
+          this.seoSerivce.updateMetaTagFacebook(metaTagFacebook);
+        }, error: (err) => {
+          console.error(err);
+        },
+        complete: () => {
+          console.log('Product detail resolver completed');
+        }
+      })
+    )
     this.currentLang = this.langService.getCurrentLang();
     this.updateFacebookUrl();
   }

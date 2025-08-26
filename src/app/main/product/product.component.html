@@ -9,7 +9,7 @@
     <mat-card-content>
       <div class="categories-grid">
         @for (category of productCategorys; track $index; let index = $index) {
-        <mat-card class="category-card" [routerLink]="['/san-pham/'+category.slug]" [routerLinkActive]="['is-active']"
+        <mat-card class="category-card" [routerLink]="['/san-pham', 'danh-muc',category.slug]" [routerLinkActive]="['is-active']"
           mat-ripple>
           <mat-card-header>
             <div mat-card-avatar class="category-avatar">

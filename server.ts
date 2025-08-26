@@ -4,14 +4,13 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
-import fs from 'fs';
+import { SSR_LANG } from './src/app/sharing/constant/injection_token.constant';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../../browser');
-  const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine();
 
@@ -25,36 +24,32 @@ export function app(): express.Express {
     maxAge: '1y'
   }));
 
-  // Đọc danh sách route tĩnh từ prerendered-routes.json
-  const prerenderedRoutes = JSON.parse(
-    fs.readFileSync(join(browserDistFolder, '../prerendered-routes.json'), 'utf-8')
-  ).routes;
-
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
-    const { path, protocol, originalUrl, baseUrl, headers } = req;
+    const { protocol, originalUrl, baseUrl, headers } = req;
 
-    const langMatch = req.path.match(/^\/(vi|en|ja)(\/|$)/);
-    const lang = langMatch ? langMatch[1] : 'vi';
-    const indexHtmlPath = join(browserDistFolder, lang, 'index.html');
+    let lang = 'vi';
+    let newOriginalUrl = originalUrl;
 
-    if (prerenderedRoutes[path]) {
-      commonEngine
-        .render({
-          bootstrap,
-          documentFilePath: indexHtml,
-          url: `${protocol}://${headers.host}${originalUrl}`,
-          publicPath: browserDistFolder,
-          providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
-        })
-        .then((html) => res.send(html))
-        .catch((err) => next(err));
-    } else {
-      // Fallback về client-side
-      res.sendFile(indexHtmlPath, (err) => {
-        if (err) next(err);
-      });
+    const splitUrl = originalUrl.split('/');
+    if (['vi', 'en', 'ja'].includes(splitUrl[1])) {
+      lang = splitUrl[1];
+      splitUrl.splice(1, 1); // Xóa phần tử ở vị trí 1 (phần tử thứ 2)
+      newOriginalUrl = splitUrl.join('/') || '/';
     }
+    const indexHtml = join(serverDistFolder, '..', lang, 'index.server.html');
+
+    // SSR cho mọi route (trừ file tĩnh)
+    commonEngine.render({
+      bootstrap,
+      documentFilePath: indexHtml,
+      url: `${protocol}://${headers.host}${newOriginalUrl}`,
+      publicPath: browserDistFolder,
+      providers: [
+        { provide: APP_BASE_HREF, useValue: baseUrl },
+        { provide: SSR_LANG, useValue: lang }
+      ],
+    }).then((html) => res.send(html)).catch((err) => next(err));
   });
 
   return server;

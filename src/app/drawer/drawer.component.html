@@ -20,8 +20,15 @@
             }
           </div>
           <div class="user-information-block_showListButton_account horizontal-container">
-            <span>{{ (userInformation$ | async) ? (userInformation$ | async)?.name ?
-              (userInformation$ | async)?.name : (userInformation$ | async)?.email : 'Tài khoản'}}</span>
+            @if(userInformation$ | async; as userInformation) {
+            @if(userInformation.name){
+            <span>{{ userInformation.name }}</span>
+            }@else {
+            <span>{{ userInformation.email }}</span>
+            }
+            }@else {
+            <span i18n>Tài khoản</span>
+            }
           </div>
         </div>
       </div>

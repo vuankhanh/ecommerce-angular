@@ -21,7 +21,7 @@ export function provideAppInitializerConfig() {
         const lang = localStorageService.get<string>('lang');
 
         if (!lang) {
-          localStorageService.set('lang', lang);
+          localStorageService.set('lang', langFromHref);
         } else {
           if (lang !== langFromHref) {
             langService.setLang(lang);

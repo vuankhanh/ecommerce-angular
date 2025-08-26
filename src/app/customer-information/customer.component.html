@@ -6,16 +6,13 @@
     </mat-expansion-panel-header>
     <mat-list class="user-information-menu">
       @for (customer of customerMenu; track $index; let i = $index) {
-        <mat-list-item
-          [routerLink]="'/khach-hang/'+customer.route"
-          [routerLinkActive]="['active-menu-item']"
-          [routerLinkActiveOptions]="{ exact: false }"
-          (click)="customerMenuPanel.close()">
-          @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
-          <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
-          }
-          <span>{{ customer.name }}</span>
-        </mat-list-item>
+      <mat-list-item [routerLink]="'/khach-hang/'+customer.route" [routerLinkActive]="['active-menu-item']"
+        [routerLinkActiveOptions]="{ exact: false }" (click)="customerMenuPanel.close()">
+        @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
+        <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
+        }
+        <span>{{ customer.name }}</span>
+      </mat-list-item>
       }
 
       <div class="height-space"></div>
@@ -30,14 +27,13 @@
   <div class="customerMenu">
     <mat-list role="list">
       @for (customer of customerMenu; track $index; let i = $index) {
-        <mat-list-item
-          [routerLink]="'/khach-hang/'+customer.route"
-          [ngClass]="currentUrl.includes('/khach-hang/'+customer.route) ? 'active-menu-item': '' ">
-          @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
-          <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
-          }
-          <span>{{ customer.name }}</span>
-        </mat-list-item>
+      <mat-list-item [routerLink]="'/khach-hang/'+customer.route"
+        [ngClass]="currentUrl.includes('/khach-hang/'+customer.route) ? 'active-menu-item': '' ">
+        @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
+        <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
+        }
+        <span>{{ customer.name }}</span>
+      </mat-list-item>
       }
     </mat-list>
   </div>

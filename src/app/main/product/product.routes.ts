@@ -14,7 +14,7 @@ export const routes: Routes = [
     },
     children: [
       {
-        path: ':productCategory',
+        path: 'danh-muc/:productCategory',
         title: $localize`:@@route.product-category.title:Danh mục sản phẩm`,
         loadComponent: () => import('./product-category/product-category.component').then(m => m.ProductCategoryComponent),
         resolve: {
@@ -26,7 +26,7 @@ export const routes: Routes = [
         }
       },
       {
-        path: ':productCategory/:productSlug',
+        path: ':productSlug',
         title: $localize`:@@route.product-detail.title:Chi tiết sản phẩm`,
         loadComponent: () => import('./product-detail/product-detail.component').then(m => m.ProductDetailComponent),
         resolve: {

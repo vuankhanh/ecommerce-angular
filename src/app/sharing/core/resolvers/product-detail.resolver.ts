@@ -4,7 +4,7 @@ import {
   ActivatedRouteSnapshot,
   ResolveFn
 } from '@angular/router';
-import { catchError, filter, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { ProductService } from '../../../services/api/product.service';
 import { ProductDetailEntity } from '../../../entity/product-detail.entity';
 

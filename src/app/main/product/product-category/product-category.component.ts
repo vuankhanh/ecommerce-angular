@@ -27,7 +27,7 @@ import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
 export class ProductCategoryComponent implements OnInit, OnDestroy {
   products: Array<TProductModel> = [];
 
-  subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -35,14 +35,18 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(data => {
-      const { productFromCategorySlug } = data;
-      this.products = productFromCategorySlug || [];
-    });
+    console.log('ProductCategoryComponent ngOnInit');
+    this.subscription.add(
+      this.activatedRoute.data.subscribe(data => {
+        const { productFromCategorySlug } = data;
+        this.products = productFromCategorySlug || [];
+      })
+    );
+    
   }
 
   showDetail(product: TProductModel) {
-    this.router.navigate(['san-pham/' + product.productCategory?.slug, product.slug]);
+    this.router.navigate(['san-pham', product.slug]);
   }
 
   ngOnDestroy() {

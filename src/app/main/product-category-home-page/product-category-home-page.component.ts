@@ -68,7 +68,7 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
   // }
 
   showDetail(product: TProductModel) {
-    this.router.navigate(['san-pham/' + this.productCategory?.slug, product.slug]);
+    this.router.navigate(['san-pham', product.slug]);
     this.emitChangeRoute.emit(product.slug);
   }
 
