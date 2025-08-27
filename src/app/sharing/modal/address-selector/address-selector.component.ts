@@ -1,20 +1,28 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../module/material';
-import { BehaviorSubject, distinctUntilChanged, map, Observable, of, startWith, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, map, Observable, of, pairwise, scan, startWith, Subscription, switchMap, tap } from 'rxjs';
 import { MatInput } from '@angular/material/input';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { isEqual } from 'lodash';
-import { VnPublicService } from '../../../services/api/vn-public.service';
+import { TAddressMetaData, TinhthanhphoComApiService } from '../../../services/api/tinhthanhpho-com-api.service';
+// import { VnPublicService } from '../../../services/api/vn-public.service';
 import { IAddress } from '../../../models/address.interface';
-import { IDistrict, IProvince, IWard } from '../../../models/vn-public-apis.interface';
+import { IDistrict, IProvince, IWard } from '../../../models/tinhthanhpho_com_api.interface';
+import { MatAutocompleteScrollEndDirective } from '../../directive/mat-autocomplete-scroll-end.directive';
+import { PaginationConstant } from '../../constant/pagination.constant';
+import { IPagination } from '../../../services/api/pagination.interface';
+// import { IDistrict, IProvince, IWard } from '../../../models/vn-public-apis.interface';
 
 @Component({
   selector: 'app-address-selector',
   standalone: true,
   imports: [
     CommonModule,
+
+    MatAutocompleteScrollEndDirective,
+
     FormsModule,
     ReactiveFormsModule,
     MaterialModule
@@ -33,11 +41,14 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
 
   private readonly renderer = inject(Renderer2)
   private readonly fb = inject(FormBuilder);
-  private readonly vnPublicService = inject(VnPublicService);
+  private readonly tinhthanhphoComApiService = inject(TinhthanhphoComApiService);
   addressForm: FormGroup;
-  provinces$: Observable<IProvince[]> = of([]);
-  districts$: Observable<IDistrict[]> = of([]);
-  wards$: Observable<IWard[]> = of([]);
+  provincesData$: Observable<IProvince[]> = of([]);
+  private bProvincesPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  districtsData$: Observable<IDistrict[]> = of([]);
+  private bDistrictsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  wardsData$: Observable<IWard[]> = of([]);
+  private bWardsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
 
   bProvinceInputChange = new BehaviorSubject<string>('');
   bDistrictInputChange = new BehaviorSubject<string>('');
@@ -54,7 +65,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
 
     this.subscription.add(
       this.addressForm.valueChanges.pipe(
-        distinctUntilChanged((prev, curr) =>{
+        distinctUntilChanged((prev, curr) => {
           return isEqual(prev, curr)
         })
       ).subscribe(value => {
@@ -90,12 +101,15 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   onProvinceOptionSelected(event: MatAutocompleteSelectedEvent) {
-    const plainProvnce = {...event.option.value};
+    const plainProvnce = { ...event.option.value };
 
     const province: IProvince = plainProvnce;
     this.provinceEl.nativeElement.value = province.name;
     this.districtEl.nativeElement.value = null;
     this.wardEl.nativeElement.value = null;
+
+    this.bDistrictsPagination.next(PaginationConstant);
+    this.bWardsPagination.next(PaginationConstant);
 
     this.provinceControl.setValue(province);
     this.setDistrict$(province.code);
@@ -103,14 +117,42 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
     this.wardControl.setValue(null);
   }
 
+  onProvincesScrollBottom() {
+    console.log('Scroll end reached');
+    const { size, page, totalItems, totalPages } = this.bProvincesPagination.getValue();
+    if (page < totalPages) {
+      this.bProvincesPagination.next({
+        size,
+        page: page + 1,
+        totalItems,
+        totalPages
+      });
+    }
+  }
+
   onDistrictOptionSelected(event: MatAutocompleteSelectedEvent) {
     const district: IProvince = event.option.value;
     this.districtEl.nativeElement.value = district.name;
     this.wardEl.nativeElement.value = null;
 
+    this.bWardsPagination.next(PaginationConstant);
+
     this.districtControl.setValue(district);
     this.setWard$(district.code);
     this.wardControl.setValue(null);
+  }
+
+  onDistrictsScrollBottom() {
+    console.log('Scroll end reached');
+    const { size, page, totalItems, totalPages } = this.bDistrictsPagination.getValue();
+    if (page < totalPages) {
+      this.bDistrictsPagination.next({
+        size,
+        page: page + 1,
+        totalItems,
+        totalPages
+      });
+    }
   }
 
   onWardOptionSelected(event: MatAutocompleteSelectedEvent) {
@@ -120,39 +162,78 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
     this.wardControl.setValue(ward);
   }
 
+  onWardsScrollBottom() {
+    const { size, page, totalItems, totalPages } = this.bWardsPagination.getValue();
+    if (page < totalPages) {
+      this.bWardsPagination.next({
+        size,
+        page: page + 1,
+        totalItems,
+        totalPages
+      });
+    }
+  }
+
   private setProvince$() {
-    this.provinces$ = this.vnPublicService.getProvinces().pipe(
-      switchMap((provinces: IProvince[]) => this.bProvinceInputChange.pipe(
-        startWith(''),
-        map((value: string) => {
-          const filterValue = value.toLowerCase();
-          return provinces.filter((province: IProvince) => province.name.toLowerCase().includes(filterValue));
-        })
-      ))
+    const provinces$: Observable<TAddressMetaData<IProvince[]>> = this.bProvinceInputChange.asObservable().pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(value => {
+        return this.bProvincesPagination.asObservable().pipe(
+          distinctUntilChanged((prev, curr) => prev.page === curr.page && prev.size === curr.size),
+          switchMap(paging => {
+            return this.tinhthanhphoComApiService.getProvinces(value, paging.size, paging.page) as Observable<TAddressMetaData<IProvince[]>>;
+          })
+        )
+      })
+    );
+    this.provincesData$ = provinces$.pipe(
+      tap(res => {
+        this.bProvincesPagination.next(res.paging);
+      }),
+      scan((acc, curr) => {
+        if (curr.paging.page > 1) return [...acc, ...curr.data];
+        // Nếu là trang tiếp theo, nối dữ liệu
+        return curr.data;
+      }, [] as IProvince[])
     );
   }
 
   private setDistrict$(provinceCode: string) {
-    this.districts$ = this.vnPublicService.getDistricts(provinceCode).pipe(
-      switchMap((districts: IDistrict[]) => this.bDistrictInputChange.pipe(
-        startWith(''),
-        map((value: string) => {
-          const filterValue = value.toLowerCase();
-          return districts.filter((district: IDistrict) => district.name.toLowerCase().includes(filterValue));
-        })
-      ))
+    const district$ = this.bDistrictInputChange.pipe(
+      startWith(''),
+      distinctUntilChanged(),
+      switchMap(value => this.tinhthanhphoComApiService.getDistricts(provinceCode, value)
+      ));
+    this.districtsData$ = district$.pipe(
+      tap(res => {
+        this.bDistrictsPagination.next(res.paging);
+      }),
+      scan((acc, curr) => {
+        if (curr.paging.page > 1) return [...acc, ...curr.data];
+        // Nếu là trang tiếp theo, nối dữ liệu
+        return curr.data;
+      }, [] as IDistrict[])
     );
   }
 
   private setWard$(districtCode: string) {
-    this.wards$ = this.vnPublicService.getWards(districtCode).pipe(
-      switchMap((wards: IWard[]) => this.bWardInputChange.pipe(
-        startWith(''),
-        map((value: string) => {
-          const filterValue = value.toLowerCase();
-          return wards.filter((ward: IWard) => ward.name.toLowerCase().includes(filterValue));
-        })
-      ))
+    const wards$ = this.bWardInputChange.pipe(
+      startWith(''),
+      distinctUntilChanged(),
+      switchMap(value => this.tinhthanhphoComApiService.getWards(districtCode, value))
+    );
+
+    this.wardsData$ = wards$.pipe(
+      tap(res => {
+        this.bWardsPagination.next(res.paging);
+      }),
+      scan((acc, curr) => {
+        if (curr.paging.page > 1) return [...acc, ...curr.data];
+        // Nếu là trang tiếp theo, nối dữ liệu
+        return curr.data;
+      }, [] as IWard[])
     );
   }
 
@@ -161,16 +242,19 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
     this.districtEl.nativeElement.value = this.address?.district?.name || '';
     this.wardEl.nativeElement.value = this.address?.ward?.name || '';
 
-    this.renderer.listen(this.provinceEl.nativeElement, 'input', (event: InputEvent ) => {
+    this.renderer.listen(this.provinceEl.nativeElement, 'input', (event: InputEvent) => {
       this.bProvinceInputChange.next(this.provinceEl.nativeElement.value);
+      this.bProvincesPagination.next(PaginationConstant);
     });
-  
+
     this.renderer.listen(this.districtEl.nativeElement, 'input', () => {
       this.bDistrictInputChange.next(this.districtEl.nativeElement.value);
+      this.bDistrictsPagination.next(PaginationConstant);
     });
-  
+
     this.renderer.listen(this.wardEl.nativeElement, 'input', () => {
       this.bWardInputChange.next(this.wardEl.nativeElement.value);
+      this.bWardsPagination.next(PaginationConstant);
     });
   }
 

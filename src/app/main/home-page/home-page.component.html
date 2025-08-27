@@ -1,11 +1,9 @@
 <div class="home-container vertical-container">
   <app-slide-show></app-slide-show>
 
-  <div class="height-space"></div>
-
   <div class="product-category-home-page-container">
     @for (productCategory of productCategory$ | async; track $index) {
-    <div class="category-name horizontal-container" [routerLink]="['/san-pham/'+productCategory.slug]">
+    <div class="category-name horizontal-container" [routerLink]="['/san-pham/', 'danh-muc', productCategory.slug]">
       <h2>{{ productCategory.name }}</h2>
       <span class="horizontal-container">
         <span i18n>Xem thêm</span>

@@ -1,27 +1,30 @@
 <form [formGroup]="addressForm" class="vertical-container">
   <mat-form-field appearance="fill">
     <mat-label i18n>Tỉnh</mat-label>
-    <input #provinceEl type="text" matInput [matAutocomplete]="provinceAuto" (blur)="onProvinceBlur($event)">
+    <input #provinceEl type="text" matInput [matAutocomplete]="provinceAuto" (blur)="onProvinceBlur($event)" appMatAutocompleteScrollEnd
+      (scrolledToBottom)="onProvincesScrollBottom()">
     <mat-autocomplete #provinceAuto="matAutocomplete" (optionSelected)="onProvinceOptionSelected($event)">
-      @for (province of provinces$ | async; track province) {
+      @for (province of provincesData$ | async; track province) {
       <mat-option [value]="province">{{province.name}}</mat-option>
       }
     </mat-autocomplete>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label i18n>Huyện</mat-label>
-    <input #districtEl type="text" matInput [matAutocomplete]="districtAuto" (blur)="onDistrictBlur($event)">
+    <input #districtEl type="text" matInput [matAutocomplete]="districtAuto" (blur)="onDistrictBlur($event)" appMatAutocompleteScrollEnd
+      (scrolledToBottom)="onDistrictsScrollBottom()">
     <mat-autocomplete #districtAuto="matAutocomplete" (optionSelected)="onDistrictOptionSelected($event)">
-      @for (districts of districts$ | async; track districts) {
+      @for (districts of districtsData$ | async; track districts) {
       <mat-option [value]="districts">{{districts.name}}</mat-option>
       }
     </mat-autocomplete>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label i18n>Phường</mat-label>
-    <input #wardEl type="text" matInput [matAutocomplete]="wardAuto" (blur)="onWardBlur($event)">
+    <input #wardEl type="text" matInput [matAutocomplete]="wardAuto" (blur)="onWardBlur($event)" appMatAutocompleteScrollEnd
+      (scrolledToBottom)="onWardsScrollBottom()">
     <mat-autocomplete #wardAuto="matAutocomplete" (optionSelected)="onWardOptionSelected($event)">
-      @for (wards of wards$ | async; track wards) {
+      @for (wards of wardsData$ | async; track wards) {
       <mat-option [value]="wards">{{wards.name}}</mat-option>
       }
     </mat-autocomplete>

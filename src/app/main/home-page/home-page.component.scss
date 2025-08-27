@@ -1,6 +1,8 @@
 .home-container {
   .product-category-home-page-container {
     .category-name {
+      margin-top: 16px;
+      cursor: pointer;
       padding: 0 15px;
       align-items: flex-end;
       justify-content: space-between;
@@ -13,8 +15,12 @@
 
       span {
         align-items: center;
-        cursor: pointer;
       }
+    }
+
+    .category-name:hover{
+      color: var(--bep4than-text-on-primary);
+      background-color: var(--bep4than-primary-background);
     }
   }
 }
