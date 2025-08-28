@@ -8,8 +8,10 @@
         padding: 16px;
         justify-content: flex-end;
         mat-card-title {
-          > *:not(:first-child) {
-            margin-left: 10px;
+          div.horizontal-container {
+            > *:not(:first-child) {
+              margin-left: 10px;
+            }
           }
         }
       }

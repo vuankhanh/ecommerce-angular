@@ -1,4 +1,10 @@
-export function getLangs(): { code: string; name: string, locale: string }[] {
+export enum Language {
+  VI = 'vi',
+  EN = 'en',
+  JA = 'ja'
+}
+
+export function getLangs(): { code: `${Language}`; name: string, locale: string }[] {
   return [
     { code: 'vi', name: 'Tiếng Việt', locale: 'vi_VN' },
     { code: 'en', name: 'English', locale: 'en_US' },

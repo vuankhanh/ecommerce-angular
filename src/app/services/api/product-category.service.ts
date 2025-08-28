@@ -17,13 +17,13 @@ export class ProductCategoryService {
 
   getAll(name?: string, page?: number, size?: number): Observable<TProductCategory> {
     let params = new HttpParams();
-    if (name != undefined) {
+    if (name != null) {
       params = params.append('name', name)
     }
-    if (page != undefined) {
+    if (page != null) {
       params = params.append('page', page)
     }
-    if (size != undefined) {
+    if (size != null) {
       params = params.append('size', size)
     }
     return this.httpClient.get<IProductCategoryResponse>(this.url).pipe(

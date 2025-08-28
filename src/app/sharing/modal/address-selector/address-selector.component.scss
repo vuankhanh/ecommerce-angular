@@ -1,3 +1,9 @@
-form{
-
+form {
+}
+::ng-deep .spinner-element{
+  justify-content: center;
+  mat-spinner{
+    width: 24px;
+    height: 24px;
+  }
 }

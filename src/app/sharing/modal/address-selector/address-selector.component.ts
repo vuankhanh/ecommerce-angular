@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../module/material';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, map, Observable, of, pairwise, scan, startWith, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, Observable, of, scan, startWith, Subscription, switchMap, tap } from 'rxjs';
 import { MatInput } from '@angular/material/input';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
@@ -45,16 +45,22 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   addressForm: FormGroup;
   provincesData$: Observable<IProvince[]> = of([]);
   private bProvincesPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  isEnableLoadingMoreProvinces = true;
+  isShowLoadingMoreProvinces = false;
   districtsData$: Observable<IDistrict[]> = of([]);
   private bDistrictsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  isEnableLoadingMoreDistricts = true;
+  isShowLoadingMoreDistricts = false;
   wardsData$: Observable<IWard[]> = of([]);
   private bWardsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  isEnableLoadingMoreWards = true;
+  isShowLoadingMoreWards = false;
 
   bProvinceInputChange = new BehaviorSubject<string>('');
   bDistrictInputChange = new BehaviorSubject<string>('');
   bWardInputChange = new BehaviorSubject<string>('');
 
-  private subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
   constructor() {
     this.addressForm = this.fb.group({
       province: ['', Validators.required],
@@ -118,7 +124,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   onProvincesScrollBottom() {
-    console.log('Scroll end reached');
+    this.isShowLoadingMoreProvinces = true;
     const { size, page, totalItems, totalPages } = this.bProvincesPagination.getValue();
     if (page < totalPages) {
       this.bProvincesPagination.next({
@@ -127,6 +133,8 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
         totalItems,
         totalPages
       });
+    }else {
+      this.isEnableLoadingMoreProvinces = false;
     }
   }
 
@@ -143,7 +151,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   onDistrictsScrollBottom() {
-    console.log('Scroll end reached');
+    this.isShowLoadingMoreDistricts = true;
     const { size, page, totalItems, totalPages } = this.bDistrictsPagination.getValue();
     if (page < totalPages) {
       this.bDistrictsPagination.next({
@@ -152,6 +160,8 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
         totalItems,
         totalPages
       });
+    }else {
+      this.isEnableLoadingMoreDistricts = false;
     }
   }
 
@@ -163,6 +173,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   onWardsScrollBottom() {
+    this.isShowLoadingMoreWards = true;
     const { size, page, totalItems, totalPages } = this.bWardsPagination.getValue();
     if (page < totalPages) {
       this.bWardsPagination.next({
@@ -171,6 +182,8 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
         totalItems,
         totalPages
       });
+    }else {
+      this.isEnableLoadingMoreWards = false;
     }
   }
 
@@ -193,6 +206,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
         this.bProvincesPagination.next(res.paging);
       }),
       scan((acc, curr) => {
+        this.isShowLoadingMoreProvinces = false;
         if (curr.paging.page > 1) return [...acc, ...curr.data];
         // Nếu là trang tiếp theo, nối dữ liệu
         return curr.data;
@@ -211,6 +225,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
         this.bDistrictsPagination.next(res.paging);
       }),
       scan((acc, curr) => {
+        this.isShowLoadingMoreDistricts = false;
         if (curr.paging.page > 1) return [...acc, ...curr.data];
         // Nếu là trang tiếp theo, nối dữ liệu
         return curr.data;
@@ -230,6 +245,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
         this.bWardsPagination.next(res.paging);
       }),
       scan((acc, curr) => {
+        this.isShowLoadingMoreWards = false;
         if (curr.paging.page > 1) return [...acc, ...curr.data];
         // Nếu là trang tiếp theo, nối dữ liệu
         return curr.data;

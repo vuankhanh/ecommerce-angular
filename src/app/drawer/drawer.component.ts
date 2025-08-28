@@ -16,6 +16,7 @@ import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
 import { FormsModule } from '@angular/forms';
 import { LangService } from '../services/lang.service';
 import { getLangs } from '../sharing/constant/lang.constant';
+import { LangSelectorComponent } from '../sharing/component/lang-selector/lang-selector.component';
 
 @Component({
   selector: 'app-drawer',
@@ -25,6 +26,8 @@ import { getLangs } from '../sharing/constant/lang.constant';
     FormsModule,
     RouterLink,
     RouterLinkActive,
+
+    LangSelectorComponent,
 
     PrefixBackendStaticPipe,
 

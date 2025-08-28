@@ -107,17 +107,7 @@
   </mat-nav-list>
 
   <mat-nav-list class="bottom-menu">
-    <div class="language-selector vertical-container">
-      <mat-form-field appearance="fill" subscriptSizing="dynamic">
-        <mat-label i18n>Ngôn ngữ</mat-label>
-        <mat-select [(ngModel)]="currentLang" (selectionChange)="changeLanguage($event.value)">
-          @for (lang of langs; track $index) {
-          <mat-option [value]="lang.code">{{ lang.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
-
+    <app-lang-selector></app-lang-selector>
   </mat-nav-list>
 
 </div>

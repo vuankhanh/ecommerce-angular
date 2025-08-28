@@ -18,18 +18,18 @@ export class ProductService {
 
   getAll(name?: string, productCategoryId?: string, page?: number, size?: number): Observable<TProduct> {
     let params = new HttpParams();
-    if (name != undefined) {
+    if (name != null) {
       params = params.append('name', name)
     }
 
-    if (productCategoryId != undefined) {
+    if (productCategoryId != null) {
       params = params.append('productCategoryId', productCategoryId)
     }
 
-    if (page != undefined) {
+    if (page != null) {
       params = params.append('page', page)
     }
-    if (size != undefined) {
+    if (size != null) {
       params = params.append('size', size)
     }
     return this.httpClient.get<IProductResponse>(this.url, { params }).pipe(

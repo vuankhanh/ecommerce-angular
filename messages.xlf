@@ -106,7 +106,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="route.customer.personal.title" datatype="html">
@@ -250,7 +250,7 @@
         <source>Hủy đơn</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/customer-information/order-history-detail/order-history-detail.component.html</context>
-          <context context-type="linenumber">129,130</context>
+          <context context-type="linenumber">131,132</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8967794217816108109" datatype="html">
@@ -344,11 +344,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">81,82</context>
+          <context context-type="linenumber">71,72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">94,95</context>
+          <context context-type="linenumber">84,85</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
@@ -363,7 +363,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">83,84</context>
+          <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1425991189649446302" datatype="html">
@@ -374,7 +374,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">123,124</context>
+          <context context-type="linenumber">113,114</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
@@ -393,7 +393,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">131,132</context>
+          <context context-type="linenumber">121,122</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
@@ -415,29 +415,18 @@
           <context context-type="linenumber">25,27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4102614594058210408" datatype="html">
-        <source>Ngôn ngữ</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/drawer/drawer.component.html</context>
-          <context context-type="linenumber">112</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">58</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="2842747082138177563" datatype="html">
         <source>Đăng nhập bằng Facebook</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">143,144</context>
+          <context context-type="linenumber">133,134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8864033359681357167" datatype="html">
         <source>Đăng nhập bằng Google</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">154,155</context>
+          <context context-type="linenumber">144,145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8795058576068444140" datatype="html">
@@ -526,7 +515,7 @@
         <source>Xem thêm</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/home-page/home-page.component.html</context>
-          <context context-type="linenumber">11,12</context>
+          <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2098210024175941478" datatype="html">
@@ -691,6 +680,13 @@
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4102614594058210408" datatype="html">
+        <source>Ngôn ngữ</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/component/lang-selector/lang-selector.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="menu.product" datatype="html">
         <source>Sản phẩm</source>
         <context-group purpose="location">
@@ -737,21 +733,21 @@
         <source>Huyện</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/address-selector/address-selector.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7361295986742447699" datatype="html">
         <source>Phường</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/address-selector/address-selector.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1076168920176183541" datatype="html">
         <source>Địa chỉ</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/address-selector/address-selector.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5952732544276936255" datatype="html">

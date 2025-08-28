@@ -1,133 +1,137 @@
-@if (orderDetail) {
-  <div class="order-detail-container">
-    <!-- Header -->
-    <mat-card class="order-header">
-      <mat-card-header>
-        <mat-card-title i18n>Chi tiết đơn hàng</mat-card-title>
-        <mat-card-subtitle i18n>Mã đơn hàng: {{orderDetail.orderCode}}</mat-card-subtitle>
-      </mat-card-header>
-    </mat-card>
-  
-    <!-- Order Status & Payment -->
-    <mat-card class="order-status">
-      <mat-card-content>
-        <div class="status-row">
-          <div class="status-item">
-            <mat-icon>local_shipping</mat-icon>
-            <span class="label" i18n>Trạng thái:</span>
-            <mat-chip selected>
-              {{orderDetail.status}}
-            </mat-chip>
-          </div>
-          <div class="status-item">
-            <mat-icon>payment</mat-icon>
-            <span class="label" i18n>Thanh toán:</span>
-            <span class="value">{{orderDetail.paymentMethod}}</span>
+@if (order$ | async; as orderDetail) {
+<div class="order-detail-container">
+  <!-- Header -->
+  <mat-card class="order-header">
+    <mat-card-header>
+      <mat-card-title i18n>Chi tiết đơn hàng</mat-card-title>
+      <mat-card-subtitle i18n>Mã đơn hàng: {{orderDetail.orderCode}}</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <!-- Order Status & Payment -->
+  <mat-card class="order-status">
+    <mat-card-content>
+      <div class="status-row">
+        <div class="status-item">
+          <mat-icon>local_shipping</mat-icon>
+          <span class="label" i18n>Trạng thái:</span>
+          <div [appOrderStatusColor]="orderDetail.status" class="horizontal-container">
+            <mat-chip selected>{{ orderDetail.status | orderStatusTranslate }}</mat-chip>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
-  
-    <!-- Order Items -->
-    <mat-card class="order-items">
-      <mat-card-header>
-        <mat-card-title i18n>Sản phẩm đã đặt</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <mat-list>
-          @for (orderItem of orderDetail.orderItems; track $index) {
-          <mat-list-item>
-            <div matListItemAvatar class="horizontal-container">
-              <img [src]="orderItem.productThumbnail | prefixBackendStatic" [alt]="orderItem.productName"
-                class="product-image">
-            </div>
-            <div matListItemTitle>
-              <span class="product-name">{{orderItem.productName}}</span>
-            </div>
-            <div matListItemLine>
-              <span>{{orderItem.productCode}}</span>
-            </div>
-            <div matListItemLine>
-              <span>{{'('+(orderItem.price | vndCurrency)+')'}} x {{orderItem.quantity}}</span>
-            </div>
-          </mat-list-item>
-          }
-        </mat-list>
-      </mat-card-content>
-    </mat-card>
-  
-    <!-- Delivery Information -->
-    <mat-card class="delivery-info">
-      <mat-card-header>
-        <mat-card-title i18n>Thông tin giao hàng</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="delivery-details">
-          <div class="delivery-row">
-            <mat-icon>person</mat-icon>
-            <span class="label" i18n>Người nhận:</span>
-            <span class="value">{{orderDetail.delivery.name}}</span>
-          </div>
-          <div class="delivery-row">
-            <mat-icon>phone</mat-icon>
-            <span class="label" i18n>Số điện thoại:</span>
-            <span class="value">{{orderDetail.delivery.phoneNumber}}</span>
-          </div>
-          <div class="delivery-row">
-            <mat-icon>location_on</mat-icon>
-            <span class="label" i18n>Địa chỉ:</span>
-            <span class="value">{{orderDetail.delivery.address| address}}</span>
-          </div>
+        <div class="status-item">
+          <mat-icon>payment</mat-icon>
+          <span class="label" i18n>Thanh toán:</span>
+          <span class="value">{{orderDetail.paymentMethod}}</span>
         </div>
-      </mat-card-content>
-    </mat-card>
-  
-    @if (orderDetail.note) {
-      <!-- Order Note -->
-      <mat-card class="order-note">
-        <mat-card-header>
-          <mat-card-title i18n>Ghi chú đơn hàng</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>{{orderDetail.note}}</p>
-        </mat-card-content>
-      </mat-card>
-    }
-  
-    <!-- Order Summary -->
-    <mat-card class="order-summary">
-      <mat-card-header>
-        <mat-card-title i18n>Tổng kết đơn hàng</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="summary-row">
-          <span class="label" i18n>Tạm tính:</span>
-          <span class="value">{{orderDetail.subTotal | currency:'VND':'symbol':'1.0-0'}}</span>
-        </div>
-        @if(orderDetail.discount > 0){
-          <div class="summary-row">
-            <span class="label" i18n>Giảm giá:</span>
-            <span class="value discount">-{{orderDetail.discount | currency:'VND':'symbol':'1.0-0'}}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Order Items -->
+  <mat-card class="order-items">
+    <mat-card-header>
+      <mat-card-title i18n>Sản phẩm đã đặt</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        @for (orderItem of orderDetail.orderItems; track $index) {
+        <mat-list-item>
+          <div matListItemAvatar class="horizontal-container">
+            <img [src]="orderItem.productThumbnail | prefixBackendStatic" [alt]="orderItem.productName"
+              class="product-image">
           </div>
+          <div matListItemTitle>
+            <span class="product-name">{{orderItem.productName}}</span>
+          </div>
+          <div matListItemLine>
+            <span>{{orderItem.productCode}}</span>
+          </div>
+          <div matListItemLine>
+            <span>{{'('+(orderItem.price | vndCurrency)+')'}} x {{orderItem.quantity}}</span>
+          </div>
+        </mat-list-item>
         }
-        <div class="summary-row">
-          <span class="label" i18n>Phí giao hàng:</span>
-          <span class="value">{{orderDetail.deliveryFee | currency:'VND':'symbol':'1.0-0'}}</span>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Delivery Information -->
+  <mat-card class="delivery-info">
+    <mat-card-header>
+      <mat-card-title i18n>Thông tin giao hàng</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="delivery-details">
+        <div class="delivery-row">
+          <mat-icon>person</mat-icon>
+          <span class="label" i18n>Người nhận:</span>
+          <span class="value">{{orderDetail.delivery.name}}</span>
         </div>
-        <mat-divider></mat-divider>
-        <div class="summary-row total">
-          <span class="label" i18n>Tổng cộng:</span>
-          <span class="value">{{orderDetail.total | currency:'VND':'symbol':'1.0-0'}}</span>
+        <div class="delivery-row">
+          <mat-icon>phone</mat-icon>
+          <span class="label" i18n>Số điện thoại:</span>
+          <span class="value">{{orderDetail.delivery.phoneNumber}}</span>
         </div>
-      </mat-card-content>
-    </mat-card>
-  
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-      <button mat-raised-button color="warn" (click)="cancelOrder()">
-        <mat-icon>cancel</mat-icon>
-        <span i18n>Hủy đơn</span>
-      </button>
-    </div>
+        <div class="delivery-row">
+          <mat-icon>location_on</mat-icon>
+          <span class="label" i18n>Địa chỉ:</span>
+          <span class="value">{{orderDetail.delivery.address| address}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (orderDetail.note) {
+  <!-- Order Note -->
+  <mat-card class="order-note">
+    <mat-card-header>
+      <mat-card-title i18n>Ghi chú đơn hàng</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{orderDetail.note}}</p>
+    </mat-card-content>
+  </mat-card>
+  }
+
+  <!-- Order Summary -->
+  <mat-card class="order-summary">
+    <mat-card-header>
+      <mat-card-title i18n>Tổng kết đơn hàng</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="summary-row">
+        <span class="label" i18n>Tạm tính:</span>
+        <span class="value">{{orderDetail.subTotal | currency:'VND':'symbol':'1.0-0'}}</span>
+      </div>
+      @if(orderDetail.discount > 0){
+      <div class="summary-row">
+        <span class="label" i18n>Giảm giá:</span>
+        <span class="value discount">-{{orderDetail.discount | currency:'VND':'symbol':'1.0-0'}}</span>
+      </div>
+      }
+      <div class="summary-row">
+        <span class="label" i18n>Phí giao hàng:</span>
+        <span class="value">{{orderDetail.deliveryFee | currency:'VND':'symbol':'1.0-0'}}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="summary-row total">
+        <span class="label" i18n>Tổng cộng:</span>
+        <span class="value">{{orderDetail.total | currency:'VND':'symbol':'1.0-0'}}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    @if (nextPossiblestate$ | async; as nextPossiblestate) {
+      @if(nextPossiblestate[1]; as cancelStatus) {
+        <button mat-raised-button color="warn" (click)="cancelOrder(orderDetail)">
+          <mat-icon>cancel</mat-icon>
+          <span i18n>Hủy đơn</span>
+        </button>
+      }
+    }
   </div>
+</div>
 }

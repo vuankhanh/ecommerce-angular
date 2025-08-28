@@ -23,6 +23,7 @@ import { ToastService } from '../services/toast.service';
 import { getLangs } from '../sharing/constant/lang.constant';
 import { LangService } from '../services/lang.service';
 import { FormsModule } from '@angular/forms';
+import { LangSelectorComponent } from '../sharing/component/lang-selector/lang-selector.component';
 
 @Component({
   selector: 'app-header',
@@ -32,6 +33,8 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     RouterLink,
     RouterLinkActive,
+
+    LangSelectorComponent,
 
     PrefixBackendStaticPipe,
 
@@ -47,8 +50,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   identification?: Identification;
   menusList: Array<TMenu> = getMenu();
   customerMenu: Array<TMenu> = getCustomerMenu();
-  langs = getLangs();
-  currentLang: string = 'vi';
+  
   badgeCart: number = 0;
   showAlertAddedToCart: boolean = false;
 
@@ -65,8 +67,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     public authService: AuthService,
     private mainContainerScrollService: MainContainerScrollService,
     private socialAuthenticationService: SocialAuthenticationService,
-    private readonly inProgressSpinnerService: InProgressSpinnerService,
-    private readonly langService: LangService
+    private readonly inProgressSpinnerService: InProgressSpinnerService
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
@@ -78,7 +79,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     )
     
-    this.currentLang = this.langService.getCurrentLang();
+    
   }
 
   ngAfterViewInit(): void{
@@ -102,10 +103,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.changeStyleHeader(notTop);
       })
     )
-  }
-
-  changeLanguage(lang: string){
-    this.langService.setLang(lang);
   }
 
   changeStyleHeader(notTop: boolean): void{

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PageEvent, MatPaginatorIntl } from '@angular/material/paginator';
-
-import { CustomPaginator } from '../../providers/CustomPaginatorConfiguration';
+import { PageEvent } from '@angular/material/paginator';
 
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
@@ -10,9 +8,11 @@ import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 import { TOrderModel } from '../../models/order-response.interface';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
-import { BehaviorSubject, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, Subscription, switchMap, tap } from 'rxjs';
 import { IPagination } from '../../services/api/pagination.interface';
 import { PaginationConstant } from '../../sharing/constant/pagination.constant';
+import { OrderStatusTranslatePipe } from '../../sharing/pipe/order-status-translate.pipe';
+import { OrderStatusColorDirective } from '../../sharing/directive/order-status-color.directive';
 @Component({
   selector: 'app-order-history',
   standalone: true,
@@ -21,6 +21,9 @@ import { PaginationConstant } from '../../sharing/constant/pagination.constant';
 
     CurrencyCustomPipe,
     PrefixBackendStaticPipe,
+    OrderStatusTranslatePipe,
+
+    OrderStatusColorDirective,
 
     MaterialModule
   ],
@@ -32,7 +35,9 @@ export class OrderHistoryComponent implements OnInit {
 
   orders: Array<TOrderModel> = [];
   private readonly bPagination: BehaviorSubject<IPagination> = new BehaviorSubject<IPagination>(PaginationConstant);
-  pagination$ = this.bPagination.asObservable();
+  pagination$ = this.bPagination.asObservable().pipe(
+    tap(pagination => {console.log('Pagination changed:', pagination)})
+  );
   
   orderPersonal$ = this.pagination$.pipe(
     distinctUntilChanged((prev, curr) => prev.page === curr.page && prev.size === curr.size),
@@ -60,7 +65,6 @@ export class OrderHistoryComponent implements OnInit {
           size: paging.size,
           totalPages: paging.totalPages
         }
-
         this.bPagination.next(paginationParams);
         this.orders = data;
       })
@@ -69,6 +73,7 @@ export class OrderHistoryComponent implements OnInit {
 
   handlePageEvent(event: PageEvent) {
     const currentPagination =  this.bPagination.getValue();
+
     currentPagination.page = event.pageIndex + 1;
     currentPagination.size = event.pageSize;
 

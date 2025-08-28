@@ -4,8 +4,10 @@
     <mat-card class="order-card" (click)="showDetail(order)">
       <mat-card-header>
         <mat-card-title>
-          <mat-chip>{{ order.status }}</mat-chip>
-          <span class="order-date">{{order.createdAt | date:'hh:mm:ss dd/MM/yyyy'}}</span>
+          <div [appOrderStatusColor]="order.status" class="horizontal-container">
+            <mat-chip selected>{{ order.status | orderStatusTranslate }}</mat-chip>
+            <span class="order-date">{{order.createdAt | date:'hh:mm:ss dd/MM/yyyy'}}</span>
+          </div>
         </mat-card-title>
       </mat-card-header>
       <mat-divider></mat-divider>
@@ -13,7 +15,7 @@
         <mat-list>
           @for (orderItem of order.orderItems; track $index) {
           <mat-list-item>
-            <div matListItemAvatar class="horizontal-container"> 
+            <div matListItemAvatar class="horizontal-container">
               <img [src]="orderItem.productThumbnail | prefixBackendStatic" [alt]="orderItem.productName"
                 class="product-image">
             </div>
@@ -45,8 +47,8 @@
   </div>
 
   @if (pagination$ | async; as pagination) {
-    <mat-paginator [length]="pagination.totalItems" [pageIndex]="pagination.page"
-      [pageSize]="pagination.size" [pageSizeOptions]="[10, 20, 100]" (page)="handlePageEvent($event)">
-    </mat-paginator>
+  <mat-paginator [length]="pagination.totalItems" [pageIndex]="pagination.page-1" [pageSize]="pagination.size"
+    [pageSizeOptions]="[10, 20, 100]" (page)="handlePageEvent($event)">
+  </mat-paginator>
   }
 </div>
