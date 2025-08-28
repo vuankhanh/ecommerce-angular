@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { EMPTY, expand, map, Observable, toArray } from 'rxjs';
 import { IProduct, TProductModel } from '../../models/product.interface';
 import { ISuccess } from '../../models/success.interface';
-import { IPagination } from './pagination.interface';
+import { IPagination } from '../../models/pagination.interface';
 import { ProductDetailEntity } from '../../entity/product-detail.entity';
 
 @Injectable({

@@ -2,9 +2,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { ISuccess } from '../../../models/success.interface';
-import { IPagination } from '../pagination.interface';
+import { IPagination } from '../../../models/pagination.interface';
 import { map, Observable } from 'rxjs';
-import { IOrderCreateRequest } from '../order-request.interface';
+import { IOrderCreateRequest } from '../../../models/order-request.interface';
 import { TOrderDetailModel, TOrderModel } from '../../../models/order-response.interface';
 import { OrderStatus } from '../../../sharing/constant/order.constant';
 

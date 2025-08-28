@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InputReasonOrderCancelledComponent } from '../../sharing/modal/input-reason-order-cancelled/input-reason-order-cancelled.component';
 import { ConfirmationDialogData } from '../../models/confirmation-dialog.interface';
 import { ConfirmationDialogComponent } from '../../sharing/modal/confirmation-dialog/confirmation-dialog.component';
+import { OrderPaymentMethodTranslatePipe } from '../../sharing/pipe/order-payment-method-translate.pipe';
 
 @Component({
   selector: 'app-order-history-detail',
@@ -27,6 +28,7 @@ import { ConfirmationDialogComponent } from '../../sharing/modal/confirmation-di
     CurrencyCustomPipe,
     AddressPipe,
     OrderStatusTranslatePipe,
+    OrderPaymentMethodTranslatePipe,
 
     OrderStatusColorDirective,
 

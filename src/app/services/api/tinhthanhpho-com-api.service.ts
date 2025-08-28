@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment.development';
 import { ISuccess } from '../../models/success.interface';
 import { IDistrict, IProvince, IWard } from '../../models/tinhthanhpho_com_api.interface';
 import { map } from 'rxjs';
-import { IPagination } from './pagination.interface';
+import { IPagination } from '../../models/pagination.interface';
 
 @Injectable({
   providedIn: 'root'

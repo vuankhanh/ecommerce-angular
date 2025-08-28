@@ -1,4 +1,4 @@
-import { IPagination } from "../../services/api/pagination.interface";
+import { IPagination } from "../../models/pagination.interface";
 
 export const PaginationConstant: IPagination = {
   page: 1,

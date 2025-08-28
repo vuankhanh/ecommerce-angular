@@ -9,7 +9,7 @@ import { OrderPersonalApiService } from '../../services/api/personal/order-perso
 import { TOrderModel } from '../../models/order-response.interface';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { BehaviorSubject, distinctUntilChanged, Subscription, switchMap, tap } from 'rxjs';
-import { IPagination } from '../../services/api/pagination.interface';
+import { IPagination } from '../../models/pagination.interface';
 import { PaginationConstant } from '../../sharing/constant/pagination.constant';
 import { OrderStatusTranslatePipe } from '../../sharing/pipe/order-status-translate.pipe';
 import { OrderStatusColorDirective } from '../../sharing/directive/order-status-color.directive';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { IPagination } from '../pagination.interface';
+import { IPagination } from '../../../models/pagination.interface';
 import { ISuccess } from '../../../models/success.interface';
 import { IDelivery, TDeliveryModel } from '../../../models/address.interface';
 import { EMPTY, expand, map, Observable, toArray } from 'rxjs';

@@ -1,5 +1,5 @@
-import { IDelivery } from "../../models/address.interface";
-import { TPaymentMethod } from "../../models/payment.interface";
+import { IDelivery } from "./address.interface";
+import { TPaymentMethod } from "./payment.interface";
 
 export interface IOrderCreateRequest {
   orderItems: IOrderItemsRequest[];

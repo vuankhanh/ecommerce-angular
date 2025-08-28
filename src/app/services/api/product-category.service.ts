@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { EMPTY, expand, map, Observable, toArray } from 'rxjs';
 import { IProductCategory, TProductCategoryModel } from '../../models/product-category.interface';
-import { IPagination } from './pagination.interface';
+import { IPagination } from '../../models/pagination.interface';
 import { ISuccess } from '../../models/success.interface';
 
 @Injectable({

@@ -12,7 +12,7 @@ import { IAddress } from '../../../models/address.interface';
 import { IDistrict, IProvince, IWard } from '../../../models/tinhthanhpho_com_api.interface';
 import { MatAutocompleteScrollEndDirective } from '../../directive/mat-autocomplete-scroll-end.directive';
 import { PaginationConstant } from '../../constant/pagination.constant';
-import { IPagination } from '../../../services/api/pagination.interface';
+import { IPagination } from '../../../models/pagination.interface';
 // import { IDistrict, IProvince, IWard } from '../../../models/vn-public-apis.interface';
 
 @Component({

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { ISuccess } from '../../models/success.interface';
 import { map, Observable } from 'rxjs';
-import { IOrderCreateRequest } from './order-request.interface';
+import { IOrderCreateRequest } from '../../models/order-request.interface';
 import { TOrderDetailModel } from '../../models/order-response.interface';
 
 @Injectable({

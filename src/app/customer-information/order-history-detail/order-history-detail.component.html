@@ -22,7 +22,7 @@
         <div class="status-item">
           <mat-icon>payment</mat-icon>
           <span class="label" i18n>Thanh toán:</span>
-          <span class="value">{{orderDetail.paymentMethod}}</span>
+          <span class="value">{{orderDetail.paymentMethod | orderPaymentMethodTranslate}}</span>
         </div>
       </div>
     </mat-card-content>

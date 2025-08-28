@@ -24,7 +24,7 @@ import { DeliveryService } from '../../services/delivery.service';
 import { AddressPipe } from '../../sharing/pipe/address.pipe';
 import { DeliveryComponent } from '../../sharing/modal/delivery/delivery.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { IOrderCreateRequest, IOrderItemsRequest } from '../../services/api/order-request.interface';
+import { IOrderCreateRequest, IOrderItemsRequest } from '../../models/order-request.interface';
 import { PaymentMethod } from '../../sharing/constant/payment.constant';
 import { DeliverySelectionComponent } from '../../sharing/modal/delivery-selection/delivery-selection.component';
 import { DialogRef } from '@angular/cdk/dialog';
