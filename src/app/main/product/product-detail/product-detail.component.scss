@@ -1,4 +1,15 @@
 mat-card {
+  .info-section {
+    mat-card-header{
+      ::ng-deep .mat-mdc-card-header-text {
+        width: 100%;
+      }
+      mat-card-subtitle {
+        width: 100%;
+      }
+    }
+  }
+
   .quantity-section {
     align-items: center;
   }
