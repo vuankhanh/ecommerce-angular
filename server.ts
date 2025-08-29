@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import { SSR_LANG } from './src/app/sharing/constant/injection_token.constant';
+import { Language } from './src/app/sharing/constant/lang.constant';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -12,6 +13,7 @@ export function app(): express.Express {
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../../browser');
 
+  const languages = Object.values(Language);
   const commonEngine = new CommonEngine();
 
   server.set('view engine', 'html');
@@ -28,12 +30,14 @@ export function app(): express.Express {
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
-    let lang = 'vi';
+    let lang: `${Language}` = 'vi';
     let newOriginalUrl = originalUrl;
 
     const splitUrl = originalUrl.split('/');
-    if (['vi', 'en', 'ja'].includes(splitUrl[1])) {
-      lang = splitUrl[1];
+
+    const secondIndex = splitUrl[1] as Language;
+    if (languages.includes(secondIndex)) {
+      lang = secondIndex;
       splitUrl.splice(1, 1); // Xóa phần tử ở vị trí 1 (phần tử thứ 2)
       newOriginalUrl = splitUrl.join('/') || '/';
     }

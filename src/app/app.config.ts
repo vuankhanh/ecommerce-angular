@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
+import { ApplicationConfig, provideAppInitializer } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -17,7 +17,7 @@ import { authInterceptor } from './sharing/core/interceptor/auth.interceptor';
 import { provideAppInitializerConfig } from './sharing/provider/app-initializer.provider';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './providers/CustomPaginatorConfiguration';
-import { LangPipe } from './sharing/pipe/lang.pipe';
+import { LangLocalePipe, LangPipe } from './sharing/pipe/lang.pipe';
 import { langInterceptor } from './sharing/core/interceptor/lang.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -39,6 +39,7 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
     }),
     PrefixBackendStaticPipe,
+    LangLocalePipe,
     LangPipe,
     provideNgxMask()
   ]

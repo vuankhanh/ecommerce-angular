@@ -13,12 +13,14 @@ import { IPagination } from '../../models/pagination.interface';
 import { PaginationConstant } from '../../sharing/constant/pagination.constant';
 import { OrderStatusTranslatePipe } from '../../sharing/pipe/order-status-translate.pipe';
 import { OrderStatusColorDirective } from '../../sharing/directive/order-status-color.directive';
+import { LangPipe } from '../../sharing/pipe/lang.pipe';
 @Component({
   selector: 'app-order-history',
   standalone: true,
   imports: [
     CommonModule,
 
+    LangPipe,
     CurrencyCustomPipe,
     PrefixBackendStaticPipe,
     OrderStatusTranslatePipe,

@@ -18,7 +18,7 @@ import { ProductDetailEntity } from '../../../entity/product-detail.entity';
 import { NumberInputComponent } from '../../../sharing/component/number-input/number-input.component';
 import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
 import { CartItemEntity } from '../../../entity/cart.entity';
-import { LangPipe } from '../../../sharing/pipe/lang.pipe';
+import { LangLocalePipe, LangPipe } from '../../../sharing/pipe/lang.pipe';
 import { LangService } from '../../../services/lang.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SEOService } from '../../../services/seo.service';
@@ -67,7 +67,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     private authService: AuthService,
     private mainContainerScrollService: MainContainerScrollService,
     private readonly langService: LangService,
-    private readonly langPipe: LangPipe,
+    private readonly langLocalePipe: LangLocalePipe,
     private sanitizer: DomSanitizer,
     private readonly seoSerivce: SEOService,
     private readonly prefixBackendStaticPipe: PrefixBackendStaticPipe
@@ -116,7 +116,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private updateFacebookUrl() {
-    const locale = this.currentLang ? this.langPipe.transform(this.currentLang, 'locale') : 'vi_VN';
+    const locale = this.currentLang ? this.langLocalePipe.transform(this.currentLang, 'locale') : 'vi_VN';
     const url = `https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fbep.4.than&width=450&layout&action&size&share=true&height=35&appId&locale=${locale}`;
     this.sanitizedFacebookUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }

@@ -16,11 +16,11 @@
           @for (orderItem of order.orderItems; track $index) {
           <mat-list-item>
             <div matListItemAvatar class="horizontal-container">
-              <img [src]="orderItem.productThumbnail | prefixBackendStatic" [alt]="orderItem.productName"
+              <img [src]="orderItem.productThumbnail | prefixBackendStatic" [alt]="orderItem.productName | lang"
                 class="product-image">
             </div>
             <div matListItemTitle>
-              <span class="product-name">{{orderItem.productName}}</span>
+              <span class="product-name">{{orderItem.productName | lang}}</span>
             </div>
             <div matListItemLine>
               <span>{{orderItem.productCode}}</span>

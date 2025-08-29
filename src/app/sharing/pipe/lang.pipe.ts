@@ -1,10 +1,13 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 import { getLangs } from '../constant/lang.constant';
+import { TLanguage } from '../../models/lang.interface';
+import { LangService } from '../../services/lang.service';
 
 @Pipe({
-  name: 'lang'
+  name: 'localeCode',
+  standalone: true
 })
-export class LangPipe implements PipeTransform {
+export class LangLocalePipe implements PipeTransform {
   private readonly langs = getLangs();
   transform(code: string, ...args: unknown[]): string | null {
     let lang = this.langs.find(l => l.code === code);
@@ -14,5 +17,15 @@ export class LangPipe implements PipeTransform {
     if (field === 'name') return lang.name;
     return lang.locale;
   }
+}
 
+@Pipe({
+  name: 'lang',
+  standalone: true
+})
+export class LangPipe implements PipeTransform {
+  private readonly currentLang = inject(LangService).getCurrentLang();
+  transform(value: { [key in TLanguage]: string }, ...args: unknown[]): string {
+    return value[this.currentLang];
+  }
 }

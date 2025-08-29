@@ -17,6 +17,7 @@ import { InputReasonOrderCancelledComponent } from '../../sharing/modal/input-re
 import { ConfirmationDialogData } from '../../models/confirmation-dialog.interface';
 import { ConfirmationDialogComponent } from '../../sharing/modal/confirmation-dialog/confirmation-dialog.component';
 import { OrderPaymentMethodTranslatePipe } from '../../sharing/pipe/order-payment-method-translate.pipe';
+import { LangPipe } from '../../sharing/pipe/lang.pipe';
 
 @Component({
   selector: 'app-order-history-detail',
@@ -27,6 +28,7 @@ import { OrderPaymentMethodTranslatePipe } from '../../sharing/pipe/order-paymen
     PrefixBackendStaticPipe,
     CurrencyCustomPipe,
     AddressPipe,
+    LangPipe,
     OrderStatusTranslatePipe,
     OrderPaymentMethodTranslatePipe,
 

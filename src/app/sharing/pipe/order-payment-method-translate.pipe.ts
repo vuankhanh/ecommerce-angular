@@ -5,7 +5,8 @@ import { Language } from '../constant/lang.constant';
 import { PAYMENT_METHOD_LABEL } from '../constant/payment.constant';
 
 @Pipe({
-  name: 'orderPaymentMethodTranslate'
+  name: 'orderPaymentMethodTranslate',
+  standalone: true
 })
 export class OrderPaymentMethodTranslatePipe implements PipeTransform {
   private readonly localStorageService = inject(LocalStorageService)
