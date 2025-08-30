@@ -12,7 +12,7 @@
 
   <div class="cart-container vertical-container">
     <button mat-icon-button routerLink="/gio-hang" [routerLinkActive]="['is-active']">
-      <mat-icon [matBadge]="badgeCart" [matBadgeHidden]="!badgeCart">shopping_cart</mat-icon>
+      <mat-icon aria-hidden="false" [matBadge]="badgeCart" [matBadgeHidden]="!badgeCart">shopping_cart</mat-icon>
     </button>
   </div>
 
