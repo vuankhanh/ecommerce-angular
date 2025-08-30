@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
@@ -13,11 +13,4 @@ import { RouterLink } from '@angular/router';
   templateUrl: './empty-cart.component.html',
   styleUrls: ['./empty-cart.component.scss']
 })
-export class EmptyCartComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class EmptyCartComponent {}

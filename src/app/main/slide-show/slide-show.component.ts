@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { animationSlide } from '../../animation/slide-show';
 
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
-import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SlideShowService } from '../../services/api/slide-show.service';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
@@ -24,6 +23,7 @@ import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe'
   animations: [animationSlide]
 })
 export class SlideShowComponent {
+  private readonly slideShowService: SlideShowService = inject(SlideShowService);
   slideShow$ = this.slideShowService.get();
 
   customOptions: OwlOptions = {
@@ -42,10 +42,4 @@ export class SlideShowComponent {
     },
     nav: true
   }
-
-  private subscription: Subscription = new Subscription();
-  constructor(
-    private readonly slideShowService: SlideShowService
-  ) { }
-
 }

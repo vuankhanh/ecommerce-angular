@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -21,23 +21,21 @@ import { ToastService } from '../../../../services/toast.service';
   styleUrls: ['./forgot-password.component.scss']
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
+  private readonly formBuilder: FormBuilder = inject(FormBuilder);
+  private readonly resetPasswordService: ResetPasswordService = inject(ResetPasswordService);
+  private readonly toastService: ToastService = inject(ToastService);
   @Output() valueChange = new EventEmitter();
 
   forgotPasswordForm!: FormGroup;
 
-  subscription: Subscription = new Subscription()
-  constructor(
-    private formBuilder: FormBuilder,
-    private resetPasswordService: ResetPasswordService,
-    private toastService: ToastService
-  ) { }
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.initForm();
   }
 
   initForm() {
-    let emailRegEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     this.forgotPasswordForm = this.formBuilder.group({
       email: ['', { validators: [Validators.required, Validators.pattern(emailRegEx)], updateOn: 'blur' }]
     })
@@ -46,10 +44,12 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   checkEmail() {
     if (this.forgotPasswordForm.valid) {
       this.subscription.add(
-        this.resetPasswordService.checkEmail(this.forgotPasswordForm.value.email).subscribe(res => {
-          this.valueChange.emit('forgotPasswordSuccessful');
-        }, err => {
-          this.toastService.shortToastError('Email không hợp lệ', '');
+        this.resetPasswordService.checkEmail(this.forgotPasswordForm.value.email).subscribe({
+          next: () => {
+            this.valueChange.emit('forgotPasswordSuccessful');
+          }, error: () => {
+            this.toastService.shortToastError('Email không hợp lệ', '');
+          }
         })
       )
     }

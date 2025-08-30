@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MaterialModule } from './sharing/module/material';
@@ -27,33 +27,26 @@ import { BreakpointDetectionService } from './services/breakpoint-detection.serv
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
+  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly mouseEventEmitService: MouseEventEmitService = inject(MouseEventEmitService);
+  private readonly mainContainerScrollService: MainContainerScrollService = inject(MainContainerScrollService)
+  private readonly breakpointDetectionService: BreakpointDetectionService = inject(BreakpointDetectionService);
+
   @ViewChild('drawer') drawer?: MatSidenav;
   @ViewChild('drawerContent') drawercontent?: MatDrawerContent;
-  isBrowser: boolean;
+  isBrowser: boolean = isPlatformBrowser(this.platformId);
   breakpointDetection$: Observable<boolean> = this.breakpointDetectionService.detection$();
 
-  ratingValue: number = 3.6;
+  ratingValue = 3.6;
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    private mouseEventEmitService: MouseEventEmitService,
-    private mainContainerScrollService: MainContainerScrollService,
-    private breakpointDetectionService: BreakpointDetectionService
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
 
   ngOnInit(): void {
     this.setScroll();
   }
 
-  ngAfterViewInit(): void {
-    
-  }
-
-  toggle(event: any) {
+  toggle() {
     this.drawer?.toggle();
   }
 
@@ -74,10 +67,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onScroll = (event: any): void => {
-    let target: HTMLDivElement = <HTMLDivElement>event.target;
-    let index: number = target.scrollTop;
-    let indexBottom = target.scrollHeight - target.clientHeight;
+  onScroll(event: Event): void {
+    const target: HTMLDivElement = event.target as HTMLDivElement;
+    const index = target.scrollTop;
+    const indexBottom = target.scrollHeight - target.clientHeight;
 
     this.mainContainerScrollService.setPositionTop(index);
     this.mainContainerScrollService.setPositionBottom(indexBottom - index);

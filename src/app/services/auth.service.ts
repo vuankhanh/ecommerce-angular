@@ -1,13 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-//Component
-
-//Model
 import { IJwtDecoded } from '../models/token.interface';
-
-//Service
 import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
 import { SocialAuthenticationService } from './api/social-login/social-authentication';
@@ -15,9 +10,7 @@ import { SocialAuthenticationService } from './api/social-login/social-authentic
 import { BehaviorSubject, filter, lastValueFrom, Observable, switchMap, take } from 'rxjs';
 import { TToken } from '../models/token.interface';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
-import { AuthenticationUtil } from '../sharing/util/authentication.util';
 import { LocalAuthenticationService } from './api/local-authentication.service';
-import { DeliveryService } from './delivery.service';
 import { AuthComponent, TypeLogin } from '../sharing/modal/auth/auth.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BreakpointDetectionService } from './breakpoint-detection.service';
@@ -25,23 +18,21 @@ import { BreakpointDetectionService } from './breakpoint-detection.service';
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly router: Router = inject(Router);
+  private readonly _dialog: MatDialog = inject(MatDialog);
+  private readonly _bottomSheet: MatBottomSheet = inject(MatBottomSheet);
+  private readonly breakpointDetectionService: BreakpointDetectionService = inject(BreakpointDetectionService);
+  private readonly jwtDecodedService: JwtDecodedService = inject(JwtDecodedService);
+  private readonly localStorageService: LocalStorageService = inject(LocalStorageService);
+  private readonly socialAuthenticationService: SocialAuthenticationService = inject(SocialAuthenticationService);
+  private readonly localAuthenticationService: LocalAuthenticationService = inject(LocalAuthenticationService);
+
   private isMobile$: Observable<boolean> = this.breakpointDetectionService.detection$();
   private readonly bJwtPayload: BehaviorSubject<IJwtDecoded | null> = new BehaviorSubject<IJwtDecoded | null>(null);
   public jwtPayload$: Observable<IJwtDecoded | null> = this.bJwtPayload.asObservable();
-  constructor(
-    private router: Router,
-    private _dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet,
-    private readonly breakpointDetectionService: BreakpointDetectionService,
-    private jwtDecodedService: JwtDecodedService,
-    private localStorageService: LocalStorageService,
-    private socialAuthenticationService: SocialAuthenticationService,
-    private localAuthenticationService: LocalAuthenticationService,
-    private deliveryService: DeliveryService,
-  ) { }
 
   login(type: 'login' | 'register' | 'forgotPassword') {
-    let data: TypeLogin = { type: type };
+    const data: TypeLogin = { type: type };
     this.openAuthenticationComponent(data).pipe(
       filter(result => !!result),
       take(1)
@@ -73,7 +64,7 @@ export class AuthService {
   }
 
   updateAccessToken(newAccessToken: string) {
-    const tokenInformation: IJwtDecoded = <IJwtDecoded>this.jwtDecodedService.jwtDecoded(newAccessToken);
+    const tokenInformation: IJwtDecoded = this.jwtDecodedService.jwtDecoded(newAccessToken) as IJwtDecoded;
     if (!tokenInformation) {
       console.error('Invalid access token');
       return;
@@ -85,11 +76,10 @@ export class AuthService {
   async getUserInfoFromTokenStoraged(): Promise<boolean> {
     const accessTokenStoraged: string | null = this.localStorageService.get(LocalStorageKey.ACCESSTOKEN);
     if (accessTokenStoraged) {
-      const tokenInformation: IJwtDecoded = <IJwtDecoded>this.jwtDecodedService.jwtDecoded(accessTokenStoraged);
+      const tokenInformation: IJwtDecoded = this.jwtDecodedService.jwtDecoded(accessTokenStoraged) as IJwtDecoded;
       if (tokenInformation) {
-        // const isTokenExpire: boolean = AuthenticationUtil.checkTokenExpires(tokenInformation);
         try {
-          const response = await lastValueFrom(this.localAuthenticationService.config());
+          await lastValueFrom(this.localAuthenticationService.config());
           this.userInformation = tokenInformation;
           return true;
         } catch (error) {

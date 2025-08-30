@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, inject, OnDestroy, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -42,26 +42,19 @@ import { ConfirmationDialogData } from '../../models/confirmation-dialog.interfa
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CartComponent implements OnDestroy {
+  private readonly router: Router = inject(Router);
+  private readonly renderer2: Renderer2 = inject(Renderer2);
+  private readonly cartService: CartService = inject(CartService)
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly toastService: ToastService = inject(ToastService);
+  private readonly matDialog: MatDialog = inject(MatDialog);
+
   cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
 
   jwtDecoded$: Observable<IJwtDecoded | null> = this.authService.jwtPayload$;
 
   private subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private renderer2: Renderer2,
-    private cartService: CartService,
-    private authService: AuthService,
-    private toastService: ToastService,
-    private matDialog: MatDialog
-  ) {}
-
-  ngOnInit(): void { }
-
-  ngAfterViewInit(): void {
-
-  }
 
   cartItemsQuantityChange(cartItem: CartItemEntity, value: number) {
     this.cartService.changeQuantity(cartItem, value)

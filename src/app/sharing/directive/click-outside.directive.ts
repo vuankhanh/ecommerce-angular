@@ -1,17 +1,16 @@
-import { Directive, Input, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
+import { Directive, Output, EventEmitter, ElementRef, HostListener, inject } from '@angular/core';
 
 @Directive({
-  selector: '[clickOutside]'
+  selector: '[appClickOutside]'
 })
 export class ClickOutsideDirective {
+  private readonly elementRef: ElementRef = inject(ElementRef);
   @Output() clickOutside = new EventEmitter<void>();
-
-  constructor(private elementRef: ElementRef) { }
   
   @HostListener('document:click', ['$event'])
   public onClick(event: MouseEvent) {
-    let target = event.target as HTMLElement;
-    let targetId = target.id;
+    const target = event.target as HTMLElement;
+    const targetId = target.id;
     
     const clickedInside = this.elementRef.nativeElement.contains(target);
     if (!clickedInside || targetId === "closeAlertAddedToCart") {

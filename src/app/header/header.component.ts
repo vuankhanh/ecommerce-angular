@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ViewChild, AfterViewInit, Output, EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ViewChild, AfterViewInit, Output, EventEmitter, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -20,8 +20,6 @@ import { PrefixBackendStaticPipe } from '../sharing/pipe/prefix-backend.pipe';
 import { InProgressSpinnerService } from '../services/in-progress-spinner.service';
 import { TMenu } from '../models/menu.interface';
 import { ToastService } from '../services/toast.service';
-import { getLangs } from '../sharing/constant/lang.constant';
-import { LangService } from '../services/lang.service';
 import { FormsModule } from '@angular/forms';
 import { LangSelectorComponent } from '../sharing/component/lang-selector/lang-selector.component';
 
@@ -44,33 +42,29 @@ import { LangSelectorComponent } from '../sharing/component/lang-selector/lang-s
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly ren: Renderer2 = inject(Renderer2);
+  private readonly cartService: CartService = inject(CartService);
+  private readonly toastService: ToastService = inject(ToastService);
+  public readonly authService: AuthService = inject(AuthService);
+  private readonly mainContainerScrollService: MainContainerScrollService = inject(MainContainerScrollService);
+  private readonly socialAuthenticationService: SocialAuthenticationService = inject(SocialAuthenticationService);
+  private readonly inProgressSpinnerService: InProgressSpinnerService = inject(InProgressSpinnerService);
   @ViewChild('header', { static: false }) header?: ElementRef;
   @Output() toggleDrawer = new EventEmitter();
 
   identification?: Identification;
-  menusList: Array<TMenu> = getMenu();
-  customerMenu: Array<TMenu> = getCustomerMenu();
+  menusList: TMenu[] = getMenu();
+  customerMenu: TMenu[] = getCustomerMenu();
   
-  badgeCart: number = 0;
-  showAlertAddedToCart: boolean = false;
+  badgeCart = 0;
+  showAlertAddedToCart = false;
 
   userInformation$ = this.authService.jwtPayload$;
 
-  isBrowser: boolean;
+  isBrowser = isPlatformBrowser(this.platformId);
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    private ren: Renderer2,
-    private cartService: CartService,
-    private toastService: ToastService,
-    public authService: AuthService,
-    private mainContainerScrollService: MainContainerScrollService,
-    private socialAuthenticationService: SocialAuthenticationService,
-    private readonly inProgressSpinnerService: InProgressSpinnerService
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
   
   ngOnInit(): void {
     this.subscription.add(
@@ -78,8 +72,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.badgeCart = cart.totalQuantity;
       })
     )
-    
-    
   }
 
   ngAfterViewInit(): void{

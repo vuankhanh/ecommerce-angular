@@ -9,7 +9,7 @@ import { Language } from '../constant/lang.constant';
 })
 export class OrderStatusTranslatePipe implements PipeTransform {
   private readonly localStorageService = inject(LocalStorageService)
-  transform(value: `${OrderStatus}`, ...args: unknown[]): string {
+  transform(value: `${OrderStatus}`): string {
     const lang = this.localStorageService.get('lang') as `${Language}` || 'vi';
     return ORDER_STATUS_LABEL[value]?.[lang] || value;
   }

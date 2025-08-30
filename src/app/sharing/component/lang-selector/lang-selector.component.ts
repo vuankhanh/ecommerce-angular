@@ -25,7 +25,7 @@ import { LangService } from '../../../services/lang.service';
 export class LangSelectorComponent implements OnInit {
   private readonly langService = inject(LangService);
   langs = getLangs();
-  currentLang: string = 'vi';
+  currentLang = 'vi';
 
   ngOnInit(): void {
     this.currentLang = this.langService.getCurrentLang();

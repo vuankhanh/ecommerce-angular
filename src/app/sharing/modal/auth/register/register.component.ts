@@ -1,17 +1,18 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, EventEmitter, inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 //Validation Form
 import { tiengVietKhongDau, safePassword, isSameInConfirmPassword } from '../../../validator/validators'
 
 //Service
-import { RegisterService, Account } from '../../../../services/api/register.service';
+import { RegisterService } from '../../../../services/api/register.service';
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../module/material';
 import { CheckExistsAccountService } from '../../../../services/api/check-exists-account.service';
 import { ToastService } from '../../../../services/toast.service';
+import { CapsLockDirective } from '../../../directive/caps-lock.directive';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -20,34 +21,35 @@ import { ToastService } from '../../../../services/toast.service';
 
     ReactiveFormsModule,
 
+    CapsLockDirective,
+
     MaterialModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
+  private readonly formBuilder: FormBuilder = inject(FormBuilder);
+  private readonly checkExistsAccountService: CheckExistsAccountService = inject(CheckExistsAccountService);
+  private readonly registerService: RegisterService = inject(RegisterService);
+  private readonly toastService: ToastService = inject(ToastService);
+
   @Output() valueChange = new EventEmitter();
   registerGroup!: FormGroup;
-  fieldTextType: boolean = false;
-  repeatFieldTextType: boolean = false;
+  fieldTextType = false;
+  repeatFieldTextType = false;
   capsOn: any;
-  loading: boolean = false;
+  loading = false;
 
-  subscription: Subscription = new Subscription();
-  constructor(
-    private formBuilder: FormBuilder,
-    private checkExistsAccountService: CheckExistsAccountService,
-    private registerService: RegisterService,
-    private toastService: ToastService
-  ) { }
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.formInit();
   }
 
   formInit() {
-    let emailRegEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    let phoneNumberRegEx = /((0)+([0-9]{9})\b)/g;
+    const emailRegEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const phoneNumberRegEx = /((0)+([0-9]{9})\b)/g;
     this.registerGroup = this.formBuilder.group({
       userName: ['', { validators: [Validators.required, tiengVietKhongDau()], updateOn: 'blur' }],
       password: ['', { validators: [Validators.required, safePassword()], updateOn: 'blur' }],
@@ -59,17 +61,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   checkExistsUserName() {
-    let userName = this.registerGroup.controls['userName'];
+    const userName = this.registerGroup.controls['userName'];
     if (userName.valid) {
       this.subscription.add(
-        this.checkExistsAccountService.checkExistUserName({ userName: userName.value }).subscribe(res => {
-          if (userName.errors) {
-            delete userName.errors!['isAlreadyExist'];
-          }
-
-        }, error => {
-          if (error.status === 409) {
-            userName.setErrors({ isAlreadyExist: true });
+        this.checkExistsAccountService.checkExistUserName({ userName: userName.value }).subscribe({
+          next: () => {
+            if (userName.errors) {
+              delete userName.errors!['isAlreadyExist'];
+            }
+          }, error: (error) => {
+            if (error.status === 409) {
+              userName.setErrors({ isAlreadyExist: true });
+            }
           }
         })
       )
@@ -77,16 +80,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   checkExistsEmail() {
-    let email = this.registerGroup.controls['email'];
+    const email = this.registerGroup.controls['email'];
     if (email.valid) {
       this.subscription.add(
-        this.checkExistsAccountService.checkExistEmail({ email: email.value }).subscribe(res => {
-          if (email.errors) {
-            delete email.errors!['isAlreadyExist'];
-          }
-        }, error => {
-          if (error.status === 409) {
-            email.setErrors({ isAlreadyExist: true });
+        this.checkExistsAccountService.checkExistEmail({ email: email.value }).subscribe({
+          next: () => {
+            if (email.errors) {
+              delete email.errors!['isAlreadyExist'];
+            }
+          }, error: (err) => {
+            if (err.status === 409) {
+              email.setErrors({ isAlreadyExist: true });
+            }
           }
         })
       )
@@ -99,27 +104,29 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   register() {
-    let email = this.registerGroup.controls['email'];
-    let userName = this.registerGroup.controls['userName'];
+    const email = this.registerGroup.controls['email'];
+    const userName = this.registerGroup.controls['userName'];
     if (this.registerGroup.valid) {
       this.loading = true;
       this.subscription.add(
-        this.registerService.register(this.registerGroup.value).subscribe(res => {
-          this.loading = false;
-          this.toastService.shortToastSuccess('Bạn đã đăng ký thành công.', 'Thành Công');
-          this.valueChange.emit('registerSuccessful');
-        }, error => {
-          if (error.status === 409) {
-            if (error.error.key) {
-              if (error.error.key.userName) {
-                userName.setErrors({ isAlreadyExist: true });
-              }
-
-              if (error.error.key.email) {
-                email.setErrors({ isAlreadyExist: true });
-              }
-            }
+        this.registerService.register(this.registerGroup.value).subscribe({
+          next: () => {
             this.loading = false;
+            this.toastService.shortToastSuccess('Bạn đã đăng ký thành công.', 'Thành Công');
+            this.valueChange.emit('registerSuccessful');
+          }, error: (error) => {
+            if (error.status === 409) {
+              if (error.error.key) {
+                if (error.error.key.userName) {
+                  userName.setErrors({ isAlreadyExist: true });
+                }
+
+                if (error.error.key.email) {
+                  email.setErrors({ isAlreadyExist: true });
+                }
+              }
+              this.loading = false;
+            }
           }
         })
       )

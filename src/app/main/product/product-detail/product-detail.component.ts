@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -18,7 +18,7 @@ import { ProductDetailEntity } from '../../../entity/product-detail.entity';
 import { NumberInputComponent } from '../../../sharing/component/number-input/number-input.component';
 import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
 import { CartItemEntity } from '../../../entity/cart.entity';
-import { LangLocalePipe, LangPipe } from '../../../sharing/pipe/lang.pipe';
+import { LangLocalePipe } from '../../../sharing/pipe/lang.pipe';
 import { LangService } from '../../../services/lang.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SEOService } from '../../../services/seo.service';
@@ -46,34 +46,31 @@ import { PrefixBackendStaticPipe } from '../../../sharing/pipe/prefix-backend.pi
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
-export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProductDetailComponent implements OnInit, OnDestroy {
+  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly router: Router = inject(Router);
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute)
+  private readonly cartService: CartService = inject(CartService);
+  public readonly authService: AuthService = inject(AuthService);
+  private readonly mainContainerScrollService: MainContainerScrollService = inject(MainContainerScrollService);
+  private readonly langService: LangService = inject(LangService);
+  private readonly langLocalePipe: LangLocalePipe = inject(LangLocalePipe);
+  private readonly sanitizer: DomSanitizer = inject(DomSanitizer);
+  private readonly seoSerivce: SEOService = inject(SEOService);
+  private readonly prefixBackendStaticPipe: PrefixBackendStaticPipe = inject(PrefixBackendStaticPipe);
+
   @ViewChild('listImg') listImg?: ElementRef;
   @ViewChild('mainContainer') mainContainer?: ElementRef;
-  currentLang: string = 'vi';
+  currentLang = 'vi';
   sanitizedFacebookUrl!: SafeResourceUrl;
   scrollBottom$ = this.mainContainerScrollService.listenScrollBottom$;
-  isBrowser: boolean;
+  isBrowser: boolean = isPlatformBrowser(this.platformId);
 
   product: ProductDetailEntity | null = null;
 
   identification?: Identification;
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private cartService: CartService,
-    private authService: AuthService,
-    private mainContainerScrollService: MainContainerScrollService,
-    private readonly langService: LangService,
-    private readonly langLocalePipe: LangLocalePipe,
-    private sanitizer: DomSanitizer,
-    private readonly seoSerivce: SEOService,
-    private readonly prefixBackendStaticPipe: PrefixBackendStaticPipe
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
 
   ngOnInit(): void {
     this.subscription.add(
@@ -84,7 +81,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
 
           const metaTagFacebook: MetaTagFacebook = {
             title: this.product.name,
-            image: this.prefixBackendStaticPipe.transform(this.product.album?.media[0]!.url!),
+            image: this.prefixBackendStaticPipe.transform(this.product.album?.media[0]?.url || ''),
             imageAlt: this.product.name,
             imageType: 'image/webp',
             imageWidth: '1045',
@@ -121,10 +118,6 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     this.sanitizedFacebookUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-  ngAfterViewInit() {
-
-  }
-
   bookNow(product: ProductDetailEntity) {
     const cartItem = new CartItemEntity(product);
     this.cartService.addToCart(cartItem)
@@ -136,7 +129,7 @@ export class ProductDetailComponent implements OnInit, AfterViewInit, OnDestroy 
     this.cartService.addToCart(cartItem)
   }
 
-  contactUs(type: 'messenger' | 'zalo' | 'call') { }
+  // contactUs(type: 'messenger' | 'zalo' | 'call') { }
 
   login() {
     this.authService.login('login');

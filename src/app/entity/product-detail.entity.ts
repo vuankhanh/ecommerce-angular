@@ -7,22 +7,22 @@ export class ProductDetailEntity implements TProductModel {
   slug: string;
   description: string;
   shortDescription: string;
-  albumId?: string | undefined;
-  album?: TAlbumModel | undefined;
+  albumId?: string;
+  album?: TAlbumModel;
   price: number;
-  productCategoryId?: string | undefined;
-  productCategory?: TProductCategoryModel | undefined;
+  productCategoryId?: string;
+  productCategory?: TProductCategoryModel;
   inStock: boolean;
-  reviews?: IProductReviewModel[] | undefined;
-  averageRating?: number | undefined;
-  totalReviews?: number | undefined;
+  reviews?: IProductReviewModel[];
+  averageRating?: number;
+  totalReviews?: number;
   
   _id: string;
   createdAt: string;
   updatedAt: string;
 
-  quantity: number = 1;
-  totalPrice: number = 0;
+  quantity = 1;
+  totalPrice = 0;
 
   constructor(
     product: TProductModel

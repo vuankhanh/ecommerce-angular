@@ -1,10 +1,9 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
 
 import { AuthService } from '../services/auth.service';
 import { CartService } from '../services/cart.service';
-import { UrlChangeService } from '../services/url-change.service';
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -39,27 +38,24 @@ import { LangSelectorComponent } from '../sharing/component/lang-selector/lang-s
   styleUrls: ['./drawer.component.scss']
 })
 export class DrawerComponent implements OnInit {
+  private readonly router: Router = inject(Router);
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly cartService: CartService = inject(CartService)
+  private readonly langService: LangService = inject(LangService);
+
   @ViewChild('accordion') accordion?: MatAccordion;
   @ViewChild('userAccordion') userAccordion?: MatAccordion;
   @Output() toggleDrawer = new EventEmitter();
 
-  menusList: Array<TMenu> = getMenu();
-  customerMenu: Array<TMenu> = getCustomerMenu();
+  menusList: TMenu[] = getMenu();
+  customerMenu: TMenu[] = getCustomerMenu();
   langs = getLangs();
-  currentLang: string = 'vi';
-  badgeCart: number = 0;
+  currentLang = 'vi';
+  badgeCart = 0;
 
   userInformation$ = this.authService.jwtPayload$;
 
-  subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private cartService: CartService,
-    private readonly langService: LangService,
-  ) {
-
-  }
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.subscription.add(

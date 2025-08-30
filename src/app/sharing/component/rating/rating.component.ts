@@ -14,13 +14,12 @@ const totalNumberOfStars = 5;
   styleUrls: ['./rating.component.scss']
 })
 export class RatingComponent implements OnInit {
-  @Input() ratingValue: number = 0;
+  @Input() ratingValue = 0;
   @Input() showRatingTitle?: boolean;
   
-  ratingValueFloor: number = 0;
+  ratingValueFloor = 0;
   totalNumberOfStars = Array(totalNumberOfStars).fill(null).map((value, index)=>index+1);
   ratingTitle?: string;
-  constructor() { }
 
   ngOnInit(): void {
     this.ratingValueFloor = Math.floor(this.ratingValue);

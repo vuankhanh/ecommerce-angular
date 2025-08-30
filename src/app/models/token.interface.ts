@@ -1,5 +1,3 @@
-import { ISuccess } from "./success.interface"
-
 export interface IJwtDecoded {
   email: string,
   name: string,

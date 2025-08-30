@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, EventEmitter, Host, OnDestroy, Optional, Output } from '@angular/core';
+import { AfterViewInit, Directive, EventEmitter, inject, OnDestroy, Output } from '@angular/core';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
 
@@ -7,13 +7,10 @@ import { Subscription } from 'rxjs';
   standalone: true
 })
 export class MatAutocompleteScrollEndDirective implements AfterViewInit, OnDestroy {
+  private readonly matAutocompleteTrigger: MatAutocompleteTrigger | null = inject(MatAutocompleteTrigger, { host: true, optional: true });
   @Output() scrolledToBottom = new EventEmitter<void>();
   private panel: HTMLElement | null = null;
   private readonly subscription = new Subscription();
-
-  constructor(
-    @Host() @Optional() private matAutocompleteTrigger: MatAutocompleteTrigger
-  ) {}
 
   ngAfterViewInit() {
     if (!this.matAutocompleteTrigger) {
@@ -22,7 +19,7 @@ export class MatAutocompleteScrollEndDirective implements AfterViewInit, OnDestr
     this.subscription.add(
       this.matAutocompleteTrigger.autocomplete.opened.subscribe(() => {
         setTimeout(() => {
-          this.panel = this.matAutocompleteTrigger.autocomplete.panel?.nativeElement;
+          this.panel = this.matAutocompleteTrigger?.autocomplete.panel?.nativeElement;
           if (this.panel) {
             this.panel.addEventListener('scroll', this.onScroll);
           }

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Router, NavigationStart, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
+import { Router, NavigationStart } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -8,9 +8,8 @@ import { filter, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UrlChangeService {
-  constructor(
-    private router: Router
-  ) {}
+  private readonly router: Router = inject(Router);
+
   urlChange(): Observable<NavigationStart>{
     return this.router.events.pipe(
       filter(event => event instanceof NavigationStart),

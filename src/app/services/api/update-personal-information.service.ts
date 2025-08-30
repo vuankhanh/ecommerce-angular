@@ -1,18 +1,16 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment.development';
 @Injectable({
   providedIn: 'root'
 })
 export class UpdatePersonalInformationService {
-  private urlUpdatePersonal: string = environment.backendApi+'/update-customer';
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private urlUpdatePersonal = environment.backendApi+'/update-customer';
 
   update(token: string, updateInfo: any){
-    let headers: HttpHeaders = new HttpHeaders({
+    const headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
       'x-access-token': token
     });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -8,7 +8,7 @@ import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 import { TOrderModel } from '../../models/order-response.interface';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
-import { BehaviorSubject, distinctUntilChanged, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, Subscription, switchMap } from 'rxjs';
 import { IPagination } from '../../models/pagination.interface';
 import { PaginationConstant } from '../../sharing/constant/pagination.constant';
 import { OrderStatusTranslatePipe } from '../../sharing/pipe/order-status-translate.pipe';
@@ -33,13 +33,14 @@ import { LangPipe } from '../../sharing/pipe/lang.pipe';
   styleUrls: ['./order-history.component.scss']
 })
 export class OrderHistoryComponent implements OnInit {
+  private readonly router: Router = inject(Router);
+  private readonly orderPersonalApiService: OrderPersonalApiService = inject(OrderPersonalApiService);
+
   displayedColumns: string[] = ['orderCode', 'createdAt', 'name', 'totalValue', 'status'];
 
-  orders: Array<TOrderModel> = [];
+  orders: TOrderModel[] = [];
   private readonly bPagination: BehaviorSubject<IPagination> = new BehaviorSubject<IPagination>(PaginationConstant);
-  pagination$ = this.bPagination.asObservable().pipe(
-    tap(pagination => {console.log('Pagination changed:', pagination)})
-  );
+  pagination$ = this.bPagination.asObservable();
   
   orderPersonal$ = this.pagination$.pipe(
     distinctUntilChanged((prev, curr) => prev.page === curr.page && prev.size === curr.size),
@@ -47,10 +48,6 @@ export class OrderHistoryComponent implements OnInit {
   );
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private orderPersonalApiService: OrderPersonalApiService,
-  ) { }
 
   ngOnInit(): void {
     this.listenOrder();

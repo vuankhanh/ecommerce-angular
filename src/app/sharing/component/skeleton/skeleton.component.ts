@@ -13,8 +13,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class SkeletonComponent implements OnInit {
   @Input() quantity = 3;
 
-  fakeArray: Array<null> = []
-  constructor() { }
+  fakeArray: null[] = [];
 
   ngOnInit(): void {
     const newArray = new Array(this.quantity);

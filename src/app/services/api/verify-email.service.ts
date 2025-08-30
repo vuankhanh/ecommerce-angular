@@ -1,15 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VerifyEmailService {
-  private urlVerifyEmail: string = environment.backendApi+'/verify-email'
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private urlVerifyEmail = environment.backendApi+'/verify-email'
 
   verify(userId: string, emailToken: string){
     let params: HttpParams = new HttpParams();

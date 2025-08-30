@@ -1,9 +1,7 @@
 import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 
 export function initializeIcons(
-  matIconRegistry: MatIconRegistry, 
-  domSanitizer: DomSanitizer
+  matIconRegistry: MatIconRegistry
 ): boolean {
   // Đăng ký Font Awesome
   matIconRegistry.registerFontClassAlias('fa', 'fa');
@@ -18,6 +16,6 @@ export function provideIconConfig() {
   return {
     provide: 'ICON_INITIALIZER',
     useFactory: initializeIcons,
-    deps: [MatIconRegistry, DomSanitizer]
+    deps: [MatIconRegistry]
   };
 }

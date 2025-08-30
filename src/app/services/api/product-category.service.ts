@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { EMPTY, expand, map, Observable, toArray } from 'rxjs';
-import { IProductCategory, TProductCategoryModel } from '../../models/product-category.interface';
+import { TProductCategoryModel } from '../../models/product-category.interface';
 import { IPagination } from '../../models/pagination.interface';
 import { ISuccess } from '../../models/success.interface';
 
@@ -10,10 +10,8 @@ import { ISuccess } from '../../models/success.interface';
   providedIn: 'root'
 })
 export class ProductCategoryService {
-  private readonly url: string = environment.backendApi + '/product-category';
-  constructor(
-    private readonly httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private readonly url = environment.backendApi + '/product-category';
 
   getAll(name?: string, page?: number, size?: number): Observable<TProductCategory> {
     let params = new HttpParams();
@@ -26,7 +24,7 @@ export class ProductCategoryService {
     if (size != null) {
       params = params.append('size', size)
     }
-    return this.httpClient.get<IProductCategoryResponse>(this.url).pipe(
+    return this.httpClient.get<IProductCategoryResponse>(this.url, { params }).pipe(
       map(response => response.metaData)
     )
   }
@@ -40,7 +38,7 @@ export class ProductCategoryService {
         return page <= paging.totalPages ? this.getAll('', page) : EMPTY
       }),
       toArray(),
-      map((arr: Array<TProductCategory>) => {
+      map((arr: TProductCategory[]) => {
         const data = arr.map(res=>res.data).flat();
         return data;
       })

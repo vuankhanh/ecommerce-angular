@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
 import { SSR_LANG } from '../sharing/constant/injection_token.constant';
 import { Language } from '../sharing/constant/lang.constant';
@@ -8,12 +8,10 @@ import { Language } from '../sharing/constant/lang.constant';
   providedIn: 'root'
 })
 export class LangService {
+  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly ssrLang: `${Language}` | null = inject(SSR_LANG, { optional: true });
+  private readonly localStorageService: LocalStorageService = inject(LocalStorageService);
   readonly isBrowser: boolean = isPlatformBrowser(this.platformId);
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(SSR_LANG) @Optional() private ssrLang: `${Language}` | null, // Thêm @Optional()
-    private readonly localStorageService: LocalStorageService
-  ) { }
 
   getLangFromHref(): string | null {
     if (this.isBrowser) {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { catchError, filter, map, Observable, of, switchMap } from 'rxjs';
@@ -19,10 +19,14 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./verification-email.component.scss']
 })
 export class VerificationEmailComponent {
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private readonly verifyEmailService: VerifyEmailService = inject(VerifyEmailService);
+  private readonly authService: AuthService = inject(AuthService);
+
   result$: Observable<boolean> = this.activatedRoute.queryParams.pipe(
     map(params => {
-      let userId = params['userId'];
-      let emailToken = params['emailToken'];
+      const userId = params['userId'];
+      const emailToken = params['emailToken'];
       return {
         userId,
         emailToken
@@ -31,15 +35,9 @@ export class VerificationEmailComponent {
     filter(params => !!params.userId && !!params.emailToken),
     switchMap(({ userId, emailToken }) => this.verifyEmailService.verify(userId, emailToken).pipe(
       map(res => res ? true : false),
-      catchError(_=> of(false))
+      catchError(()=> of(false))
     )),
   );
-
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private verifyEmailService: VerifyEmailService,
-    private authService: AuthService
-  ) { }
 
   login() {
     this.authService.login('login');

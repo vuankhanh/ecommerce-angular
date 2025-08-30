@@ -5,10 +5,9 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class MouseEventEmitService {
-  private isEnter: boolean = false;
+  private isEnter = false;
   private leftPanelMouseEvent$: BehaviorSubject<boolean> = new BehaviorSubject(this.isEnter);
   private leftPanelMouseEvent = this.leftPanelMouseEvent$.asObservable();
-  constructor() { }
 
   set(isEnter: boolean){
     if(this.isEnter != isEnter){

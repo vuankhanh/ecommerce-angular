@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { TAlbumModel } from '../../models/album.interface';
 import { ISuccess } from '../../models/success.interface';
@@ -9,10 +9,8 @@ import { map } from 'rxjs';
   providedIn: 'root'
 })
 export class SlideShowService {
-  private readonly url: string = environment.backendApi;
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private readonly url = environment.backendApi;
 
   get() {
     return this.httpClient.get<IAlbumResponse>(this.url+'/slide-show').pipe(

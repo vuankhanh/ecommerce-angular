@@ -2,7 +2,7 @@ import { inject } from "@angular/core";
 import { SocketIoService } from "../../services/socket/socket-io.service";
 import { AuthService } from "../../services/auth.service";
 import { DeliveryService } from "../../services/delivery.service";
-import { catchError, filter, lastValueFrom, map, of, take } from "rxjs";
+import { lastValueFrom, map, take } from "rxjs";
 import { DeliveryPersonalApiService } from "../../services/api/personal/delivery-personal.api.service";
 import { DeliveryEntity } from "../../entity/deliverty.entity";
 import { LangService } from "../../services/lang.service";
@@ -31,7 +31,7 @@ export function provideAppInitializerConfig() {
     }
 
     const authService = inject(AuthService);
-    const socketIoService = inject(SocketIoService);
+    inject(SocketIoService);
     const deliveryService = inject(DeliveryService);
     const deliveryPersonalApiService = inject(DeliveryPersonalApiService);
     const isAuthenticated = await authService.getUserInfoFromTokenStoraged();
@@ -44,7 +44,7 @@ export function provideAppInitializerConfig() {
           map((response) => {
             return new DeliveryEntity(response);
           }),
-        )).catch(_ => null);
+        )).catch(() => null);
 
         if (defaultDelivery) {
           deliveryService.setDelivery(defaultDelivery);

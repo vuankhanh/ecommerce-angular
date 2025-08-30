@@ -10,7 +10,7 @@ import { LangService } from '../../services/lang.service';
 export class LangLocalePipe implements PipeTransform {
   private readonly langs = getLangs();
   transform(code: string, ...args: unknown[]): string | null {
-    let lang = this.langs.find(l => l.code === code);
+    const lang = this.langs.find(l => l.code === code);
 
     if (!lang) throw new Error(`LangPipe: Không tìm thấy ngôn ngữ với code = ${code}`);
     const field = args[0] as 'locale' | 'name' | undefined;
@@ -25,7 +25,7 @@ export class LangLocalePipe implements PipeTransform {
 })
 export class LangPipe implements PipeTransform {
   private readonly currentLang = inject(LangService).getCurrentLang();
-  transform(value: { [key in TLanguage]: string }, ...args: unknown[]): string {
+  transform(value: Record<TLanguage, string>): string {
     return value[this.currentLang];
   }
 }

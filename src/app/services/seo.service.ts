@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { MetaTagFacebook } from '../models/MetaTag';
 
@@ -6,10 +6,8 @@ import { MetaTagFacebook } from '../models/MetaTag';
   providedIn: 'root'
 })
 export class SEOService {
-
-  constructor(
-    private title: Title, private meta: Meta
-  ) { }
+  private readonly title: Title = inject(Title);
+  private readonly meta: Meta = inject(Meta);
 
   updateTitle(title: string) {
     this.title.setTitle(title);

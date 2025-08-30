@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { ISuccess } from '../../models/success.interface';
 import { map, Observable } from 'rxjs';
@@ -10,11 +10,8 @@ import { TOrderDetailModel } from '../../models/order-response.interface';
   providedIn: 'root'
 })
 export class OrderService {
+  private readonly httpClient: HttpClient = inject(HttpClient);
   private url = environment.backendApi + '/order';
-
-  constructor(
-    private httpClient: HttpClient
-  ) { }
   
   create(data: IOrderCreateRequest): Observable<TOrderDetailModel> {
     return this.httpClient.post<OrderDetailResponse>(this.url, data).pipe(

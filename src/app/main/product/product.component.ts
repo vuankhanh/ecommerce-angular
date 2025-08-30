@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
@@ -32,16 +32,13 @@ import { BreadCrumbComponent } from '../bread-crumb/bread-crumb.component';
   styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit, OnDestroy {
+  private readonly router: Router = inject(Router);
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private readonly productCategoryService: ProductCategoryService = inject(ProductCategoryService);
+
   productCategorise$: Observable<TProductCategoryModel[]> = this.productCategoryService.getAllData();
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private productCategoryService: ProductCategoryService
-  ) {
-
-  }
 
   ngOnInit(): void {
     const slug$ = this.productCategorise$.pipe(
@@ -52,9 +49,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.router.events.pipe(
         filter(event => event instanceof NavigationEnd),
-        map(event => this.activatedRoute.children),
+        map(() => this.activatedRoute.children),
         filter(children => !children.length),
-        switchMap(_ => slug$)
+        switchMap(() => slug$)
       ).subscribe((slug) => {
         this.router.navigate(['san-pham','danh-muc', slug]);
       })
@@ -63,18 +60,11 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.subscription.add(
       slug$.pipe(
         take(1),
-        filter(_=>!this.activatedRoute.children.length )
+        filter(() => !this.activatedRoute.children.length )
       ).subscribe((slug) => {
         this.router.navigate(['san-pham','danh-muc', slug]);
       })
     )
-  }
-
-  dosomething(event: any) {
-    let img: HTMLImageElement = <HTMLImageElement>event.target;
-    if (img) {
-      let src: string = img.src;
-    }
   }
 
   ngOnDestroy() {

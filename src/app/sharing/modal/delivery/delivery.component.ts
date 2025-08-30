@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AddressSelectorComponent } from '../address-selector/address-selector.component';
 import { NgxMaskDirective } from 'ngx-mask';
 import { IAddress } from '../../../models/address.interface';
-import { BehaviorSubject, lastValueFrom, map, Observable, take, tap } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, map, Observable, take } from 'rxjs';
 import { vietnamesePhoneNumberValidator } from '../../validator/vietnamese-phone-number.validator';
 
 @Component({
@@ -32,15 +32,15 @@ export class DeliveryComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  private readonly bControlFormChanged: BehaviorSubject<{ [key: string]: any }> = new BehaviorSubject<{ [key: string]: any }>({});
-  private readonly controlFormChanged$: Observable<{ [key: string]: any }> = this.bControlFormChanged.asObservable();
+  private readonly bControlFormChanged: BehaviorSubject<Record<string, any>> = new BehaviorSubject<Record<string, any>>({});
+  private readonly controlFormChanged$: Observable<Record<string, any>> = this.bControlFormChanged.asObservable();
   isFormChanged$: Observable<boolean> = this.controlFormChanged$.pipe(
-    map((value: { [key: string]: any }) => {
+    map((value: Record<string, any>) => {
       return Object.keys(value).length > 0;
     }),
   );
 
-  addressValid: boolean = false;
+  addressValid = false;
 
   formGroup: FormGroup = this.formBuilder.group({
     name: ['', Validators.required],
@@ -67,7 +67,7 @@ export class DeliveryComponent implements OnInit {
 
       this.formGroup.valueChanges.subscribe((value) => {
         //Lấy ra các control đã thay đổi
-        const changedControls: { [key: string]: any } = {};
+        const changedControls: Record<string, any> = {};
         Object.keys(value).forEach(key => {
           if (!this.data) return;
           const jsonValue = JSON.stringify(value[key]);

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { EMPTY, expand, map, Observable, toArray } from 'rxjs';
@@ -11,10 +11,8 @@ import { ProductDetailEntity } from '../../entity/product-detail.entity';
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly url: string = environment.backendApi + '/product';
-  constructor(
-    private readonly httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private readonly url = environment.backendApi + '/product';
 
   getAll(name?: string, productCategoryId?: string, page?: number, size?: number): Observable<TProduct> {
     let params = new HttpParams();
@@ -46,7 +44,7 @@ export class ProductService {
         return page <= paging.totalPages ? this.getAll('', '', page) : EMPTY
       }),
       toArray(),
-      map((arr: Array<TProduct>) => {
+      map((arr: TProduct[]) => {
         const data = arr.map(res => res.data).flat();
         return data;
       })
@@ -74,6 +72,9 @@ export class ProductService {
     let params = new HttpParams();
     params = params.append('slug', slug);
 
+    if (page != null) params = params.append('page', page);
+    if (size != null) params = params.append('size', size);
+    
     return this.httpClient.get<IProductResponse>(this.url+'/by-category-slug' , { params }).pipe(
       map(response => response.metaData)
     )
@@ -90,7 +91,7 @@ export class ProductService {
         return page <= paging.totalPages ? this.getProductsByCategorySlug(slug, page) : EMPTY
       }),
       toArray(),
-      map((arr: Array<TProduct>) => {
+      map((arr: TProduct[]) => {
         const data = arr.map(res => res.data).flat();
         return data;
       })

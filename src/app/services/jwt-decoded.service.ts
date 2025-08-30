@@ -6,13 +6,10 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class JwtDecodedService {
-
-  constructor() { }
-
   jwtDecoded(token: string){
     try {
       return jwtDecode(token);
-    } catch (error) {
+    } catch {
       return null;
     }
   }

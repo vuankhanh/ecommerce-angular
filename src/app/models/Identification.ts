@@ -2,9 +2,9 @@ import { IAddress } from "./address.interface"
 
 export interface Identification {
   logo: Logo,
-  phoneNumber: Array<PhoneNumber>,
-  social: Array<SocialNetwork>,
-  address: Array<IAddress>
+  phoneNumber: PhoneNumber[],
+  social: SocialNetwork[],
+  address: IAddress[]
 }
 
 export interface Logo {

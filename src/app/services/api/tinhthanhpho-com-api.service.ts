@@ -11,7 +11,7 @@ import { IPagination } from '../../models/pagination.interface';
 })
 export class TinhthanhphoComApiService {
   private readonly httpClient = inject(HttpClient);
-  private readonly url: string = environment.backendApi + '/tinhthanhpho-com-api/v1';
+  private readonly url = environment.backendApi + '/tinhthanhpho-com-api/v1';
 
   getProvinces(
     keyword?: string,

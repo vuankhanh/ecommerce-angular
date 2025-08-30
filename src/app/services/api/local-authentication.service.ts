@@ -1,9 +1,9 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment.development';
 
-import { map, Observable } from 'rxjs';
+import { map } from 'rxjs';
 import { ISuccess } from '../../models/success.interface';
 import { IAccessToken, TToken } from '../../models/token.interface';
 
@@ -11,10 +11,8 @@ import { IAccessToken, TToken } from '../../models/token.interface';
   providedIn: 'root'
 })
 export class LocalAuthenticationService {
+  private readonly httpClient: HttpClient = inject(HttpClient);
   private url = environment.backendApi+'/auth';
-  constructor(
-    private httpClient: HttpClient
-  ) { }
 
   login(userName: UserName){
     return this.httpClient.post<TokenResponse>(this.url+'/login', userName);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -10,11 +10,4 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './forgot-password-successful.component.html',
   styleUrls: ['./forgot-password-successful.component.scss']
 })
-export class ForgotPasswordSuccessfulComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class ForgotPasswordSuccessfulComponent {}

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Input, Renderer2, forwardRef } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Renderer2, forwardRef, inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Directive({
@@ -11,16 +11,16 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
   }]
 })
 export class OnlyNumberDirective implements ControlValueAccessor {
+  private readonly el: ElementRef = inject(ElementRef);
+  private readonly renderer: Renderer2 = inject(Renderer2);
     /**
   Nếu limitedValue = true thì chỉ cho phép nhập số từ 1 đến 999.
   Còn nếu limitedValue = false thì không giới hạn giá trị nhập vào. Mặc định là true.
   */
-  @Input() limitedValue: boolean = true;
-  @Input() allowZero: boolean = false;
-  private onChange: (value: number) => void = () => { };
-  private onTouched: () => void = () => { };
-
-  constructor(private el: ElementRef, private renderer: Renderer2) { }
+  @Input() limitedValue = true;
+  @Input() allowZero = false;
+  private onChange: (value: number) => void = null!;
+  private onTouched: () => void = null!;
 
   @HostListener('input', ['$event']) onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;

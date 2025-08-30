@@ -1,24 +1,20 @@
-import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
 
 import { PaymentSuccessfulComponent } from '../../sharing/modal/payment-successful/payment-successful.component';
 import { CartService } from '../../services/cart.service';
-import { take, map, Observable, Subscription, switchMap, filter, lastValueFrom, combineLatest, tap, startWith, firstValueFrom } from 'rxjs';
+import { take, map, Observable, Subscription, switchMap, filter, lastValueFrom, combineLatest, startWith, firstValueFrom } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/api/order.service';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { ToastService } from '../../services/toast.service';
 
-import { IJwtDecoded, TToken } from '../../models/token.interface';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { EmptyCartComponent } from '../../sharing/component/empty-cart/empty-cart.component';
-import { LocalStorageKey } from '../../sharing/constant/local_storage.constant';
 import { CartEntity, CartItemEntity } from '../../entity/cart.entity';
-import { ProductDetailEntity } from '../../entity/product-detail.entity';
 import { DeliveryEntity } from '../../entity/deliverty.entity';
 import { DeliveryService } from '../../services/delivery.service';
 import { AddressPipe } from '../../sharing/pipe/address.pipe';
@@ -27,7 +23,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IOrderCreateRequest, IOrderItemsRequest } from '../../models/order-request.interface';
 import { PaymentMethod } from '../../sharing/constant/payment.constant';
 import { DeliverySelectionComponent } from '../../sharing/modal/delivery-selection/delivery-selection.component';
-import { DialogRef } from '@angular/cdk/dialog';
 import { TDeliveryModel } from '../../models/address.interface';
 import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 
@@ -50,7 +45,17 @@ import { OrderPersonalApiService } from '../../services/api/personal/order-perso
   templateUrl: './payment-page.component.html',
   styleUrls: ['./payment-page.component.scss']
 })
-export class PaymentPageComponent implements OnInit, OnDestroy {
+export class PaymentPageComponent implements OnDestroy {
+  private readonly router: Router = inject(Router);
+  private readonly dialog: MatDialog = inject(MatDialog);
+  private readonly renderer2: Renderer2 = inject(Renderer2);
+  private readonly toastService: ToastService = inject(ToastService);
+  private readonly cartService: CartService = inject(CartService);
+  private readonly deliveryService: DeliveryService = inject(DeliveryService)
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly orderService: OrderService = inject(OrderService);
+  private readonly orderPersonalApiService: OrderPersonalApiService = inject(OrderPersonalApiService);
+
   @ViewChild('btnInsertAddress') btnInsertAddress!: ElementRef;
 
   jwtPayload$ = this.authService.jwtPayload$;
@@ -63,7 +68,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   noteControl: FormControl = new FormControl<string>('');
 
   lastValue$ = combineLatest([this.cartItem$, this.delivery$, this.noteControl.valueChanges.pipe(startWith(''))]).pipe(
-    filter(([cartItems, delivery, note]) => {
+    filter(([cartItems, delivery]) => {
       return !!cartItems && cartItems.length > 0 && !!delivery;
     }),
     map(([cartItems, delivery, note]) => {
@@ -93,19 +98,6 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['thumbnail', 'name', 'price', 'quantity'];
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private dialog: MatDialog,
-    private renderer2: Renderer2,
-    private toastService: ToastService,
-    private cartService: CartService,
-    private readonly deliveryService: DeliveryService,
-    private authService: AuthService,
-    private orderService: OrderService,
-    private orderPersonalApiService: OrderPersonalApiService,
-  ) { }
-
-  ngOnInit(): void { }
 
   async chooseAddress() {
     const payload = await lastValueFrom(this.jwtPayload$.pipe(
@@ -192,7 +184,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
       this.cartService.reset();
       this.deliveryService.reset();
 
-      let result: 'goProduct' | 'goOrderHistory' = await lastValueFrom(dialogRef.afterClosed().pipe(
+      const result: 'goProduct' | 'goOrderHistory' = await lastValueFrom(dialogRef.afterClosed().pipe(
         filter(res => !!res),
         take(1)
       ));

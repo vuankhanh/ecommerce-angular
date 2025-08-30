@@ -1,5 +1,5 @@
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, isDevMode, OnInit, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { TOrderModel } from '../../../models/order.interface';
@@ -16,22 +16,9 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './payment-successful.component.html',
   styleUrls: ['./payment-successful.component.scss']
 })
-export class PaymentSuccessfulComponent implements OnInit {
-  private isBrowser: boolean;
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    @Inject(DOCUMENT) private _document: Document,
-    private renderer2: Renderer2,
-    public dialogRef: MatDialogRef<PaymentSuccessfulComponent>,
-    @Inject(MAT_DIALOG_DATA) public orderModel: TOrderModel,
-
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
-
-  ngOnInit(): void {
-
-  }
+export class PaymentSuccessfulComponent {
+  public readonly dialogRef: MatDialogRef<PaymentSuccessfulComponent> = inject(MatDialogRef<PaymentSuccessfulComponent>);
+  public readonly orderModel: TOrderModel = inject(MAT_DIALOG_DATA);
 
   goOrderHistory() {
     this.dialogRef.close('goOrderHistory');

@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
@@ -6,7 +6,8 @@ import { DomSanitizer } from '@angular/platform-browser';
   name: 'trustYoutubeUrl'
 })
 export class TrustYoutubeUrlPipe implements PipeTransform {
-  constructor(private domSanitizer: DomSanitizer) { }
+  private readonly domSanitizer: DomSanitizer = inject(DomSanitizer);
+
   transform(youtubeUrl: string) {
     return this.domSanitizer.bypassSecurityTrustResourceUrl(youtubeUrl)
   }

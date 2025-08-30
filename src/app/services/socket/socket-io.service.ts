@@ -1,4 +1,4 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { merge, Observable, fromEvent } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,9 +8,10 @@ import { environment } from '../../../environments/environment.development';
   providedIn: 'root'
 })
 export class SocketIoService {
+  private readonly platformId: object = inject(PLATFORM_ID);
   private socket: any;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor() {
     const isBrowser = isPlatformBrowser(this.platformId);
     if (isBrowser) {
       import('socket.io-client').then(io => {

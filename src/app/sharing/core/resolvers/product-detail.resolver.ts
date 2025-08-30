@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import {
-  RouterStateSnapshot,
   ActivatedRouteSnapshot,
   ResolveFn
 } from '@angular/router';
@@ -10,15 +9,14 @@ import { ProductDetailEntity } from '../../../entity/product-detail.entity';
 
 export const productDetailResolver: ResolveFn<ProductDetailEntity | null> =
   (
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    route: ActivatedRouteSnapshot
   ): Observable<ProductDetailEntity | null> => {
     const productService = inject(ProductService);
     const productSlug = route.paramMap.get('productSlug') as string;
-    if(!productSlug) {
+    if (!productSlug) {
       return of(null);
     }
     return productService.getDetail(undefined, productSlug).pipe(
-      catchError(_=> of(null)) // trả về null nếu lỗi
+      catchError(() => of(null)) // trả về null nếu lỗi
     );
   };

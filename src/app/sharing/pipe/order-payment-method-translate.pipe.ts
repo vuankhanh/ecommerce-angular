@@ -10,7 +10,7 @@ import { PAYMENT_METHOD_LABEL } from '../constant/payment.constant';
 })
 export class OrderPaymentMethodTranslatePipe implements PipeTransform {
   private readonly localStorageService = inject(LocalStorageService)
-  transform(value: TPaymentMethod, ...args: unknown[]): string {
+  transform(value: TPaymentMethod): string {
     const lang = this.localStorageService.get('lang') as `${Language}` || 'vi';
     return PAYMENT_METHOD_LABEL[value]?.[lang] || value;
   }

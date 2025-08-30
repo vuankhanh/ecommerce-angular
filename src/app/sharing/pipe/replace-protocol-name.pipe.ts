@@ -6,9 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ReplaceProtocolNamePipe implements PipeTransform {
 
-  transform(value: string, ...args: any[]): any {
+  transform(value: string): any {
     if(value.startsWith('https://') || value.startsWith('http://')){
-      let newName: string = value.split("//")[1];
+      let newName = value.split("//")[1];
       if(newName.startsWith('www.')){
         newName = newName.split("www.")[1];
       }

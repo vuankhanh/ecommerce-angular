@@ -6,7 +6,7 @@ export interface ICartItem {
 }
 
 export interface ICart {
-  cartItems: Array<ICartItem>;
+  cartItems: ICartItem[];
   totalValue: number;
   totalQuantity: number;
 }

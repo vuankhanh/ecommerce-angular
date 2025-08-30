@@ -13,8 +13,8 @@ export class CartItemEntity implements ICartItem {
 
 export class CartEntity implements ICart {
   cartItems: CartItemEntity[];
-  totalValue: number = 0;
-  totalQuantity: number = 0;
+  totalValue = 0;
+  totalQuantity = 0;
 
   constructor(cartItems: CartItemEntity[]) {
     this.cartItems = cartItems;
@@ -23,7 +23,7 @@ export class CartEntity implements ICart {
   }
 
   addItem(cartItemEntity: CartItemEntity) {
-    let index = this.cartItems.findIndex((cartItem: CartItemEntity) => cartItem.product._id === cartItemEntity.product._id);
+    const index = this.cartItems.findIndex((cartItem: CartItemEntity) => cartItem.product._id === cartItemEntity.product._id);
     if (index < 0) {
       this.cartItems.push(cartItemEntity);
     }else {
@@ -35,7 +35,7 @@ export class CartEntity implements ICart {
   }
 
   changeQuantity(cartItemEntity: CartItemEntity, quantity: number) {
-    let index = this.cartItems.findIndex((cartItem: CartItemEntity) => cartItem.product._id === cartItemEntity.product._id);
+    const index = this.cartItems.findIndex((cartItem: CartItemEntity) => cartItem.product._id === cartItemEntity.product._id);
     quantity = quantity || 1; // Default to 1 if quantity is not provided
     if (index !== -1) {
       this.cartItems[index].quantity = quantity;

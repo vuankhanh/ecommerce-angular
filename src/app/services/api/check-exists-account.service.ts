@@ -1,16 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { environment } from '../../../environments/environment.development';
 @Injectable({
   providedIn: 'root'
 })
 export class CheckExistsAccountService {
-  private urlCheckUserName: string = environment.backendApi+'/check-user-name';
-  private urlCheckEmail: string = environment.backendApi+'/check-email';
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private urlCheckUserName = environment.backendApi+'/check-user-name';
+  private urlCheckEmail = environment.backendApi+'/check-email';
 
   checkExistUserName(userName: UserName){
     return this.httpClient.post(this.urlCheckUserName, userName);

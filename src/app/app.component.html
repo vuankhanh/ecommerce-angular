@@ -2,15 +2,15 @@
   <mat-drawer-container autosize>
     @if (breakpointDetection$ | async) {
     <mat-drawer #drawer mode="over">
-      <app-drawer (toggleDrawer)="toggle($event)"></app-drawer>
+      <app-drawer (toggleDrawer)="toggle()"></app-drawer>
     </mat-drawer>
     }
 
     <mat-drawer-content #drawerContent (scroll)="onScroll($event)">
       <div class="main-container">
-        <app-header #appHeader (toggleDrawer)="toggle($event)"></app-header>
+        <app-header #appHeader (toggleDrawer)="toggle()"></app-header>
         <router-outlet (activate)="onActivate()"></router-outlet>
-        <app-footer (toggleDrawer)="toggle($event)"></app-footer>
+        <app-footer (toggleDrawer)="toggle()"></app-footer>
       </div>
     </mat-drawer-content>
 

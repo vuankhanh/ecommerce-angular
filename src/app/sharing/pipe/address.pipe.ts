@@ -6,7 +6,7 @@ import { IAddress } from '../../models/address.interface';
 })
 export class AddressPipe implements PipeTransform {
 
-  transform(value: IAddress, ...args: unknown[]): unknown {
+  transform(value: IAddress): unknown {
     if (value) {
       const { district, province, ward, street } = value;
       return `${street}, ${ward.name}, ${district.name}, ${province.name}`;

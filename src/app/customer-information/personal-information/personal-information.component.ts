@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject} from '@angular/core';
 
-import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { PersonalService } from '../../services/api/personal/personal.api.service';
@@ -17,9 +16,6 @@ import { PersonalService } from '../../services/api/personal/personal.api.servic
   styleUrls: ['./personal-information.component.scss']
 })
 export class PersonalInformationComponent {
+  private readonly personalService: PersonalService = inject(PersonalService);
   personal$ = this.personalService.getPersonalInfo();
-  constructor(
-    private personalService: PersonalService
-  ) {}
-
 }

@@ -33,7 +33,7 @@ export function isSameInConfirmPassword(): ValidatorFn {
     }
 
     if (parent && parent.get('password')) {
-      let passwordControl = parent.get('password');
+      const passwordControl = parent.get('password');
       return (passwordControl?.value != confirmPassword) ? { passwordIsNotSame: true } : null;
     }
 
@@ -48,7 +48,7 @@ export function tiengVietKhongDau(): ValidatorFn {
       return null;
     }
 
-    let re = /[^a-z0-9]/
+    const re = /[^a-z0-9]/
 
     return re.test(value) ? { containsSpecialCharacter: true } : null;
   }

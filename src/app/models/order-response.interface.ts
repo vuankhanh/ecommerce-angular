@@ -1,6 +1,6 @@
 
 import { OrderStatus } from "../sharing/constant/order.constant";
-import { IDelivery, TDeliveryModel } from "./address.interface";
+import { TDeliveryModel } from "./address.interface";
 import { TLanguage } from "./lang.interface";
 import { IMongodbDocument } from "./mongo.interface";
 import { TPaymentMethod } from "./payment.interface";
@@ -33,7 +33,7 @@ export interface IOrderDetailResponse {
 export interface IOrderItem {
   productThumbnail: string;
   productCode: string;
-  productName: { [key in TLanguage]: string };
+  productName: Record<TLanguage, string>;
   productCategorySlug: string;
   productSlug: string;
   quantity: number;

@@ -1,11 +1,9 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { LocalStorageService } from './local-storage.service'
 
-import { ProductDetailEntity } from '../entity/product-detail.entity';
 import { ToastService } from './toast.service';
-// import { SocketIoService } from './socket/socket-io.service';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
@@ -15,16 +13,16 @@ import { CartEntity, CartItemEntity } from '../entity/cart.entity';
   providedIn: 'root'
 })
 export class CartService {
+  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly localStorageService: LocalStorageService = inject(LocalStorageService);
+  private readonly toastService: ToastService = inject(ToastService);
+
   private readonly rawCart: CartEntity = new CartEntity([]);
   private readonly bCartStoraged: BehaviorSubject<CartEntity> = new BehaviorSubject<CartEntity>(this.rawCart);
   cartStoraged$: Observable<CartEntity> = this.bCartStoraged.asObservable();
 
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    private localStorageService: LocalStorageService,
-    private toastService: ToastService
-  ) {
-    if (isPlatformBrowser(platformId)) {
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
       this.get();
     }
   }
@@ -39,7 +37,7 @@ export class CartService {
     } else {
       try {
         cart = new CartEntity(cartItemsLocalStoraged);
-      } catch (error) {
+      } catch {
         this.set(this.rawCart); // Nếu có lỗi thì khởi tạo giỏ hàng mới
         cart = this.rawCart;
       }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { toHTML } from "ngx-editor";
@@ -14,17 +14,15 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./support.component.scss']
 })
 export class SupportComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   supportDetail?: SupportDetail;
   preview: any;
 
-  subscription: Subscription = new Subscription();
-  constructor(
-    private activatedRoute: ActivatedRoute
-  ) { }
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     const activatedRouteData$ = this.activatedRoute.data.pipe(
-      map(data => <SupportDetail>data['support'])
+      map(data => data['support'] as SupportDetail)
     );
 
     activatedRouteData$.subscribe(res => {

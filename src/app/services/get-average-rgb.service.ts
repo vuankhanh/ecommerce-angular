@@ -5,37 +5,34 @@ import { Injectable } from '@angular/core';
 })
 export class GetAverageRgbService {
 
-  constructor() { }
-
   getAverageRGB(imgEl: HTMLImageElement) {
+    const blockSize = 5;
+    const defaultRGB = { r: 0, g: 0, b: 0 };
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext && canvas.getContext('2d');
+    const rgb = { r: 0, g: 0, b: 0 };
 
-    var blockSize = 5, // only visit every 5 pixels
-      defaultRGB = { r: 0, g: 0, b: 0 }, // for non-supporting envs
-      canvas = document.createElement('canvas'),
-      context = canvas.getContext && canvas.getContext('2d'),
-      data, width, height,
-      i = -4,
-      length,
-      rgb = { r: 0, g: 0, b: 0 },
-      count = 0;
+    let i = -4;
+    let count = 0;
+    let data;
 
     if (!context) {
       return defaultRGB;
     }
 
-    height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
-    width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+    const height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+    const width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
 
     context.drawImage(imgEl, 0, 0);
 
     try {
       data = context.getImageData(0, 0, width, height);
-    } catch (e) {
+    } catch {
       /* security error, img on diff domain */
       return defaultRGB;
     }
 
-    length = data.data.length;
+    const length = data.data.length;
 
     while ((i += blockSize * 4) < length) {
       ++count;

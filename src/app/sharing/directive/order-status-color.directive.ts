@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnChanges, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, inject, Input, OnChanges, Renderer2 } from '@angular/core';
 import { OrderStatus } from '../constant/order.constant';
 
 @Directive({
@@ -6,9 +6,9 @@ import { OrderStatus } from '../constant/order.constant';
   standalone: true
 })
 export class OrderStatusColorDirective implements OnChanges {
+  private readonly el: ElementRef = inject(ElementRef);
+  private readonly renderer: Renderer2 = inject(Renderer2);
   @Input('appOrderStatusColor') status!: `${OrderStatus}`; // Trạng thái đơn hàng
-
-  constructor(private el: ElementRef, private renderer: Renderer2) { }
 
   ngOnChanges() {
     let bgColor = '';

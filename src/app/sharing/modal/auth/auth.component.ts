@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../module/material';
@@ -27,15 +27,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-  historyModalComponent: Array<'login' | 'register' | 'forgotPassword' | 'registerSuccessful' | 'forgotPasswordSuccessful'> = [];
-  constructor(
-    @Optional() public bottomSheetRef: MatBottomSheetRef<AuthComponent>,
-    @Optional() public dialogRef: MatDialogRef<AuthComponent>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) @Optional() public data: TypeLogin,
-    @Inject(MAT_DIALOG_DATA) @Optional() public dialogData: TypeLogin
-  ) {
-    this.data = data || dialogData;
-  }
+  public readonly bottomSheetRef: MatBottomSheetRef<AuthComponent> | null = inject(MatBottomSheetRef<AuthComponent>, { optional: true });
+  public readonly dialogRef: MatDialogRef<AuthComponent> | null = inject(MatDialogRef<AuthComponent>, { optional: true });
+  data: TypeLogin = inject(MAT_BOTTOM_SHEET_DATA, { optional: true }) || inject(MAT_DIALOG_DATA, { optional: true });
+  historyModalComponent: ('login' | 'register' | 'forgotPassword' | 'registerSuccessful' | 'forgotPasswordSuccessful')[] = [];
 
   ngOnInit(): void {
     this.historyModalComponent.push(this.data.type);

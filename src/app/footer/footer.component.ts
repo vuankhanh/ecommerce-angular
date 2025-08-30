@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { Component, EventEmitter, inject, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { Identification } from '../models/Identification';
@@ -27,24 +27,21 @@ import { getMenu } from '../sharing/constant/menu.constant';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit, OnDestroy {
+  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly cartService: CartService = inject(CartService);
+  private readonly supportService: SupportService = inject(SupportService);
+
   @Output() toggleDrawer = new EventEmitter();
   identification?: Identification;
 
-  badgeCart: number = 0;
-  menusList: Array<TMenu> = getMenu();
+  badgeCart = 0;
+  menusList: TMenu[] = getMenu();
 
-  supports: Array<Support> = [];
+  supports: Support[] = [];
 
-  isBrowser: boolean;
+  isBrowser: boolean = isPlatformBrowser(this.platformId);
 
-  subscription: Subscription = new Subscription();
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    private cartService: CartService,
-    private supportService: SupportService
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.subscription.add(

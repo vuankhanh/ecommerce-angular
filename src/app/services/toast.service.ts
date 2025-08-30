@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -6,9 +6,7 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root'
 })
 export class ToastService {
-  constructor(
-    private toastrService: ToastrService
-  ) { }
+  private readonly toastrService: ToastrService = inject(ToastrService);
 
   shortToastSuccess(message:string, title:string){
     return this.toastrService.success(message, title, {

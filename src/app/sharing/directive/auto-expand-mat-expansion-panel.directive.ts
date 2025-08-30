@@ -1,4 +1,4 @@
-import { Directive, Input, OnInit } from '@angular/core';
+import { Directive, inject, Input, OnInit } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { TMenu } from '../../models/menu.interface';
@@ -8,12 +8,9 @@ import { TMenu } from '../../models/menu.interface';
   standalone: true
 })
 export class AutoExpandMatExpansionPanelDirective implements OnInit {
+  private readonly router: Router = inject(Router);
+  private readonly expansionPanel: MatExpansionPanel = inject(MatExpansionPanel);
   @Input() appAutoExpand: TMenu[] | undefined = [];
-
-  constructor(
-    private router: Router,
-    private expansionPanel: MatExpansionPanel
-  ) {}
 
   ngOnInit() {
     const hasActiveChild = this.appAutoExpand?.some(child => 

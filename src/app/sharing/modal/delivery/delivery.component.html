@@ -26,7 +26,7 @@
   <mat-dialog-actions>
     <button matButton (click)="onNoClick()" i18n>Trở lại</button>
     @if (data) {
-      <button matButton (click)="form.ngSubmit.emit()" [disabled]="formGroup.invalid || !addressValid || !(isFormChanged$ | async)"
+      <button matButton (click)="form.ngSubmit.emit()" [disabled]="formGroup.invalid || !addressValid || (isFormChanged$ | async) === false"
       cdkFocusInitial>
       <span i18n>Hoàn thành</span>
     </button>

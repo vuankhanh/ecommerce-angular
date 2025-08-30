@@ -55,7 +55,7 @@
     </div>
 
     <div class="warning">
-      <div class="caps-lock-warning" (capsLock)="capsOn=$event">
+      <div class="caps-lock-warning" appCapsLock (capsLock)="capsOn=$event">
         @if (capsOn) {
           <span i18n>Caps Lock đang bật</span>
         }

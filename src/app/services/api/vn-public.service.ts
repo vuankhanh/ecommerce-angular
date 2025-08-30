@@ -10,7 +10,7 @@ import { ISuccess } from '../../models/success.interface';
 })
 export class VnPublicService {
   private readonly httpClient = inject(HttpClient);
-  private readonly url: string = environment.backendApi + '/vn-public-apis';
+  private readonly url = environment.backendApi + '/vn-public-apis';
 
   getProvinces() {
     return this.httpClient.get<IProvinceResponse>(this.url + '/provinces').pipe(

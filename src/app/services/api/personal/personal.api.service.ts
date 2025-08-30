@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { ISuccess } from '../../../models/success.interface';
 import { TUserInformationModel } from '../../../models/user-information.interface';
@@ -9,10 +9,8 @@ import { map, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PersonalService {
-  private readonly url: string = environment.backendApi + '/client/info';
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private readonly url = environment.backendApi + '/client/info';
 
   getPersonalInfo(): Observable<TUserInformationModel> {
     return this.httpClient.get<IPersonalResponse>(this.url).pipe(

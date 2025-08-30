@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
@@ -40,6 +40,11 @@ import { LangPipe } from '../../sharing/pipe/lang.pipe';
   styleUrls: ['./order-history-detail.component.scss']
 })
 export class OrderHistoryDetailComponent implements OnDestroy {
+  private readonly router: Router = inject(Router);
+  private readonly dialog: MatDialog = inject(MatDialog);
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute)
+  private readonly orderPersonalApiService: OrderPersonalApiService = inject(OrderPersonalApiService);
+
   order$: Observable<TOrderDetailModel> = this.activatedRoute.params.pipe(
     filter(params => !!params['id']),
     map(params => params['id']),
@@ -61,13 +66,6 @@ export class OrderHistoryDetailComponent implements OnDestroy {
   displayedColumns: string[] = ['name', 'price', 'quantity'];
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private dialog: MatDialog,
-    private activatedRoute: ActivatedRoute,
-    private orderPersonalApiService: OrderPersonalApiService
-  ) {
-  }
 
   cancelOrder(orderDetail: TOrderDetailModel) {
     this.subscription.add(
@@ -105,7 +103,6 @@ export class OrderHistoryDetailComponent implements OnDestroy {
       })
     )
   }
-
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

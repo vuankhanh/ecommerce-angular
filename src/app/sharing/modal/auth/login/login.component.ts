@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 //Service
@@ -26,20 +26,19 @@ import { AuthService } from '../../../../services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  private readonly formBuilder: FormBuilder = inject(FormBuilder);
+  private readonly localAuthenticationService: LocalAuthenticationService = inject(LocalAuthenticationService);
+  private readonly authService: AuthService = inject(AuthService)
+  private readonly socialAuthenticationService: SocialAuthenticationService = inject(SocialAuthenticationService);
+  private readonly toastService: ToastService = inject(ToastService)
+  private readonly inProgressSpinnerService: InProgressSpinnerService = inject(InProgressSpinnerService);
+
   @Output() valueChange = new EventEmitter();
   @Output() closeModal = new EventEmitter();
   loginGroup!: FormGroup;
-  fieldTextType: boolean = false;
+  fieldTextType = false;
 
-  private subscription: Subscription = new Subscription();
-  constructor(
-    private formBuilder: FormBuilder,
-    private localAuthenticationService: LocalAuthenticationService,
-    private authService: AuthService,
-    private socialAuthenticationService: SocialAuthenticationService,
-    private toastService: ToastService,
-    private inProgressSpinnerService: InProgressSpinnerService
-  ) { }
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.initForm();

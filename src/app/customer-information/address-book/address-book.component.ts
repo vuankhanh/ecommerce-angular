@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../sharing/module/material';
 import { DeliveryPersonalApiService } from '../../services/api/personal/delivery-personal.api.service';
-import { filter, map, Subscription, switchMap } from 'rxjs';
+import { filter, Subscription, switchMap } from 'rxjs';
 import { IDelivery, TDeliveryModel } from '../../models/address.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { DeliveryComponent } from '../../sharing/modal/delivery/delivery.component';
@@ -21,13 +21,12 @@ import { ConfirmationDialogData } from '../../models/confirmation-dialog.interfa
   styleUrls: ['./address-book.component.scss']
 })
 export class AddressBookComponent implements OnInit, OnDestroy {
+  private readonly deliveryPersonalApiService: DeliveryPersonalApiService = inject(DeliveryPersonalApiService);
+  private readonly dialog: MatDialog = inject(MatDialog);
+
   deliverys: TDeliveryModel[] = [];
 
   private readonly subscription = new Subscription();
-  constructor(
-    private deliveryPersonalApiService: DeliveryPersonalApiService,
-    private dialog: MatDialog
-  ) { }
 
   ngOnInit(): void {
     this.subscription.add(
@@ -84,7 +83,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       }).afterClosed().pipe(
         filter(confirm => confirm),
         switchMap(() => this.deliveryPersonalApiService.remove(delivery._id))
-      ).subscribe((delivery: TDeliveryModel) => {
+      ).subscribe(() => {
         this.deliverys.splice(index, 1);
         this.deliverys = [...this.deliverys]; // Trigger change detection
       })
@@ -94,7 +93,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   onSetDefaultAddress(index: number, delivery: TDeliveryModel): void {
     this.subscription.add(
       this.deliveryPersonalApiService.setDefault(delivery._id).pipe(
-      ).subscribe(_=>{
+      ).subscribe(()=>{
         this.deliverys.forEach((item) => item.isDefault = false);
         this.deliverys[index].isDefault = true;
         this.deliverys = [...this.deliverys]; // Trigger change detection

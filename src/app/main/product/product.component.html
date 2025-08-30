@@ -13,8 +13,7 @@
           mat-ripple>
           <mat-card-header>
             <div mat-card-avatar class="category-avatar">
-              <img [src]="category.album.thumbnailUrl | prefixBackendStatic" [alt]="category.name"
-                (load)="dosomething($event)">
+              <img [src]="category.album.thumbnailUrl | prefixBackendStatic" [alt]="category.name">
             </div>
             <mat-card-title>{{ category.name }}</mat-card-title>
           </mat-card-header>

@@ -1,8 +1,7 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, filter, Observable } from 'rxjs';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DeliveryEntity } from '../entity/deliverty.entity';
 import { LocalStorageService } from './local-storage.service';
-import { ToastService } from './toast.service';
 import { isPlatformBrowser } from '@angular/common';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 import { TDeliveryModel } from '../models/address.interface';
@@ -11,15 +10,14 @@ import { TDeliveryModel } from '../models/address.interface';
   providedIn: 'root'
 })
 export class DeliveryService {
+  private readonly platformId: object = inject(PLATFORM_ID);
+  private readonly localStorageService = inject(LocalStorageService);
+
   private readonly bDeliveryStoraged: BehaviorSubject<DeliveryEntity | TDeliveryModel | null> = new BehaviorSubject<DeliveryEntity | TDeliveryModel | null>(null);
   deliveryStoraged$: Observable<DeliveryEntity | TDeliveryModel | null> = this.bDeliveryStoraged.asObservable();
 
-  constructor(
-    @Inject(PLATFORM_ID) platformId: Object,
-    private localStorageService: LocalStorageService,
-    private toastService: ToastService
-  ) {
-    if (isPlatformBrowser(platformId)) {
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
       this.get();
     }
   }

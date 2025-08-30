@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { ISuccess } from '../../../models/success.interface';
 import { IPagination } from '../../../models/pagination.interface';
@@ -12,11 +12,8 @@ import { OrderStatus } from '../../../sharing/constant/order.constant';
   providedIn: 'root'
 })
 export class OrderPersonalApiService {
+  private readonly httpClient: HttpClient = inject(HttpClient);
   private url = environment.backendApi + '/client/order';
-
-  constructor(
-    private httpClient: HttpClient
-  ) { }
 
   getAll(page?: number, size?: number): Observable<TOrder> {
     let params = new HttpParams();
@@ -62,7 +59,7 @@ export class OrderPersonalApiService {
 
     let params = new HttpParams();
     params = params.append('id', id);
-    let data: { status: `${OrderStatus}`; reasonForCancelReason?: string } = { status: newStatus };
+    const data: { status: `${OrderStatus}`; reasonForCancelReason?: string } = { status: newStatus };
 
     if(newStatus === OrderStatus.CANCELED) {
       if (!reasonForCancelReason) {

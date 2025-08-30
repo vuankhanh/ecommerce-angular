@@ -15,7 +15,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   styleUrl: './header-page-container.component.scss'
 })
 export class HeaderPageContainerComponent {
-  @Input() title: string = '';
+  @Input() title = '';
 
   @Output() goBack: EventEmitter<null> = new EventEmitter<null>();
 }

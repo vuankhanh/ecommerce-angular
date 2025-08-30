@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
 
@@ -35,22 +35,18 @@ import { BreakpointDetectionService } from '../services/breakpoint-detection.ser
   styleUrls: ['./customer.component.scss']
 })
 export class CustomerComponent implements OnInit, OnDestroy {
+  private readonly router: Router = inject(Router);
+  private readonly breakpointDetectionService: BreakpointDetectionService = inject(BreakpointDetectionService)
+  private readonly urlChangeService: UrlChangeService = inject(UrlChangeService);
+  private readonly authService: AuthService = inject(AuthService);
+
   @ViewChild('userAccordion') userAccordion?: MatAccordion;
-  customerMenu: Array<TMenu> = getCustomerMenu();
-  currentUrl: string;
-  activeMenu: TMenu;
+  customerMenu: TMenu[] = getCustomerMenu();
+  currentUrl = this.router.url;
+  activeMenu: TMenu = this.getActiveMenu(this.currentUrl, this.customerMenu);
 
   isMobile$ = this.breakpointDetectionService.detection$();
   private subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private breakpointDetectionService: BreakpointDetectionService,
-    private urlChangeService: UrlChangeService,
-    private authService: AuthService
-  ) {
-    this.currentUrl = this.router.url;
-    this.activeMenu = this.getActiveMenu(this.currentUrl, this.customerMenu);
-  }
 
   ngOnInit(): void {
     this.subscription.add(
@@ -63,8 +59,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
     );
   }
 
-  getActiveMenu(route: string, arrayMenu: Array<TMenu>) {
-    let index: number = arrayMenu.findIndex(menu => route.includes(menu.route || ''));
+  getActiveMenu(route: string, arrayMenu: TMenu[]) {
+    const index = arrayMenu.findIndex(menu => route.includes(menu.route || ''));
     return arrayMenu[index];
   }
 

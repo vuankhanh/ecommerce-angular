@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './number-input.component.scss'
 })
 export class NumberInputComponent {
-  @Input() value: number = 1;
+  @Input() value = 1;
   @Output() valueChange: EventEmitter<number> = new EventEmitter<number>();
 
   increment() {

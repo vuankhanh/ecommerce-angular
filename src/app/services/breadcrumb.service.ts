@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Data, NavigationEnd, Router } from '@angular/router';
 
 import { IBreadcrumb } from '../models/breadcrumb.interface';
@@ -7,23 +7,22 @@ import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ProductDetailEntity } from '../entity/product-detail.entity';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class BreadcrumbService {
-
+  private readonly router: Router = inject(Router);
   // Subject emitting the breadcrumb hierarchy
   private readonly _breadcrumbs$ = new BehaviorSubject<IBreadcrumb[]>([]);
 
   // Observable exposing the breadcrumb hierarchy
   readonly breadcrumbs$ = this._breadcrumbs$.asObservable();
 
-  constructor(private router: Router) {
+  constructor() {
     this.router.events.pipe(
       // Filter the NavigationEnd events as the breadcrumb is updated only when the route reaches its end
       filter((event) => event instanceof NavigationEnd)
-    ).subscribe(event => {
+    ).subscribe(() => {
         // Construct the breadcrumb hierarchy
         const root = this.router.routerState.snapshot.root;
         const breadcrumbs: IBreadcrumb[] = [];
@@ -45,7 +44,7 @@ export class BreadcrumbService {
         if(route.routeConfig?.path === ':productSlug'){
           if(route.data['product']){
             const product: ProductDetailEntity = route.data['product'];
-            let newRouteUrl = routeUrl;
+            const newRouteUrl = routeUrl;
             newRouteUrl.splice(-1);
             const breadcrumb = {
               label: product.productCategory!.name,

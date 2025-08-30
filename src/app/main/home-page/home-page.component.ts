@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { SlideShowComponent } from '../slide-show/slide-show.component';
@@ -24,17 +24,7 @@ import { TProductCategoryModel } from '../../models/product-category.interface';
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']
 })
-export class HomePageComponent implements OnInit, AfterViewInit {
+export class HomePageComponent {
+  private readonly productCategoryService: ProductCategoryService = inject(ProductCategoryService);
   productCategory$: Observable<TProductCategoryModel[]> = this.productCategoryService.getAllData();
-  constructor(
-    private productCategoryService: ProductCategoryService
-  ) {}
-
-  ngOnInit() {
-
-  }
-
-  ngAfterViewInit() {
-
-  }
 }

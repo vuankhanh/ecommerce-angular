@@ -258,7 +258,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
     this.districtEl.nativeElement.value = this.address?.district?.name || '';
     this.wardEl.nativeElement.value = this.address?.ward?.name || '';
 
-    this.renderer.listen(this.provinceEl.nativeElement, 'input', (event: InputEvent) => {
+    this.renderer.listen(this.provinceEl.nativeElement, 'input', () => {
       this.bProvinceInputChange.next(this.provinceEl.nativeElement.value);
       this.bProvincesPagination.next(PaginationConstant);
     });
@@ -274,18 +274,18 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
     });
   }
 
-  onProvinceBlur(event: FocusEvent) {
-    const provinceName: string = this.provinceControl.value?.name;
+  onProvinceBlur() {
+    const provinceName = this.provinceControl.value?.name;
     this.provinceEl.nativeElement.value = provinceName ? provinceName : '';
   }
 
-  onDistrictBlur(event: FocusEvent) {
-    const districtName: string = this.districtControl.value?.name;
+  onDistrictBlur() {
+    const districtName = this.districtControl.value?.name;
     this.districtEl.nativeElement.value = districtName ? districtName : '';
   }
 
-  onWardBlur(event: FocusEvent) {
-    const wardName: string = this.wardControl.value?.name;
+  onWardBlur() {
+    const wardName = this.wardControl.value?.name;
     this.wardEl.nativeElement.value = wardName ? wardName : '';
   }
 

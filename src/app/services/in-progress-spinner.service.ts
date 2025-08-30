@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 
@@ -8,12 +8,8 @@ import { ProgressSpinnerComponent } from '../sharing/component/progress-spinner/
   providedIn: 'root'
 })
 export class InProgressSpinnerService {
+  private readonly overlay: Overlay = inject(Overlay);
   private spinnerTopRef = this.cdkSpinnerCreate();
-  constructor(
-    private overlay: Overlay
-  ) {
-
-  }
 
   progressSpinnerStatus(status: boolean){
     if(status){

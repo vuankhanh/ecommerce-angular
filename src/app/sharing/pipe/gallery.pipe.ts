@@ -1,19 +1,16 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 import { PrefixBackendStaticPipe } from './prefix-backend.pipe';
-import { TAlbumModel, TMediaModel } from '../../models/album.interface';
+import { TMediaModel } from '../../models/album.interface';
 
 @Pipe({
   name: 'gallery',
   standalone: true
 })
 export class GalleryPipe implements PipeTransform {
-  constructor(
-    private readonly prefixBackendStaticPipe: PrefixBackendStaticPipe
-  ) {
+  private readonly prefixBackendStaticPipe: PrefixBackendStaticPipe = inject(PrefixBackendStaticPipe);
 
-  }
-  transform(media: TMediaModel[], ...args: unknown[]): GalleryItem[] {
+  transform(media: TMediaModel[]): GalleryItem[] {
     if (!media || !media.length) {
       return [];
     }

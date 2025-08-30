@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   BreakpointObserver,
   Breakpoints,
@@ -11,10 +11,7 @@ import { map } from 'rxjs';
   providedIn: 'root'
 })
 export class BreakpointDetectionService {
-
-  constructor(
-    private breakpointObserver: BreakpointObserver
-  ) {}
+  private readonly breakpointObserver: BreakpointObserver = inject(BreakpointObserver);
 
   detection$(){
     return this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.HandsetPortrait, Breakpoints.HandsetLandscape]).pipe(

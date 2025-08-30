@@ -22,15 +22,13 @@ import { DeliveryComponent } from '../delivery/delivery.component';
 })
 export class DeliverySelectionComponent implements OnInit, OnDestroy {
   readonly dialogRef = inject(MatDialogRef<DeliverySelectionComponent>);
+  private readonly _dialog: MatDialog = inject(MatDialog);
   private readonly deliveryPersonalApiService: DeliveryPersonalApiService = inject(DeliveryPersonalApiService);
 
   deliverys: TDeliveryModel[] = [];
   selectedDeliveryId: string | null = inject<string | null>(MAT_DIALOG_DATA);;
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    private readonly _dialog: MatDialog
-  ) { }
 
   ngOnInit(): void {
     this.subscription.add(

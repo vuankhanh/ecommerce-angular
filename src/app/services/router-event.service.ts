@@ -1,4 +1,4 @@
-import { Injectable, Injector, runInInjectionContext, OnDestroy } from '@angular/core';
+import { Injectable, Injector, runInInjectionContext, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, ResolveFn, Router } from '@angular/router';
 import { concat, filter, map, Observable, of, switchMap, tap, from, Subject, takeUntil } from 'rxjs';
 
@@ -6,14 +6,12 @@ import { concat, filter, map, Observable, of, switchMap, tap, from, Subject, tak
   providedIn: 'root'
 })
 export class RouterEventService implements OnDestroy {
+  private readonly router: Router = inject(Router);
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private readonly injector: Injector = inject(Injector);
+
   private destroy$ = new Subject<void>();
   private titleObserver?: MutationObserver;
-
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private injector: Injector
-  ) { }
 
   ngOnDestroy(): void {
     this.destroy$.next();

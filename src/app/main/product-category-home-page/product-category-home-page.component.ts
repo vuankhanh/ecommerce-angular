@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -33,10 +33,9 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
   products: TProductModel[] = [];
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private productService: ProductService
-  ) { }
+
+  private readonly router: Router = inject(Router);
+  private readonly productService: ProductService = inject(ProductService);
 
   ngOnInit(): void {
     if (!this.productCategory) {

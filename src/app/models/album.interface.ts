@@ -5,7 +5,7 @@ export interface IAlbum {
   description: string,
   slug: string,
   thumbnailUrl: string,
-  media: Array<TMediaModel>,
+  media: TMediaModel[],
   mediaItems: number,
   createdAt: Date,
   updatedAt: Date

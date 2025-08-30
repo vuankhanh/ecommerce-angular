@@ -1,11 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { PrefixBackendStaticPipe } from '../../../sharing/pipe/prefix-backend.pipe';
-import { ProductService } from '../../../services/api/product.service';
 import { TProductModel } from '../../../models/product.interface';
 import { SkeletonComponent } from '../../../sharing/component/skeleton/skeleton.component';
 import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
@@ -25,15 +23,12 @@ import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
   styleUrls: ['./product-category.component.scss']
 })
 export class ProductCategoryComponent implements OnInit, OnDestroy {
-  products: Array<TProductModel> = [];
+  private readonly router: Router = inject(Router);
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  products: TProductModel[] = [];
 
   private readonly subscription: Subscription = new Subscription();
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private productService: ProductService,
-  ) {}
-
+  
   ngOnInit(): void {
     console.log('ProductCategoryComponent ngOnInit');
     this.subscription.add(

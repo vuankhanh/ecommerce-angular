@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IPagination } from '../../../models/pagination.interface';
@@ -10,10 +10,8 @@ import { EMPTY, expand, map, Observable, toArray } from 'rxjs';
   providedIn: 'root'
 })
 export class DeliveryPersonalApiService {
-  private readonly url: string = environment.backendApi + '/client/address';
-  constructor(
-    private httpClient: HttpClient
-  ) { }
+  private readonly httpClient: HttpClient = inject(HttpClient);
+  private readonly url = environment.backendApi + '/client/address';
 
   private getAll(name?: string, page?: number, size?: number): Observable<TDelivery> {
     let params = new HttpParams();
@@ -40,7 +38,7 @@ export class DeliveryPersonalApiService {
         return page <= paging.totalPages ? this.getAll('', page) : EMPTY
       }),
       toArray(),
-      map((arr: Array<TDelivery>) => {
+      map((arr: TDelivery[]) => {
         const data = arr.map(res => res.data).flat();
         return data;
       })

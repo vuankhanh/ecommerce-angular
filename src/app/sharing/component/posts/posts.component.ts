@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { toHTML } from "ngx-editor";
 import { Posts } from '../../../models/Posts';
@@ -12,14 +12,9 @@ import { SanitizeHtmlBindingPipe } from '../../pipe/sanitize-html-binding.pipe';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.scss']
 })
-export class PostsComponent implements OnInit, OnChanges {
+export class PostsComponent implements OnChanges {
   @Input() editorContent?: Posts;
-  preview: string = '';
-  constructor() { }
-
-  ngOnInit(): void {
-    
-  }
+  preview = '';
 
   ngOnChanges(simpleChanges: SimpleChanges): void {
     const editorContentChange = simpleChanges['editorContent'];

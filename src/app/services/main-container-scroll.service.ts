@@ -13,7 +13,6 @@ export class MainContainerScrollService {
 
   private bDirectionPostion: BehaviorSubject<DirectionPostion | null> = new BehaviorSubject<DirectionPostion | null>(null);
   listenDirectionPostion$: Observable<DirectionPostion | null> = this.bDirectionPostion.asObservable();
-  constructor() { }
 
   setPositionTop(position: number){
     return this.blistenScrollTop.next(position);
