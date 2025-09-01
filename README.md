@@ -1,16 +1,16 @@
-## Kiểm tra các element tiếng Việt chưa có thuộc tính i18n
+# Ecommerce Angular
 
-Để tìm các element chứa tiếng Việt có dấu mà chưa có thuộc tính `i18n`, sử dụng Regex sau trong VS Code:
+User-facing e-commerce website built with Angular.
 
-```
-<([a-zA-Z0-9\-]+)(?![^>]*i18n)[^>]*>[^<]*[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđĐ]+[^<]*<\/\1>
-```
+## Project Overview
 
-**Cách dùng:**
-- Mở hộp thoại tìm kiếm (Ctrl+Shift+F).
-- Chọn "Use Regular Expression" (biểu tượng .*).
-- Dán regex trên vào ô tìm kiếm.
+- Browse products, place orders, and contact the shop.
+- Modern, responsive, and user-friendly interface.
+- Multi-language support for better accessibility.
+- Integrated SonarQube for source code quality checking.
 
-**Loại trừ file .xlf:**
-- Thêm vào ô "files to include": `!*.xlf`
-- Hoặc vào phần "files to exclude" trong tìm kiếm: `*.xlf`
+## Multi-language & Responsive UI Preview
+![Preview](./readme-media/preview/phone-tab.gif)
+
+## SonarQube Report
+![SonarQube Report](./readme-media/report/sonar-qube-report.png)

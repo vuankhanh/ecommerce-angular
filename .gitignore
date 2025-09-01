@@ -45,3 +45,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# SonarQube
+sonar-project.properties
+.cache_ggshield
+.scannerwork
