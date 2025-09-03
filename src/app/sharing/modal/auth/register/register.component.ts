@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   formInit() {
     const emailRegEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const phoneNumberRegEx = /((0)+([0-9]{9})\b)/g;
+    const phoneNumberRegEx = /^0\d{9}$/g;
     this.registerGroup = this.formBuilder.group({
       userName: ['', { validators: [Validators.required, tiengVietKhongDau()], updateOn: 'blur' }],
       password: ['', { validators: [Validators.required, safePassword()], updateOn: 'blur' }],
