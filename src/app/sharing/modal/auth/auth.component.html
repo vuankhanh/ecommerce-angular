@@ -1,9 +1,9 @@
-<div class="close-button" (click)="closeModal()">
+<a class="close-button" tabindex="0" (click)="closeModal()" (keydown.enter)="closeModal()">
   <mat-icon>close</mat-icon>
-</div>
+</a>
 @if(historyModalComponent.length>1){
 <div class="back-button">
-  <mat-icon (click)="back()">chevron_left</mat-icon>
+  <mat-icon tabindex="0" (click)="back()" (keydown.enter)="back()">chevron_left</mat-icon>
   <div class="height-space"></div>
 </div>
 }

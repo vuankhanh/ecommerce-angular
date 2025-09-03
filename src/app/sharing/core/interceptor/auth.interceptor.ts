@@ -6,7 +6,7 @@ import {
   HttpErrorResponse,
   HttpInterceptorFn
 } from '@angular/common/http';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { Observable, catchError, map, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
 import { LocalStorageService } from '../../../services/local-storage.service';
 import { LocalStorageKey } from '../../constant/local_storage.constant';
@@ -22,7 +22,7 @@ export const authInterceptor: HttpInterceptorFn = (
   const localAuthenticationService = inject(LocalAuthenticationService);
   const localStorageService = inject(LocalStorageService);
   if (request.url.includes('/api/client') || request.url.includes('/api/auth/config')) {
-    const accessToken = localStorageService.get(LocalStorageKey.ACCESSTOKEN);
+    const accessToken = localStorageService.get<string>(LocalStorageKey.ACCESSTOKEN);
     
     if (accessToken) {
       const cloned = request.clone({
@@ -60,6 +60,7 @@ function handle401Error(
 
     const refreshTokenRequest = localAuthenticationService.refreshToken(refreshToken);
     return refreshTokenRequest.pipe(
+      map(refreshTokenResponse => refreshTokenResponse.accessToken),
       switchMap(accessToken => {
         localStorageService.set(LocalStorageKey.ACCESSTOKEN, accessToken);
         isRefreshing = false;

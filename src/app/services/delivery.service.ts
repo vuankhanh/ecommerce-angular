@@ -1,5 +1,5 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { DeliveryEntity } from '../entity/deliverty.entity';
 import { LocalStorageService } from './local-storage.service';
 import { isPlatformBrowser } from '@angular/common';
@@ -13,8 +13,8 @@ export class DeliveryService {
   private readonly platformId: object = inject(PLATFORM_ID);
   private readonly localStorageService = inject(LocalStorageService);
 
-  private readonly bDeliveryStoraged: BehaviorSubject<DeliveryEntity | TDeliveryModel | null> = new BehaviorSubject<DeliveryEntity | TDeliveryModel | null>(null);
-  deliveryStoraged$: Observable<DeliveryEntity | TDeliveryModel | null> = this.bDeliveryStoraged.asObservable();
+  private readonly bDeliveryStoraged = new BehaviorSubject<DeliveryEntity | TDeliveryModel | null>(null);
+  deliveryStoraged$ = this.bDeliveryStoraged.asObservable();
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
@@ -23,7 +23,7 @@ export class DeliveryService {
   }
 
   private get() {
-    const delivertyLocalStoraged: DeliveryEntity | TDeliveryModel | null = this.localStorageService.get(LocalStorageKey.DELIVERY);
+    const delivertyLocalStoraged = this.localStorageService.get<DeliveryEntity | TDeliveryModel | null>(LocalStorageKey.DELIVERY);
     this.bDeliveryStoraged.next(delivertyLocalStoraged);
   }
 

@@ -81,7 +81,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
           const metaTagFacebook: MetaTagFacebook = {
             title: this.product.name,
-            image: this.prefixBackendStaticPipe.transform(this.product.album?.media[0]?.url || ''),
+            image: this.prefixBackendStaticPipe.transform(this.product.album?.media[0]?.url ?? ''),
             imageAlt: this.product.name,
             imageType: 'image/webp',
             imageWidth: '1045',
@@ -96,7 +96,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             productPriceCurrency: 'VND',
             productRetailerItemId: this.product._id,
             productItemGroupId: this.product._id,
-            googleProductCategory: this.product.productCategory?.name || '',
+            googleProductCategory: this.product.productCategory?.name ?? '',
           }
 
           this.seoSerivce.updateMetaTagFacebook(metaTagFacebook);

@@ -44,27 +44,11 @@ export class ProductCategoryHomePageComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.productService.getAll('', this.productCategory._id).subscribe(res => {
-        // this.productResponse = res;
         const data = res.data;
         this.products = data;
       })
     )
   }
-
-  // listenProduct(type: string) {
-  //   this.subscription.add(
-  //     this.productService.getProduct(type).subscribe(res => {
-  //       this.productResponse = res;
-  //       this.configPagination = {
-  //         totalItems: this.productResponse.totalItems,
-  //         page: this.productResponse.page,
-  //         size: this.productResponse.size,
-  //         totalPages: this.productResponse.totalPages
-  //       };
-  //       this.products = this.productResponse.data;
-  //     })
-  //   )
-  // }
 
   showDetail(product: TProductModel) {
     this.router.navigate(['san-pham', product.slug]);

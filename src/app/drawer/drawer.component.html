@@ -37,7 +37,7 @@
     <mat-list class="user-information-menu">
       @for (customer of customerMenu; track $index) {
       <mat-list-item [routerLink]="['/khach-hang/'+customer.route]" [routerLinkActive]="['is-active']"
-        [routerLinkActiveOptions]="{ exact: customer.route ? false : true }" (click)="closeSideMenu()">
+        [routerLinkActiveOptions]="{ exact: customer.route ? false : true }" (click)="closeSideMenu()" (tabindex)="0" (keydown.enter)="closeSideMenu()">
         @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
         <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
         }
@@ -46,18 +46,18 @@
       <div class="height-space"></div>
       }
 
-      <mat-list-item (click)="logout()">
+      <mat-list-item (click)="logout()" (tabindex)="0" (keydown.enter)="logout()">
         <mat-icon fontSet="fa" fontIcon="fa-sign-out" matListItemIcon></mat-icon>
         <span i18n>Thoát tài khoản</span>
       </mat-list-item>
     </mat-list>
     }@else {
     <mat-list>
-      <mat-list-item (click)="login('login')">
+      <mat-list-item (click)="login('login')" (tabindex)="0" (keydown.enter)="login('login')">
         <mat-icon fontSet="fa" fontIcon="fa-sign-in" matListItemIcon></mat-icon>
         <span i18n>Đăng nhập</span>
       </mat-list-item>
-      <mat-list-item (click)="login('register')">
+      <mat-list-item (click)="login('register')" (tabindex)="0" (keydown.enter)="login('register')">
         <mat-icon fontSet="fa" fontIcon="fa-user-plus" matListItemIcon></mat-icon>
         <span i18n>Đăng ký</span>
       </mat-list-item>
@@ -66,7 +66,7 @@
   </mat-expansion-panel>
 
   <mat-nav-list>
-    <mat-list-item (click)="closeSideMenu()" role="listitem" routerLink="" routerLinkActive="active-menu-item"
+    <mat-list-item (click)="closeSideMenu()" (tabindex)="0" (keydown.enter)="closeSideMenu()" routerLink="" routerLinkActive="active-menu-item"
       [routerLinkActiveOptions]="{ exact: true }">
       <mat-icon fontSet="fa-solid" fontIcon="fa-house" matListItemIcon></mat-icon>
       <span i18n>Trang chủ</span>
@@ -88,14 +88,14 @@
       </mat-expansion-panel-header>
 
       @for (child of nav.children; track $index) {
-      <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="child.route"
+      <mat-list-item (click)="closeSideMenu()" (tabindex)="0" (keydown.enter)="closeSideMenu()" [routerLink]="child.route"
         routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
         {{ child.name }}
       </mat-list-item>
       }
     </mat-expansion-panel>
     }@else {
-    <mat-list-item (click)="closeSideMenu()" role="listitem" [routerLink]="nav.route"
+    <mat-list-item (click)="closeSideMenu()" (tabindex)="0" (keydown.enter)="closeSideMenu()" [routerLink]="nav.route"
       routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
       @if (!!nav.icon?.fontSet && !!nav.icon?.fontIcon) {
       <mat-icon [fontSet]="nav.icon!.fontSet" [fontIcon]="nav.icon!.fontIcon" matListItemIcon></mat-icon>

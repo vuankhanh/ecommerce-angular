@@ -17,9 +17,10 @@ export class LangService {
     if (this.isBrowser) {
       const base = document.querySelector('base');
 
-      if (base && base.getAttribute('href')) {
+      if (base?.getAttribute('href')) {
         const href = base.getAttribute('href')!;
-        const match = href.match(/^\/([a-zA-Z-]+)\//);
+        const langRegex = /^\/([a-zA-Z-]+)\//;
+        const match = langRegex.exec(href);
         return match ? match[1] : null;
       }
     }
@@ -27,7 +28,7 @@ export class LangService {
   }
 
   getCurrentLang(): `${Language}` {
-    return (this.ssrLang ? this.ssrLang : this.localStorageService.get<`${Language}`>('lang')) || 'vi';
+    return (this.ssrLang ?? this.localStorageService.get<`${Language}`>('lang')) ?? 'vi';
   }
 
   setLang(lang: string): void {

@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./bread-crumb.component.scss']
 })
 export class BreadCrumbComponent implements OnInit {
-  private breadcrumbService: BreadcrumbService = inject(BreadcrumbService);
+  private readonly breadcrumbService: BreadcrumbService = inject(BreadcrumbService);
   breadcrumbs$?: Observable<IBreadcrumb[]>;
 
   ngOnInit(): void {

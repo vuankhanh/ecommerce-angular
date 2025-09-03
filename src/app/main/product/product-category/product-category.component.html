@@ -2,13 +2,12 @@
 <div class="products-container">
   <div class="flex-me">
     @for (product of products; track $index; let index = $index) {
-    <div class="product-frame">
+    <a class="product-frame" [routerLink]="['/san-pham', product.slug]">
       <div class="img-container">
-        <img [src]="(product.album?.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy"
-          (click)="showDetail(product)">
+        <img [src]="(product.album?.thumbnailUrl || '') | prefixBackendStatic" [alt]="product.name" loading="lazy">
       </div>
       <div class="product-info">
-        <div class="text-container" (click)="showDetail(product)">
+        <div class="text-container">
           <h3 class="heading">{{product.name}}</h3>
           <div class="product-price">
             <span class="amount-of-money">{{ product.price | vndCurrency}}</span>
@@ -18,7 +17,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </a>
     }
   </div>
 </div>

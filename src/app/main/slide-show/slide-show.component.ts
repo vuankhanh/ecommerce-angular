@@ -1,7 +1,5 @@
 import { Component, inject } from '@angular/core';
 
-import { animationSlide } from '../../animation/slide-show';
-
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
 import { CommonModule } from '@angular/common';
@@ -20,7 +18,6 @@ import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe'
   ],
   templateUrl: './slide-show.component.html',
   styleUrls: ['./slide-show.component.scss'],
-  animations: [animationSlide]
 })
 export class SlideShowComponent {
   private readonly slideShowService: SlideShowService = inject(SlideShowService);

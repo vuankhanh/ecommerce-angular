@@ -60,7 +60,8 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = process.env['PORT'] || 4000;
+  const envPort = process.env['PORT'];
+  const port = !envPort ? 4000 : Number(envPort);
 
   // Start up the Node server
   const server = app();

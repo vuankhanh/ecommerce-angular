@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment.development';
 })
 export class UpdatePersonalInformationService {
   private readonly httpClient: HttpClient = inject(HttpClient);
-  private urlUpdatePersonal = environment.backendApi+'/update-customer';
+  private readonly urlUpdatePersonal = environment.backendApi+'/update-customer';
 
   update(token: string, updateInfo: any){
     const headers: HttpHeaders = new HttpHeaders({

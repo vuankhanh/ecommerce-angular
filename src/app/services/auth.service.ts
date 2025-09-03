@@ -2,13 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { IJwtDecoded } from '../models/token.interface';
+import { IJwtDecoded, TToken } from '../models/token.interface';
 import { JwtDecodedService } from './jwt-decoded.service';
 import { LocalStorageService } from './local-storage.service';
 import { SocialAuthenticationService } from './api/social-login/social-authentication';
 
 import { BehaviorSubject, filter, lastValueFrom, Observable, switchMap, take } from 'rxjs';
-import { TToken } from '../models/token.interface';
 import { LocalStorageKey } from '../sharing/constant/local_storage.constant';
 import { LocalAuthenticationService } from './api/local-authentication.service';
 import { AuthComponent, TypeLogin } from '../sharing/modal/auth/auth.component';
@@ -27,7 +26,7 @@ export class AuthService {
   private readonly socialAuthenticationService: SocialAuthenticationService = inject(SocialAuthenticationService);
   private readonly localAuthenticationService: LocalAuthenticationService = inject(LocalAuthenticationService);
 
-  private isMobile$: Observable<boolean> = this.breakpointDetectionService.detection$();
+  private readonly isMobile$: Observable<boolean> = this.breakpointDetectionService.detection$();
   private readonly bJwtPayload: BehaviorSubject<IJwtDecoded | null> = new BehaviorSubject<IJwtDecoded | null>(null);
   public jwtPayload$: Observable<IJwtDecoded | null> = this.bJwtPayload.asObservable();
 
@@ -94,7 +93,6 @@ export class AuthService {
 
   logout() {
     this.bJwtPayload.next(null);
-    // this.cartService.setDelivery(null);
     this.localStorageService.remove(LocalStorageKey.ACCESSTOKEN);
     this.localStorageService.remove(LocalStorageKey.REFRESHTOKEN);
     this.socialAuthenticationService.signOut();

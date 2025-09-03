@@ -12,7 +12,7 @@ import { IAccessToken, TToken } from '../../models/token.interface';
 })
 export class LocalAuthenticationService {
   private readonly httpClient: HttpClient = inject(HttpClient);
-  private url = environment.backendApi+'/auth';
+  private readonly url = environment.backendApi+'/auth';
 
   login(userName: UserName){
     return this.httpClient.post<TokenResponse>(this.url+'/login', userName);

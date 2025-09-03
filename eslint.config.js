@@ -40,7 +40,6 @@ module.exports = tseslint.config(
       ...angular.configs.templateAccessibility,
     ],
     rules: {
-      "@angular-eslint/template/click-events-have-key-events": "off",
       "@angular-eslint/template/no-static-element-interactions": "off",
 
       "@angular-eslint/template/accessibility-elements-content": "off",

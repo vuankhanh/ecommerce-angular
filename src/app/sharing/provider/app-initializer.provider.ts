@@ -31,7 +31,8 @@ export function provideAppInitializerConfig() {
     }
 
     const authService = inject(AuthService);
-    inject(SocketIoService);
+    const socketIoService = inject(SocketIoService);
+    socketIoService.connect();
     const deliveryService = inject(DeliveryService);
     const deliveryPersonalApiService = inject(DeliveryPersonalApiService);
     const isAuthenticated = await authService.getUserInfoFromTokenStoraged();

@@ -61,7 +61,7 @@ export class PaymentPageComponent implements OnDestroy {
   jwtPayload$ = this.authService.jwtPayload$;
   delivery$: Observable<DeliveryEntity | TDeliveryModel | null> = this.deliveryService.deliveryStoraged$;
   cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
-  private cartItem$ = this.cart$.pipe(
+  private readonly cartItem$ = this.cart$.pipe(
     map(cart => cart.cartItems)
   )
 

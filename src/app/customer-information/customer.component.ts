@@ -46,7 +46,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
   activeMenu: TMenu = this.getActiveMenu(this.currentUrl, this.customerMenu);
 
   isMobile$ = this.breakpointDetectionService.detection$();
-  private subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.subscription.add(
@@ -59,8 +59,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
     );
   }
 
-  getActiveMenu(route: string, arrayMenu: TMenu[]) {
-    const index = arrayMenu.findIndex(menu => route.includes(menu.route || ''));
+  private getActiveMenu(route: string, arrayMenu: TMenu[]) {
+    const index = arrayMenu.findIndex(menu => route.includes(menu.route!));
     return arrayMenu[index];
   }
 

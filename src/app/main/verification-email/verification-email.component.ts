@@ -34,7 +34,7 @@ export class VerificationEmailComponent {
     }),
     filter(params => !!params.userId && !!params.emailToken),
     switchMap(({ userId, emailToken }) => this.verifyEmailService.verify(userId, emailToken).pipe(
-      map(res => res ? true : false),
+      map(res => !!res),
       catchError(()=> of(false))
     )),
   );

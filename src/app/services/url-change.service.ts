@@ -13,7 +13,7 @@ export class UrlChangeService {
   urlChange(): Observable<NavigationStart>{
     return this.router.events.pipe(
       filter(event => event instanceof NavigationStart),
-      map(event => event as NavigationStart)
+      map(event => event)
     );
   }
 }

@@ -17,7 +17,7 @@
         <mat-form-field [ngClass]="passwordValid() ? 'mat-form-field-done' : ''">
           <mat-label i18n>Mật khẩu *</mat-label>
           <input matInput [type]="!fieldTextType ? 'password' : 'text'" formControlName="password">
-          <mat-icon matSuffix (click)="fieldTextType = !fieldTextType">
+          <mat-icon matSuffix tabindex="0" (click)="fieldTextType = !fieldTextType" (keydown.enter)="fieldTextType = !fieldTextType">
             {{ !fieldTextType ? 'visibility' : 'visibility_off'}}
           </mat-icon>
         </mat-form-field>
@@ -25,7 +25,7 @@
         <mat-form-field [ngClass]="passwordValid() ? 'mat-form-field-done' : ''">
           <mat-label i18n>Nhập lại mật khẩu *</mat-label>
           <input matInput [type]="!repeatFieldTextType ? 'password' : 'text'" formControlName="confirmPassword">
-          <mat-icon matSuffix (click)="repeatFieldTextType = !repeatFieldTextType">
+          <mat-icon matSuffix tabindex="0" (click)="repeatFieldTextType = !repeatFieldTextType" (keydown.enter)="repeatFieldTextType = !repeatFieldTextType">
             {{ !repeatFieldTextType ? 'visibility' : 'visibility_off'}}
           </mat-icon>
         </mat-form-field>
@@ -87,10 +87,9 @@
       }
     </div>
     <div class="height-space"></div>
-    <button mat-button type="submit" class="submit-button button-primary" [disabled]="registerGroup.invalid || loading">
+    <button mat-button type="submit" class="submit-button button-primary" tabindex="0" [disabled]="registerGroup.invalid || loading">
       @if (!loading) {
         <span i18n>Đăng ký</span>
-
       }@else {
         <div class="horizontal-container">
           <mat-spinner diameter="30"></mat-spinner>
@@ -99,7 +98,7 @@
     </button>
     <div class="height-space"></div>
     <div class="change-component horizontal-container">
-      <div class="textLink" (click)="valueChange.emit('login')" i18n>Đăng nhập</div>
+      <a class="textLink" tabindex="0" (click)="valueChange.emit('login')" (keydown.enter)="valueChange.emit('login')" i18n>Đăng nhập</a>
     </div>
   </form>
 </div>

@@ -13,7 +13,7 @@ export const supportResolver: ResolveFn<SupportDetail> = (
   route: ActivatedRouteSnapshot
 ): Observable<SupportDetail> => {
   const supportService = inject(SupportService);
-  const supportRoute = route.paramMap.get('route') || '';
+  const supportRoute = route.paramMap.get('route') ?? '';
 
   return supportService.getDetail(supportRoute);
 };

@@ -7,7 +7,7 @@
     <mat-list class="user-information-menu">
       @for (customer of customerMenu; track $index; let i = $index) {
       <mat-list-item [routerLink]="'/khach-hang/'+customer.route" [routerLinkActive]="['active-menu-item']"
-        [routerLinkActiveOptions]="{ exact: false }" (click)="customerMenuPanel.close()">
+        [routerLinkActiveOptions]="{ exact: false }" (click)="customerMenuPanel.close()" (tabindex)="0" (keydown.enter)="customerMenuPanel.close()">
         @if (!!customer.icon?.fontSet && !!customer.icon?.fontIcon) {
         <mat-icon [fontSet]="customer.icon!.fontSet" [fontIcon]="customer.icon!.fontIcon" matListItemIcon></mat-icon>
         }
@@ -16,7 +16,7 @@
       }
 
       <div class="height-space"></div>
-      <mat-list-item (click)="logout()">
+      <mat-list-item (click)="logout()" (tabindex)="0" (keydown.enter)="logout()">
         <mat-icon fontSet="fa" fontIcon="fa-sign-out" matListItemIcon></mat-icon>
         <span i18n>Thoát tài khoản</span>
       </mat-list-item>
@@ -25,7 +25,7 @@
   <mat-divider></mat-divider>
   }@else {
   <div class="customerMenu">
-    <mat-list role="list">
+    <mat-list>
       @for (customer of customerMenu; track $index; let i = $index) {
       <mat-list-item [routerLink]="'/khach-hang/'+customer.route"
         [ngClass]="currentUrl.includes('/khach-hang/'+customer.route) ? 'active-menu-item': '' ">

@@ -27,7 +27,7 @@
           <app-number-input id="quantity-input" [value]="cartItems.quantity"
             (valueChange)="cartItemsQuantityChange(cartItems, $event)"></app-number-input>
             <button matIconButton color="warn">
-              <mat-icon (click)="removeCartItem(cartItems, cartItemElement)">delete</mat-icon>
+              <mat-icon (click)="removeCartItem(cartItems, cartItemElement)" tabindex="0" (keydown.enter)="removeCartItem(cartItems, cartItemElement)">delete</mat-icon>
             </button>
         </div>
       </div>

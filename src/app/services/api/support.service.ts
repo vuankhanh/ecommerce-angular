@@ -8,7 +8,7 @@ import { Support, SupportDetail } from '../../models/Support';
 })
 export class SupportService {
   private readonly httpClient: HttpClient = inject(HttpClient);
-  private urlGetAll = environment.backendApi+'/support';
+  private readonly urlGetAll = environment.backendApi+'/support';
 
   getAll(){
     const headers: HttpHeaders = new HttpHeaders({

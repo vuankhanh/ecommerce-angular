@@ -15,7 +15,7 @@
         <mat-form-field>
           <mat-label i18n>Mật khẩu</mat-label>
           <input matInput [type]="!fieldTextType ? 'password' : 'text'" formControlName="password">
-          <mat-icon matSuffix (click)="fieldTextType = !fieldTextType">
+          <mat-icon matSuffix tabindex="0" (click)="fieldTextType = !fieldTextType" (keydown.enter)="fieldTextType = !fieldTextType">
             {{ !fieldTextType ? 'visibility' : 'visibility_off'}}
           </mat-icon>
         </mat-form-field>
@@ -27,8 +27,10 @@
     </button>
     <div class="height-space"></div>
     <div class="change-component horizontal-container">
-      <div class="textLink" (click)="valueChange.emit('register')" i18n>Đăng ký</div>
-      <div class="textLink" (click)="valueChange.emit('forgotPassword')" i18n>Quên mật khẩu</div>
+      <a class="textLink" tabindex="0" (click)="valueChange.emit('register')"
+        (keydown.enter)="valueChange.emit('register')" i18n>Đăng ký</a>
+      <a class="textLink" tabindex="0" (click)="valueChange.emit('forgotPassword')"
+        (keydown.enter)="valueChange.emit('forgotPassword')" i18n>Quên mật khẩu</a>
     </div>
   </form>
 
@@ -36,16 +38,15 @@
     <p i18n>Hoặc đăng nhập bằng</p>
     <div class="horizontal-container center">
       <div class="horizontal-container">
-        <div class="social-networking-item horizontal-container loginFacebook"
-          (click)="socialAuthentication('facebook')">
+        <a class="social-networking-item horizontal-container loginFacebook" tabindex="0" (click)="socialAuthentication('facebook')" (keydown.enter)="socialAuthentication('facebook')">
           <mat-icon fontSet="fab" fontIcon="fa-facebook-f"></mat-icon>
-        </div>
+        </a>
 
         <div class="width-space"></div>
 
-        <div class="social-networking-item horizontal-container loginGoogle" (click)="socialAuthentication('google')">
+        <a class="social-networking-item horizontal-container loginGoogle" tabindex="0" (click)="socialAuthentication('google')" (keydown.enter)="socialAuthentication('google')">
           <mat-icon fontSet="fab" fontIcon="fa-google"></mat-icon>
-        </div>
+        </a>
       </div>
     </div>
   </div>

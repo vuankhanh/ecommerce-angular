@@ -1,22 +1,19 @@
-.breadcrumb-container{
+.breadcrumb-container {
   padding: 10px;
+
   ul {
-    & {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-  
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
     li {
-      & {
-        display: inline;
-      }
-  
+      display: inline;
+
       &:before {
         content: ">";
         margin: 0 6px;
       }
-  
+
       &:first-child:before {
         content: "";
         margin: 0;

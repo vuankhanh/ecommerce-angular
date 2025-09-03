@@ -6,7 +6,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class LocalStorageService {
   private readonly platformId: object = inject(PLATFORM_ID);
-  private isBrowser: boolean = isPlatformBrowser(this.platformId);
+  private readonly isBrowser: boolean = isPlatformBrowser(this.platformId);
 
   get<T>(key: string): T | null {
     if (!this.isBrowser) {

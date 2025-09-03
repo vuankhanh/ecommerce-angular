@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -12,13 +12,12 @@ import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
   standalone: true,
   imports: [
     CommonModule,
-
-    SkeletonComponent,
-
-    CurrencyCustomPipe,
+    RouterLink,
     
+    SkeletonComponent,
+    CurrencyCustomPipe,
     PrefixBackendStaticPipe,
-  ],
+],
   templateUrl: './product-category.component.html',
   styleUrls: ['./product-category.component.scss']
 })
@@ -34,7 +33,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.activatedRoute.data.subscribe(data => {
         const { productFromCategorySlug } = data;
-        this.products = productFromCategorySlug || [];
+        this.products = Array.isArray(productFromCategorySlug) ? productFromCategorySlug : [];
       })
     );
     

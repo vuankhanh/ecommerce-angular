@@ -5,7 +5,8 @@
       <!-- Image Gallery Section -->
       <div class="image-section">
         <mat-card class="gallery-card">
-          <gallery [objectFit]="'contain'" [items]="(product.album?.media || []) | gallery"></gallery>
+          <gallery class="gallery-component" [objectFit]="'contain'" [items]="(product.album?.media || []) | gallery">
+          </gallery>
         </mat-card>
       </div>
 
@@ -74,38 +75,6 @@
             </div>
           </div>
           }
-
-          <!-- Contact Section -->
-          <!-- @if (identification) {
-          <mat-expansion-panel class="contact-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon>support_agent</mat-icon>
-                Trò chuyện thêm
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <div class="contact-options">
-              <a mat-stroked-button href="https://m.me/thuy.hai.san.carota" target="_blank"
-                (click)="contactUs('messenger')" class="contact-btn messenger">
-                <mat-icon svgIcon="messenger"></mat-icon>
-                Facebook Messenger
-              </a>
-
-              <a mat-stroked-button href="https://zalo.me/0834517989" target="_blank" (click)="contactUs('zalo')"
-                class="contact-btn zalo">
-                <mat-icon svgIcon="zalo-new"></mat-icon>
-                Zalo
-              </a>
-
-              <a mat-stroked-button [href]="'tel: 0834517989'" target="_blank" (click)="contactUs('call')"
-                class="contact-btn call">
-                <mat-icon>phone</mat-icon>
-                Gọi điện
-              </a>
-            </div>
-          </mat-expansion-panel>
-          } -->
         </mat-card-content>
         <!-- Action Buttons -->
         <mat-card-actions class="action-buttons" [ngClass]="{'scrolled': (((scrollBottom$ | async) ?? 0) > 6)}">
@@ -131,10 +100,7 @@
 </div>
 
 <ng-template #facebookLikeButton>
-  <iframe
-    [src]="sanitizedFacebookUrl"
-    width="450" height="35" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"
-    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-    style="width: 100%;"
-  ></iframe>
+  <iframe [src]="sanitizedFacebookUrl" width="450" height="35" style="border:none;overflow:hidden"
+    allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+    style="width: 100%;" title="Facebook Like Button"></iframe>
 </ng-template>

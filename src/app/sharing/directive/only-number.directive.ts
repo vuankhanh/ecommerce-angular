@@ -24,7 +24,7 @@ export class OnlyNumberDirective implements ControlValueAccessor {
 
   @HostListener('input', ['$event']) onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
-    let value = target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    let value = target.value.replace(/\D/g, ''); // Remove non-numeric characters
 
     // Remove leading zeros
     value = value.replace(/^0+/, '');
@@ -39,7 +39,7 @@ export class OnlyNumberDirective implements ControlValueAccessor {
 
   @HostListener('blur', ['$event']) onBlur(event: FocusEvent) {
     const target = event.target as HTMLInputElement;
-    let value = target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    let value = target.value.replace(/\D/g, ''); // Remove non-numeric characters
   
     if(!this.allowZero){
       if (value === '' || value === '0') {
@@ -58,7 +58,7 @@ export class OnlyNumberDirective implements ControlValueAccessor {
 
   @HostListener('paste', ['$event']) onPaste(event: ClipboardEvent) {
     const clipboardData = event.clipboardData;
-    const pastedText = clipboardData?.getData('text') || '';
+    const pastedText = clipboardData?.getData('text') ?? '';
 
     if (!/^\d+$/.test(pastedText) || Number(pastedText) > 999) {
       event.preventDefault(); // Prevent paste if not a valid number or greater than 999
@@ -66,7 +66,7 @@ export class OnlyNumberDirective implements ControlValueAccessor {
   }
 
   @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent) {
-    if (!/[0-9]/.test(event.key)) {
+    if (!/\d/.test(event.key)) {
       event.preventDefault(); // Prevent non-numeric characters
     }
   }

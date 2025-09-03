@@ -3,13 +3,13 @@
 
   <div class="product-category-home-page-container">
     @for (productCategory of productCategory$ | async; track $index) {
-    <div class="category-name horizontal-container" [routerLink]="['/san-pham/', 'danh-muc', productCategory.slug]">
+    <a class="category-name horizontal-container" [routerLink]="['/san-pham/', 'danh-muc', productCategory.slug]">
       <h2>{{ productCategory.name }}</h2>
       <span class="horizontal-container">
         <span i18n>Xem thêm</span>
         <mat-icon>arrow_right</mat-icon>
       </span>
-    </div>
+    </a>
     <app-product-category-home-page [productCategory]="productCategory"></app-product-category-home-page>
     }
   </div>

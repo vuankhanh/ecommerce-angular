@@ -39,7 +39,7 @@ export class MatAutocompleteScrollEndDirective implements AfterViewInit, OnDestr
     this.subscription.unsubscribe();
   }
 
-  private onScroll = (event: Event) => {
+  private onScroll(event: Event) {
     const target = event.target as HTMLElement;
     if (target.scrollHeight - target.scrollTop === target.clientHeight) {
       this.scrolledToBottom.emit();

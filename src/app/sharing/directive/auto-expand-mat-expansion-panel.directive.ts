@@ -14,7 +14,7 @@ export class AutoExpandMatExpansionPanelDirective implements OnInit {
 
   ngOnInit() {
     const hasActiveChild = this.appAutoExpand?.some(child => 
-      this.router.url.includes(child!.route!)
+      this.router.url.includes(child.route!)
     );
     
     if (hasActiveChild) {

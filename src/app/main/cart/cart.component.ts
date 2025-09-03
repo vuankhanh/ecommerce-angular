@@ -54,7 +54,7 @@ export class CartComponent implements OnDestroy {
 
   jwtDecoded$: Observable<IJwtDecoded | null> = this.authService.jwtPayload$;
 
-  private subscription: Subscription = new Subscription();
+  private readonly subscription: Subscription = new Subscription();
 
   cartItemsQuantityChange(cartItem: CartItemEntity, value: number) {
     this.cartService.changeQuantity(cartItem, value)
@@ -97,11 +97,7 @@ export class CartComponent implements OnDestroy {
     this.router.navigate(['/thanh-toan']);
   }
 
-  ngOnDestroy() {
-    // if (this.customerForm && this.customerForm.valid) {
-    //   let address: Address = this.addressValue();
-    //   this.cartService.setDelivery(address);
-    // }
+  ngOnDestroy() { 
     this.subscription.unsubscribe();
   }
 }

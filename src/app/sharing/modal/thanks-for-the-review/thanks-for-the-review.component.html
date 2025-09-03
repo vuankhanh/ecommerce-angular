@@ -15,7 +15,5 @@
     </div>
   </div>
 
-  <div class="button-container horizontal-container" (click)="dialogRef.close()">
-    <span>OK</span>
-  </div>
+  <button matButton [mat-dialog-close]="true" cdkFocusInitial>OK</button>
 </div>

@@ -13,7 +13,7 @@ import { TokenResponse } from '../local-authentication.service';
 export class SocialAuthenticationService {
   private readonly httpClient: HttpClient = inject(HttpClient);
   private readonly auth: Auth = inject(Auth);
-  private firebaseAuthUrl = environment.backendApi + '/auth/firebase-authentication';
+  private readonly firebaseAuthUrl = environment.backendApi + '/auth/firebase-authentication';
 
   async authentication(provider: 'google' | 'facebook'): Promise<TToken> {
     if (provider !== 'google' && provider !== 'facebook') return Promise.reject(new Error('Unsupported provider'));
@@ -31,7 +31,7 @@ export class SocialAuthenticationService {
   }> {
     const result: UserCredential = await signInWithPopup(this.auth, new GoogleAuthProvider());
     const idToken = await result.user.getIdToken();
-    const email = result.user.email || '';
+    const email = result.user.email ?? '';
     if (!email) {
       throw new Error('auth/invalid-email');
     }
@@ -44,7 +44,7 @@ export class SocialAuthenticationService {
   }> {
     const result: UserCredential = await signInWithPopup(this.auth, new FacebookAuthProvider());
     const idToken = await result.user.getIdToken();
-    const email = result.user.providerData[0]?.email || '';
+    const email = result.user.providerData[0]?.email ?? '';
     if (!email) {
       throw new Error('auth/invalid-email');
     }

@@ -13,7 +13,7 @@ import { OrderStatus } from '../../../sharing/constant/order.constant';
 })
 export class OrderPersonalApiService {
   private readonly httpClient: HttpClient = inject(HttpClient);
-  private url = environment.backendApi + '/client/order';
+  private readonly url = environment.backendApi + '/client/order';
 
   getAll(page?: number, size?: number): Observable<TOrder> {
     let params = new HttpParams();

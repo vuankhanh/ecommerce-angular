@@ -110,18 +110,10 @@ mat-card {
   }
 }
 
-:host .gallery-card {
-  gallery {
+.gallery-card {
+  .gallery-component {
     width: 100%;
     height: fit-content;
-
-    ::ng-deep viewer {
-      height: fit-content;
-
-      img {
-        height: fit-content
-      }
-    }
   }
 }
 

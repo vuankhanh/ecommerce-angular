@@ -5,7 +5,7 @@ import { MaterialModule } from '../../sharing/module/material';
 import { PrefixBackendStaticPipe } from '../../sharing/pipe/prefix-backend.pipe';
 import { CurrencyCustomPipe } from '../../sharing/pipe/currency-custom.pipe';
 import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
-import { TOrderDetailModel, TOrderStatus } from '../../models/order-response.interface';
+import { TOrderDetailModel } from '../../models/order-response.interface';
 import { AddressPipe } from '../../sharing/pipe/address.pipe';
 
 import { catchError, EMPTY, filter, map, Observable, Subscription, switchMap } from 'rxjs';
@@ -56,10 +56,9 @@ export class OrderHistoryDetailComponent implements OnDestroy {
   );
   nextPossiblestate$ = this.order$.pipe(
     map(order => {
-      const status = order.status as TOrderStatus;
-      console.log(status);
+      const status = order.status;
       const statuses = OrderStatusTransition[status];
-      return statuses ? statuses : null;
+      return statuses;
     }),
     filter(statuses => !!statuses && statuses.length > 0),
   )

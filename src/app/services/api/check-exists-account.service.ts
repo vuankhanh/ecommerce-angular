@@ -7,8 +7,8 @@ import { environment } from '../../../environments/environment.development';
 })
 export class CheckExistsAccountService {
   private readonly httpClient: HttpClient = inject(HttpClient);
-  private urlCheckUserName = environment.backendApi+'/check-user-name';
-  private urlCheckEmail = environment.backendApi+'/check-email';
+  private readonly urlCheckUserName = environment.backendApi+'/check-user-name';
+  private readonly urlCheckEmail = environment.backendApi+'/check-email';
 
   checkExistUserName(userName: UserName){
     return this.httpClient.post(this.urlCheckUserName, userName);

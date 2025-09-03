@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment.development';
 })
 export class VerifyEmailService {
   private readonly httpClient: HttpClient = inject(HttpClient);
-  private urlVerifyEmail = environment.backendApi+'/verify-email'
+  private readonly urlVerifyEmail = environment.backendApi+'/verify-email'
 
   verify(userId: string, emailToken: string){
     let params: HttpParams = new HttpParams();

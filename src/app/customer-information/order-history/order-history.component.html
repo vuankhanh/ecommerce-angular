@@ -1,7 +1,7 @@
 <div class="order-history-container">
   <div class="cards-container">
     @for (order of orders; track order) {
-    <mat-card class="order-card" (click)="showDetail(order)">
+    <mat-card class="order-card" (click)="showDetail(order)" tabindex="0" (keydown.enter)="showDetail(order)">
       <mat-card-header>
         <mat-card-title>
           <div [appOrderStatusColor]="order.status" class="horizontal-container">
@@ -38,7 +38,7 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-button color="primary" (click)="showDetail(order)">
+        <button mat-button color="primary" (click)="showDetail(order)" tabindex="0" (keydown.enter)="showDetail(order)">
           Xem chi tiết
         </button>
       </mat-card-actions>

@@ -11,7 +11,7 @@ export class SocketIoService {
   private readonly platformId: object = inject(PLATFORM_ID);
   private socket: any;
 
-  constructor() {
+  connect(): void {
     const isBrowser = isPlatformBrowser(this.platformId);
     if (isBrowser) {
       import('socket.io-client').then(io => {

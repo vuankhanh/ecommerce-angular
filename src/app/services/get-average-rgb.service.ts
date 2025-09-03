@@ -9,7 +9,7 @@ export class GetAverageRgbService {
     const blockSize = 5;
     const defaultRGB = { r: 0, g: 0, b: 0 };
     const canvas = document.createElement('canvas');
-    const context = canvas.getContext && canvas.getContext('2d');
+    const context = canvas.getContext?.('2d');
     const rgb = { r: 0, g: 0, b: 0 };
 
     let i = -4;

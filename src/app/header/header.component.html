@@ -1,4 +1,4 @@
-<div class="header-container horizontal-container" #header>
+<div class="header-container horizontal-container" #header [ngClass]="(isNotAtTop$ | async) ? 'header-container-scrolled' : ''">
   <div class="drawer-toggle-button vertical-container">
     <button mat-icon-button (click)="toggleDrawerEmit()">
       <mat-icon>menu</mat-icon>
@@ -54,7 +54,7 @@
     <div class="horizontal-container">
       <app-lang-selector></app-lang-selector>
       <div class="user-information horizontal-container">
-        <div class="user-information-block horizontal-container" routerLink="/khach-hang"
+        <a class="user-information-block horizontal-container" routerLink="/khach-hang"
           [routerLinkActive]="['is-active']" [routerLinkActiveOptions]="{ exact: false }">
           <div class="user-information-block_icon vertical-container">
             @if (userInformation$ | async; as userInformation) {
@@ -86,64 +86,65 @@
               <mat-icon>arrow_drop_down</mat-icon>
             </div>
           </div>
-        </div>
+        </a>
 
         <div class="listButton vertical-container">
           @if(userInformation$ | async) {
 
-          <mat-list role="list">
+          <mat-list>
             <div class="micro-height-space"></div>
 
             @for (cMenu of customerMenu; track $index; let i = $index;) {
-            <mat-list-item role="listitem" [routerLink]="['/khach-hang'+'/'+cMenu.route]"
+            <mat-list-item [routerLink]="['/khach-hang'+'/'+cMenu.route]"
               routerLinkActive="active-menu-item" [routerLinkActiveOptions]="{ exact: false }">
               {{ cMenu.name }}
             </mat-list-item>
             }
 
             <div class="height-space"></div>
-            <mat-list-item role="listitem" (click)="logout()" i18n>Thoát tài khoản</mat-list-item>
+            <mat-list-item (click)="logout()" (tabindex)="0" (keydown.enter)="logout()" i18n>Thoát tài khoản</mat-list-item>
             <div class="micro-height-space"></div>
           </mat-list>
           }@else {
 
           <div class="authentication-action-container">
-            <div class="button-loginRegister loginRegister button-primary horizontal-container">
-              <div class="textButton horizontal-container" (click)="authService.login('login')">
+            <a class="button-loginRegister loginRegister button-primary horizontal-container" tabindex="0" (click)="authService.login('login')" (keydown.enter)="authService.login('login')">
+              <div class="textButton horizontal-container">
                 <span i18n>Đăng nhập</span>
               </div>
-            </div>
+            </a>
 
             <div class="mini-height-space"></div>
 
-            <div class="button-loginRegister loginRegister button-primary horizontal-container">
-              <div class="textButton horizontal-container" (click)="authService.login('register')">
+            <a class="button-loginRegister loginRegister button-primary horizontal-container" tabindex="0" (click)="authService.login('register')" (keydown.enter)="authService.login('register')">
+              <div class="textButton horizontal-container">
                 <span i18n>Đăng ký</span>
               </div>
-            </div>
+            </a>
 
             <div class="mini-height-space"></div>
 
-            <div class="button-loginRegister loginFacebook horizontal-container"
-              (click)="socialAuthentication('facebook')">
+            <a class="button-loginRegister loginFacebook horizontal-container" tabindex="0"
+              (click)="socialAuthentication('facebook')" (keydown.enter)="socialAuthentication('facebook')">
               <div class="icon">
                 <mat-icon fontSet="fab" fontIcon="fa-facebook-f"></mat-icon>
               </div>
               <div class="textButton horizontal-container">
                 <span i18n>Đăng nhập bằng Facebook</span>
               </div>
-            </div>
+            </a>
 
             <div class="mini-height-space"></div>
 
-            <div class="button-loginRegister loginGoogle horizontal-container" (click)="socialAuthentication('google')">
+            <a class="button-loginRegister loginGoogle horizontal-container" tabindex="0"
+              (click)="socialAuthentication('google')" (keydown.enter)="socialAuthentication('google')">
               <div class="icon">
                 <mat-icon fontSet="fab" fontIcon="fa-google"></mat-icon>
               </div>
               <div class="textButton horizontal-container">
                 <span i18n>Đăng nhập bằng Google</span>
               </div>
-            </div>
+            </a>
           </div>
           }
         </div>

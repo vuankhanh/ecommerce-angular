@@ -2,15 +2,9 @@
 <div class="footer-container">
   <div class="horizontal-container footer-item-container">
     <div class="vertical-container first-block">
-      <!-- <div class="logo-container">
-                  <img width="100" src="{{ identification.logo.srcThumbnail | galleryRoute }}" alt="">
-              </div> -->
-
-      <iframe
-        src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fthuy.hai.san.carota&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=583183603050614"
-        width="340" height="130" style="border:none;overflow:hidden" scrolling="no" frameborder="0"
-        allowfullscreen="true"
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+      <iframe [src]="sanitizedFacebookUrl" width="450" height="35" style="border:none;overflow:hidden" allowfullscreen="true"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" style="width: 100%;"
+        title="Facebook Like Button"></iframe>
 
       <div class="menu-container horizontal-container">
         @for (menu of menusList; track $index; let index = $index) {
@@ -69,15 +63,6 @@
     <div class="height-space"></div>
 
     <div class="third-block">
-      <!-- <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.7338716789923!2d105.8244628!3d20.963199900000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xfa2d7145a9279994!2zVGjhu6d5IEjhuqNpIFPhuqNuIENhcm90YQ!5e0!3m2!1svi!2s!4v1627466727028!5m2!1svi!2s"
-                  style="border:0;"
-                  height="100%"
-                  width="100%"
-                  allowfullscreen="true"
-                  loading="lazy"
-              ></iframe> -->
-
       @for (item of supports; track $index) {
       <div class="vertical-container dropdown-container">
         <a [routerLink]="['support/'+item.route]" [routerLinkActive]="['is-active']"

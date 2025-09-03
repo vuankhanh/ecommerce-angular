@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, Renderer2, ViewChild, AfterViewInit, Output, EventEmitter, PLATFORM_ID, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Output, EventEmitter, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -41,9 +41,8 @@ import { LangSelectorComponent } from '../sharing/component/lang-selector/lang-s
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy {
   private readonly platformId: object = inject(PLATFORM_ID);
-  private readonly ren: Renderer2 = inject(Renderer2);
   private readonly cartService: CartService = inject(CartService);
   private readonly toastService: ToastService = inject(ToastService);
   public readonly authService: AuthService = inject(AuthService);
@@ -56,7 +55,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   identification?: Identification;
   menusList: TMenu[] = getMenu();
   customerMenu: TMenu[] = getCustomerMenu();
-  
+
   badgeCart = 0;
   showAlertAddedToCart = false;
 
@@ -64,62 +63,42 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isBrowser = isPlatformBrowser(this.platformId);
 
+  isNotAtTop$ = this.mainContainerScrollService.listenScrollTop$.pipe(
+    map(position => {
+      return position > 0;
+    }),
+    distinctUntilChanged()
+  )
+
   private readonly subscription: Subscription = new Subscription();
-  
+
   ngOnInit(): void {
     this.subscription.add(
-      this.cartService.cartStoraged$.subscribe(cart=>{
+      this.cartService.cartStoraged$.subscribe(cart => {
         this.badgeCart = cart.totalQuantity;
       })
     )
   }
 
-  ngAfterViewInit(): void{
-    setTimeout(() => {
-      this.listentMainContainerScroll();
-    }, 300);
-  }
-
-  toggleDrawerEmit(){
+  toggleDrawerEmit() {
     this.toggleDrawer.emit();
   }
 
-  listentMainContainerScroll(){
-    this.subscription.add(
-      this.mainContainerScrollService.listenScrollTop$.pipe(
-        map(position=> {
-          return !!(position > 0);
-        }),
-        distinctUntilChanged()
-      ).subscribe(notTop=>{
-        this.changeStyleHeader(notTop);
-      })
-    )
-  }
-
-  changeStyleHeader(notTop: boolean): void{
-    if(notTop){
-      this.ren.addClass(this.header?.nativeElement, 'header-container-scrolled')
-    }else{
-      this.ren.removeClass(this.header?.nativeElement, 'header-container-scrolled');
-    }
-  }
-
-  async socialAuthentication(provider: 'google' | 'facebook'){
+  async socialAuthentication(provider: 'google' | 'facebook') {
     this.inProgressSpinnerService.progressSpinnerStatus(true);
     try {
       const token: TToken = await this.socialAuthenticationService.authentication(provider);
       this.authService.afterLogin(token);
       this.inProgressSpinnerService.progressSpinnerStatus(false);
     } catch (error: any) {
-      if (error.message === 'auth/invalid-email'){
+      if (error.message === 'auth/invalid-email') {
         this.toastService.shortToastError('Không lấy được email', 'Lỗi xác thực');
       }
       this.inProgressSpinnerService.progressSpinnerStatus(false);
     }
   }
 
-  logout(){
+  logout() {
     this.authService.logout();
   }
 

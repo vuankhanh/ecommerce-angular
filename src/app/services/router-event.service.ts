@@ -10,7 +10,7 @@ export class RouterEventService implements OnDestroy {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly injector: Injector = inject(Injector);
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   private titleObserver?: MutationObserver;
 
   ngOnDestroy(): void {

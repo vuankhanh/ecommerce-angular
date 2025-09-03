@@ -11,7 +11,7 @@ import { TOrderDetailModel } from '../../models/order-response.interface';
 })
 export class OrderService {
   private readonly httpClient: HttpClient = inject(HttpClient);
-  private url = environment.backendApi + '/order';
+  private readonly url = environment.backendApi + '/order';
   
   create(data: IOrderCreateRequest): Observable<TOrderDetailModel> {
     return this.httpClient.post<OrderDetailResponse>(this.url, data).pipe(

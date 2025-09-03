@@ -22,7 +22,7 @@ export const routes: Routes = [
           productFromCategorySlug: productFromCategorySlugResolver
         },
         data: {
-          breadcrumb: (data: any) => data.productCategory?.name || $localize`:@@route.product-category.title:Danh mục sản phẩm`
+          breadcrumb: (data: any) => data.productCategory?.name ?? $localize`:@@route.product-category.title:Danh mục sản phẩm`
         }
       },
       {
@@ -34,7 +34,7 @@ export const routes: Routes = [
         },
         data: {
           breadcrumb: (data: any)=>{
-            return data.product?.name || $localize`:@@route.product-detail.title:Chi tiết sản phẩm`
+            return data.product?.name ?? $localize`:@@route.product-detail.title:Chi tiết sản phẩm`
           }
         }
       }

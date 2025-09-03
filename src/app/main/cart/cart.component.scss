@@ -36,7 +36,6 @@
           justify-content: space-between;
 
           .product-name-text {
-            // margin-bottom: 10px;
             font-weight: 500;
           }
         }
@@ -61,8 +60,6 @@
       position: sticky;
       top: 85px;
       width: 100%;
-      // background: #ededed;
-
       .total-price-frame {
         background: #ededed;
         padding: 15px;
@@ -109,13 +106,6 @@
     .cart-frame {
       .cart-item {
         align-items: center;
-
-        .product-information-container {
-          .img-container {
-            img {}
-          }
-        }
-
         .product-price-container {
           flex-direction: column;
           gap: 10px;
