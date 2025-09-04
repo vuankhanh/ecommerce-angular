@@ -9,7 +9,7 @@ import { ProgressSpinnerComponent } from '../sharing/component/progress-spinner/
 })
 export class InProgressSpinnerService {
   private readonly overlay: Overlay = inject(Overlay);
-  private spinnerTopRef = this.cdkSpinnerCreate();
+  private readonly spinnerTopRef = this.cdkSpinnerCreate();
 
   progressSpinnerStatus(status: boolean){
     if(status){

@@ -13,7 +13,7 @@ export function safePassword(): ValidatorFn {
 
     const hasLowerCase = /[a-z]+/.test(value);
 
-    const hasNumeric = /[0-9]+/.test(value);
+    const hasNumeric = /\d+/.test(value);
 
     const length = value.length >= 6;
 
@@ -32,7 +32,7 @@ export function isSameInConfirmPassword(): ValidatorFn {
       return null;
     }
 
-    if (parent && parent.get('password')) {
+    if (parent?.get('password')) {
       const passwordControl = parent.get('password');
       return (passwordControl?.value != confirmPassword) ? { passwordIsNotSame: true } : null;
     }
@@ -48,7 +48,7 @@ export function tiengVietKhongDau(): ValidatorFn {
       return null;
     }
 
-    const re = /[^a-z0-9]/
+    const re = /[^a-z\d]/
 
     return re.test(value) ? { containsSpecialCharacter: true } : null;
   }

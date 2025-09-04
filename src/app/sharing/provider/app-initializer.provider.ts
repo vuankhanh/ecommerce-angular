@@ -10,7 +10,7 @@ import { LocalStorageService } from "../../services/local-storage.service";
 import { isPlatformBrowser } from "@angular/common";
 
 export function provideAppInitializerConfig() {
-  return async () => {
+  return async function() {
     const langService = inject(LangService);
     const platformId = (langService as any).platformId;
     if (isPlatformBrowser(platformId)) {
@@ -20,12 +20,10 @@ export function provideAppInitializerConfig() {
         const localStorageService = inject(LocalStorageService);
         const lang = localStorageService.get<string>('lang');
 
-        if (!lang) {
+        if (lang && lang !== langFromHref) {
+          langService.setLang(lang);
+        }else{
           localStorageService.set('lang', langFromHref);
-        } else {
-          if (lang !== langFromHref) {
-            langService.setLang(lang);
-          }
         }
       }
     }

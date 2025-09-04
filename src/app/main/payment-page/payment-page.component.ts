@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
 
@@ -23,7 +23,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IOrderCreateRequest, IOrderItemsRequest } from '../../models/order-request.interface';
 import { PaymentMethod } from '../../sharing/constant/payment.constant';
 import { DeliverySelectionComponent } from '../../sharing/modal/delivery-selection/delivery-selection.component';
-import { TDeliveryModel } from '../../models/address.interface';
+import { IDelivery } from '../../models/address.interface';
 import { OrderPersonalApiService } from '../../services/api/personal/order-personal.api.service';
 
 @Component({
@@ -48,7 +48,6 @@ import { OrderPersonalApiService } from '../../services/api/personal/order-perso
 export class PaymentPageComponent implements OnDestroy {
   private readonly router: Router = inject(Router);
   private readonly dialog: MatDialog = inject(MatDialog);
-  private readonly renderer2: Renderer2 = inject(Renderer2);
   private readonly toastService: ToastService = inject(ToastService);
   private readonly cartService: CartService = inject(CartService);
   private readonly deliveryService: DeliveryService = inject(DeliveryService)
@@ -59,7 +58,7 @@ export class PaymentPageComponent implements OnDestroy {
   @ViewChild('btnInsertAddress') btnInsertAddress!: ElementRef;
 
   jwtPayload$ = this.authService.jwtPayload$;
-  delivery$: Observable<DeliveryEntity | TDeliveryModel | null> = this.deliveryService.deliveryStoraged$;
+  delivery$: Observable<IDelivery | null> = this.deliveryService.deliveryStoraged$;
   cart$: Observable<CartEntity> = this.cartService.cartStoraged$;
   private readonly cartItem$ = this.cart$.pipe(
     map(cart => cart.cartItems)
@@ -119,7 +118,7 @@ export class PaymentPageComponent implements OnDestroy {
           panelClass: 'delivery-modal',
           data: delivery
         }).afterClosed().pipe(
-          filter(deliveryResult => !!deliveryResult),
+          filter((deliveryResult: IDelivery) => !!deliveryResult),
           map(deliveryResult => {
             if (delivery) return {
               ...delivery,
@@ -129,7 +128,7 @@ export class PaymentPageComponent implements OnDestroy {
           })
         )),
 
-      ).subscribe((delivery: DeliveryEntity) => {
+      ).subscribe((delivery: IDelivery) => {
         this.deliveryService.setDelivery(delivery);
       })
     )
@@ -143,9 +142,9 @@ export class PaymentPageComponent implements OnDestroy {
           panelClass: 'delivery-selection-modal',
           data: delivery && '_id' in delivery ? (delivery as any)._id : null
         }).afterClosed().pipe(
-          filter(deliveryResult => !!deliveryResult),
+          filter((deliveryResult: IDelivery) => !!deliveryResult),
         ))
-      ).subscribe((delivery: DeliveryEntity) => {
+      ).subscribe((delivery: IDelivery) => {
         this.deliveryService.setDelivery(delivery);
       })
     )

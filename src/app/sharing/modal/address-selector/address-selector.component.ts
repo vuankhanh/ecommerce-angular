@@ -7,13 +7,11 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CommonModule } from '@angular/common';
 import { isEqual } from 'lodash';
 import { TAddressMetaData, TinhthanhphoComApiService } from '../../../services/api/tinhthanhpho-com-api.service';
-// import { VnPublicService } from '../../../services/api/vn-public.service';
 import { IAddress } from '../../../models/address.interface';
 import { IDistrict, IProvince, IWard } from '../../../models/tinhthanhpho_com_api.interface';
 import { MatAutocompleteScrollEndDirective } from '../../directive/mat-autocomplete-scroll-end.directive';
 import { PaginationConstant } from '../../constant/pagination.constant';
 import { IPagination } from '../../../models/pagination.interface';
-// import { IDistrict, IProvince, IWard } from '../../../models/vn-public-apis.interface';
 
 @Component({
   selector: 'app-address-selector',
@@ -44,15 +42,15 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   private readonly tinhthanhphoComApiService = inject(TinhthanhphoComApiService);
   addressForm: FormGroup;
   provincesData$: Observable<IProvince[]> = of([]);
-  private bProvincesPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  private readonly bProvincesPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
   isEnableLoadingMoreProvinces = true;
   isShowLoadingMoreProvinces = false;
   districtsData$: Observable<IDistrict[]> = of([]);
-  private bDistrictsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  private readonly bDistrictsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
   isEnableLoadingMoreDistricts = true;
   isShowLoadingMoreDistricts = false;
   wardsData$: Observable<IWard[]> = of([]);
-  private bWardsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
+  private readonly bWardsPagination: BehaviorSubject<IPagination> = new BehaviorSubject(PaginationConstant);
   isEnableLoadingMoreWards = true;
   isShowLoadingMoreWards = false;
 
@@ -196,7 +194,7 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
         return this.bProvincesPagination.asObservable().pipe(
           distinctUntilChanged((prev, curr) => prev.page === curr.page && prev.size === curr.size),
           switchMap(paging => {
-            return this.tinhthanhphoComApiService.getProvinces(value, paging.size, paging.page) as Observable<TAddressMetaData<IProvince[]>>;
+            return this.tinhthanhphoComApiService.getProvinces(value, paging.size, paging.page);
           })
         )
       })
@@ -254,9 +252,9 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngAfterViewInit(): void {
-    this.provinceEl.nativeElement.value = this.address?.province?.name || '';
-    this.districtEl.nativeElement.value = this.address?.district?.name || '';
-    this.wardEl.nativeElement.value = this.address?.ward?.name || '';
+    this.provinceEl.nativeElement.value = this.address?.province?.name ?? '';
+    this.districtEl.nativeElement.value = this.address?.district?.name ?? '';
+    this.wardEl.nativeElement.value = this.address?.ward?.name ?? '';
 
     this.renderer.listen(this.provinceEl.nativeElement, 'input', () => {
       this.bProvinceInputChange.next(this.provinceEl.nativeElement.value);
@@ -276,17 +274,17 @@ export class AddressSelectorComponent implements OnInit, AfterViewInit, OnDestro
 
   onProvinceBlur() {
     const provinceName = this.provinceControl.value?.name;
-    this.provinceEl.nativeElement.value = provinceName ? provinceName : '';
+    this.provinceEl.nativeElement.value = provinceName ?? '';
   }
 
   onDistrictBlur() {
     const districtName = this.districtControl.value?.name;
-    this.districtEl.nativeElement.value = districtName ? districtName : '';
+    this.districtEl.nativeElement.value = districtName ?? '';
   }
 
   onWardBlur() {
     const wardName = this.wardControl.value?.name;
-    this.wardEl.nativeElement.value = wardName ? wardName : '';
+    this.wardEl.nativeElement.value = wardName ?? '';
   }
 
   ngOnDestroy(): void {

@@ -16,15 +16,12 @@ export class OrderFromColorDirective implements OnChanges {
     switch (this.orderFrom) {
       case OrderFrom.VISITOR:
         bgColor = '#FF9800'; // Màu cam
-        color = '#fff';
         break;
       case OrderFrom.LOYALTY:
         bgColor = '#4CAF50'; // Màu xanh lá
-        color = '#fff';
         break;
       case OrderFrom.ADMIN:
         bgColor = '#2196F3'; // Màu xanh dương
-        color = '#fff';
         break;
       default:
         bgColor = '#E0E0E0'; // Màu xám nhạt

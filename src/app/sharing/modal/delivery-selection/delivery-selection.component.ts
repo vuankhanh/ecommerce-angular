@@ -7,6 +7,7 @@ import { IDelivery, TDeliveryModel } from '../../../models/address.interface';
 import { FormsModule } from '@angular/forms';
 import { filter, lastValueFrom, Subscription, switchMap, take } from 'rxjs';
 import { DeliveryComponent } from '../delivery/delivery.component';
+import { DeliveryEntity } from '../../../entity/deliverty.entity';
 
 @Component({
   selector: 'app-delivery-selection',
@@ -81,11 +82,12 @@ export class DeliverySelectionComponent implements OnInit, OnDestroy {
     if (!this.selectedDeliveryId) {
       return;
     }
-    const delivery = await lastValueFrom(this.deliveryPersonalApiService.getDetail(this.selectedDeliveryId!).pipe(
+    const delivery = await lastValueFrom(this.deliveryPersonalApiService.getDetail(this.selectedDeliveryId).pipe(
       take(1)
     ));
 
-    this.dialogRef.close(delivery);
+    const deliveryEntity = new DeliveryEntity(delivery);
+    this.dialogRef.close(deliveryEntity.toPlainObject());
   }
 
   ngOnDestroy(): void {

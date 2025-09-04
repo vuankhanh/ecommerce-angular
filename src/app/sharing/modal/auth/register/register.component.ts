@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   formInit() {
-    const emailRegEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegEx = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
     const phoneNumberRegEx = /^0\d{9}$/g;
     this.registerGroup = this.formBuilder.group({
       userName: ['', { validators: [Validators.required, tiengVietKhongDau()], updateOn: 'blur' }],
@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.checkExistsAccountService.checkExistUserName({ userName: userName.value }).subscribe({
           next: () => {
             if (userName.errors) {
-              delete userName.errors!['isAlreadyExist'];
+              userName.setErrors({ isAlreadyExist: null });
             }
           }, error: (error) => {
             if (error.status === 409) {
@@ -86,7 +86,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.checkExistsAccountService.checkExistEmail({ email: email.value }).subscribe({
           next: () => {
             if (email.errors) {
-              delete email.errors!['isAlreadyExist'];
+              email.setErrors({ isAlreadyExist: null });
             }
           }, error: (err) => {
             if (err.status === 409) {

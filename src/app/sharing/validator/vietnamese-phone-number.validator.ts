@@ -2,11 +2,11 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 const patterns = [
   // Số bắt đầu bằng 0 (10 số)
-  /^0(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7}$/,
+  /^0(3[2-9]|5[689]|7[06-9]|8[1-9]|9\d)\d{7}$/,
   // Số bắt đầu bằng +84 (12 ký tự)
-  /^\+84(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7}$/,
+  /^\+84(3[2-9]|5[689]|7[06-9]|8[1-9]|9\d)\d{7}$/,
   // Số bắt đầu bằng 84 (11 số)
-  /^84(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-9]|9[0-9])[0-9]{7}$/
+  /^84(3[2-9]|5[689]|7[06-9]|8[1-9]|9\d)\d{7}$/
 ];
 
 export function vietnamesePhoneNumberValidator(): ValidatorFn {

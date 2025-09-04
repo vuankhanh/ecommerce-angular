@@ -1,4 +1,3 @@
-// @import './styles/soho-theme.scss';
 @use './styles/bep4than-theme' as *;
 
 ::-webkit-scrollbar {
@@ -37,7 +36,6 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   color: var(--bep4than-text-primary);
-  // background-color: #fdf9f8;
   background-color: #fafafa;
 }
 
@@ -148,7 +146,6 @@ a.user-information-block {
   position: relative !important;
 
   mat-dialog-container {
-    // background: white;
     color: var(--bep4than-text-primary);
   }
 }

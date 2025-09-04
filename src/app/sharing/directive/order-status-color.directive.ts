@@ -16,23 +16,18 @@ export class OrderStatusColorDirective implements OnChanges {
     switch (this.status) {
       case OrderStatus.PENDING:
         bgColor = '#FFA000'; // Vàng cam
-        color = '#fff';
         break;
       case OrderStatus.CONFIRMED:
         bgColor = '#1976D2'; // Xanh dương đậm
-        color = '#fff';
         break;
       case OrderStatus.SHIPPING:
         bgColor = '#00BCD4'; // Xanh ngọc
-        color = '#fff';
         break;
       case OrderStatus.COMPLETED:
         bgColor = '#388E3C'; // Xanh lá đậm
-        color = '#fff';
         break;
       case OrderStatus.CANCELED:
         bgColor = '#D32F2F'; // Đỏ đậm
-        color = '#fff';
         break;
       default:
         bgColor = '#E0E0E0'; // Xám nhạt

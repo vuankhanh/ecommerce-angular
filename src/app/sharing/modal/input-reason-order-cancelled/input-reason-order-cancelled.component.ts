@@ -18,8 +18,7 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule,
     MatInputModule
   ],
-  templateUrl: './input-reason-order-cancelled.component.html',
-  styleUrl: './input-reason-order-cancelled.component.scss'
+  templateUrl: './input-reason-order-cancelled.component.html'
 })
 export class InputReasonOrderCancelledComponent {
   readonly dialogRef = inject(MatDialogRef<InputReasonOrderCancelledComponent>);

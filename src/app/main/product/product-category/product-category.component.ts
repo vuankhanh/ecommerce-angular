@@ -7,6 +7,7 @@ import { PrefixBackendStaticPipe } from '../../../sharing/pipe/prefix-backend.pi
 import { TProductModel } from '../../../models/product.interface';
 import { SkeletonComponent } from '../../../sharing/component/skeleton/skeleton.component';
 import { CurrencyCustomPipe } from '../../../sharing/pipe/currency-custom.pipe';
+import { isArray } from 'lodash';
 @Component({
   selector: 'app-product-category',
   standalone: true,
@@ -33,7 +34,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.activatedRoute.data.subscribe(data => {
         const { productFromCategorySlug } = data;
-        this.products = Array.isArray(productFromCategorySlug) ? productFromCategorySlug : [];
+        this.products = isArray(productFromCategorySlug) ? productFromCategorySlug : [];
       })
     );
     

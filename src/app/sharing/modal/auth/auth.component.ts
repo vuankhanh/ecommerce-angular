@@ -29,7 +29,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class AuthComponent implements OnInit {
   public readonly bottomSheetRef: MatBottomSheetRef<AuthComponent> | null = inject(MatBottomSheetRef<AuthComponent>, { optional: true });
   public readonly dialogRef: MatDialogRef<AuthComponent> | null = inject(MatDialogRef<AuthComponent>, { optional: true });
-  data: TypeLogin = inject(MAT_BOTTOM_SHEET_DATA, { optional: true }) || inject(MAT_DIALOG_DATA, { optional: true });
+  data: TypeLogin = inject(MAT_BOTTOM_SHEET_DATA, { optional: true }) ?? inject(MAT_DIALOG_DATA, { optional: true });
   historyModalComponent: ('login' | 'register' | 'forgotPassword' | 'registerSuccessful' | 'forgotPasswordSuccessful')[] = [];
 
   ngOnInit(): void {

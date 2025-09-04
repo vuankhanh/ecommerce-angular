@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment.development';
   standalone: true
 })
 export class PrefixBackendStaticPipe implements PipeTransform {
-  private backendStatic = environment.backendStatic;
+  private readonly backendStatic = environment.backendStatic;
   transform(value: string): string {
     if (!value) return '';
     // Nếu là tuyệt đối thì trả về nguyên giá trị

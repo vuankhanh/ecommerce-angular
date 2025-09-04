@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const { DOMParser, XMLSerializer } = require('@xmldom/xmldom');
 const xmlFormatter = require('xml-formatter');
 const chalk = require('chalk');
@@ -14,9 +13,8 @@ const langFiles = Object.values(i18nConfig.locales);
 function parseTransUnits(xml) {
   const doc = new DOMParser().parseFromString(xml, 'application/xml');
   const units = {};
-  const transUnits = doc.getElementsByTagName('trans-unit');
-  for (let i = 0; i < transUnits.length; i++) {
-    const unit = transUnits[i];
+  const transUnits = Array.from(doc.getElementsByTagName('trans-unit'));
+  for (const unit of transUnits) {
     const id = unit.getAttribute('id');
     const source = unit.getElementsByTagName('source')[0]?.textContent || '';
     const target = unit.getElementsByTagName('target')[0]?.textContent || '';
@@ -50,15 +48,6 @@ function syncLangFile(defaultUnits, langPath) {
     } else {
       // Kiểm tra source khác
       if (langUnits[id].source !== defaultUnits[id].source) {
-        // // Đè source từ mặc định sang
-        // const sourceNode = langUnits[id].node.getElementsByTagName('source')[0];
-        // if (sourceNode) {
-        //   sourceNode.textContent = defaultUnits[id].source;
-        // } else {
-        //   const newSource = doc.createElement('source');
-        //   newSource.textContent = defaultUnits[id].source;
-        //   langUnits[id].node.appendChild(newSource);
-        // }
         report.sourceDiff.push(id);
       }
 

@@ -102,7 +102,7 @@ export class DeliveryComponent implements OnInit {
         this.dialogRef.close(partialDelivery)
       }else {
         const delivery: DeliveryEntity = new DeliveryEntity(this.formGroup.value);
-        this.dialogRef.close(delivery);
+        this.dialogRef.close(delivery.toPlainObject());
       }
     } else {
       console.error('Form is invalid');

@@ -70,28 +70,28 @@
         <source>Xác nhận xóa địa chỉ</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/customer-information/address-book/address-book.component.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="addressBook.confirmationDialog.message" datatype="html">
         <source>Bạn có chắc chắn muốn xóa địa chỉ &quot;<x id="PH" equiv-text="delivery.address.street"/>&quot; không?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/customer-information/address-book/address-book.component.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="addressBook.confirmationDialog.confirmText" datatype="html">
         <source>Có</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/customer-information/address-book/address-book.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="addressBook.confirmationDialog.cancelText" datatype="html">
         <source>Không</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/customer-information/address-book/address-book.component.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7543248245394144267" datatype="html">
@@ -382,7 +382,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
-          <context context-type="linenumber">102,103</context>
+          <context context-type="linenumber">101,102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2356914890840265311" datatype="html">
@@ -397,11 +397,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
-          <context context-type="linenumber">30,31</context>
+          <context context-type="linenumber">31,32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/register/register.component.html</context>
-          <context context-type="linenumber">92,94</context>
+          <context context-type="linenumber">92,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7512061398120216885" datatype="html">
@@ -426,7 +426,7 @@
         <source>Đăng nhập bằng Google</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
-          <context context-type="linenumber">144,145</context>
+          <context context-type="linenumber">145,146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8795058576068444140" datatype="html">
@@ -473,42 +473,42 @@
         <source>Xác nhận xóa sản phẩm</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/cart/cart.component.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cart.confirmationDialog.message" datatype="html">
         <source>Bạn có chắc chắn muốn xóa sản phẩm &quot;<x id="PH" equiv-text="cartItem.product.name"/>&quot; khỏi giỏ hàng không?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/cart/cart.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cart.confirmationDialog.confirmText" datatype="html">
         <source>Có</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/cart/cart.component.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cart.confirmationDialog.confircancelTextmText" datatype="html">
         <source>Không</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/cart/cart.component.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cart.emptyTitle" datatype="html">
         <source>Giỏ hàng của bạn đang trống!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/cart/cart.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cart.emptyMessage" datatype="html">
         <source>Vui lòng thêm sản phẩm vào giỏ hàng trước khi đặt hàng.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/cart/cart.component.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2709500617292719329" datatype="html">
@@ -578,42 +578,42 @@
         <source>Số lượng</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
-          <context context-type="linenumber">37,38</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5567835675676650833" datatype="html">
         <source>Mô tả chi tiết</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
-          <context context-type="linenumber">44,45</context>
+          <context context-type="linenumber">45,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="684629911605542822" datatype="html">
         <source>Đánh giá (<x id="INTERPOLATION" equiv-text="{{product.reviews.length}}"/>)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
-          <context context-type="linenumber">54,55</context>
+          <context context-type="linenumber">55,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{review.userName || &apos;Khách hàng&apos;}}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
-          <context context-type="linenumber">61,62</context>
+          <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4469607901898592845" datatype="html">
         <source>Đặt hàng ngay</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
-          <context context-type="linenumber">114,115</context>
+          <context context-type="linenumber">83,84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3180168871028705329" datatype="html">
         <source>Thêm vào giỏ</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/main/product/product-detail/product-detail.component.html</context>
-          <context context-type="linenumber">119,120</context>
+          <context context-type="linenumber">88,89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1018191110741063776" datatype="html">
@@ -807,14 +807,14 @@
         <source>Quên mật khẩu</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
-          <context context-type="linenumber">31,32</context>
+          <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7402772130961748336" datatype="html">
         <source>Hoặc đăng nhập bằng</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/auth/login/login.component.html</context>
-          <context context-type="linenumber">36,37</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5046771485639196427" datatype="html">
@@ -956,6 +956,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/sharing/modal/delivery/delivery.component.html</context>
           <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5707935280374486749" datatype="html">
+        <source>Lý do hủy đơn hàng</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/sharing/modal/input-reason-order-cancelled/input-reason-order-cancelled.component.html</context>
+          <context context-type="linenumber">1,2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6844775520184253316" datatype="html">
