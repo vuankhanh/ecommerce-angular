@@ -12,8 +12,7 @@ import { PersonalService } from '../../services/api/personal/personal.api.servic
 
     MaterialModule
   ],
-  templateUrl: './personal-information.component.html',
-  styleUrls: ['./personal-information.component.scss']
+  templateUrl: './personal-information.component.html'
 })
 export class PersonalInformationComponent {
   private readonly personalService: PersonalService = inject(PersonalService);
