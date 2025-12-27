@@ -14,6 +14,7 @@ import { TMenu } from '../models/menu.interface';
 import { getMenu } from '../sharing/constant/menu.constant';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LangLocalePipe } from '../sharing/pipe/lang.pipe';
+import { IDENTIFICATION } from '../sharing/constant/identification.constant';
 @Component({
   selector: 'app-footer',
   standalone: true,
@@ -38,7 +39,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   @Output() toggleDrawer = new EventEmitter();
   currentLang = 'vi';
   sanitizedFacebookUrl!: SafeResourceUrl;
-  identification?: Identification;
+  identification?: Identification = IDENTIFICATION;
 
   badgeCart = 0;
   menusList: TMenu[] = getMenu();

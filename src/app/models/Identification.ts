@@ -1,23 +1,23 @@
 import { IAddress } from "./address.interface"
 
 export interface Identification {
-  logo: Logo,
-  phoneNumber: PhoneNumber[],
-  social: SocialNetwork[],
+  logo: ILogo,
+  phoneNumber: IPhoneNumber[],
+  social: ISocialNetwork[],
   address: IAddress[]
 }
 
-export interface Logo {
+export interface ILogo {
   src: string,
   srcThumbnail: string,
 }
 
-export interface PhoneNumber {
+export interface IPhoneNumber {
   number: string,
   isMain: boolean
 }
 
-export interface SocialNetwork {
+export interface ISocialNetwork {
   name: string,
   url: string
 }

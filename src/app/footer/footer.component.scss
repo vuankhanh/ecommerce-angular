@@ -14,12 +14,13 @@ button {
 
 .footer-container {
   padding: 15px;
-  background: var(--tertiary-background);
+  background: var(--bep4than-tertiary-background);
   color: white;
 
   .footer-item-container {
     width: 100%;
     justify-content: space-between;
+    gap: 10px;
     box-sizing: border-box;
 
     .first-block {
@@ -74,39 +75,40 @@ button {
       width: 30%;
 
       .social-container {
-        .social-networking-item {
+        a {
           align-items: center;
           text-decoration: none;
           color: white;
 
           mat-icon {
             cursor: pointer;
+            height: 40px;
+            width: 40px;
+            min-width: 40px;
+            min-height: 40px;
             border-radius: 100%;
             align-items: center;
             justify-content: center;
             margin-right: 5px;
             margin-bottom: 5px;
-            height: 40px;
-            width: 40px;
-            min-width: 40px;
-            min-height: 40px;
-            padding: 8px;
+            display: flex;
+            font-size: 24px;
           }
+        }
 
-          .facebook {
-            background: #3b5998;
-            color: white;
-          }
+        .facebook {
+          background: #3b5998;
+          color: white;
+        }
 
-          .google {
-            background: #db4a39;
-            color: white;
-          }
+        .google {
+          background: #db4a39;
+          color: white;
+        }
 
-          .zalo {
-            background: #0573ff;
-            color: white;
-          }
+        .zalo {
+          background: #0573ff;
+          color: white;
         }
       }
 
